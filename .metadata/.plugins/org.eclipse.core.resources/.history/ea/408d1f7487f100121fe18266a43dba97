@@ -1,0 +1,16 @@
+package Common;
+
+public class BoundingBox {
+
+	private double TopLeft;
+	private double bottomRight;
+	
+	public double getTopLeft() {
+		return TopLeft;
+	}
+	public double getBottomRight() {
+		return bottomRight;
+	}
+	
+	
+}

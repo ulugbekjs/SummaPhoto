@@ -1,0 +1,20 @@
+package Common;
+
+import java.util.LinkedList;
+import java.util.List;
+
+public class PhotoContainerSingleton {
+
+	    private static final PhotoContainerSingleton instance = new PhotoContainerSingleton();
+	    private List<Photo> photos;
+	 
+	    private PhotoContainerSingleton() {
+	    	photos = new LinkedList<>()
+	    }
+	 
+	    public static PhotoContainerSingleton getInstance() {
+	        return instance;
+	    }
+	    
+	    
+}

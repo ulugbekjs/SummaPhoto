@@ -2,14 +2,15 @@ package Common;
 
 import java.util.Date;
 
-public class Photo {
+public class Photo implements Comparable<Photo> {
 
 	private Date takenDate;
-	private Location location;
-	private Event linkedEvent;
+	private Point location;
+	private ActualEvent parentActualEvent;
 	private boolean isHorizontal;
-	
-	public Photo(Date date, Location location, boolean horizontal) {
+	//TODO private Image photo;
+
+	public Photo(Date date, Point location, boolean horizontal) {
 		this.takenDate = date;
 		this.location = location;
 		this.isHorizontal = horizontal;
@@ -19,9 +20,19 @@ public class Photo {
 		return this.isHorizontal;
 	}
 	
-	public void attachToEvent(Event event) {
-		if (event == null)
-			linkedEvent = event;
+	public Date getTakenDate() {
+		return this.takenDate;
 	}
+	
+	public void attachToEvent(ActualEvent event) {
+		if (event == null)
+			parentActualEvent = event;
+	}
+
+	@Override
+	public int compareTo(Photo o) {
+		return this.takenDate.compareTo(o.takenDate);
+	}
+	
 	
 }

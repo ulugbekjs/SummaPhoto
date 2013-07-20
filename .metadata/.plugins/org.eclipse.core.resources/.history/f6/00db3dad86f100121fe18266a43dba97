@@ -1,0 +1,7 @@
+package Common;
+
+public abstract class AbstractContainer<T> {
+	private static final T instace = null;
+
+	public abstract void addItem(Class<? extends Object> object);
+}

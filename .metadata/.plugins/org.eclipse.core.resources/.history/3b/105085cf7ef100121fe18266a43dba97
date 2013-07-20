@@ -1,0 +1,17 @@
+package Common;
+
+
+public class EventContainerSingelton {
+	  private static final EventContainerSingelton instance = new EventContainerSingelton();
+	    private List<Event> events;
+	 
+	    private EventContainerSingelton() {
+	    	unSortedPhotos = new LinkedList<Photo>();
+	    }
+	    
+
+	 
+	    public static PhotoContainerSingleton getInstance() {
+	        return instance;
+	    }
+}

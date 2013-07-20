@@ -1,0 +1,22 @@
+package Common;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+
+public class EventContainerSingelton {
+	  private static final EventContainerSingelton instance = new EventContainerSingelton();
+	    private Map<UUID,Event> events = new HashMap<>();
+	 
+	    private EventContainerSingelton() {
+	    	events = = new HashMap();
+	    }
+	    
+	    
+	    
+	    public static EventContainerSingelton getInstance() {
+	        return instance;
+	    }
+}

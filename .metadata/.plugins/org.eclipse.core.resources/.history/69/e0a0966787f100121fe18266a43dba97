@@ -1,0 +1,7 @@
+package Common;
+
+public class BoundingBox {
+
+	private double TopLeft;
+	private double bottomRight;
+}

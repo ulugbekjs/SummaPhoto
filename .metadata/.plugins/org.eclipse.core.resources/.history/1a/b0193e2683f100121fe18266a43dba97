@@ -1,0 +1,40 @@
+package Common;
+
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
+
+
+
+public class EventContainerSingelton {
+
+	private static final EventContainerSingelton instance = new EventContainerSingelton();
+	private Map<Date,Event> events = new TreeMap<Date,Event>();
+
+	private EventContainerSingelton() {
+	}
+
+	private void addNewEvent(Event event) {
+		if ((event != null) && (events.containsValue(event)))
+			events.put(event.getEventStartTime(), event);
+	}
+
+	/**
+	 * adds a photo to an Event already in the container
+	 * @param photo
+	 * @param event
+	 * @return true iff addition was successful
+	 */
+	private boolean addPhotoToEventInContainer(Photo photo, Event event) {
+		if (!events.containsValue(event) && !event.isPhotoInEvent(photo)) 
+		 	return false; //event does not exist
+		if ()
+			
+		
+		return
+	}
+
+	public static EventContainerSingelton getInstance() {
+		return instance;
+	}
+}

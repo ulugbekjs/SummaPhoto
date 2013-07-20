@@ -1,0 +1,19 @@
+package Common;
+
+import java.util.List;
+
+
+public class EventContainerSingelton {
+	  private static final EventContainerSingelton instance = new EventContainerSingelton();
+	    private List<Event> events;
+	 
+	    private EventContainerSingelton() {
+	    	events = new LinkedList<Event>();
+	    }
+	    
+
+	 
+	    public static PhotoContainerSingleton getInstance() {
+	        return instance;
+	    }
+}

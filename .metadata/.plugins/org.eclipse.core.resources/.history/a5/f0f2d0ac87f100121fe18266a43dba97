@@ -1,0 +1,24 @@
+package Common;
+
+public class BoundingBox {
+
+	private Location topLeft;
+	private Location bottomRight;
+	
+	public Location getTopLeft() {
+		return topLeft;
+	}
+	public Location getBottomRight() {
+		return bottomRight;
+	}
+	
+	public BoundingBox(Location topLeft,Location bottomRight) {
+		this.topLeft = topLeft;
+		this.bottomRight = bottomRight;
+	}
+	
+	public double getWidth() {
+		return Math.abs(arg0)
+	}
+	
+}

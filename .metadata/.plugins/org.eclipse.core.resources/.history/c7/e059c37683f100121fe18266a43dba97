@@ -1,0 +1,27 @@
+package Common;
+
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+
+
+public class EventContainerSingelton {
+
+	private static final EventContainerSingelton instance = new EventContainerSingelton();
+	private Set<Event> events = new TreeSet<Event>();
+
+	private EventContainerSingelton() {
+	}
+
+	private void addEventToContainer(Event event) {
+		if ((event != null) && (events.contains(event)))
+			events.add(event.getEventStartTime(), event);
+	}
+
+	public static EventContainerSingelton getInstance() {
+		return instance;
+	}
+}
