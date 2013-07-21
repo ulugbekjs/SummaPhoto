@@ -1,0 +1,14 @@
+package ActivationManager;
+
+public class ActivationManagerThread {
+
+	//states
+	private static final int  REGULAR_MODE = 0;
+	private static final int  DEDICATED_MODE = 1;
+	
+	
+	private int currentState = 0;
+	
+	
+
+}

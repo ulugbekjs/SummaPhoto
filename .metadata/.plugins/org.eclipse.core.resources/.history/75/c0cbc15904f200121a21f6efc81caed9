@@ -1,0 +1,10 @@
+package ActivationManager;
+
+public class ActivationManagerThread {
+
+	private static final int  REGULAR_MODE = 0;
+	private static final int  DEDICATED_MODE = 1;
+	
+	
+
+}
