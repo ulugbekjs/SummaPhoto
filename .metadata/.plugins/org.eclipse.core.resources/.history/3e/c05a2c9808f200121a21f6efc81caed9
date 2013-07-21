@@ -1,0 +1,6 @@
+package ActivationManager;
+
+public class EventCandidateContainer {
+
+	private eventCandidateCounter = 0;
+}

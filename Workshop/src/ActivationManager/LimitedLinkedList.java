@@ -6,13 +6,15 @@ import java.util.Queue;
 @SuppressWarnings("serial")
 public class LimitedLinkedList<E> extends LinkedList<E> {
 	
-	int limit; 
+	int limit;
 	
 	public LimitedLinkedList(int limit) {
-		
+		this.limit = limit;
 	}
 	@Override
 	public boolean add(E e) {
-		if ()
-	}; 
+		if (super.size() < limit)
+			 return super.add(e);
+		return false;
+	};
 }

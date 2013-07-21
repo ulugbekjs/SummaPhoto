@@ -7,12 +7,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
-public class ActualEvent {
-
-	private UUID eventID;
-	private Set<Photo> eventPhotos = new TreeSet<Photo>();
+public class ActualEvent extends AbstractEvent {
+	
 	private Date startTime = null;
 	private Date endTime = null;
+	
 	private int horizontalPhotosCount = 0;
 	private int verticalPhotosCount = 0;
 	
@@ -21,19 +20,6 @@ public class ActualEvent {
 	private BoundingBox box;
 
 	public ActualEvent() {
-		eventID = UUID.randomUUID();
-	}
-
-	public boolean isEmpty() {
-		return (this.eventPhotos.size() == 0); 
-	}
-
-	public UUID getEventID() {
-		return this.eventID;	
-	}
-
-	public int getPhotosCount() {
-		return this.eventPhotos.size();
 	}
 
 	public Date getEventStartTime() {
@@ -50,10 +36,6 @@ public class ActualEvent {
 
 	public int verticalPhotosCount() {
 		return verticalPhotosCount;
-	}
-
-	public boolean isPhotoInEvent(Photo photo) {
-		return eventPhotos.contains(photo);
 	}
 	
 	public void calculateEventBoundingBox() {
@@ -74,7 +56,8 @@ public class ActualEvent {
 		
 	}
 
-	public void addPhotoToEvent(Photo photo) {
+	@Override
+	public void addPhoto(Photo photo) {
 		if (photo.isHorizontal()) 
 			horizontalPhotosCount++;
 		else 

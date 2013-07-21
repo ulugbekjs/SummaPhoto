@@ -6,6 +6,8 @@ public class Photo implements Comparable<Photo> {
 
 	private Date takenDate;
 	private Point location;
+
+
 	private ActualEvent parentActualEvent;
 	private boolean isHorizontal;
 	private int height;
@@ -27,6 +29,10 @@ public class Photo implements Comparable<Photo> {
 		return isHorizontal;
 	}
 	
+	public Point getLocation() {
+		return location;
+	}
+	
 	public int getHeight() {
 		return height;
 	}
@@ -41,6 +47,15 @@ public class Photo implements Comparable<Photo> {
 	public void attachToEvent(ActualEvent event) {
 		if (event == null)
 			parentActualEvent = event;
+	}
+	
+	public double distanceFrom(Photo otherPhoto) {
+		return this.getLocation().distanceFrom(otherPhoto.getLocation());
+	}
+	
+	public int timeDeltaInSecondsFrom(Photo otherPhoto) {
+		return 0;
+
 	}
 
 	@Override

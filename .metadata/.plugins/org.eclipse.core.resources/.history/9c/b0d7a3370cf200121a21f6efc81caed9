@@ -1,0 +1,21 @@
+package ActivationManager;
+
+import Common.AbstractEvent;
+import Common.Photo;
+
+public class EventCandidate extends AbstractEvent {
+
+	private Photo lastPhoto = null;
+	
+	public EventCandidate(Photo photo) {
+		super();
+		addPhotoToEvent(photo);
+	}
+	
+	@Override
+	public void addPhotoToEvent(Photo photo) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}

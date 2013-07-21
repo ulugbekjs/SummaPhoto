@@ -1,0 +1,28 @@
+package ActivationManager;
+
+public class EventCandidateContainer {
+
+	private static final EventCandidateContainer instance = new EventCandidateContainer(); 
+	
+	private int eventCandidateCounter = 0;
+
+	public int getEventCandidateCounter() {
+		return eventCandidateCounter;
+	}
+	
+	public boolean isEmpty(){
+		return (eventCandidateCounter == 0);
+	}
+	
+	public getLastAddedEvent() {
+		return 
+	}
+	
+	private EventCandidateContainer() {}
+	
+	public static EventCandidateContainer getInstance() {
+		return instance;
+	}
+	
+	
+}

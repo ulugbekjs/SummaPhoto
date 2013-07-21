@@ -1,0 +1,7 @@
+package ActivationManager;
+
+import Common.AbstractEvent;
+
+public class EventCandidate extends AbstractEvent {
+	
+}

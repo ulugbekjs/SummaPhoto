@@ -1,0 +1,14 @@
+package Common;
+
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.UUID;
+
+public abstract class AbstractEvent {
+	
+	private UUID eventID;
+	private Set<Photo> eventPhotos = new TreeSet<Photo>();
+	
+	private int horizontalPhotosCount = 0;
+	private int verticalPhotosCount = 0;
+}

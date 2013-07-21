@@ -1,0 +1,15 @@
+package ActivationManager;
+
+public class EventCandidateContainer {
+
+	private int eventCandidateCounter = 0;
+
+	public int getEventCandidateCounter() {
+		return eventCandidateCounter;
+	}
+	
+	public boolean isEmpty(){
+		return (eventCandidateCounter == 0);
+	}
+	
+}

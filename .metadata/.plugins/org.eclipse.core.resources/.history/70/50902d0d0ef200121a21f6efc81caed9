@@ -1,0 +1,37 @@
+package ActivationManager;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
+import java.util.TreeSet;
+
+import Common.ActualEvent;
+
+public class EventCandidateContainer {
+
+	private static final EventCandidateContainer instance = new EventCandidateContainer(); 
+	
+	private Queue<ActualEvent> events = new LinkedList<ActualEvent>();
+
+	private int eventCandidateCounter = 0;
+
+	public int getEventCandidateCounter() {
+		return eventCandidateCounter;
+	}
+	
+	public boolean isEmpty(){
+		return (eventCandidateCounter == 0);
+	}
+	
+	public getLastAddedEvent() {
+		return events.
+	}
+	
+	private EventCandidateContainer() {}
+	
+	public static EventCandidateContainer getInstance() {
+		return instance;
+	}
+	
+	
+}
