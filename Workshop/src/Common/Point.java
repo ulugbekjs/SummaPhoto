@@ -4,6 +4,8 @@ public class Point {
 
 	private double longitude;
 	private double latitude;
+	private int height;
+	private int width;
 	
 	public double getLongitude() {
 		return longitude;

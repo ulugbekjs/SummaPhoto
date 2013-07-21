@@ -1,0 +1,27 @@
+package ActivationManager;
+
+import Common.ActualEvent;
+import Common.ActualEventContainerSingelton;
+
+public class ActivationManagerThread {
+
+	private static final ActivationManagerThread instance = null;
+	
+	//states
+	private static final int  REGULAR_MODE = 0;
+	private static final int  DEDICATED_MODE = 1;
+	
+	private Queue<Photo> buffer = new Queue
+	
+	private int currentState = 0;
+	
+	private ActivationManagerThread() {
+	}
+
+
+	public static ActualEventContainerSingelton getInstance() {
+		return instance;
+	}
+	
+
+}

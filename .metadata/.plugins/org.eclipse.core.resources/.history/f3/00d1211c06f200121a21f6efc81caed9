@@ -1,0 +1,7 @@
+package ActivationManager;
+
+import java.util.LinkedList;
+
+public class LimitedLinkedList  implements Queue<E> {
+
+}
