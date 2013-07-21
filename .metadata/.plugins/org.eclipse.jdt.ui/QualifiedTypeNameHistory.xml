@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.util.Queue"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.UUID"/>
+<fullyQualifiedTypeName name="java.util.TreeMap"/>
+<fullyQualifiedTypeName name="Common.Event"/>
+<fullyQualifiedTypeName name="java.lang.Comparable"/>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="java.util.Set"/>
+<fullyQualifiedTypeName name="java.util.TreeSet"/>
+<fullyQualifiedTypeName name="Common.AbstractContainer"/>
+<fullyQualifiedTypeName name="Common.BoundingBox"/>
+<fullyQualifiedTypeName name="Common.Location"/>
+<fullyQualifiedTypeName name="java.lang.Runnable"/>
+<fullyQualifiedTypeName name="com.drew.imaging.ImageMetadataReader"/>
+<fullyQualifiedTypeName name="com.drew.metadata.Metadata"/>
+<fullyQualifiedTypeName name="com.drew.metadata.exif.ExifSubIFDDirectory"/>
+<fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="com.drew.lang.GeoLocation"/>
+<fullyQualifiedTypeName name="Common.Photo"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="junit.framework.Assert"/>
+<fullyQualifiedTypeName name="android.media.ExifInterface"/>
+<fullyQualifiedTypeName name="Common.Point"/>
+<fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread"/>
+</qualifiedTypeNameHistroy>

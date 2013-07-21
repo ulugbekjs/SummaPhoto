@@ -1,0 +1,32 @@
+package PhotoListener;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+
+import Common.Photo;
+import Common.Point;
+
+import android.media.ExifInterface;
+
+public class PhotoListenerThread {
+
+	public PhotoListenerThread() {
+	}
+
+	public Photo createPhotoFromFile(String path) {
+
+
+		// extract photo metadata
+		Date date = null;
+		float[] location = null;
+
+		String jpegFile = "c:\\users\\yonatan\\pictures\\try.jpg";
+		ExifInterface metadata = new ExifInterface(jpegFile);
+		
+		String orientation = metadata.getAttribute(ExifInterface.TAG_ORIENTATION);
+		
+		Photo photo = new Photo(date, new Point(2, 2), true);
+		return photo;
+	}
+}

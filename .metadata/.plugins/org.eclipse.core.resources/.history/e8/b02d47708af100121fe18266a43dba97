@@ -1,0 +1,8 @@
+package PhotoListener;
+
+public class PhotoListenerThread {
+
+	public PhotoListenerThread() {
+		
+	}
+}

@@ -74,8 +74,6 @@ public class ActualEvent {
 		
 	}
 
-	
-
 	public void addPhotoToEvent(Photo photo) {
 		if (photo.isHorizontal()) 
 			horizontalPhotosCount++;

@@ -1,0 +1,13 @@
+import PhotoListener.PhotoListenerThread;
+
+
+public class Main {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+PhotoListenerThread t = new PhotoListenerThread();
+	}
+
+}

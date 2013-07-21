@@ -1,0 +1,9 @@
+package PhotoListener;
+
+public class PhotoListenerThread {
+
+	public PhotoListenerThread() {
+		File jpegFile = new File("myImage.jpg");
+		Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
+	}
+}

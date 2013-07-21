@@ -1,0 +1,33 @@
+package PhotoListener;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+
+import Common.Photo;
+
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.lang.GeoLocation;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.exif.ExifSubIFDDirectory;
+
+public class PhotoListenerThread {
+
+	public PhotoListenerThread() {
+	}
+
+	public Photo createPhotoFromFile(String path) {
+		File jpegFile = new File("c:\\users\\yonatan\\pictures\\try.jpg");
+
+
+		// extract photo metadata
+		Date date = null;
+		float[] location = null;
+		
+		
+		
+		Photo photo = new Photo(date, location, horizontal)
+		return photo;
+	}
+}

@@ -11,10 +11,14 @@ public class Photo implements Comparable<Photo> {
 	//TODO private Image photo;
 
 	public Photo(Date date, Point location, boolean horizontal) {
+		
 		this.takenDate = date;
 		this.location = location;
 		this.isHorizontal = horizontal;
+		
 	}
+	
+	
 	
 	public boolean isHorizontal() {
 		return this.isHorizontal;

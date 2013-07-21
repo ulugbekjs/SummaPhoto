@@ -1,0 +1,17 @@
+import java.io.IOException;
+
+import org.junit.Test;
+
+import android.media.ExifInterface;
+
+import junit.framework.Assert;
+import junit.framework.TestCase;
+
+
+public class Testing extends TestCase {
+
+	@Test
+	public void testExtracting() {
+		
+	}
+}
