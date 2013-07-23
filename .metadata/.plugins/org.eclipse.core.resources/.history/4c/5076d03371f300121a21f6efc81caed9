@@ -1,0 +1,7 @@
+package com.workshopandriod;
+
+import android.app.Service;
+
+public class MainService  extends Service{
+
+}

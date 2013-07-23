@@ -1,21 +1,32 @@
 package ActivationManager;
 
 import java.util.Queue;
+
+import org.apache.http.client.fluent.Request;
+
 import Common.Photo;
 
 public class ActivationManagerThread {
 
-	private static final ActivationManagerThread instance = null;
+	private static final ActivationManagerThread instance = new ActivationManagerThread();
 
 	//states
 	private static final int REGULAR_MODE = 0;
 	private static final int DEDICATED_MODE = 1;
+
 	private static final int BUFFER_SIZE = 100;
-	private static final int NEW_CANDIDATE_THRESHOLD_SCORE = 5;
+
+	// TODO: maybe do this by number of photos for collage
+	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 5;
+	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 30;
 
 	//instance fields
 	private Queue<Photo> buffer = new LimitedLinkedList<Photo>(BUFFER_SIZE);
 	private int currentState = 0; // start in REGULAR_MODE;
+	private int remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE;
+	private int remainingHorizontal = 0;
+	private int remainingVertical = 0;
+
 
 	private ActivationManagerThread() {
 	}
@@ -24,27 +35,34 @@ public class ActivationManagerThread {
 		return instance;
 	}
 
-	private double calculateCandidateScore(Photo newPhoto) {
-		Photo lastPhoto = EventCandidateContainer.getInstance().getLastAddedEvent().getLastAddedPhoto();
-		return (lastPhoto.distanceFrom(newPhoto) + lastPhoto.timeDeltaInSecondsFrom(newPhoto));
-	}
-
 	private boolean isNewEventCandidate(Photo newPhoto) {
-		return (calculateCandidateScore(newPhoto) > NEW_CANDIDATE_THRESHOLD_SCORE) ? true : false;
+		Photo lastPhoto = EventCandidateContainer.getInstance().getLastAddedEvent().getLastAddedPhoto();
+		double delta = lastPhoto.timeDeltaInSecondsFrom(newPhoto);
+		return (score > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
 	}
 
+	private boolean isCollageNeeded() {
+		return (((currentState == DEDICATED_MODE || currentState == REGULAR_MODE)) && (remainingEvents == 0) || // currentState == DEDICATED_MODE || currentState == REGULAR_MODE
+				(currentState == DEDICATED_MODE && 
+				((remainingHorizontal == 0) ||
+						(remainingVertical == 0)))); 
+	}
 	/**
 	 * 
 	 * @param photo
-	 * @return TRUE iff new EventCandidate was created
+	 * @return TRUE if next module should be awakened
 	 */
-	public boolean processIncomingPhoto(Photo photo) {
-		EventCandidate event = null;
+	private boolean processPhoto(Photo photo) {
 
+
+		EventCandidate event = null;
 		if (EventCandidateContainer.getInstance().isEmpty() || isNewEventCandidate(photo)) {  // new event
 			event = new EventCandidate(photo);
 			EventCandidateContainer.getInstance().addEvent(event);
-			return true;
+
+			if (remainingEvents > 0) { // for DEDICATED_MODE
+				remainingEvents--;
+			}
 		}
 		else  { // add photo to last added event in container
 			event = EventCandidateContainer.getInstance().getLastAddedEvent();
@@ -55,8 +73,67 @@ public class ActivationManagerThread {
 				// TODO: handle this situation that should not happen
 			}
 		}
-		return false;
+
+		if (currentState == DEDICATED_MODE && photo.isHorizontal()) {
+			remainingHorizontal--;
+		}
+		if ((currentState == DEDICATED_MODE && !photo.isHorizontal())) {
+			remainingVertical--;
+		}
+
+
+		if (isCollageNeeded()) {
+			setToRegularMode(); // upon decision to create collage, resume REGULAR_MODE
+			return true;
+		}
+		else 
+			return false;
 	}
 
+	public synchronized boolean processPhotoBuffer() {
+		boolean ret = false;
+		while (!buffer.isEmpty()) { 
+			if (buffer.peek() != null) 
+				processPhoto(buffer.poll());
+		}
+		return ret;
+
+	}
+
+	public synchronized void addToBuffer(Photo p) {
+		buffer.add(p);
+	}
+
+	public boolean consumeDedictedRequest(DedicatedRequest request) {
+		// make sure dedicated request has information
+		if ((request.getEventsNeeded() != 0 || request.getVerticalNeeded() !=0 || request.getHorizontalNeeded() != 0)) {
+			setToDedicatedMode(request);
+		}
+		return true;
+	}
+
+	private void setMode(int newState, DedicatedRequest request) {
+		switch (newState) {
+		case DEDICATED_MODE: {
+			if (request != null) {
+				this.remainingEvents = request.getEventsNeeded();
+				this.remainingHorizontal = request.getHorizontalNeeded();
+				this.remainingVertical = request.getVerticalNeeded();
+			}
+		}
+		case REGULAR_MODE: {
+
+		}
+		}
+
+	}
+	
+	private void setToRegularMode() {
+		setMode(REGULAR_MODE, null);
+	}
+	
+	private void setToDedicatedMode(DedicatedRequest request) {
+		setMode(DEDICATED_MODE, request);
+	}
 }
 

@@ -1,0 +1,12 @@
+package ActivationManager;
+
+public class DedicatedRequest {
+
+	private int horizontalNeeded = 0;
+	private int verticalNeeded = 0;
+	private int eventsNeeded = 0;
+	
+	public DedicatedRequest() {
+	}
+
+}

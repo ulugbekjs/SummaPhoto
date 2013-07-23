@@ -1,0 +1,6 @@
+import android.app.Service;
+
+
+public class BService extends Service {
+
+}

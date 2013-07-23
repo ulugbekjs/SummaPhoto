@@ -1,0 +1,16 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.xtremelabs.robolectric.RobolectricTestRunner;
+
+@RunWith(RobolectricTestRunner.class)
+public class sas {
+
+
+	@Test
+	public void testGet_FormsCorrectRequest_noBasicAuth() throws Exception {
+		System.out.println("dsad");
+	}
+}

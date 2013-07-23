@@ -1,8 +1,0 @@
-package ActivationManager;
-
-public class ActivationManagerThread {
-
-	private static final int   REGULAR_MODE = 0;
-	private static int final static DEDICATED_MODE = 0;
-
-}

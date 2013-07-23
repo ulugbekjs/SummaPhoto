@@ -1,0 +1,27 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+
+public class sas {
+
+	@RunWith(RobolectricTestRunner.class)
+	public class HttpTest {
+	    private Http http;
+
+	    @Before
+	    public void setup() {
+	        Robolectric.setDefaultHttpResponse(200, "OK");
+	        http = new Http();
+	    }
+
+	    @Test
+	    public void testGet_FormsCorrectRequest_noBasicAuth() throws Exception {
+	        Robolectric.addPendingHttpResponse(200, "OK");
+
+	        http.get("www.example.com", new HashMap<String, String>(), null, null);
+
+	        assertThat(((HttpUriRequest) Robolectric.getSentHttpRequest(0)).getURI(), equalTo(URI.create("www.example.com")));
+	    }
+
+}

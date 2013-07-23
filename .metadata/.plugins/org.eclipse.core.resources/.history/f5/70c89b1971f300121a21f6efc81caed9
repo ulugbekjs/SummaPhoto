@@ -1,0 +1,8 @@
+
+
+public class BService  {
+	
+	public static void tet() {
+		System.out.println("bbb");
+	}
+}

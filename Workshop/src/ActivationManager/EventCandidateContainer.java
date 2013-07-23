@@ -9,14 +9,12 @@ public class EventCandidateContainer {
 	
 	private List<EventCandidate> events = new LinkedList<EventCandidate>();
 
-	private int eventCandidateCounter = 0;
-
-	public int getEventCandidateCounter() {
-		return eventCandidateCounter;
+	public int getEventCandidateNumber() {
+		return events.size();
 	}
 	
 	public boolean isEmpty(){
-		return (eventCandidateCounter == 0);
+		return (events.size() == 0);
 	}
 	
 	public EventCandidate getLastAddedEvent() {

@@ -1,0 +1,8 @@
+import junit.framework.TestCase;
+
+import org.junit.Test;
+
+public class TTT extends TestCase {
+
+	@Test
+}

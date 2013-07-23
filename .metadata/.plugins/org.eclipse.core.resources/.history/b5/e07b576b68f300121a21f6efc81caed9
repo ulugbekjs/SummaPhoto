@@ -1,0 +1,7 @@
+package com.workshopandriod.test;
+
+import junit.framework.TestCase;
+
+public class sdas extends TestCase {
+
+}

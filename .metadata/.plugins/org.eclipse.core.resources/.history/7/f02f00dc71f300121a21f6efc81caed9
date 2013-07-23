@@ -1,0 +1,17 @@
+package com.workshopandriod.test;
+
+import com.workshopandriod.MainService;
+
+public class ServiceTestCase extends android.test.ServiceTestCase<MainService> {
+
+	public ServiceTestCase(Class<MainService> serviceClass) {
+		super(serviceClass);
+		// TODO Auto-generated constructor stub
+	}
+	
+	@Test
+	public void photoTest() {
+		
+	}
+
+}
