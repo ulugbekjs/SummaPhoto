@@ -37,8 +37,8 @@ public class ActivationManagerThread {
 
 	private boolean isNewEventCandidate(Photo newPhoto) {
 		Photo lastPhoto = EventCandidateContainer.getInstance().getLastAddedEvent().getLastAddedPhoto();
-		double delta = lastPhoto.timeDeltaInSecondsFrom(newPhoto);
-		return (score > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
+		int delta = lastPhoto.timeDeltaInSecondsFrom(newPhoto);
+		return (delta > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
 	}
 
 	private boolean isCollageNeeded() {
@@ -60,7 +60,7 @@ public class ActivationManagerThread {
 			event = new EventCandidate(photo);
 			EventCandidateContainer.getInstance().addEvent(event);
 
-			if (remainingEvents > 0) { // for DEDICATED_MODE
+			if (remainingEvents > 0) { 
 				remainingEvents--;
 			}
 		}
@@ -80,7 +80,6 @@ public class ActivationManagerThread {
 		if ((currentState == DEDICATED_MODE && !photo.isHorizontal())) {
 			remainingVertical--;
 		}
-
 
 		if (isCollageNeeded()) {
 			setToRegularMode(); // upon decision to create collage, resume REGULAR_MODE
@@ -119,13 +118,17 @@ public class ActivationManagerThread {
 				this.remainingEvents = request.getEventsNeeded();
 				this.remainingHorizontal = request.getHorizontalNeeded();
 				this.remainingVertical = request.getVerticalNeeded();
+				currentState = DEDICATED_MODE;
 			}
+			break;
 		}
 		case REGULAR_MODE: {
-
+			remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE;
+			remainingHorizontal = 0;
+			remainingVertical = 0;
+			currentState = REGULAR_MODE;
 		}
 		}
-
 	}
 	
 	private void setToRegularMode() {

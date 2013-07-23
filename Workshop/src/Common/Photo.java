@@ -2,6 +2,10 @@ package Common;
 
 import java.util.Date;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Seconds;
+
 public class Photo implements Comparable<Photo> {
 
 	private Date takenDate;
@@ -49,13 +53,21 @@ public class Photo implements Comparable<Photo> {
 			parentActualEvent = event;
 	}
 	
+	// TODO: Use google Location DistanceTO
 	public double distanceFrom(Photo otherPhoto) {
 		return this.getLocation().distanceFrom(otherPhoto.getLocation());
 	}
 	
 	public int timeDeltaInSecondsFrom(Photo otherPhoto) {
-		return 0;
-
+		DateTime thisTime = new DateTime(takenDate);
+		DateTime otherTime = new DateTime(otherPhoto.getTakenDate());
+		
+		if (thisTime.isAfter(otherTime)) {
+			return Seconds.secondsBetween(otherTime,thisTime).getSeconds();
+		}
+		else {
+			return Seconds.secondsBetween(thisTime, otherTime).getSeconds();
+		}
 	}
 
 	@Override
