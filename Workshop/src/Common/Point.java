@@ -20,6 +20,5 @@ public class Point {
 	public double distanceFrom(Point p) {
 		return Math.sqrt((this.longitude-p.getLongitude())*(this.longitude-p.getLongitude()) + 
 				(this.latitude-p.getLatitude())*(this.latitude-p.getLatitude()));
-
 	}
 }

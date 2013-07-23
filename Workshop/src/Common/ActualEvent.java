@@ -7,10 +7,12 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import org.joda.time.DateTime;
+
 public class ActualEvent extends AbstractEvent {
 	
-	private Date startTime = null;
-	private Date endTime = null;
+	private DateTime startTime = null;
+	private DateTime endTime = null;
 	
 	private int horizontalPhotosCount = 0;
 	private int verticalPhotosCount = 0;
@@ -22,11 +24,11 @@ public class ActualEvent extends AbstractEvent {
 	public ActualEvent() {
 	}
 
-	public Date getEventStartTime() {
+	public DateTime getEventStartTime() {
 		return this.startTime;
 	}
 
-	public Date getEventEndTime() {
+	public DateTime getEventEndTime() {
 		return this.endTime;
 	}
 

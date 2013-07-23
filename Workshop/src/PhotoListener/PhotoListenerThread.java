@@ -1,8 +1,11 @@
 package PhotoListener;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+
+import javax.imageio.ImageIO;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -55,14 +58,16 @@ public class PhotoListenerThread {
 		try {
 			int width = jpgDirectory.getImageWidth();
 			int	height = jpgDirectory.getImageHeight();
+
 			photo = new Photo(
 					date,
 					width,
 					height,
 					new Point(location.getLongitude(),location.getLatitude()),
-					true);
+					true,
+					path.getPath());
 		} catch (MetadataException e) {
-			// TODO Auto-generated catch block
+			// TODO ERROR reading EXIF details of photo
 			e.printStackTrace();
 		}
 

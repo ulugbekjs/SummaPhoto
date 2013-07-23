@@ -35,4 +35,9 @@ public class ListenerTestCases {
 
 		ActivationManagerThread.getInstance().processPhotoBuffer();
 	}
+	
+	@Test
+	public void bingTest() {
+		BingServices.createBingRequest();
+	}
 }
