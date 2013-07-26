@@ -1,18 +1,28 @@
 package Bing;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
 import Common.BoundingBox;
+import Common.Point;
 
 public class StaticMap {
 
 	private UUID requestUuid;
 	private BoundingBox box;
+	private Point centerPoint;
+	public Point getCenterPoint() {
+		return centerPoint;
+	}
+	public void setCenterPoint(Point centerPoint) {
+		this.centerPoint = centerPoint;
+	}
+
 	private String jpgPath;
 	private String metadataPath;
-	private List<PushPin> pins = 
+	private List<Pushpin> pins = new LinkedList<Pushpin>(); 
 			
 	public String getJpgPath() {
 		return jpgPath;
@@ -31,6 +41,10 @@ public class StaticMap {
 	}
 	public BoundingBox getBox() {
 		return box;
+	}
+	
+	public void addPushpin(Pushpin pin) {
+		pins.add(pin);
 	}
 
 	public void setBox(BoundingBox box) {

@@ -8,49 +8,42 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.UUID;
 
-import javax.media.j3d.PointSound;
-import javax.swing.Box.Filler;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.hamcrest.core.Is;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.sun.corba.se.spi.activation._ActivatorImplBase;
-import com.sun.xml.internal.txw2.Document;
-
+import Common.BoundingBox;
 import Common.Point;
 
 public class BingServices {
 
-	public static StaticMap getStaticMap(Point[] points) {
+	public static void getStaticMap(Point[] points) {
 
 		StaticMap map = new StaticMap();
+
 		//get jpeg
-		getStaticMapOrMetadataFile(map, false, points);
+		map.setJpgPath(getStaticMapOrMetadataFile(map, false, points));
 		// get metadata
-		getStaticMapOrMetadataFile(map, true, points);
+		map.setMetadataPath(getStaticMapOrMetadataFile(map, true, points));
+
+		File xmlFile = new File(map.getMetadataPath());
+		fillStaticMapWithData(xmlFile, map);
+		System.out.println("€ds");
 	}
 
 
-	private static void getStaticMapOrMetadataFile(StaticMap map, boolean metadata, Point[] points) {
-
-
+	private static String getStaticMapOrMetadataFile(StaticMap map, boolean metadata, Point[] points) {
+		File file = null;
 		try {
 
 			URL                 url;
@@ -88,8 +81,6 @@ public class BingServices {
 			printout.flush ();
 
 			// Get response
-			File file = null;
-
 			input = new DataInputStream (urlConn.getInputStream());
 			int bt = -1;
 			if (!metadata) {
@@ -114,7 +105,7 @@ public class BingServices {
 				map.setJpgPath(file.getPath());
 			}
 			else {
-				
+
 			}
 
 			fop.flush();
@@ -125,11 +116,81 @@ public class BingServices {
 			e.printStackTrace();
 		}   
 
-		return file;
+		return file.getPath();
 	}
-	
-	private void fillStaticMapWithData(File xmlFile, StaticMap map) {
+
+	private static void fillStaticMapWithData(File xmlFile, StaticMap map) {
+
+		SAXBuilder builder = new SAXBuilder();
+
+
+
+		Document document = null;
+		try {
+			document = (Document) builder.build(xmlFile);
+		} catch (JDOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Element rootNode = document.getRootElement();
+		Namespace namespace = rootNode.getNamespace();
 		
+		try {
+		
+		Element metaNode = rootNode.getChild("ResourceSets",namespace);
+		metaNode = metaNode.getChild("ResourceSet",namespace).getChild("Resources", namespace).getChild("StaticMapMetadata", namespace);
+
+		Element node = metaNode.getChild("BoundingBox",namespace);
+
+		double SouthLatitude = new Double(node. getChildText("SouthLatitude",namespace)); // "SouthLatitude"
+		double WestLongitude = new Double(node. getChildText("WestLongitude",namespace)); // "WestLongitude"
+		double NorthLatitude = new Double(node. getChildText("NorthLatitude",namespace)); // "NorthLatitude"
+		double EastLongitude = new Double(node. getChildText("EastLongitude",namespace)); // "EastLongitude"
+
+
+		BoundingBox box = new BoundingBox(new Point(NorthLatitude, WestLongitude), 
+				new Point(EastLongitude, SouthLatitude));
+		map.setBox(box);
+
+		node = metaNode.getChild("MapCenter", namespace);
+		double latitude = new Double(node.getChildText("Latitude", namespace));
+		double longitude = new Double(node.getChildText("Longitude", namespace));
+
+		Point center = new Point(latitude, longitude);
+		map.setCenterPoint(center);
+
+		Element pushpinsNode =  metaNode.getChild("Pushpins", namespace);
+
+		for (Element pushpinNode : pushpinsNode.getChildren()) {
+
+			node = pushpinNode.getChild("Point", namespace);
+			latitude = new Double(node.getChildText("Latitude", namespace));	
+			longitude = new Double(node.getChildText("Longitude", namespace)); 
+
+			node = pushpinNode.getChild("Anchor", namespace);
+			int ax =  new Integer(node.getChildText("X", namespace));	
+			int ay =  new Integer(node.getChildText("Y", namespace));	
+
+			node = pushpinNode.getChild("TopLeftOffset", namespace);
+			int tx =  new Integer(node.getChildText("X", namespace));	
+			int ty =  new Integer(node.getChildText("Y", namespace));	
+
+			node = pushpinNode.getChild("BottomRightOffset", namespace);
+			int bx =  new Integer(node.getChildText("X", namespace));	
+			int by =  new Integer(node.getChildText("Y", namespace));	
+
+			map.addPushpin(new Pushpin(new Point(latitude,longitude),
+					new int[] {ax, ay},
+					new int[] {tx, ty},
+					new int[] {bx, by}));
+		}
+		}
+		catch (NullPointerException exception) {
+			// TODO: handle null (nodes that are not found)
+		}
 	}
 }
 

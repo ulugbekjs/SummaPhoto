@@ -1,0 +1,281 @@
+package Bing;
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.UUID;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
+
+import Common.BoundingBox;
+import Common.Point;
+
+public class BingServices {
+
+	public static void getStaticMap(Point[] points) {
+
+		StaticMap map = new StaticMap();
+
+		//get jpeg
+		map.setJpgPath(getStaticMapOrMetadataFile(map, false, points));
+		// get metadata
+		map.setMetadataPath(getStaticMapOrMetadataFile(map, true, points));
+
+		File xmlFile = new File(map.getMetadataPath());
+		fillStaticMapWithData(xmlFile, map);
+		System.out.println("€ds");
+	}
+
+
+	private static String getStaticMapOrMetadataFile(StaticMap map, boolean metadata, Point[] points) {
+		File file = null;
+		try {
+
+			URL                 url;
+			URLConnection   urlConn;
+			DataOutputStream    printout;
+			DataInputStream     input;
+
+			//Make the actual connection
+			if (metadata) {
+				url = new URL("http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?mmd=1&o=xml&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt");
+			}
+			else {
+				url = new URL("http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?mmd=0&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt");
+			}
+			urlConn = url.openConnection();
+			urlConn.setDoInput (true);
+			urlConn.setDoOutput (true);
+			urlConn.setUseCaches (false);
+			urlConn.setRequestProperty("Content-Type", "text/plain");
+			urlConn.setRequestProperty("charset",  "charset=utf-8");
+
+			StringBuilder builder = new StringBuilder();
+
+			for (Point point : points)  {
+				builder.append("pp=");
+				builder.append(point.toString());
+				builder.append(";14;\r\n");
+			}
+
+			String strContent = builder.toString();
+
+			urlConn.setRequestProperty("Content-Length", new Integer(strContent.getBytes().length).toString()); 
+			printout = new DataOutputStream (urlConn.getOutputStream ());
+			printout.writeBytes (strContent);
+			printout.flush ();
+
+			// Get response
+			input = new DataInputStream (urlConn.getInputStream());
+			int bt = -1;
+			if (!metadata) {
+				// TODO: make jpg data work with imageIO and not with file
+				file = new File("./moshe.jpg");
+			}
+			else {
+				file = new File("./moshe.xml");
+			}
+
+			FileOutputStream fop = new FileOutputStream(file);
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+			while ((bt = input.read()) > -1) {
+				fop.write(bt);	
+			}
+
+			if (!metadata) {
+				map.setJpgPath(file.getPath());
+			}
+			else {
+
+			}
+
+			fop.flush();
+			fop.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}   
+
+		return file.getPath();
+	}
+
+	private static void fillStaticMapWithData(File xmlFile, StaticMap map) {
+		
+		 SAXBuilder builder = new SAXBuilder();
+	 
+		
+	 
+			Document document = null;
+			try {
+				document = (Document) builder.build(xmlFile);
+			} catch (JDOMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Element rootNode = document.getRootElement();
+			Namespace namespace = rootNode.getNamespace();
+			Element metaNode = rootNode.getChild("ResourceSets",namespace);
+			metaNode = metaNode.getChild("ResourceSet",namespace).getChild("Resources", namespace).getChild("StaticMapMetadata", namespace);
+			
+			Element node = metaNode.getChild("BoundingBox");
+
+			double SouthLatitude = new Double(node. getChildText("SouthLatitude")); // "SouthLatitude"
+//			double WestLongitude = new Double(boxNodes.item(1).getNodeValue()); // "WestLongitude"
+//			double NorthLatitude = new Double(boxNodes.item(2).getNodeValue()); // "NorthLatitude"
+//			double EastLongitude = new Double(boxNodes.item(3).getNodeValue()); // "EastLongitude"
+
+	 
+//		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder dBuilder = null;
+//		try {
+//			dBuilder = dbFactory.newDocumentBuilder();
+//		} catch (ParserConfigurationException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		Document doc = null;
+//		try {
+//			doc = dBuilder.parse(xmlFile);
+//		} catch (SAXException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		doc.getDocumentElement().normalize();
+//
+//		// traverse to ResourceSets
+//		NodeList nodes = doc.getDocumentElement().getChildNodes();
+//		Node metaNode = null;
+//		for (int i = 0; i < nodes.getLength(); i++) {
+//			Node node = nodes.item(i);
+//
+//			if (node.getNodeType() == Node.ELEMENT_NODE && (node.getNodeName().compareTo("ResourceSets") == 0)) {
+//				metaNode = node;	
+//			}
+//		}
+//
+//		// traverse to ResourceSet
+//		nodes = metaNode.getChildNodes();
+//		for (int i = 0; i < nodes.getLength(); i++) {
+//			Node node = nodes.item(i);
+//
+//			if (node.getNodeType() == Node.ELEMENT_NODE && (node.getNodeName().compareTo("ResourceSet") == 0)) {
+//				metaNode = node;	
+//			}
+//		}
+//
+//		// traverse to Resource
+//		nodes = metaNode.getChildNodes();
+//		for (int i = 0; i < nodes.getLength(); i++) {
+//			Node node = nodes.item(i);
+//
+//			if (node.getNodeType() == Node.ELEMENT_NODE && (node.getNodeName().compareTo("Resources") == 0)) {
+//				metaNode = node;	
+//			}
+//		}
+//
+//		// traverse to StaticMapMetadata
+//		nodes = metaNode.getChildNodes();
+//		for (int i = 0; i < nodes.getLength(); i++) {
+//			Node node = nodes.item(i);
+//
+//			if (node.getNodeType() == Node.ELEMENT_NODE && (node.getNodeName().compareTo("StaticMapMetadata") == 0)) {
+//				metaNode = node;	
+//			}
+//		}
+//
+//		nodes = metaNode.getChildNodes();
+//		for (int i = 0; i < nodes.getLength(); i++) {
+//			Node node = nodes.item(i);
+//
+//			if (node.getNodeType() == Node.ELEMENT_NODE && (node.getNodeName().compareTo("BoundingBox") == 0)) {
+//				NodeList boxNodes = node.getChildNodes();
+//				double SouthLatitude = new Double(((Element)boxNodes).getElementsByTagName("SouthLatitude")); // "SouthLatitude"
+//				double WestLongitude = new Double(boxNodes.item(1).getNodeValue()); // "WestLongitude"
+//				double NorthLatitude = new Double(boxNodes.item(2).getNodeValue()); // "NorthLatitude"
+//				double EastLongitude = new Double(boxNodes.item(3).getNodeValue()); // "EastLongitude"
+//
+//				BoundingBox box = new BoundingBox(new Point(NorthLatitude, WestLongitude), 
+//						new Point(EastLongitude, SouthLatitude));
+//				map.setBox(box);	
+//			}
+//		}
+		//
+		//
+		//
+		//		Element node = metaNode.getChild("BoundingBox");
+		//		double SouthLatitude = new Double(node.getChildText("SouthLatitude"));
+		//		double WestLongitude = new Double(node.getChildText("WestLongitude"));
+		//		double NorthLatitude = new Double(node.getChildText("NorthLatitude"));
+		//		double EastLongitude = new Double(node.getChildText("EastLongitude"));
+		//
+		//		BoundingBox box = new BoundingBox(new Point(NorthLatitude, WestLongitude), 
+		//				new Point(EastLongitude, SouthLatitude));
+		//		map.setBox(box);
+		//
+		//		node = metaNode.getChild("MapCenter");
+		//		double latitude = new Double(node.getChildText("Latitude"));
+		//		double longitude = new Double(node.getChildText("Longitude"));
+		//
+		//		Point center = new Point(latitude, longitude);
+		//		map.setCenterPoint(center);
+		//
+		//		List<Element> list =  metaNode.getChildren("Pushpins");
+		//
+		//		for (int i = 0; i < list.size(); i++) {
+		//
+		//			Element pushpinNode = (Element) list.get(i);
+		//
+		//			node = pushpinNode.getChild("Point");
+		//			latitude = new Double(node.getChildText("Latitude"));	
+		//			longitude = new Double(node.getChildText("Longitude")); 
+		//
+		//			node = pushpinNode.getChild("Anchor");
+		//			double ax =  new Double(node.getChildText("X"));	
+		//			double ay =  new Double(node.getChildText("Y"));	
+		//
+		//			node = pushpinNode.getChild("TopLeftOffset");
+		//			double tx =  new Double(node.getChildText("X"));	
+		//			double ty =  new Double(node.getChildText("Y"));	
+		//
+		//			node = pushpinNode.getChild("BottomRightOffset");
+		//			double bx =  new Double(node.getChildText("X"));	
+		//			double by =  new Double(node.getChildText("Y"));	
+		//
+		//			map.addPushpin(new Pushpin(new Point(latitude,longitude),
+		//					new Point(ax, ay), new Point(tx, ty), new Point(bx, by)));
+		//		}
+		//
+		//	} catch (IOException io) {
+		//		System.out.println(io.getMessage());
+		//	} catch (JDOMException jdomex) {
+		//		System.out.println(jdomex.getMessage());
+		//	}
+	}
+}
+

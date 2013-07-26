@@ -79,6 +79,6 @@ public class ListenerTestCases {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		BingServices.getStaticMapOrMetadata(true, points);
+		BingServices.getStaticMap(points);
 	}
 }

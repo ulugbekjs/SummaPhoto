@@ -1,0 +1,33 @@
+package Bing;
+
+import Common.Point;
+
+public class PushPin {
+	private Point point;
+	private Point anchor;
+	private Point topLeftOffset;
+	private Point bottomRightOffset;
+	
+	public Point getPoint() {
+		return point;
+	}
+
+	public Point getAnchor() {
+		return anchor;
+	}
+
+	public Point getTopLeftOffset() {
+		return topLeftOffset;
+	}
+
+	public Point getBottomRightOffset() {
+		return bottomRightOffset;
+	}
+
+	public PushPin(Point point, Point anchor, Point topLeftOffset, Point bottomRightOffset) {
+		this.point = point;
+		this.anchor = anchor;
+		this.topLeftOffset = topLeftOffset;
+		this.bottomRightOffset = bottomRightOffset;
+	}
+}
