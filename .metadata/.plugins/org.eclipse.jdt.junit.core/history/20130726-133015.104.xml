@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testrun name="ListenerTestCases" project="Workshop" tests="2" started="2" failures="0" errors="0" ignored="0">
+  <testsuite name="PhotoListener.ListenerTestCases" time="24.464">
+    <testcase name="extractionTest" classname="PhotoListener.ListenerTestCases" time="0.0"/>
+    <testcase name="bingTest" classname="PhotoListener.ListenerTestCases" time="24.464"/>
+  </testsuite>
+</testrun>

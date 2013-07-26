@@ -12,7 +12,7 @@ public class Point {
 		return latitude;
 	}
 	
-	public Point(double longitude, double latitude) {
+	public Point(double latitude, double longitude) {
 		this.longitude = longitude;
 		this.latitude = latitude;
 	}
@@ -20,5 +20,10 @@ public class Point {
 	public double distanceFrom(Point p) {
 		return Math.sqrt((this.longitude-p.getLongitude())*(this.longitude-p.getLongitude()) + 
 				(this.latitude-p.getLatitude())*(this.latitude-p.getLatitude()));
+	}
+	
+	@Override
+	public String toString() {
+		return (latitude + "," + longitude);
 	}
 }

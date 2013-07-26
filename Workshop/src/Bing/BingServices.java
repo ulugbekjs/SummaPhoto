@@ -1,13 +1,23 @@
 package Bing;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.UUID;
+
+import javax.media.j3d.PointSound;
+import javax.swing.Box.Filler;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -16,121 +26,110 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.hamcrest.core.Is;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sun.corba.se.spi.activation._ActivatorImplBase;
+import com.sun.xml.internal.txw2.Document;
+
+import Common.Point;
+
 public class BingServices {
 
-	public static void createBingRequest() {
-		excutePost("http://www.google.com", "");
-	}
-	public static String excutePost(String targetURL, String urlParameters)
-	{
-		URL url;
-		HttpURLConnection connection = null;  
-		try {
-			//Create connection
-			url = new URL(targetURL);
-			connection = (HttpURLConnection)url.openConnection();
-			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Content-Type", 
-					"application/x-www-form-urlencoded");
+	public static StaticMap getStaticMap(Point[] points) {
 
-			connection.setRequestProperty("Content-Length", "" + 
-					Integer.toString(urlParameters.getBytes().length));
-			connection.setRequestProperty("Content-Language", "en-US");  
-
-			connection.setUseCaches (false);
-			connection.setDoInput(true);
-			connection.setDoOutput(true);
-
-			//Send request
-			DataOutputStream wr = new DataOutputStream (
-					connection.getOutputStream ());
-			wr.writeBytes (urlParameters);
-			wr.flush ();
-			wr.close ();
-
-			//Get Response	
-			InputStream is = connection.getInputStream();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-			String line;
-			StringBuffer response = new StringBuffer(); 
-			while((line = rd.readLine()) != null) {
-				response.append(line);
-				response.append('\r');
-			}
-			rd.close();
-			return response.toString();
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			return null;
-
-		} finally {
-
-			if(connection != null) {
-				connection.disconnect(); 
-			}
-		}
-
-
+		StaticMap map = new StaticMap();
+		//get jpeg
+		getStaticMapOrMetadataFile(map, false, points);
+		// get metadata
+		getStaticMapOrMetadataFile(map, true, points);
 	}
 
 
+	private static void getStaticMapOrMetadataFile(StaticMap map, boolean metadata, Point[] points) {
 
 
-	public static void getBla() {
-		String readTwitterFeed = readTwitterFeed();
 		try {
-			JSONArray jsonArray = new JSONArray(readTwitterFeed);
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject jsonObject = jsonArray.getJSONObject(i);
-				System.out.println(jsonObject.toString());
+
+			URL                 url;
+			URLConnection   urlConn;
+			DataOutputStream    printout;
+			DataInputStream     input;
+
+			//Make the actual connection
+			if (metadata) {
+				url = new URL("http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?mmd=1&o=xml&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private JSONObject buildJsonObject() {
-		JSONObject object = new JSONObject();
-		try {
-			object.put("name", "Jack Hack");
-			object.put("score", new Integer(200));
-			object.put("current", new Double(152.32));
-			object.put("nickname", "Hacker");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return object;
-	}
-
-	public static String readTwitterFeed() {
-		StringBuilder builder = new StringBuilder();
-		HttpClient client = new DefaultHttpClient();
-		HttpGet httpGet = new HttpGet("http://twitter.com/statuses/user_timeline/vogella.json");
-		try {
-			HttpResponse response = client.execute(httpGet);
-			StatusLine statusLine = response.getStatusLine();
-			int statusCode = statusLine.getStatusCode();
-			if (statusCode == 200) {
-				HttpEntity entity = response.getEntity();
-				InputStream content = entity.getContent();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					builder.append(line);
-				}
-			} else {
+			else {
+				url = new URL("http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?mmd=0&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt");
 			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
+			urlConn = url.openConnection();
+			urlConn.setDoInput (true);
+			urlConn.setDoOutput (true);
+			urlConn.setUseCaches (false);
+			urlConn.setRequestProperty("Content-Type", "text/plain");
+			urlConn.setRequestProperty("charset",  "charset=utf-8");
+
+			StringBuilder builder = new StringBuilder();
+
+			for (Point point : points)  {
+				builder.append("pp=");
+				builder.append(point.toString());
+				builder.append(";14;\r\n");
+			}
+
+			String strContent = builder.toString();
+
+			urlConn.setRequestProperty("Content-Length", new Integer(strContent.getBytes().length).toString()); 
+			printout = new DataOutputStream (urlConn.getOutputStream ());
+			printout.writeBytes (strContent);
+			printout.flush ();
+
+			// Get response
+			File file = null;
+
+			input = new DataInputStream (urlConn.getInputStream());
+			int bt = -1;
+			if (!metadata) {
+				// TODO: make jpg data work with imageIO and not with file
+				file = new File("./moshe.jpg");
+			}
+			else {
+				file = new File("./moshe.xml");
+			}
+
+			FileOutputStream fop = new FileOutputStream(file);
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+			while ((bt = input.read()) > -1) {
+				fop.write(bt);	
+			}
+
+			if (!metadata) {
+				map.setJpgPath(file.getPath());
+			}
+			else {
+				
+			}
+
+			fop.flush();
+			fop.close();
+
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		return builder.toString();
+		}   
+
+		return file;
+	}
+	
+	private void fillStaticMapWithData(File xmlFile, StaticMap map) {
+		
 	}
 }
+

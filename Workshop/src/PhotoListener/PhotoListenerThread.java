@@ -24,15 +24,12 @@ public class PhotoListenerThread {
 	public PhotoListenerThread() {
 	}
 
-	public Photo createPhotoFromFile(File path) {
+	public Photo createPhotoFromFile(File path) throws ImageProcessingException {
 
 		// extract photo metadata
 		Metadata metadata = null;
 		try {
 			metadata = ImageMetadataReader.readMetadata(path);
-		} catch (ImageProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,0 +1,12 @@
+package Bing;
+
+import java.util.UUID;
+
+import Common.BoundingBox;
+
+public class StaticMap {
+
+	private UUID requestUuid;
+	private BoundingBox box;
+ 
+}
