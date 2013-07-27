@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.io.InputStreamReader"/>
-<fullyQualifiedTypeName name="org.json.JSONArray"/>
-<fullyQualifiedTypeName name="org.apache.http.client.ClientProtocolException"/>
-<fullyQualifiedTypeName name="com.xtremelabs.robolectric.RobolectricTestRunner"/>
-<fullyQualifiedTypeName name="org.junit.runner.RunWith"/>
-<fullyQualifiedTypeName name="java.util.HashMap"/>
-<fullyQualifiedTypeName name="org.json.JSONObject"/>
-<fullyQualifiedTypeName name="java.io.DataOutputStream"/>
-<fullyQualifiedTypeName name="java.net.URLConnection"/>
 <fullyQualifiedTypeName name="java.io.DataInputStream"/>
 <fullyQualifiedTypeName name="org.json.JSONException"/>
 <fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="android.app.Service"/>
-<fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread"/>
 <fullyQualifiedTypeName name="com.workshopandriod.MainService"/>
 <fullyQualifiedTypeName name="java.io.FileOutputStream"/>
 <fullyQualifiedTypeName name="Bing.SamplePost"/>
@@ -35,9 +25,7 @@
 <fullyQualifiedTypeName name="com.sun.corba.se.spi.activation._ActivatorImplBase"/>
 <fullyQualifiedTypeName name="java.util.UUID"/>
 <fullyQualifiedTypeName name="javax.swing.Box.Filler"/>
-<fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="Bing.PushPin"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="com.sun.media.sound.InvalidFormatException"/>
 <fullyQualifiedTypeName name="Common.BoundingBox"/>
 <fullyQualifiedTypeName name="java.lang.Double"/>
@@ -59,5 +47,17 @@
 <fullyQualifiedTypeName name="java.lang.NullPointerException"/>
 <fullyQualifiedTypeName name="Bing.StaticMap"/>
 <fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="android.provider.SyncStateContract.Constants"/>
+<fullyQualifiedTypeName name="org.joda.time.field.OffsetDateTimeField"/>
+<fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
+<fullyQualifiedTypeName name="android.R.integer"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="Partitioning.DBScan"/>
+<fullyQualifiedTypeName name="javax.security.auth.PrivateCredentialPermission"/>
 <fullyQualifiedTypeName name="android.R"/>
+<fullyQualifiedTypeName name="android.R.bool"/>
+<fullyQualifiedTypeName name="Partitioning.DBScan.PhotoForClustering"/>
+<fullyQualifiedTypeName name="Partitioning.DBScan.PhotoObjectForClustering"/>
+<fullyQualifiedTypeName name="Common.Photo"/>
 </qualifiedTypeNameHistroy>

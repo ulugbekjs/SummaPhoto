@@ -1,0 +1,16 @@
+package Partitioning;
+
+import org.joda.time.field.OffsetDateTimeField;
+
+import android.R.integer;
+import android.provider.SyncStateContract.Constants;
+
+public class DBScan {
+	
+	/*Parameters for deciding weather two pictures are "close" to each other as part
+	 * of the DBScan algorithm
+	 */
+	private final double MaxSecondsInterval = 600;	
+	private final double MaxMetersInterval = 50; 
+
+}

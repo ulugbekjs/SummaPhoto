@@ -1,0 +1,35 @@
+package Partitioning;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import org.joda.time.field.OffsetDateTimeField;
+
+import PhotoListener.PhotoListenerThread;
+import Common.*;
+import android.R.bool;
+import android.R.integer;
+import android.provider.SyncStateContract.Constants;
+
+public class DBScan {
+	
+	/*Parameters for deciding weather two pictures are "close" to each other as part
+	 * of the DBScan algorithm
+	 */
+	private final double MaxSecondsInterval = 600;	
+	private final double MaxMetersInterval = 50; 
+	
+	private boolean isEpsilonDistanced (Photo p1, Photo p2)
+	{
+		if ((p1.distanceFrom(p2) < MaxMetersInterval) && (p1.timeDeltaInSecondsFrom(p2) < MaxSecondsInterval)
+				return true;
+		return false;
+	}
+	
+	private List<Photo> regionQueryList (Photo p)
+	{
+		List<Photo> photosEpsilonClose = new LinkedList<Photo>();
+		
+	}
+
+}
