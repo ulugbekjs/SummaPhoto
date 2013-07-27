@@ -1,7 +1,6 @@
 package ActivationManager;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 @SuppressWarnings("serial")
 public class LimitedLinkedList<E> extends LinkedList<E> {

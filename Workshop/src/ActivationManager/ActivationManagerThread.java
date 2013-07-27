@@ -87,18 +87,41 @@ public class ActivationManagerThread {
 			return false;
 	}
 
-	public synchronized boolean processPhotoBuffer() {
-		boolean ret = false;
-		while (!buffer.isEmpty()) { 
-			if (buffer.peek() != null) 
-				processPhoto(buffer.poll());
+	public void processPhotoBuffer() {
+		synchronized (buffer) {
+			while (buffer.isEmpty()) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			// empty the buffer
+			while (!buffer.isEmpty()) { 
+				if (buffer.peek() != null) 
+					processPhoto(buffer.poll());
+			}
+			
+			notifyAll();
 		}
-		return ret;
-
 	}
 
-	public synchronized void addToBuffer(Photo p) {
-		buffer.add(p);
+	public void addToBuffer(Photo p) {
+		synchronized (buffer) {
+			while (buffer.size() > BUFFER_SIZE) {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			buffer.add(p);
+
+			notifyAll();
+		}
 	}
 
 	public boolean consumeDedictedRequest(DedicatedRequest request) {
@@ -129,11 +152,11 @@ public class ActivationManagerThread {
 		}
 	}
 	
-	private void setToRegularMode() {
+	private synchronized void setToRegularMode() {
 		setMode(REGULAR_MODE, null);
 	}
 	
-	private void setToDedicatedMode(DedicatedRequest request) {
+	private synchronized void setToDedicatedMode(DedicatedRequest request) {
 		setMode(DEDICATED_MODE, request);
 	}
 }

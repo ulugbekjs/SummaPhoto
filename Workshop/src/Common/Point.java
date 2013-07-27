@@ -1,5 +1,7 @@
 package Common;
 
+import android.location.Location;
+
 public class Point {
 
 	private double longitude;
@@ -17,9 +19,10 @@ public class Point {
 		this.latitude = latitude;
 	}
 	
-	public double distanceFrom(Point p) {
-		return Math.sqrt((this.longitude-p.getLongitude())*(this.longitude-p.getLongitude()) + 
-				(this.latitude-p.getLatitude())*(this.latitude-p.getLatitude()));
+	public float distanceFrom(Point p) {
+		float[] results = new float[3]; 
+		Location.distanceBetween(this.latitude, this.longitude, p.getLatitude(), p.getLongitude(), results);
+		return results[0];
 	}
 	
 	@Override
