@@ -4,6 +4,8 @@
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"/>
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID"/>
 		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
+			<item value="/Users/yonatan/Documents/workspace/WorkshopRepository"/>
+			<item value="/Users/yonatan/Documents/workspace/WorkshopRepository/Workshop/lib"/>
 			<item value="C:\Users\yonatan"/>
 			<item value="C:\Users\yonatan\WorkshopRepository"/>
 		</list>
@@ -21,8 +23,8 @@
 		</list>
 	</section>
 	<section name="WorkbenchPreferenceDialogSettings">
-		<item value="0" key="DIALOG_Y_ORIGIN"/>
-		<item value="53" key="DIALOG_X_ORIGIN"/>
+		<item value="131" key="DIALOG_Y_ORIGIN"/>
+		<item value="71" key="DIALOG_X_ORIGIN"/>
 	</section>
 	<section name="NewWizardAction">
 		<item value="com.android.ide.eclipse.adt.project.NewTestProjectWizard" key="NewWizardSelectionPage.STORE_SELECTED_ID"/>
