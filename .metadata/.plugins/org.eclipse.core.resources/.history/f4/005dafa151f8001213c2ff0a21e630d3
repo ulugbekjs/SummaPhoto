@@ -1,0 +1,36 @@
+package ActivationManager;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.ManagerFactoryParameters;
+
+public class SmartModeService {
+	    private static ScheduledExecutorService scheduler = null;
+	    private static ActivationManager manager = ActivationManager.getInstance();  
+	      
+
+	    private SmartModeService() {
+			// TODO Auto-generated constructor stub
+		}
+	    
+	    public static void startService() {
+	    	if (scheduler == null) {
+	    		scheduler =  Executors.newScheduledThreadPool(1);
+	    		scheduler.scheduleWithFixedDelay(new Runnable() {
+							@Override
+							public void run() {
+								manager.processPhotoBuffer();
+							}
+	    	    	    },
+	    	    	    0,
+	    	    	    30,
+	    	    	    TimeUnit.SECONDS);
+	    	}
+	    }
+	    
+	    public static void stopService() {
+	    	scheduler.shutdown();
+	    }
+}

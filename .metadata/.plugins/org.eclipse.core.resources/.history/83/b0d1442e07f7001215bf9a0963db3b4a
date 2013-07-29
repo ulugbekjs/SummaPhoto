@@ -1,0 +1,27 @@
+package ActivationManager;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class ActivationManagerThread {
+
+	Timer timer;
+	ActivationManager manager;
+	
+	public ActivationManagerThread() {
+		manager = ActivationManager.getInstance();
+		timer = new Timer();  //At this line a new Thread will be created
+	    timer.schedule(new RemindTask(), seconds*1000); //delay in milliseconds
+	    
+	}
+	
+	private class ActivationManagerTask extends TimerTask {
+
+		@Override
+		public void run() {
+			
+			
+		}
+		
+	}
+}

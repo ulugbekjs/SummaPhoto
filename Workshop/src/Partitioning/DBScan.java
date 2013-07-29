@@ -2,17 +2,8 @@ package Partitioning;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.security.auth.PrivateCredentialPermission;
-
-import org.joda.time.field.OffsetDateTimeField;
-
-import PhotoListener.PhotoListenerThread;
 import Common.*;
-import android.R;
-import android.R.bool;
-import android.R.integer;
-import android.provider.SyncStateContract.Constants;
+
 
 public class DBScan {
 	

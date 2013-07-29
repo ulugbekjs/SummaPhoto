@@ -1,0 +1,11 @@
+package ActivationManager;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
+public class SmartModeService {
+	    private final ScheduledExecutorService scheduler =
+	       Executors.newScheduledThreadPool(1);
+
+	
+}

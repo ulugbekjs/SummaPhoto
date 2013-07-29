@@ -4,15 +4,16 @@
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"/>
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID"/>
 		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
-			<item value="/Users/yonatan/Documents/workspace/WorkshopRepository"/>
+			<item value="/Users/yonatan/Documents/workspace/WorkshopRepository/WorkshopJava/lib"/>
 			<item value="/Users/yonatan/Documents/workspace/WorkshopRepository/Workshop/lib"/>
+			<item value="/Users/yonatan/Documents/workspace/WorkshopRepository"/>
 			<item value="C:\Users\yonatan"/>
 			<item value="C:\Users\yonatan\WorkshopRepository"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.internal.QuickAccess">
-		<item value="1025" key="dialogWidth"/>
-		<item value="526" key="dialogHeight"/>
+		<item value="800" key="dialogWidth"/>
+		<item value="500" key="dialogHeight"/>
 		<list key="orderedProviders">
 		</list>
 		<list key="textArray">
@@ -23,8 +24,8 @@
 		</list>
 	</section>
 	<section name="WorkbenchPreferenceDialogSettings">
-		<item value="26" key="DIALOG_Y_ORIGIN"/>
-		<item value="589" key="DIALOG_X_ORIGIN"/>
+		<item value="131" key="DIALOG_Y_ORIGIN"/>
+		<item value="71" key="DIALOG_X_ORIGIN"/>
 	</section>
 	<section name="InstallationDialogSettings">
 		<item value="702" key="DIALOG_WIDTH"/>

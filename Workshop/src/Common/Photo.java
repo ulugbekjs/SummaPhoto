@@ -20,12 +20,11 @@ public class Photo implements Comparable<Photo> {
 
 	//TODO private Image photo;
 
-	public Photo(Date date, int width, int height, Point location, boolean horizontal, String path) {
+	public Photo(Date date, int width, int height, Point location, String path) {
 		this.takenDate = new DateTime(date);
 		this.location = location;
 		this.height = height;
 		this.width = width;
-		// TODO: get isHorizontal argument when using the EXIFInterface from android, and not calculate it
 		this.isHorizontal = (width > height);
 		this.path = path;
 
