@@ -109,7 +109,7 @@ public class ActivationManager {
 		}
 
 		// request map
-		List<Point> points = BingServices.getImagesPointsArray();
+		List<Point> points = BingServices.getImagesPointsList();
 		BingServices.getStaticMap(points);
 	}
 

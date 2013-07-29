@@ -1,15 +1,28 @@
 package Bing;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -26,8 +39,14 @@ import Common.Photo;
 import Common.Point;
 
 public class BingServices {
+
 	private final static String TAG = "BingServices";
 
+	/**
+	 * Queries BING for JPG & Metadata for ActualEvent points
+	 * @param points list of all Points in ActualEvents
+	 * @return StaticMap, or NULL if map could not be created
+	 */
 	public static StaticMap getStaticMap(List<Point> points) {
 
 		StaticMap map = null;
@@ -35,16 +54,11 @@ public class BingServices {
 		if (points.size()  > 0) { // Request iff there is one photo
 
 			map = new StaticMap();
-			
-			//get jpeg
-			map.setJpgPath(getStaticMapOrMetadataFile(false, points));
-			
-			// get metadata
-			map.setMetadataPath(getStaticMapOrMetadataFile(true, points));
 
-			File xmlFile = new File(map.getMetadataPath());
-			fillStaticMapWithData(xmlFile, map);
-			
+			map.setJpgPath(getJPG(points));
+			map.setMetadataPath(getJPGMetadata(points));
+
+			fillMapWithMetaData(map);
 		}
 		else {
 			Log.d(TAG, "getStaticMap: Zero locations in request");
@@ -52,7 +66,20 @@ public class BingServices {
 
 		return map;
 	}
-	public static List<Point> getImagesPointsArray() {
+
+	private static String getJPG(List<Point> points) {
+		return createHTTPRequest(false, points);
+	}
+
+	private static String getJPGMetadata(List<Point> points) {
+		return createHTTPRequest(true, points);
+	}
+
+	/**
+	 * creates a List of Points to be sent to BING from all cuurent ActualEvents in ActualEventContainer
+	 * @return List of all Points in ActualEventContainer
+	 */
+	public static List<Point> getImagesPointsList() {
 		List<Point> points = new ArrayList<Point>();
 		//TODO: this should work with the ActualEventContainer
 		for (EventCandidate event: EventCandidateContainer.getInstance().getAllEventsInContainer()) {
@@ -63,17 +90,89 @@ public class BingServices {
 		return points;
 	}
 
+	//
+	//	private static String getStaticMapOrMetadataFile(boolean metadata, List<Point> points) {
+	//
+	//		File file = null;
+	//		try {
+	//
+	//			URL                 url;
+	//			URLConnection   urlConn;
+	//			DataOutputStream    printout;
+	//			DataInputStream     input;
+	//
+	//			String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
+	//			//Make the actual connection
+	//			if (metadata) {
+	//				urlString += "mmd=1&o=xml";
+	//			}
+	//			else {
+	//				urlString += "mmd=0";
+	//			}
+	//
+	//			urlString = urlString + "&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
+	//
+	//			url = new URL(urlString);
+	//			urlConn = url.openConnection();
+	//			urlConn.setDoInput (true);
+	//			urlConn.setDoOutput (true); // POST Request
+	//			urlConn.setUseCaches (false);
+	//			urlConn.setRequestProperty("Content-Type", "text/plain");
+	//			urlConn.setRequestProperty("charset",  "charset=utf-8");
+	//
+	//			// adding pushpins coordinates to BING request
+	//			StringBuilder builder = new StringBuilder();
+	//
+	//			for (Point point : points)  {
+	//				builder.append("pp=");
+	//				builder.append(point.toString());
+	//				builder.append(";14;\r\n");
+	//			}
+	//
+	//			String strContent = builder.toString();
+	//
+	//			urlConn.setRequestProperty("Content-Length", Integer.valueOf(strContent.getBytes().length).toString()); 
+	//			printout = new DataOutputStream (urlConn.getOutputStream ());
+	//			printout.writeBytes (strContent);
+	//			printout.flush ();
+	//
+	//			// Get response
+	//			input = new DataInputStream (urlConn.getInputStream());
+	//
+	//			File externalStorageDir = Environment.getExternalStorageDirectory();
+	//			File testsDir = new File(externalStorageDir, "Tests");
+	//			file = new File(testsDir, "moshiko.");
+	//
+	//			if (!metadata) {
+	//				// TODO: make jpg data work with imageIO and not with file
+	//				file = new File(file.getPath() + "jpg");
+	//			}
+	//			else {
+	//				file = new File(file.getPath()  + "xml");
+	//			}
+	//
+	//			readFromStreamAndWriteToFile(input, testsDir, file);
+	//
+	//
+	//		} catch (IOException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}   
+	//
+	//		return file.getPath();
+	//	}
 
-	private static String getStaticMapOrMetadataFile(boolean metadata, List<Point> points) {
-		
+	/**
+	 * Queries Bing for JPG or Metadata
+	 * @param metadata TRUE if method should query for Metadata, FALSE if method should query for JPG
+	 * @param points 
+	 * @return Path of newly saved .JPG/XML
+	 */
+	private static String createHTTPRequest(boolean metadata, List<Point> points) {
+
 		File file = null;
+
 		try {
-
-			URL                 url;
-			URLConnection   urlConn;
-			DataOutputStream    printout;
-			DataInputStream     input;
-
 			String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
 			//Make the actual connection
 			if (metadata) {
@@ -85,83 +184,106 @@ public class BingServices {
 
 			urlString = urlString + "&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
 
-			url = new URL(urlString);
-			urlConn = url.openConnection();
-			urlConn.setDoInput (true);
-			urlConn.setDoOutput (true); // POST Request
-			urlConn.setUseCaches (false);
-			urlConn.setRequestProperty("Content-Type", "text/plain");
-			urlConn.setRequestProperty("charset",  "charset=utf-8");
+			// Construct POST Request
+			
+			HttpPost postReq = new HttpPost(urlString);
 
 			// adding pushpins coordinates to BING request
 			StringBuilder builder = new StringBuilder();
-
 			for (Point point : points)  {
 				builder.append("pp=");
 				builder.append(point.toString());
 				builder.append(";14;\r\n");
 			}
-
-			String strContent = builder.toString();
-
-			urlConn.setRequestProperty("Content-Length", Integer.valueOf(strContent.getBytes().length).toString()); 
-			printout = new DataOutputStream (urlConn.getOutputStream ());
-			printout.writeBytes (strContent);
-			printout.flush ();
-
-			// Get response
-			input = new DataInputStream (urlConn.getInputStream());
-			
-			File externalStorageDir = Environment.getExternalStorageDirectory();
-			File testsDir = new File(externalStorageDir, "Tests");
-			file = new File(testsDir, "moshiko.");
-			
-			if (!metadata) {
-				// TODO: make jpg data work with imageIO and not with file
-				file = new File(file.getPath() + "jpg");
+			StringEntity entity = null;
+			try {
+				entity = new StringEntity(builder.toString(), HTTP.UTF_8);
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			else {
-				file = new File(file.getPath()  + "xml");
+			postReq.setEntity(entity);
+
+			// Set BING Requested headers
+			postReq.setHeader("Content-Type", "text/plain");
+			postReq.setHeader("charset",  "charset=utf-8");
+
+			HttpResponse response = null;
+			try {
+				HttpClient httpclient = new DefaultHttpClient();
+				response = httpclient.execute(postReq);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
-			readFromStreamAndWriteToFile(input, testsDir, file);
-			
+			StatusLine statusLine = response.getStatusLine();
+			if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				response.getEntity().writeTo(out);
+				out.close();
 
+				createOutputFile(metadata, out);
+
+			} else {
+				//Closes the connection.
+				response.getEntity().getContent().close();
+				throw new IOException(statusLine.getReasonPhrase());
+			}
+		}
+		catch (FileNotFoundException exception) {
+			//TODO : DIE
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}   
+		}
 
 		return file.getPath();
 	}
 
-	private static void readFromStreamAndWriteToFile(DataInputStream input, File dir, File file) throws IOException {
-
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
+	private static void createOutputFile(boolean metadata, ByteArrayOutputStream out) throws IOException {
 		
+		File file;
+		File externalStorageDir = Environment.getExternalStorageDirectory();
+		File testsDir = new File(externalStorageDir, "Tests");
+		file = new File(testsDir, "moshiko.");
+
+		// Construct right file according to requested content
+		if (!metadata) {
+			// TODO: make jpg data work with imageIO and not with file
+			file = new File(file.getPath() + "jpg");
+		}
+		else {
+			file = new File(file.getPath()  + "xml");
+		}
+
+
+		if (!testsDir.exists()) {
+			testsDir.mkdirs();
+		}
+
 		file.delete();
 		file.createNewFile();
 
-		
-		FileOutputStream fop = new FileOutputStream(file);
 
-		byte[] buffer = new byte[1024];
-		while (input.read(buffer) > -1) {
-			fop.write(buffer);	
-		}
-
-		fop.flush();
-		fop.close();
+		OutputStream outputStream = new FileOutputStream (file); 
+		out.writeTo(outputStream);
 	}
-	private static void fillStaticMapWithData(File xmlFile, StaticMap map) {
+
+
+	private static void fillMapWithMetaData(StaticMap map) {
 
 		SAXBuilder builder = new SAXBuilder();
 
 		Document document = null;
 		try {
-			document = (Document) builder.build(xmlFile);
+			document = (Document) builder.build(map.getMetadataPath());
 		} catch (JDOMException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
