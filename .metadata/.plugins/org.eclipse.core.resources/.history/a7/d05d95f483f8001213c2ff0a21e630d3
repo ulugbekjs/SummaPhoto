@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +24,18 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
+
 import android.os.Environment;
 import android.util.Log;
 import ActivationManager.EventCandidate;
 import ActivationManager.EventCandidateContainer;
 
+import Common.BoundingBox;
 import Common.Photo;
 import Common.Point;
 
@@ -45,13 +55,11 @@ public class BingServices {
 		if (points.size()  > 0) { // Request only iff there is at least one photo
 
 			map = new StaticMap();
+
 			map.setJpgPath(getJPG(points));
 			map.setMetadataPath(getJPGMetadata(points));
-			
-			if (map.getJpgPath() == null || map.getMetadataPath() == null) {
-				map = null;  // free map for GC
-			}
 
+			fillMapWithMetaData(map);
 		}
 		else {
 			Log.d(TAG, "getStaticMap: Zero locations in request");
@@ -159,7 +167,7 @@ public class BingServices {
 	 * Queries Bing for JPG or Metadata
 	 * @param metadata TRUE if method should query for Metadata, FALSE if method should query for JPG
 	 * @param points 
-	 * @return Path of newly saved .JPG/XML or NULL
+	 * @return Path of newly saved .JPG/XML
 	 */
 	private static String createHTTPRequest(boolean metadata, List<Point> points) {
 
@@ -175,7 +183,6 @@ public class BingServices {
 				urlString += "mmd=0";
 			}
 
-			// concatenate with BING key
 			urlString = urlString + "&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
 
 			// Construct POST Request
@@ -240,7 +247,7 @@ public class BingServices {
 		}
 		
 		// an error occured
-		return file;
+		return null;
 	}
 
 	private static String createOutputFile(boolean metadata, ByteArrayOutputStream out) throws IOException {
@@ -272,5 +279,79 @@ public class BingServices {
 		return file.getPath();
 	}
 
+
+	private static void fillMapWithMetaData(StaticMap map) {
+
+		SAXBuilder builder = new SAXBuilder();
+
+		Document document = null;
+		try {
+			document = (Document) builder.build(map.getMetadataPath());
+		} catch (JDOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Element rootNode = document.getRootElement();
+		Namespace namespace = rootNode.getNamespace();
+
+		try {
+
+			Element metaNode = rootNode.getChild("ResourceSets",namespace);
+			metaNode = metaNode.getChild("ResourceSet",namespace).getChild("Resources", namespace).getChild("StaticMapMetadata", namespace);
+
+			// get bounding box
+			Element node = metaNode.getChild("BoundingBox",namespace);
+
+			double SouthLatitude = Double.valueOf(node. getChildText("SouthLatitude",namespace)); // "SouthLatitude"
+			double WestLongitude = Double.valueOf(node. getChildText("WestLongitude",namespace)); // "WestLongitude"
+			double NorthLatitude = Double.valueOf(node. getChildText("NorthLatitude",namespace)); // "NorthLatitude"
+			double EastLongitude = Double.valueOf(node. getChildText("EastLongitude",namespace)); // "EastLongitude"
+
+			BoundingBox box = new BoundingBox(new Point(NorthLatitude, WestLongitude), 
+					new Point(EastLongitude, SouthLatitude));
+			map.setBox(box);
+
+			// get center point
+			node = metaNode.getChild("MapCenter", namespace);
+			double latitude = Double.valueOf(node.getChildText("Latitude", namespace));
+			double longitude = Double.valueOf(node.getChildText("Longitude", namespace));
+
+			Point center = new Point(latitude, longitude);
+			map.setCenterPoint(center);
+
+			// get pushpins data: location, anchor & offsets
+			Element pushpinsNode =  metaNode.getChild("Pushpins", namespace);
+
+			for (Element pushpinNode : pushpinsNode.getChildren()) {
+
+				node = pushpinNode.getChild("Point", namespace);
+				latitude = Double.valueOf(node.getChildText("Latitude", namespace));	
+				longitude = Double.valueOf(node.getChildText("Longitude", namespace)); 
+
+				node = pushpinNode.getChild("Anchor", namespace);
+				int ax = Integer.valueOf(node.getChildText("X", namespace));	
+				int ay = Integer.valueOf(node.getChildText("Y", namespace));	
+
+				node = pushpinNode.getChild("TopLeftOffset", namespace);
+				int tx = Integer.valueOf(node.getChildText("X", namespace));	
+				int ty = Integer.valueOf(node.getChildText("Y", namespace));	
+
+				node = pushpinNode.getChild("BottomRightOffset", namespace);
+				int bx = Integer.valueOf(node.getChildText("X", namespace));	
+				int by = Integer.valueOf(node.getChildText("Y", namespace));	
+
+				map.addPushpin(new Pushpin(new Point(latitude,longitude),
+						new int[] {ax, ay},
+						new int[] {tx, ty},
+						new int[] {bx, by}));
+			}
+		}
+		catch (NullPointerException exception) {
+			// TODO: handle null (nodes that are not found)
+		}
+	}
 }
 

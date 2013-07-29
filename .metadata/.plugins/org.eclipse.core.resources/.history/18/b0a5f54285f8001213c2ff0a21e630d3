@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,11 +48,12 @@ public class BingServices {
 		if (points.size()  > 0) { // Request only iff there is at least one photo
 
 			map = new StaticMap();
+
 			map.setJpgPath(getJPG(points));
 			map.setMetadataPath(getJPGMetadata(points));
 			
 			if (map.getJpgPath() == null || map.getMetadataPath() == null) {
-				map = null;  // free map for GC
+				map = null; 
 			}
 
 		}
@@ -175,7 +179,6 @@ public class BingServices {
 				urlString += "mmd=0";
 			}
 
-			// concatenate with BING key
 			urlString = urlString + "&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
 
 			// Construct POST Request

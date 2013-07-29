@@ -60,10 +60,10 @@ public class StaticMap {
 		Document document = null;
 		try {
 			File xmlFile = new File(this.metadataPath);
-			if (!xmlFile.exists()) { // check that xml file still exists
+			if (!xmlFile.exists()) { // check that file still exists
 				throw new IOException();
 			}
-			document = (Document) builder.build (xmlFile);
+			document = (Document) builder.build  (this.metadataPath);
 		} catch (JDOMException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
