@@ -56,9 +56,8 @@ public class PhotoListenerThread extends FileObserver {
 						}
 					}
 				}
-
-				ActivationManager.getInstance().addToBuffer(photo);
-
+				if (photo != null)
+					ActivationManager.getInstance().addToBuffer(photo);
 			}
 		}
 		else {
@@ -105,7 +104,7 @@ public class PhotoListenerThread extends FileObserver {
 					date,
 					width,
 					height,
-					new Point(location.getLongitude(),location.getLatitude()),
+					new Point(location.getLatitude(),location.getLongitude()),
 					path.getPath());
 		} catch (MetadataException e) {
 			// TODO ERROR reading EXIF details of photo

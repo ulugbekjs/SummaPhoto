@@ -31,5 +31,7 @@ public class EventCandidateContainer {
 		events.add(e);
 	}
 	
-	
+	public List<EventCandidate> getAllEventsInContainer() {
+		return events;
+	}
 }

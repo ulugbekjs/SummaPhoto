@@ -29,5 +29,10 @@ public abstract class AbstractEvent {
 		return eventPhotos.contains(photo);
 	}
 	
+	public Set<Photo> getEventPhotos() {
+		return eventPhotos;
+	}
+	
 	public abstract void addPhoto(Photo photo);
+	
 }

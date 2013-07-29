@@ -1,12 +1,12 @@
 package ActivationManager;
 
-import java.util.Queue;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
 
-import android.util.Log;
+import Bing.BingServices;
 import Common.Photo;
+import Common.Point;
 
 public class ActivationManager {
 
@@ -16,11 +16,9 @@ public class ActivationManager {
 	private static final int REGULAR_MODE = 0;
 	private static final int DEDICATED_MODE = 1;
 
-	private static final int BUFFER_SIZE = 100;
-
 	// TODO: maybe do this by number of photos for collage
-	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 5;
-	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 30;
+	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 2;
+	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 1;
 
 	//instance fields
 	private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
@@ -83,44 +81,45 @@ public class ActivationManager {
 		}
 
 		if (isCollageNeeded()) {
-			setToRegularMode(); // upon decision to create collage, resume REGULAR_MODE
 			return true;
 		}
 		else 
 			return false;
 	}
 
+	/**
+	 * Empties buffer and decides if to trigger clustering
+	 */
 	public void processPhotoBuffer() {
 
+		boolean isCollageNeeded = false;
 		// empty the buffer
 		Photo photo = null;
 		while (!buffer.isEmpty()) { 
 			photo = buffer.remove();
 			if (photo != null) {
-				processPhoto(photo);
+				isCollageNeeded = processPhoto(photo);
 			}
 		}
+
+		// advance in collage process if necessary
+		if (isCollageNeeded) {
+			setToRegularMode(); // upon decision to create collage, switch to REGULAR_MODE
+			// TODO: insert clustering algorithm
+		}
+
+		// request map
+		List<Point> points = BingServices.getImagesPointsArray();
+		BingServices.getStaticMap(points);
 	}
 
 	public void addToBuffer(Photo p) {
-		//		synchronized (buffer) {
-		//			while (buffer.size() >= BUFFER_SIZE) {
-		//				try {
-		//					wait();
-		//				} catch (InterruptedException e) {
-		//					// TODO Auto-generated catch block
-		//					e.printStackTrace();
-		//				}
-		//			}
 		try {
 			buffer.put(p);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//
-		//			buffer.notify();
-		//		}
 	}
 
 	public boolean consumeDedictedRequest(DedicatedRequest request) {

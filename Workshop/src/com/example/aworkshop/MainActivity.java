@@ -17,7 +17,7 @@ import android.view.Menu;
 public class MainActivity extends Activity {
 
 	// static final fields
-	private static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
+	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	//		File dataDirectory = new File(root + "/DCIM/Camera/");
 	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
 

@@ -16,33 +16,56 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
+import android.os.Environment;
+import android.util.Log;
+import ActivationManager.EventCandidate;
+import ActivationManager.EventCandidateContainer;
+
 import Common.BoundingBox;
+import Common.Photo;
 import Common.Point;
 
 public class BingServices {
+	private final static String TAG = "BingServices";
 
-	public static StaticMap getStaticMap(Point[] points) {
+	public static StaticMap getStaticMap(List<Point> points) {
 
-		StaticMap map = new StaticMap();
+		StaticMap map = null;
 
-		//get jpeg
-		map.setJpgPath(getStaticMapOrMetadataFile(map, false, points));
-		// get metadata
-		map.setMetadataPath(getStaticMapOrMetadataFile(map, true, points));
+		if (points.size()  > 0) { // Request iff there is one photo
 
-		File xmlFile = new File(map.getMetadataPath());
-		fillStaticMapWithData(xmlFile, map);
+			map = new StaticMap();
+			
+			//get jpeg
+			map.setJpgPath(getStaticMapOrMetadataFile(false, points));
+			
+			// get metadata
+			map.setMetadataPath(getStaticMapOrMetadataFile(true, points));
+
+			File xmlFile = new File(map.getMetadataPath());
+			fillStaticMapWithData(xmlFile, map);
+			
+		}
+		else {
+			Log.d(TAG, "getStaticMap: Zero locations in request");
+		}
 
 		return map;
 	}
-	public static Point[] getImagePointArray() {
+	public static List<Point> getImagesPointsArray() {
 		List<Point> points = new ArrayList<Point>();
-		return null;
-		
+		//TODO: this should work with the ActualEventContainer
+		for (EventCandidate event: EventCandidateContainer.getInstance().getAllEventsInContainer()) {
+			for (Photo photo : event.getEventPhotos()) {
+				points.add(photo.getLocation());
+			}
+		}
+		return points;
 	}
 
 
-	private static String getStaticMapOrMetadataFile(StaticMap map, boolean metadata, Point[] points) {
+	private static String getStaticMapOrMetadataFile(boolean metadata, List<Point> points) {
+		
 		File file = null;
 		try {
 
@@ -65,11 +88,12 @@ public class BingServices {
 			url = new URL(urlString);
 			urlConn = url.openConnection();
 			urlConn.setDoInput (true);
-			urlConn.setDoOutput (true);
+			urlConn.setDoOutput (true); // POST Request
 			urlConn.setUseCaches (false);
 			urlConn.setRequestProperty("Content-Type", "text/plain");
 			urlConn.setRequestProperty("charset",  "charset=utf-8");
 
+			// adding pushpins coordinates to BING request
 			StringBuilder builder = new StringBuilder();
 
 			for (Point point : points)  {
@@ -80,38 +104,28 @@ public class BingServices {
 
 			String strContent = builder.toString();
 
-			urlConn.setRequestProperty("Content-Length", new Integer(strContent.getBytes().length).toString()); 
+			urlConn.setRequestProperty("Content-Length", Integer.valueOf(strContent.getBytes().length).toString()); 
 			printout = new DataOutputStream (urlConn.getOutputStream ());
 			printout.writeBytes (strContent);
 			printout.flush ();
 
 			// Get response
 			input = new DataInputStream (urlConn.getInputStream());
-			int bt = -1;
+			
+			File externalStorageDir = Environment.getExternalStorageDirectory();
+			File testsDir = new File(externalStorageDir, "Tests");
+			file = new File(testsDir, "moshiko.");
+			
 			if (!metadata) {
 				// TODO: make jpg data work with imageIO and not with file
-				file = new File("./moshe.jpg");
+				file = new File(file.getPath() + "jpg");
 			}
 			else {
-				file = new File("./moshe.xml");
+				file = new File(file.getPath()  + "xml");
 			}
 
-			FileOutputStream fop = new FileOutputStream(file);
-			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-
-			while ((bt = input.read()) > -1) {
-				fop.write(bt);	
-			}
-
-			if (!metadata) { // update the location of jpeg on disk
-				map.setJpgPath(file.getPath());
-			}
-
-			fop.flush();
-			fop.close();
+			readFromStreamAndWriteToFile(input, testsDir, file);
+			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -121,6 +135,26 @@ public class BingServices {
 		return file.getPath();
 	}
 
+	private static void readFromStreamAndWriteToFile(DataInputStream input, File dir, File file) throws IOException {
+
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		
+		file.delete();
+		file.createNewFile();
+
+		
+		FileOutputStream fop = new FileOutputStream(file);
+
+		byte[] buffer = new byte[1024];
+		while (input.read(buffer) > -1) {
+			fop.write(buffer);	
+		}
+
+		fop.flush();
+		fop.close();
+	}
 	private static void fillStaticMapWithData(File xmlFile, StaticMap map) {
 
 		SAXBuilder builder = new SAXBuilder();
@@ -146,10 +180,10 @@ public class BingServices {
 			// get bounding box
 			Element node = metaNode.getChild("BoundingBox",namespace);
 
-			double SouthLatitude = new Double(node. getChildText("SouthLatitude",namespace)); // "SouthLatitude"
-			double WestLongitude = new Double(node. getChildText("WestLongitude",namespace)); // "WestLongitude"
-			double NorthLatitude = new Double(node. getChildText("NorthLatitude",namespace)); // "NorthLatitude"
-			double EastLongitude = new Double(node. getChildText("EastLongitude",namespace)); // "EastLongitude"
+			double SouthLatitude = Double.valueOf(node. getChildText("SouthLatitude",namespace)); // "SouthLatitude"
+			double WestLongitude = Double.valueOf(node. getChildText("WestLongitude",namespace)); // "WestLongitude"
+			double NorthLatitude = Double.valueOf(node. getChildText("NorthLatitude",namespace)); // "NorthLatitude"
+			double EastLongitude = Double.valueOf(node. getChildText("EastLongitude",namespace)); // "EastLongitude"
 
 			BoundingBox box = new BoundingBox(new Point(NorthLatitude, WestLongitude), 
 					new Point(EastLongitude, SouthLatitude));
@@ -157,8 +191,8 @@ public class BingServices {
 
 			// get center point
 			node = metaNode.getChild("MapCenter", namespace);
-			double latitude = new Double(node.getChildText("Latitude", namespace));
-			double longitude = new Double(node.getChildText("Longitude", namespace));
+			double latitude = Double.valueOf(node.getChildText("Latitude", namespace));
+			double longitude = Double.valueOf(node.getChildText("Longitude", namespace));
 
 			Point center = new Point(latitude, longitude);
 			map.setCenterPoint(center);
@@ -169,20 +203,20 @@ public class BingServices {
 			for (Element pushpinNode : pushpinsNode.getChildren()) {
 
 				node = pushpinNode.getChild("Point", namespace);
-				latitude = new Double(node.getChildText("Latitude", namespace));	
-				longitude = new Double(node.getChildText("Longitude", namespace)); 
+				latitude = Double.valueOf(node.getChildText("Latitude", namespace));	
+				longitude = Double.valueOf(node.getChildText("Longitude", namespace)); 
 
 				node = pushpinNode.getChild("Anchor", namespace);
-				int ax =  new Integer(node.getChildText("X", namespace));	
-				int ay =  new Integer(node.getChildText("Y", namespace));	
+				int ax = Integer.valueOf(node.getChildText("X", namespace));	
+				int ay = Integer.valueOf(node.getChildText("Y", namespace));	
 
 				node = pushpinNode.getChild("TopLeftOffset", namespace);
-				int tx =  new Integer(node.getChildText("X", namespace));	
-				int ty =  new Integer(node.getChildText("Y", namespace));	
+				int tx = Integer.valueOf(node.getChildText("X", namespace));	
+				int ty = Integer.valueOf(node.getChildText("Y", namespace));	
 
 				node = pushpinNode.getChild("BottomRightOffset", namespace);
-				int bx =  new Integer(node.getChildText("X", namespace));	
-				int by =  new Integer(node.getChildText("Y", namespace));	
+				int bx = Integer.valueOf(node.getChildText("X", namespace));	
+				int by = Integer.valueOf(node.getChildText("Y", namespace));	
 
 				map.addPushpin(new Pushpin(new Point(latitude,longitude),
 						new int[] {ax, ay},

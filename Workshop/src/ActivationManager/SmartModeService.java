@@ -22,7 +22,7 @@ public class SmartModeService {
 					manager.processPhotoBuffer();
 				}
 			},
-			0,
+			20,
 			INTERVAL_IN_SECONDS,
 			TimeUnit.SECONDS);	
 		}
