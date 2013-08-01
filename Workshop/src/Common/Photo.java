@@ -7,6 +7,8 @@ import java.util.Date;
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 
+import android.R.string;
+
 public class Photo implements Comparable<Photo> {
 
 	private DateTime takenDate;
@@ -41,6 +43,11 @@ public class Photo implements Comparable<Photo> {
 
 	public boolean isHorizontal() {
 		return isHorizontal;
+	}
+	
+	public String getFilePath()
+	{
+		return this.path;
 	}
 
 	public Point getLocation() {

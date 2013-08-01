@@ -1,7 +1,0 @@
-package ActivationManager;
-
-public class EventCandidateContainerSingleton {
-
-	private int eventCandidateCounter = 0;
-	
-}

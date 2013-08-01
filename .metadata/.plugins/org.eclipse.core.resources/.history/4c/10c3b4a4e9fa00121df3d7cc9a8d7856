@@ -1,0 +1,72 @@
+package Partitioning;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import android.R.integer;
+import Common.*;
+
+
+public class DBScan {
+	
+	/*Parameters for deciding weather two pictures are "close" to each other as part
+	 * of the DBScan algorithm
+	 */
+	private static final double MaxSecondsInterval = 600;	
+	private static final double MaxMetersInterval = 50; 
+	private static final int minNumberOfPointsInCluster = 2;
+	
+	
+	
+	public static List<Cluster> DBScan (List<Photo> photosData)
+	{
+		if (photosData == null)
+			return null;
+		List<PhotoObjectForClustering> unvisitedPhotos
+					= new LinkedList<PhotoObjectForClustering>();
+		List<PhotoObjectForClustering> visitedPhotos
+					= new LinkedList<PhotoObjectForClustering>();
+		for (Photo p : photosData)
+		{
+			if (p != null)
+			{
+				unvisitedPhotos.add(new PhotoObjectForClustering(p));
+			}
+		}
+	}
+	
+	private boolean isEpsilonDistanced (Photo p1, Photo p2)
+	{
+		if ((p1.distanceFrom(p2) < MaxMetersInterval) && (p1.timeDeltaInSecondsFrom(p2) < MaxSecondsInterval))
+				return true;
+		return false;
+	}
+	
+	private List<PhotoObjectForClustering> regionQueryList (PhotoObjectForClustering p)
+	{
+		List<PhotoObjectForClustering> photosEpsilonClose = new LinkedList<PhotoObjectForClustering>();
+		for (PhotoObjectForClustering photoCandidate : photosForClustering) {
+			if ((photoCandidate != null) && (isEpsilonDistanced(p, photoCandidate)))
+			{
+				photosEpsilonClose.add(photoCandidate);
+			}
+		}
+		return photosEpsilonClose;
+	}
+	
+	private class PhotoObjectForClustering extends Photo
+	{
+		public boolean isVisited = false;
+		private Cluster cluster = null; 
+		Photo photo = null;
+		
+		public PhotoObjectForClustering(Photo p)
+		{
+			super(p.getTakenDate().toDate(), p.getWidth(), p.getHeight(), p.getLocation(), p.getFilePath());
+		}
+		
+		public Cluster getClusterOfPointCluster(){
+			return cluster;	
+		}
+	}
+}

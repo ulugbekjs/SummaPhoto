@@ -1,0 +1,17 @@
+package Partitioning;
+
+import Common.Photo;
+
+protected class PhotoObjectForClustering extends Photo {
+	
+	public boolean isVisited = false;
+	public boolean isNoise = false; 
+	pbulic Cluster cluster = null;
+	
+	
+	public PhotoObjectForClustering(Photo p)
+	{
+		super(p.getTakenDate().toDate(), p.getWidth(), p.getHeight(), p.getLocation(), p.getFilePath());
+	}
+
+}
