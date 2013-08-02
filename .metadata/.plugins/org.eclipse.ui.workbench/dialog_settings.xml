@@ -4,11 +4,11 @@
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"/>
 		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID"/>
 		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
+			<item value="C:\Users\omri\Desktop\temp"/>
+			<item value="C:\Users\omri\Documents\Omri\Workshop\WorkshopRepository\Workshop\src\Common"/>
+			<item value="C:\Users\omri\Documents\Omri\Workshop\WorkshopRepository\Workshop\src\Partitioning"/>
 			<item value="/Users/yonatan/Documents/workspace/WorkshopRepository/WorkshopJava/lib"/>
 			<item value="/Users/yonatan/Documents/workspace/WorkshopRepository/Workshop/lib"/>
-			<item value="/Users/yonatan/Documents/workspace/WorkshopRepository"/>
-			<item value="C:\Users\yonatan"/>
-			<item value="C:\Users\yonatan\WorkshopRepository"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.internal.QuickAccess">
@@ -47,8 +47,13 @@
 	</section>
 	<section name="ImportExportAction">
 		<item value="org.eclipse.ui.wizards.import.FileSystem" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
+		<item value="org.eclipse.jdt.internal.ui.jarpackager.JarPackageWizard" key="ImportExportPage.STORE_SELECTED_EXPORT_WIZARD_ID"/>
 		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
 			<item value="org.eclipse.ui.Basic"/>
+			<item value="com.android.ide.eclipse.wizards.category"/>
+		</list>
+		<list key="ImportExportPage.STORE_EXPANDED_EXPORT_CATEGORIES">
+			<item value="org.eclipse.jdt.ui.Java"/>
 		</list>
 	</section>
 </section>

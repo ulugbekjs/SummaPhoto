@@ -1,0 +1,26 @@
+package Partitioning;
+
+import Common.Photo;
+
+public class PhotoObjectForClustering extends Photo {
+	
+	public boolean isVisited = false;
+	public boolean isNoise = false; 
+	public Cluster cluster = null;
+	
+	
+	public PhotoObjectForClustering(Photo p)
+	{
+		super(p.getTakenDate().toDate(), p.getWidth(), p.getHeight(), p.getLocation(), p.getFilePath());
+	}
+	
+	public void addPointToCluster(Cluster c)
+	{
+		if (c == null)
+			return;
+		this.cluster = c;
+		c.photosInCluster.add(this);
+		
+	}
+
+}

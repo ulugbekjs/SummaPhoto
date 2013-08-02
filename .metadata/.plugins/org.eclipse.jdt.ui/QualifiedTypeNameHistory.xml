@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="javax.swing.Box.Filler"/>
-<fullyQualifiedTypeName name="Bing.PushPin"/>
-<fullyQualifiedTypeName name="com.sun.media.sound.InvalidFormatException"/>
-<fullyQualifiedTypeName name="Common.BoundingBox"/>
-<fullyQualifiedTypeName name="java.lang.Double"/>
 <fullyQualifiedTypeName name="Bing.Pushpin"/>
 <fullyQualifiedTypeName name="java.io.InputStream"/>
 <fullyQualifiedTypeName name="java.io.Reader"/>
@@ -26,7 +21,6 @@
 <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
 <fullyQualifiedTypeName name="java.util.Date"/>
 <fullyQualifiedTypeName name="android.location.Location"/>
-<fullyQualifiedTypeName name="Common.Point"/>
 <fullyQualifiedTypeName name="android.media.ExifInterface"/>
 <fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread.CameraDirectoryListener"/>
 <fullyQualifiedTypeName name="java.lang.Thread"/>
@@ -39,25 +33,31 @@
 <fullyQualifiedTypeName name="android.os.Environment"/>
 <fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread"/>
 <fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread.CameraDirObserver"/>
-<fullyQualifiedTypeName name="java.lang.String"/>
 <fullyQualifiedTypeName name="java.io.File"/>
 <fullyQualifiedTypeName name="PhotoListener.PhotoListener"/>
-<fullyQualifiedTypeName name="java.lang.Exception"/>
 <fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="java.util.Timer"/>
 <fullyQualifiedTypeName name="java.util.TimerTask"/>
 <fullyQualifiedTypeName name="ActivationManager.ActivationManagerThread.ActivationManagerTask"/>
 <fullyQualifiedTypeName name="ActivationManager.ActivationManager"/>
 <fullyQualifiedTypeName name="ActivationManager.ActivationManagerThread"/>
-<fullyQualifiedTypeName name="android.R.string"/>
 <fullyQualifiedTypeName name="android.R.integer"/>
 <fullyQualifiedTypeName name="java.lang.NullPointerException"/>
 <fullyQualifiedTypeName name="java.lang.Boolean"/>
-<fullyQualifiedTypeName name="Common.Photo"/>
 <fullyQualifiedTypeName name="Partitioning.DBScan.PhotoObjectForClustering"/>
-<fullyQualifiedTypeName name="Partitioning.PhotoObjectForClustering"/>
-<fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="Partitioning.Cluster"/>
-<fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="android.webkit.WebChromeClient.CustomViewCallback"/>
+<fullyQualifiedTypeName name="android.R.string"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="org.joda.time.DateTime"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="java.util.Hashtable"/>
+<fullyQualifiedTypeName name="Partitioning.PhotoObjectForClustering"/>
+<fullyQualifiedTypeName name="java.lang.Exception"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="Common.Photo"/>
+<fullyQualifiedTypeName name="Partitioning.DBScan"/>
+<fullyQualifiedTypeName name="java.awt.Point"/>
+<fullyQualifiedTypeName name="Common.Point"/>
+<fullyQualifiedTypeName name="Partitioning.Cluster"/>
 </qualifiedTypeNameHistroy>
