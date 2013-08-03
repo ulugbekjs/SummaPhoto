@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="Bing.Pushpin"/>
-<fullyQualifiedTypeName name="java.io.InputStream"/>
 <fullyQualifiedTypeName name="java.io.Reader"/>
 <fullyQualifiedTypeName name="org.w3c.dom.Element"/>
 <fullyQualifiedTypeName name="com.sun.org.apache.xpath.internal.axes.NodeSequence"/>
@@ -51,13 +49,15 @@
 <fullyQualifiedTypeName name="org.joda.time.DateTime"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="java.util.Hashtable"/>
-<fullyQualifiedTypeName name="Partitioning.PhotoObjectForClustering"/>
 <fullyQualifiedTypeName name="java.lang.Exception"/>
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="Common.Photo"/>
-<fullyQualifiedTypeName name="Partitioning.DBScan"/>
 <fullyQualifiedTypeName name="java.awt.Point"/>
 <fullyQualifiedTypeName name="Common.Point"/>
+<fullyQualifiedTypeName name="Partitioning.PhotoObjectForClustering"/>
+<fullyQualifiedTypeName name="Partitioning.DBScan"/>
+<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="Partitioning.Cluster"/>
+<fullyQualifiedTypeName name="Exnternals.DBScanExternals"/>
+<fullyQualifiedTypeName name="Exnternals.ClusterExternals"/>
 </qualifiedTypeNameHistroy>

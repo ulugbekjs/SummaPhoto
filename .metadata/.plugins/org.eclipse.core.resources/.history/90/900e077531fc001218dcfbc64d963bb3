@@ -1,0 +1,18 @@
+
+package Exnternals;
+import java.util.LinkedList;
+import java.util.List;
+
+import Common.Photo;
+
+
+
+public class ClusterExternals {
+
+	public List<PhotoObjectForClusteringExternals> photosInCluster = null;
+	
+	public ClusterExternals()
+	{
+		photosInCluster = new LinkedList<PhotoObjectForClusteringExternals>();
+	}
+}
