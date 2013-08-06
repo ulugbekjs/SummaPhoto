@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
-	<section name="org.eclipse.debug.ui.sourcelookup.SourceLookupDialog">
-		<item value="438" key="DIALOG_WIDTH"/>
-		<item value="319" key="DIALOG_Y_ORIGIN"/>
-		<item value="402" key="DIALOG_HEIGHT"/>
-		<item value="500" key="DIALOG_X_ORIGIN"/>
-		<item value="1|Tahoma|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Tahoma" key="DIALOG_FONT_NAME"/>
-	</section>
+	<item value="true" key="EXT_FOLDER_LAST_SUBDIR_SETTING"/>
+	<item value="D:\Eclipse\adt-bundle-windows-x86_64-20130717\sdk" key="EXT_FOLDER_LAST_PATH_SETTING"/>
 	<section name="org.eclipse.debug.ui.SCOPED_SAVE_SELECTION_DIALOG">
 		<item value="289" key="DIALOG_WIDTH"/>
 		<item value="352" key="DIALOG_HEIGHT"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.debug.ui.sourcelookup.SourceLookupDialog">
+		<item value="438" key="DIALOG_WIDTH"/>
+		<item value="319" key="DIALOG_Y_ORIGIN"/>
+		<item value="500" key="DIALOG_X_ORIGIN"/>
+		<item value="402" key="DIALOG_HEIGHT"/>
+		<item value="1|Tahoma|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Tahoma" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.debug.ui.SELECT_LAUNCHERS_DIALOG">
 		<item value="450" key="DIALOG_WIDTH"/>
@@ -22,8 +24,8 @@
 		<item value=", org.eclipse.jdt.junit.launchconfig, com.android.ide.eclipse.adt.debug.LaunchConfigType, com.android.ide.eclipse.adt.junit.launchConfigurationType, " key="org.eclipse.debug.ui.EXPANDED_NODES"/>
 		<item value="661" key="DIALOG_HEIGHT"/>
 		<item value="237" key="org.eclipse.debug.ui.DIALOG_SASH_WEIGHTS_1"/>
-		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 		<item value="762" key="org.eclipse.debug.ui.DIALOG_SASH_WEIGHTS_2"/>
+		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.debug.ui.SELECT_LAUNCH_SHORTCUT_DIALOG">
 		<item value="231" key="DIALOG_WIDTH"/>

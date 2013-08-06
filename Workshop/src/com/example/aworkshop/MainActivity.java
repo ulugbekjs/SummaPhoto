@@ -1,6 +1,8 @@
 package com.example.aworkshop;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 import ActivationManager.ActivationManager;
 import ActivationManager.ActivationManagerThread;
@@ -26,12 +28,33 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		/**
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 
 		observer.startWatching();
 		SmartModeService.startService();
+		**/
+		File directory = new File("E:/Pictures");
+		if (!directory.exists())
+			return;
+		File[] arrayOfPic =  directory.listFiles();
+		Photo tempPhoho = null;
+		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		for (File file : arrayOfPic)
+		{
+			try
+			{
+				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+			}
+			catch (Exception ex)
+			{
+			}
+			if (tempPhoho != null)
+				photosToCluster.add(tempPhoho);
+		}
+
 	}
 
 	//listen();

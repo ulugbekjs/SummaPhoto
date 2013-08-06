@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.io.Reader"/>
 <fullyQualifiedTypeName name="org.w3c.dom.Element"/>
 <fullyQualifiedTypeName name="com.sun.org.apache.xpath.internal.axes.NodeSequence"/>
 <fullyQualifiedTypeName name="org.jdom2.input.SAXBuilder"/>
@@ -29,9 +28,7 @@
 <fullyQualifiedTypeName name="java.util.Queue"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="android.os.Environment"/>
-<fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread"/>
 <fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread.CameraDirObserver"/>
-<fullyQualifiedTypeName name="java.io.File"/>
 <fullyQualifiedTypeName name="PhotoListener.PhotoListener"/>
 <fullyQualifiedTypeName name="android.util.Log"/>
 <fullyQualifiedTypeName name="java.util.Timer"/>
@@ -49,15 +46,18 @@
 <fullyQualifiedTypeName name="org.joda.time.DateTime"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="java.util.Hashtable"/>
-<fullyQualifiedTypeName name="java.lang.Exception"/>
-<fullyQualifiedTypeName name="java.util.LinkedList"/>
-<fullyQualifiedTypeName name="Common.Photo"/>
 <fullyQualifiedTypeName name="java.awt.Point"/>
 <fullyQualifiedTypeName name="Common.Point"/>
 <fullyQualifiedTypeName name="Partitioning.PhotoObjectForClustering"/>
 <fullyQualifiedTypeName name="Partitioning.DBScan"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="Partitioning.Cluster"/>
 <fullyQualifiedTypeName name="Exnternals.DBScanExternals"/>
 <fullyQualifiedTypeName name="Exnternals.ClusterExternals"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="Common.Photo"/>
+<fullyQualifiedTypeName name="com.example.aworkshop.MainActivity"/>
+<fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread"/>
+<fullyQualifiedTypeName name="java.lang.Exception"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.LinkedList"/>
 </qualifiedTypeNameHistroy>
