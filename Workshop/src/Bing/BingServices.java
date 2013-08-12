@@ -21,6 +21,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
+
+import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
 import ActivationManager.EventCandidate;
@@ -176,7 +178,7 @@ public class BingServices {
 			}
 
 			// concatenate with BING key
-			urlString = urlString + "&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
+			urlString = urlString + "&mapSize=1000,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
 
 			// Construct POST Request
 			
@@ -245,8 +247,8 @@ public class BingServices {
 
 	private static String createOutputFile(boolean metadata, ByteArrayOutputStream out) throws IOException {
 		
-		File externalStorageDir = Environment.getExternalStorageDirectory();
-		File testsDir = new File(externalStorageDir, "Tests");
+		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "Pictures");
+		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Output");
 		File file = new File(testsDir, "moshiko.");
 
 		// Construct right file according to requested content
@@ -262,15 +264,28 @@ public class BingServices {
 		if (!testsDir.exists()) {
 			testsDir.mkdirs();
 		}
-		file.delete();
-		file.createNewFile();
+		if (file.exists()) {
+			file.delete();
+		}
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+		    Log.d("Test", "sdcard mounted and writable");
+			file.createNewFile();
+		}
+		else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+		    Log.d("Test", "sdcard mounted readonly");
+		}
+		else {
+		    Log.d("Test", "sdcard state: " + state);
+		}
 
 		// actual write to file
 		OutputStream outputStream = new FileOutputStream (file); 
 		out.writeTo(outputStream);
+		out.flush();
+		out.close();
 		
 		return file.getPath();
 	}
-
 }
 

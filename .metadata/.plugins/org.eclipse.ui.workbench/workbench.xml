@@ -8,7 +8,7 @@
 </perspectiveBar>
 <coolbarLayout>
 <coolItem id="group.file" itemType="typeGroupMarker"/>
-<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="191" y="22"/>
+<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="160" y="22"/>
 <coolItem id="additions" itemType="typeGroupMarker"/>
 <coolItem id="adt.actionSet.avdManager" itemType="typeToolBarContribution" x="61" y="22"/>
 <coolItem id="adt.actionSet.lint" itemType="typeToolBarContribution" x="53" y="22"/>
@@ -18,7 +18,7 @@
 <coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="122" y="22"/>
 <coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="130" y="22"/>
 <coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
-<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="61" y="22"/>
+<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="190" y="22"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
@@ -34,120 +34,10 @@
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
 <folder appearance="1" expanded="2">
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
-<part id="1"/>
-<part id="2"/>
-<part id="3"/>
-<part id="4"/>
-<part id="5"/>
-<part id="6"/>
-<part id="7"/>
-<part id="8"/>
-<part id="9"/>
-<part id="10"/>
-<part id="11"/>
-<part id="12"/>
-<part id="13"/>
-<part id="14"/>
-<part id="15"/>
-<part id="16"/>
-<part id="17"/>
-<part id="18"/>
-<part id="19"/>
-<part id="20"/>
-<part id="21"/>
-</presentation>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
 </editorArea>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PhotoListenerThread.java" partName="PhotoListenerThread.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/PhotoListener/PhotoListenerThread.java" title="PhotoListenerThread.java" tooltip="Workshop/src/PhotoListener/PhotoListenerThread.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/PhotoListener/PhotoListenerThread.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1176" selectionTopPixel="135"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Point.java" partName="Point.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/Common/Point.java" title="Point.java" tooltip="Workshop/src/Common/Point.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/Common/Point.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="534" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="Photo.java" partName="Photo.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/Common/Photo.java" title="Photo.java" tooltip="Workshop/src/Common/Photo.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/Common/Photo.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1168" selectionTopPixel="90"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ListenerTestCases.java" partName="ListenerTestCases.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/PhotoListener/ListenerTestCases.java" title="ListenerTestCases.java" tooltip="Workshop/src/PhotoListener/ListenerTestCases.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/PhotoListener/ListenerTestCases.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="953" selectionTopPixel="375"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="EventCandidateContainer.java" partName="EventCandidateContainer.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/ActivationManager/EventCandidateContainer.java" title="EventCandidateContainer.java" tooltip="Workshop/src/ActivationManager/EventCandidateContainer.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/ActivationManager/EventCandidateContainer.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="524" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ActualEvent.java" partName="ActualEvent.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/Common/ActualEvent.java" title="ActualEvent.java" tooltip="Workshop/src/Common/ActualEvent.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/Common/ActualEvent.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="459" selectionTopPixel="428"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PhotoContainerSingleton.java" partName="PhotoContainerSingleton.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/Common/PhotoContainerSingleton.java" title="PhotoContainerSingleton.java" tooltip="Workshop/src/Common/PhotoContainerSingleton.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/Common/PhotoContainerSingleton.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ActivationManagerThread.java" partName="ActivationManagerThread.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/ActivationManager/ActivationManagerThread.java" title="ActivationManagerThread.java" tooltip="Workshop/src/ActivationManager/ActivationManagerThread.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/ActivationManager/ActivationManagerThread.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1331" selectionTopPixel="510"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ActualEventContainerSingelton.java" partName="ActualEventContainerSingelton.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/Common/ActualEventContainerSingelton.java" title="ActualEventContainerSingelton.java" tooltip="Workshop/src/Common/ActualEventContainerSingelton.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/Common/ActualEventContainerSingelton.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="411" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="LimitedLinkedList.java" partName="LimitedLinkedList.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/ActivationManager/LimitedLinkedList.java" title="LimitedLinkedList.java" tooltip="Workshop/src/ActivationManager/LimitedLinkedList.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/ActivationManager/LimitedLinkedList.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="330" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="EventCandidate.java" partName="EventCandidate.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/ActivationManager/EventCandidate.java" title="EventCandidate.java" tooltip="Workshop/src/ActivationManager/EventCandidate.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/ActivationManager/EventCandidate.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="430" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="AbstractEvent.java" partName="AbstractEvent.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/Common/AbstractEvent.java" title="AbstractEvent.java" tooltip="Workshop/src/Common/AbstractEvent.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/Common/AbstractEvent.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="8" selectionOffset="613" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BoundingBox.java" partName="BoundingBox.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/Common/BoundingBox.java" title="BoundingBox.java" tooltip="Workshop/src/Common/BoundingBox.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/Common/BoundingBox.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="BingServices.java" partName="BingServices.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/Bing/BingServices.java" title="BingServices.java" tooltip="Workshop/src/Bing/BingServices.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/Bing/BingServices.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1347" selectionTopPixel="225"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.ClassFileEditor" name="ReflectiveCallable.class" partName="ReflectiveCallable.class" title="ReflectiveCallable.class" tooltip="org.junit.internal.runners.model.ReflectiveCallable" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.jdt.ui.ClassFileEditorInputFactory" org.eclipse.jdt.ui.ClassFileIdentifier="=Workshop/C:\/Eclipse\/plugins\/org.junit_4.8.2.v4_8_2_v20110321-1705\/junit.jar&lt;org.junit.internal.runners.model(ReflectiveCallable.class"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainActivity.java" partName="MainActivity.java" path="C:/Users/yonatan/WorkshopRepository/WorkshopAndriod/src/com/workshopandriod/MainActivity.java" title="MainActivity.java" tooltip="WorkshopAndriod/src/com/workshopandriod/MainActivity.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/WorkshopAndriod/src/com/workshopandriod/MainActivity.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="567" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="SamplePost.java" partName="SamplePost.java" path="C:/Users/yonatan/WorkshopRepository/Workshop/src/Bing/SamplePost.java" title="SamplePost.java" tooltip="Workshop/src/Bing/SamplePost.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Workshop/src/Bing/SamplePost.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1614" selectionTopPixel="420"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="ServiceTestCase.java" partName="ServiceTestCase.java" path="C:/Users/yonatan/WorkshopRepository/Test/src/com/workshopandriod/test/ServiceTestCase.java" title="ServiceTestCase.java" tooltip="Test/src/com/workshopandriod/test/ServiceTestCase.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Test/src/com/workshopandriod/test/ServiceTestCase.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="368" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="MainService.java" partName="MainService.java" path="C:/Users/yonatan/WorkshopRepository/WorkshopAndriod/src/com/workshopandriod/MainService.java" title="MainService.java" tooltip="WorkshopAndriod/src/com/workshopandriod/MainService.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/WorkshopAndriod/src/com/workshopandriod/MainService.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="4" selectionOffset="753" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="PhotoListenerThread.java" partName="PhotoListenerThread.java" path="C:/Users/yonatan/WorkshopRepository/WorkshopAndriod/src/PhotoListener/PhotoListenerThread.java" title="PhotoListenerThread.java" tooltip="WorkshopAndriod/src/PhotoListener/PhotoListenerThread.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/WorkshopAndriod/src/PhotoListener/PhotoListenerThread.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1225" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.jdt.ui.CompilationUnitEditor" name="LimitedLinkedList.java" partName="LimitedLinkedList.java" path="C:/Users/yonatan/WorkshopRepository/WorkshopAndriod/src/ActivationManager/LimitedLinkedList.java" title="LimitedLinkedList.java" tooltip="WorkshopAndriod/src/ActivationManager/LimitedLinkedList.java" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/WorkshopAndriod/src/ActivationManager/LimitedLinkedList.java"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
-</editor>
-<editor activePart="true" focus="true" id="com.android.ide.eclipse.editors.manifest.ManifestEditor" name="AndroidManifest.xml" partName="WorkshopAndriod Manifest" path="C:/Users/yonatan/WorkshopRepository/WorkshopAndriod/bin/AndroidManifest.xml" title="WorkshopAndriod Manifest" tooltip="WorkshopAndriod/bin/AndroidManifest.xml" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/WorkshopAndriod/bin/AndroidManifest.xml"/>
-</editor>
 </editors>
 <views>
 <view id="org.eclipse.jdt.junit.ResultView" partName="JUnit">
@@ -157,8 +47,8 @@
 <viewState/>
 </view>
 <view id="org.eclipse.cdt.debug.ui.executablesView" partName="Executables"/>
-<view id="org.eclipse.debug.ui.PHPDebugOutput" partName="Debug Output"/>
 <view id="org.eclipse.debug.ui.PHPBrowserOutput" partName="Browser Output"/>
+<view id="org.eclipse.debug.ui.PHPDebugOutput" partName="Debug Output"/>
 <view id="org.eclipse.debug.ui.BreakpointView" partName="Breakpoints">
 <viewState/>
 </view>
@@ -177,10 +67,6 @@
 </view>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<expanded>
-<category IMemento.internal.id="Warnings"/>
-<category IMemento.internal.id="Errors"/>
-</expanded>
 <columnWidths org.eclipse.ui.ide.locationField="90" org.eclipse.ui.ide.markerType="90" org.eclipse.ui.ide.pathField="120" org.eclipse.ui.ide.resourceField="90" org.eclipse.ui.ide.severityAndDescriptionField="567"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
@@ -245,7 +131,7 @@
 <view id="org.eclipse.wst.server.ui.ServersView" partName="Servers"/>
 <view id="org.eclipse.jdt.ui.JavadocView" partName="Javadoc"/>
 </views>
-<perspectives activePart="org.eclipse.ui.console.ConsoleView" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
+<perspectives activePart="org.eclipse.jdt.ui.PackageExplorer" activePerspective="org.eclipse.jdt.ui.JavaPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.jdt.internal.ui.JavaPerspectiveFactory" id="org.eclipse.jdt.ui.JavaPerspective" label="Java"/>
 <alwaysOnActionSet id="org.eclipse.mylyn.doc.actionSet"/>
@@ -467,32 +353,23 @@
 <view id="com.android.ide.eclipse.ddms.views.LogCatView"/>
 <view id="org.eclipse.jdt.junit.ResultView"/>
 <fastViewBars/>
-<layout>
-<mainWindow>
-<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">
-<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">
-<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
 <page content="org.eclipse.wst.server.ui.ServersView" label="Servers"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.dltk.ui.ScriptExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
-<folder appearance="2" expanded="2">
-<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.7491821" ratioLeft="687" ratioRight="230" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
-<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
-<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.7491821" ratioLeft="687" ratioRight="230" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.cdt.debug.ui.executablesView" label="Executables"/>
@@ -504,8 +381,7 @@
 <page content="org.eclipse.jdt.debug.ui.DisplayView" label="LabelNotFound"/>
 <page content="org.eclipse.search.SearchResultView" label="LabelNotFound"/>
 <page content="org.eclipse.wst.xsl.jaxp.debug.ui.view1" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 <part id="3"/>
@@ -514,31 +390,23 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@1995dec" ratio="0.5" ratioLeft="836" ratioRight="836" relationship="2" relative="org.eclipse.debug.internal.ui.ConsoleFolderView">
-<folder activePageID="org.eclipse.jdt.junit.ResultView" appearance="2" expanded="2">
-<page content="com.android.ide.eclipse.ddms.views.LogCatView" label="LogCat"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@1995dec" ratio="0.5" ratioLeft="836" ratioRight="836" relationship="2" relative="org.eclipse.debug.internal.ui.ConsoleFolderView">&#x0A;<folder activePageID="org.eclipse.jdt.junit.ResultView" appearance="2" expanded="2">&#x0A;<page content="com.android.ide.eclipse.ddms.views.LogCatView" label="LogCat"/>
 <page content="org.eclipse.jdt.junit.ResultView" label="JUnit"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.44978166" ratioLeft="309" ratioRight="378" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
-<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
 <page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
 <page content="org.eclipse.cdt.dsf.gdb.ui.tracecontrol.view" label="LabelNotFound"/>
 <page content="org.eclipse.cdt.dsf.debug.ui.disassembly.view" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.5" ratioLeft="836" ratioRight="836" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
-<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">
-<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.5" ratioLeft="836" ratioRight="836" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
 <page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
 <page content="org.eclipse.debug.ui.ExpressionView" label="Expressions"/>
 <page content="org.eclipse.dltk.debug.ui.ScriptDisplayView" label="Interactive Console"/>
@@ -546,8 +414,7 @@
 <page content="org.eclipse.cdt.debug.ui.SignalsView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.ModuleView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.PHPStackView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 <part id="3"/>
@@ -559,168 +426,7 @@
 </perspective>
 </perspectives>
 <workingSets/>
-<navigationHistory>
-<editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Workshop/src/PhotoListener/ListenerTestCases.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/WorkshopAndriod/src/BService.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Workshop/src/Bing/SamplePost.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/Test/src/com/workshopandriod/test/ServiceTestCase.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/WorkshopAndriod/src/com/workshopandriod/MainService.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/WorkshopAndriod/src/com/workshopandriod/PhotoListenerThread.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/WorkshopAndriod/src/PhotoListener/PhotoListenerThread.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/WorkshopAndriod/src/ActivationManager/LimitedLinkedList.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.jdt.ui.CompilationUnitEditor" path="/WorkshopAndriod/src/PhotoListener/ListenerTestCases.java"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.android.ide.eclipse.editors.manifest.ManifestEditor" path="/WorkshopAndriod/bin/AndroidManifest.xml"/>
-</editors>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="305" y="4"/>
-</item>
-<item historyLabel="ListenerTestCases.java" index="0">
-<position info="not_deleted" x="973" y="0"/>
-</item>
-<item historyLabel="ListenerTestCases.java" index="0">
-<position info="not_deleted" x="973" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="315" y="0"/>
-</item>
-<item historyLabel="ListenerTestCases.java" index="0">
-<position info="not_deleted" x="973" y="0"/>
-</item>
-<item historyLabel="ListenerTestCases.java" index="0">
-<position info="not_deleted" x="953" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="319" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="359" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="396" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="441" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="480" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="518" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="567" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="613" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="666" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="923" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="979" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="478" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1021" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1058" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1096" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1136" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1246" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1318" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1365" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1406" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1435" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1493" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1582" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1362" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1730" y="0"/>
-</item>
-<item historyLabel="SamplePost.java" index="2">
-<position info="not_deleted" x="1614" y="0"/>
-</item>
-<item historyLabel="ServiceTestCase.java" index="3">
-<position info="not_deleted" x="144" y="0"/>
-</item>
-<item historyLabel="BService.java" index="1">
-<position info="not_deleted" x="87" y="0"/>
-</item>
-<item historyLabel="ServiceTestCase.java" index="3">
-<position info="not_deleted" x="144" y="0"/>
-</item>
-<item historyLabel="MainService.java" index="4">
-<position info="not_deleted" x="758" y="0"/>
-</item>
-<item historyLabel="PhotoListenerThread.java" index="5">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="MainService.java" index="4">
-<position info="not_deleted" x="758" y="0"/>
-</item>
-<item historyLabel="PhotoListenerThread.java" index="6">
-<position info="not_deleted" x="1225" y="0"/>
-</item>
-<item historyLabel="LimitedLinkedList.java" index="7">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="MainService.java" index="4">
-<position info="not_deleted" x="758" y="0"/>
-</item>
-<item historyLabel="MainService.java" index="4">
-<position info="not_deleted" x="758" y="0"/>
-</item>
-<item historyLabel="PhotoListenerThread.java" index="6">
-<position info="not_deleted" x="1225" y="0"/>
-</item>
-<item historyLabel="ListenerTestCases.java" index="8">
-<position info="not_deleted" x="587" y="320"/>
-</item>
-<item historyLabel="MainService.java" index="4">
-<position info="not_deleted" x="753" y="4"/>
-</item>
-<item historyLabel="ServiceTestCase.java" index="3">
-<position info="not_deleted" x="144" y="0"/>
-</item>
-<item historyLabel="ServiceTestCase.java" index="3">
-<position info="not_deleted" x="362" y="0"/>
-</item>
-<item historyLabel="ListenerTestCases.java" index="8">
-<position info="not_deleted" x="913" y="0"/>
-</item>
-<item historyLabel="ServiceTestCase.java" index="3">
-<position info="not_deleted" x="368" y="0"/>
-</item>
-<item active="true" historyLabel="WorkshopAndriod Manifest" index="9"/>
-</navigationHistory>
+<navigationHistory/>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
 <workbenchWindowAdvisor/>

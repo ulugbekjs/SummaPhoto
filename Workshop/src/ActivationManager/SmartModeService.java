@@ -30,5 +30,6 @@ public class SmartModeService {
 
 	public static void stopService() {
 		scheduler.shutdown();
+		scheduler = null;
 	}
 }

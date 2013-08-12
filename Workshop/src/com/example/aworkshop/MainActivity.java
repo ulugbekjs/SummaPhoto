@@ -10,6 +10,7 @@ import ActivationManager.SmartModeService;
 import Common.Photo;
 import PhotoListener.PhotoListenerThread;
 import android.app.Activity;
+import android.graphics.Camera;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileObserver;
@@ -22,40 +23,39 @@ public class MainActivity extends Activity {
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	//		File dataDirectory = new File(root + "/DCIM/Camera/");
 	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 
 	// global fields
 	PhotoListenerThread observer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		/**
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-
+		
 		observer.startWatching();
 		SmartModeService.startService();
-		**/
-		File directory = new File("E:/Pictures");
-		if (!directory.exists())
-			return;
-		File[] arrayOfPic =  directory.listFiles();
-		Photo tempPhoho = null;
-		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		for (File file : arrayOfPic)
-		{
-			try
-			{
-				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-			}
-			catch (Exception ex)
-			{
-			}
-			if (tempPhoho != null)
-				photosToCluster.add(tempPhoho);
-		}
-
-	}
+//		File directory = new File("E:/Pictures");
+//		if (!directory.exists())
+//			return;
+//		File[] arrayOfPic =  directory.listFiles();
+//		Photo tempPhoho = null;
+//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+//		for (File file : arrayOfPic)
+//		{
+//			try
+//			{
+//				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+//			}
+//			catch (Exception ex)
+//			{
+//			}
+//			if (tempPhoho != null)
+//				photosToCluster.add(tempPhoho);
+//		}
+//
+//	}
 
 	//listen();
 
@@ -80,6 +80,7 @@ public class MainActivity extends Activity {
 	//
 	//		ActivationManagerThread.getInstance().processPhotoBuffer();
 	//	}
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

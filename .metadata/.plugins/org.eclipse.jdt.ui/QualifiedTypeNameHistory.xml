@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="org.w3c.dom.Element"/>
-<fullyQualifiedTypeName name="com.sun.org.apache.xpath.internal.axes.NodeSequence"/>
 <fullyQualifiedTypeName name="org.jdom2.input.SAXBuilder"/>
 <fullyQualifiedTypeName name="org.w3c.dom.NodeList"/>
 <fullyQualifiedTypeName name="org.jdom2.Document"/>
@@ -26,8 +24,6 @@
 <fullyQualifiedTypeName name="java.lang.Runnable"/>
 <fullyQualifiedTypeName name="PhotoListener.CameraDirObserver"/>
 <fullyQualifiedTypeName name="java.util.Queue"/>
-<fullyQualifiedTypeName name="java.lang.System"/>
-<fullyQualifiedTypeName name="android.os.Environment"/>
 <fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread.CameraDirObserver"/>
 <fullyQualifiedTypeName name="PhotoListener.PhotoListener"/>
 <fullyQualifiedTypeName name="android.util.Log"/>
@@ -53,11 +49,15 @@
 <fullyQualifiedTypeName name="Partitioning.Cluster"/>
 <fullyQualifiedTypeName name="Exnternals.DBScanExternals"/>
 <fullyQualifiedTypeName name="Exnternals.ClusterExternals"/>
-<fullyQualifiedTypeName name="java.io.File"/>
 <fullyQualifiedTypeName name="Common.Photo"/>
 <fullyQualifiedTypeName name="com.example.aworkshop.MainActivity"/>
 <fullyQualifiedTypeName name="PhotoListener.PhotoListenerThread"/>
 <fullyQualifiedTypeName name="java.lang.Exception"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
+<fullyQualifiedTypeName name="android.graphics.Camera"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="android.os.Environment"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="android.media.MediaScannerConnection"/>
 </qualifiedTypeNameHistroy>
