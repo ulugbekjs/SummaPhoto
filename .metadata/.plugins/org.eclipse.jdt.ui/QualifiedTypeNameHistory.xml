@@ -13,9 +13,6 @@
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="java.util.Hashtable"/>
 <fullyQualifiedTypeName name="java.awt.Point"/>
-<fullyQualifiedTypeName name="Partitioning.PhotoObjectForClustering"/>
-<fullyQualifiedTypeName name="Partitioning.DBScan"/>
-<fullyQualifiedTypeName name="Partitioning.Cluster"/>
 <fullyQualifiedTypeName name="Exnternals.DBScanExternals"/>
 <fullyQualifiedTypeName name="Exnternals.ClusterExternals"/>
 <fullyQualifiedTypeName name="com.example.aworkshop.MainActivity"/>
@@ -40,8 +37,6 @@
 <fullyQualifiedTypeName name="com.example.aworkshop.R"/>
 <fullyQualifiedTypeName name="com.example.aworkshop.R.id"/>
 <fullyQualifiedTypeName name="java.security.PublicKey"/>
-<fullyQualifiedTypeName name="android.R.bool"/>
-<fullyQualifiedTypeName name="ActivationManager.SmartModeService"/>
 <fullyQualifiedTypeName name="ActivationManager.ScheduledModeService"/>
 <fullyQualifiedTypeName name="android.support.v4.app.FragmentActivity"/>
 <fullyQualifiedTypeName name="com.example.aworkshop.SettingsActivity.TimePickerFragment"/>
@@ -51,13 +46,8 @@
 <fullyQualifiedTypeName name="org.joda.time.DateTime"/>
 <fullyQualifiedTypeName name="Common.Photo"/>
 <fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="Common.BoundingBox"/>
-<fullyQualifiedTypeName name="java.lang.Override"/>
-<fullyQualifiedTypeName name="android.R.integer"/>
 <fullyQualifiedTypeName name="Common.Point"/>
 <fullyQualifiedTypeName name="Common.GPSPoint"/>
 <fullyQualifiedTypeName name="Generator.SlotBoundingBox"/>
-<fullyQualifiedTypeName name="java.lang.Math"/>
-<fullyQualifiedTypeName name="Common.PixelPoint"/>
 </qualifiedTypeNameHistroy>
