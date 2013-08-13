@@ -11,6 +11,8 @@ import org.joda.time.DateTime;
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeService;
 import Common.Photo;
+import Partitioning.Cluster;
+import Partitioning.DBScan;
 import PhotoListener.PhotoListenerThread;
 import android.os.Bundle;
 import android.os.Environment;
@@ -79,6 +81,9 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 					if (tempPhoho != null)
 						photosToCluster.add(tempPhoho);
 				}
+				DBScan algorithmDbScan = new DBScan(photosToCluster);
+				List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
+				return;
 		
 
 	}
