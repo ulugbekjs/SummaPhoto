@@ -4,7 +4,7 @@
     <string name="app_name">SummaPhoto</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">SummaPhoto</string>
     <string name="Smart">Smart</string>
     <string name="Daily">Daily</string>
     <string name="Off">Off</string>

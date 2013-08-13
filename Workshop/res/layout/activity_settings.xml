@@ -39,7 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/Smart" />
+                android:text="@string/Smart"
+                android:onClick="onRadioButtonClicked" />
 
             <TextView android:text="@string/SmartDescription" />
 
@@ -52,10 +53,11 @@
                     android:id="@+id/radioDaily"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/Daily" />
+                    android:text="@string/Daily" 
+                    android:onClick="onRadioButtonClicked" />
 
                 <TimePicker
-                    android:id="@+id/timePicker1"
+                    android:id="@+id/timePicker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -66,7 +68,8 @@
                 android:id="@+id/radioOff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Off" />
+                android:text="@string/Off"
+                android:onClick="onRadioButtonClicked" />
 
             <TextView android:text="@string/OffDescription" />
         </RadioGroup>

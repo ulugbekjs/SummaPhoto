@@ -32,4 +32,8 @@ public class SmartModeService {
 		scheduler.shutdown();
 		scheduler = null;
 	}
+	
+	public static boolean isServiceRunning() {
+		return (scheduler != null);
+	}
 }
