@@ -1,9 +1,12 @@
 package Partitioning;
 
+import java.util.AbstractQueue;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 import android.R.integer;
 import android.webkit.WebChromeClient.CustomViewCallback;
@@ -43,7 +46,7 @@ public class DBScan {
 		while (!unvisitedPhotos.isEmpty()) {
 			arbitraryUnvisitedPhoto = getArbitraryPhotoFromHashTableClustering(unvisitedPhotos);
 			moveToVisited(arbitraryUnvisitedPhoto);
-			List<PhotoObjectForClustering> neighborsList = regionQueryList(arbitraryUnvisitedPhoto);
+			Queue<PhotoObjectForClustering> neighborsList = regionQueryList(arbitraryUnvisitedPhoto);
 			if (neighborsList.size() < minNumberOfPointsInCluster) {
 				arbitraryUnvisitedPhoto.isNoise = true;
 			} 
@@ -58,10 +61,18 @@ public class DBScan {
 	}
 
 	private void expandCluster(Cluster c, PhotoObjectForClustering p,
-			List<PhotoObjectForClustering> neighbors) {
+			Queue<PhotoObjectForClustering> neighbors) {
 		if (neighbors != null) {
-			List<PhotoObjectForClustering> subNeighborsList;
-			for (PhotoObjectForClustering neighbor : neighbors) {
+			Queue<PhotoObjectForClustering> subNeighborsList;
+			
+			
+			
+			
+			
+			PhotoObjectForClustering neighbor;
+			while (!neighbors.isEmpty()) 
+			{
+				neighbor = neighbors.remove();
 				if (!neighbor.isVisited) {
 					moveToVisited(neighbor);
 					subNeighborsList = regionQueryList(neighbor);
@@ -91,9 +102,9 @@ public class DBScan {
 		return false;
 	}
 
-	private List<PhotoObjectForClustering> regionQueryList(
+	private Queue<PhotoObjectForClustering> regionQueryList(
 			PhotoObjectForClustering p) {
-		List<PhotoObjectForClustering> photosEpsilonClose = new LinkedList<PhotoObjectForClustering>();
+		Queue<PhotoObjectForClustering> photosEpsilonClose = new PriorityQueue<PhotoObjectForClustering>();
 		for (PhotoObjectForClustering photoCandidate : unvisitedPhotos.values()) {
 			if (isEpsilonDistanced(p, photoCandidate)) {
 				photosEpsilonClose.add(photoCandidate);
