@@ -1,0 +1,13 @@
+package Common;
+
+public class PixelPoint extends Point {
+
+	public PixelPoint(double latitude, double longitude) {
+		super(latitude, longitude);
+		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	
+
+}

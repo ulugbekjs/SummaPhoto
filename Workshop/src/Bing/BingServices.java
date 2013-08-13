@@ -29,7 +29,7 @@ import ActivationManager.EventCandidate;
 import ActivationManager.EventCandidateContainer;
 
 import Common.Photo;
-import Common.Point;
+import Common.GPSPoint;
 
 public class BingServices {
 
@@ -40,7 +40,7 @@ public class BingServices {
 	 * @param points list of all Points in ActualEvents
 	 * @return StaticMap, or NULL if map could not be created
 	 */
-	public static StaticMap getStaticMap(List<Point> points) {
+	public static StaticMap getStaticMap(List<GPSPoint> points) {
 
 		StaticMap map = null;
 
@@ -62,11 +62,11 @@ public class BingServices {
 		return map;
 	}
 
-	private static String getJPG(List<Point> points) {
+	private static String getJPG(List<GPSPoint> points) {
 		return createHTTPRequest(false, points);
 	}
 
-	private static String getJPGMetadata(List<Point> points) {
+	private static String getJPGMetadata(List<GPSPoint> points) {
 		return createHTTPRequest(true, points);
 	}
 
@@ -74,8 +74,8 @@ public class BingServices {
 	 * creates a List of Points to be sent to BING from all cuurent ActualEvents in ActualEventContainer
 	 * @return List of all Points in ActualEventContainer
 	 */
-	public static List<Point> getImagesPointsList() {
-		List<Point> points = new ArrayList<Point>();
+	public static List<GPSPoint> getImagesPointsList() {
+		List<GPSPoint> points = new ArrayList<GPSPoint>();
 		//TODO: this should work with the ActualEventContainer
 		for (EventCandidate event: EventCandidateContainer.getInstance().getAllEventsInContainer()) {
 			for (Photo photo : event.getEventPhotos()) {
@@ -163,7 +163,7 @@ public class BingServices {
 	 * @param points 
 	 * @return Path of newly saved .JPG/XML or NULL
 	 */
-	private static String createHTTPRequest(boolean metadata, List<Point> points) {
+	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points) {
 
 		String file = null;
 
@@ -186,7 +186,7 @@ public class BingServices {
 
 			// adding pushpins coordinates to BING request
 			StringBuilder builder = new StringBuilder();
-			for (Point point : points)  {
+			for (GPSPoint point : points)  {
 				builder.append("pp=");
 				builder.append(point.toString());
 				builder.append(";14;\r\n");

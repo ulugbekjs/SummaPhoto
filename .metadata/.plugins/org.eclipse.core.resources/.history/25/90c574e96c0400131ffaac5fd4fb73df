@@ -1,0 +1,10 @@
+package Common;
+
+public interface BoundingBox {
+	public Point getTopLeft();
+	public Point getBottomRight();
+
+	public double getWidth();
+
+	public double getHeight();
+}

@@ -1,0 +1,19 @@
+package Common;
+
+import android.R.integer;
+
+public class PixelPoint extends Point {
+	int x;
+	int y;
+
+	public PixelPoint(double latitude, double longitude) {
+		super(latitude, longitude);
+		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	public float distanceFrom(Point p) {
+		return ()
+	}
+
+}

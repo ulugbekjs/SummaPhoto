@@ -1,14 +1,14 @@
 package Bing;
 
-import Common.Point;
+import Common.GPSPoint;
 
 public class Pushpin {
-	private Point point;
+	private GPSPoint point;
 	private int[] anchor;
 	private int[] topLeftOffset;
 	private int[] bottomRightOffset;
 	
-	public Point getPoint() {
+	public GPSPoint getPoint() {
 		return point;
 	}
 
@@ -24,7 +24,7 @@ public class Pushpin {
 		return bottomRightOffset;
 	}
 
-	public Pushpin(Point point, int[] anchor, int[] topLeftOffset, int[] bottomRightOffset) {
+	public Pushpin(GPSPoint point, int[] anchor, int[] topLeftOffset, int[] bottomRightOffset) {
 		this.point = point;
 		this.anchor = anchor;
 		this.topLeftOffset = topLeftOffset;

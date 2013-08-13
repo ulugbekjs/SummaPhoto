@@ -12,7 +12,7 @@ import android.R.string;
 public class Photo implements Comparable<Photo> {
 
 	private DateTime takenDate;
-	private Point location;
+	private GPSPoint location;
 	private boolean isHorizontal;
 	private int height;
 	private int width;
@@ -23,7 +23,7 @@ public class Photo implements Comparable<Photo> {
 
 	//TODO private Image photo;
 
-	public Photo(Date date, int width, int height, Point location, String path) {
+	public Photo(Date date, int width, int height, GPSPoint location, String path) {
 		this.takenDate = new DateTime(date);
 		this.location = location;
 		this.height = height;
@@ -55,7 +55,7 @@ public class Photo implements Comparable<Photo> {
 		return this.path;
 	}
 
-	public Point getLocation() {
+	public GPSPoint getLocation() {
 		return location;
 	}
 

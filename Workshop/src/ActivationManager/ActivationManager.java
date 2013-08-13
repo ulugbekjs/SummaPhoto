@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import Bing.BingServices;
 import Common.Photo;
-import Common.Point;
+import Common.GPSPoint;
 
 public class ActivationManager {
 
@@ -109,7 +109,7 @@ public class ActivationManager {
 		}
 
 		// request map
-		List<Point> points = BingServices.getImagesPointsList();
+		List<GPSPoint> points = BingServices.getImagesPointsList();
 		BingServices.getStaticMap(points);
 	}
 

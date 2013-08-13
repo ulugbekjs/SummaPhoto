@@ -1,0 +1,17 @@
+package Common;
+
+public class PixelPoint extends Point {
+
+	public PixelPoint(double latitude, double longitude) {
+		super(latitude, longitude);
+		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	@Override
+	public float distanceFrom(Point p) {
+		// TODO Auto-generated method stub
+		return super.distanceFrom(p);
+	}
+
+}

@@ -15,7 +15,7 @@ import com.drew.metadata.jpeg.JpegDirectory;
 
 import ActivationManager.ActivationManager;
 import Common.Photo;
-import Common.Point;
+import Common.GPSPoint;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
@@ -104,7 +104,7 @@ public class PhotoListenerThread extends FileObserver {
 					date,
 					width,
 					height,
-					new Point(location.getLatitude(),location.getLongitude()),
+					new GPSPoint(location.getLatitude(),location.getLongitude()),
 					path.getPath());
 		} catch (MetadataException e) {
 			// TODO ERROR reading EXIF details of photo

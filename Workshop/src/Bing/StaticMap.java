@@ -13,19 +13,19 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
-import Common.BoundingBox;
-import Common.Point;
+import Common.GeoBoundingBox;
+import Common.GPSPoint;
 
 public class StaticMap {
 
 	private UUID requestUuid;
-	private BoundingBox box;
-	private Point centerPoint;
+	private GeoBoundingBox box;
+	private GPSPoint centerPoint;
 	private String jpgPath;
 	private String metadataPath;
 	private List<Pushpin> pins = new LinkedList<Pushpin>(); 
 			
-	public Point getCenterPoint() {
+	public GPSPoint getCenterPoint() {
 		return centerPoint;
 	}
 
@@ -45,7 +45,7 @@ public class StaticMap {
 	public UUID getRequestUuid() {
 		return requestUuid;
 	}
-	public BoundingBox getBox() {
+	public GeoBoundingBox getBox() {
 		return box;
 	}
 	
@@ -87,8 +87,8 @@ public class StaticMap {
 			double NorthLatitude = Double.valueOf(node. getChildText("NorthLatitude",namespace)); // "NorthLatitude"
 			double EastLongitude = Double.valueOf(node. getChildText("EastLongitude",namespace)); // "EastLongitude"
 
-			BoundingBox box = new BoundingBox(new Point(NorthLatitude, WestLongitude), 
-					new Point(EastLongitude, SouthLatitude));
+			GeoBoundingBox box = new GeoBoundingBox(new GPSPoint(NorthLatitude, WestLongitude), 
+					new GPSPoint(EastLongitude, SouthLatitude));
 			this.box = box;
 
 			// get center point
@@ -96,7 +96,7 @@ public class StaticMap {
 			double latitude = Double.valueOf(node.getChildText("Latitude", namespace));
 			double longitude = Double.valueOf(node.getChildText("Longitude", namespace));
 
-			Point center = new Point(latitude, longitude);
+			GPSPoint center = new GPSPoint(latitude, longitude);
 			this.centerPoint = center;
 
 			// get pushpins data: location, anchor & offsets
@@ -120,7 +120,7 @@ public class StaticMap {
 				int bx = Integer.valueOf(node.getChildText("X", namespace));	
 				int by = Integer.valueOf(node.getChildText("Y", namespace));	
 
-				pins.add(new Pushpin(new Point(latitude,longitude),
+				pins.add(new Pushpin(new GPSPoint(latitude,longitude),
 						new int[] {ax, ay},
 						new int[] {tx, ty},
 						new int[] {bx, by}));

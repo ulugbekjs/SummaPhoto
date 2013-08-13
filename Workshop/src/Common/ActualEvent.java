@@ -11,8 +11,8 @@ public class ActualEvent extends AbstractEvent {
 	private int verticalPhotosCount = 0;
 	
 	//geographic data fields
-	private Point centerPoint;
-	private BoundingBox box;
+	private GPSPoint centerPoint;
+	private GeoBoundingBox box;
 
 	public ActualEvent() {
 	}
@@ -37,7 +37,7 @@ public class ActualEvent extends AbstractEvent {
 		//TODO bounding box calculation
 	}
 	
-	public BoundingBox getBoundingBox() {
+	public GeoBoundingBox getBoundingBox() {
 		return box;
 		
 	}
@@ -46,7 +46,7 @@ public class ActualEvent extends AbstractEvent {
 		//TODO square point calculation
 	}
 	
-	public Point getCenterPoint() {
+	public GPSPoint getCenterPoint() {
 		return centerPoint;
 		
 	}
