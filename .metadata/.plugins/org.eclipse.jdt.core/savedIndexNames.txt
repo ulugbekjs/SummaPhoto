@@ -27,7 +27,6 @@ INDEX VERSION 1.126+C:\Users\yonatan\WorkshopRepository\.metadata\.plugins\org.e
 516711020.index
 3571733837.index
 1185593873.index
-2247001908.index
 304945317.index
 1356116859.index
 1697886153.index
