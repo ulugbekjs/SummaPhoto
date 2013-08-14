@@ -13,6 +13,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
+import android.R.integer;
+
 import Common.GeoBoundingBox;
 import Common.GPSPoint;
 
@@ -21,9 +23,18 @@ public class StaticMap {
 	private UUID requestUuid;
 	private GeoBoundingBox box;
 	private GPSPoint centerPoint;
+	private int pixelWidth;
+	private int pixelHeight;
 	private String jpgPath;
 	private String metadataPath;
+	
 	private List<Pushpin> pins = new LinkedList<Pushpin>(); 
+	
+	public StaticMap(int width, int height) {
+		this.requestUuid = UUID.randomUUID();
+		pixelWidth = width;
+		pixelHeight = height;
+	}
 			
 	public GPSPoint getCenterPoint() {
 		return centerPoint;
@@ -49,9 +60,14 @@ public class StaticMap {
 		return box;
 	}
 	
-	public StaticMap() {
-		this.requestUuid = UUID.randomUUID();
+	public int getPixelWidth() {
+		return this.pixelWidth;
 	}
+	
+	public int getPixelHeight() {
+		return this.pixelHeight;
+	}
+	
 	
 	private void fillMapWithMetaData() {
 

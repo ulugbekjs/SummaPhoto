@@ -1,0 +1,51 @@
+package Generator;
+
+import org.hamcrest.core.Is;
+
+import android.R.integer;
+
+public class TemplateFactory {
+	
+	public static final int TEMPLATE_1 = 1;
+	public static final int TEMPLATE_2 = 2;
+	public static final int TEMPLATE_3 = 3;
+
+	public static Template getTemplate(int num) {
+		switch (num) {
+		case 1:
+			return getTemplate1();
+		default:
+			break;
+		}
+		return null;
+	}
+	
+	private static Template getTemplate1() {
+		Template template = new this.Template(4);
+		
+		return template;
+	}
+	
+	public class Template {
+		
+		private Slot[] slots = null;
+		private int fullSlotsCounter = 0;
+		
+		private Template(int slotsInTemplate) {
+			slots = new Slot[slotsInTemplate];
+		}
+		
+		public int getCurrentNumberOfSlots() {
+			return fullSlotsCounter;
+		}
+		
+		public int getFullNumberOfSlots() {
+			return slots.length;
+		}
+		
+		public boolean isTemplateFull() {
+			return (slots.length == fullSlotsCounter);
+		}
+		
+	}
+}

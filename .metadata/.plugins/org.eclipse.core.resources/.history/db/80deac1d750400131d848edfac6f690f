@@ -1,0 +1,23 @@
+package Generator;
+
+import java.util.List;
+
+import android.R.integer;
+
+public class Template {
+	
+	private Slot[] slots = new Slot[]
+	
+	public static Template getTemplate(int num) {
+		switch (num) {
+		case 1:
+			return getTemplate1();
+		default:
+			break;
+		}
+	}
+	
+	private static Template getTemplate1() {
+		
+	}
+}

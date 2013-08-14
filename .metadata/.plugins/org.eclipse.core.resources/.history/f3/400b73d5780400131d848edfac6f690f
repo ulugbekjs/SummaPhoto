@@ -1,0 +1,61 @@
+package Generator;
+
+import org.hamcrest.core.Is;
+
+import Bing.StaticMap;
+import android.R.integer;
+
+public class Template {
+
+	//static fields
+	public static final int TEMPLATE_1 = 1;
+	public static final int TEMPLATE_2 = 2;
+	public static final int TEMPLATE_3 = 3;
+
+	//private instance fields
+	private Slot[] slots = null;
+	private int filledSlotsCounter = 0;
+	private StaticMap map = null;
+
+	// Template can only be created by static methods
+	private Template(int slotsInTemplate) {
+		slots = new Slot[slotsInTemplate];
+	}
+
+	public int getCurrentNumberOfSlots() {
+		return filledSlotsCounter;
+	}
+
+	public int getFullNumberOfSlots() {
+		return slots.length;
+	}
+
+	public boolean isTemplateFull() {
+		return (slots.length == filledSlotsCounter);
+	}
+	
+	public static Template getTemplate(int num) {
+		switch (num) {
+		case 1:
+			return getTemplate1();
+		default:
+			break;
+		}
+		return null;
+	}
+
+	/**
+	 * Constructing hard-coded template1
+	 * @return
+	 */
+	private static Template getTemplate1() {
+		Template template = new Template(4);
+		// building slots
+		
+		template.slots[0] = new Slot(topLeft, bottomRight);
+		template.slots[1] = new Slot(topLeft, bottomRight);
+				
+		return template;
+	}
+
+}

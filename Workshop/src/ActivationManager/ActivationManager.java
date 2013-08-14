@@ -105,12 +105,8 @@ public class ActivationManager {
 		// advance in collage process if necessary
 		if (isCollageNeeded) {
 			setToRegularMode(); // upon decision to create collage, switch to REGULAR_MODE
-			// TODO: insert clustering algorithm
+			// TODO: call clustering algorithm
 		}
-
-		// request map
-		List<GPSPoint> points = BingServices.getImagesPointsList();
-		BingServices.getStaticMap(points);
 	}
 
 	public void addToBuffer(Photo p) {

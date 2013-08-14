@@ -1,0 +1,8 @@
+package Generator;
+
+import android.R.integer;
+
+public class Template {
+	
+	public static getTemplate(int num)
+}

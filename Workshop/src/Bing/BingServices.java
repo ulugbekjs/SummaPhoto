@@ -22,6 +22,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 
+import android.R.integer;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
@@ -38,15 +39,17 @@ public class BingServices {
 	/**
 	 * Queries BING for JPG & Metadata for ActualEvent points
 	 * @param points list of all Points in ActualEvents
+	 * @param width width in pixels
+	 * @param height height in pixels
 	 * @return StaticMap, or NULL if map could not be created
 	 */
-	public static StaticMap getStaticMap(List<GPSPoint> points) {
+	public static StaticMap getStaticMap(List<GPSPoint> points, int width, int height) {
 
 		StaticMap map = null;
 
 		if (points.size()  > 0) { // Request only iff there is at least one photo
 
-			map = new StaticMap();
+			map = new StaticMap(width, height);
 			map.setJpgPath(getJPG(points));
 			map.setMetadataPath(getJPGMetadata(points));
 			
@@ -62,12 +65,12 @@ public class BingServices {
 		return map;
 	}
 
-	private static String getJPG(List<GPSPoint> points) {
-		return createHTTPRequest(false, points);
+	private static String getJPG(List<GPSPoint> points, int width, int height) {
+		return createHTTPRequest(false, points, width, height);
 	}
 
 	private static String getJPGMetadata(List<GPSPoint> points) {
-		return createHTTPRequest(true, points);
+		return createHTTPRequest(true, points, -1, -1);
 	}
 
 	/**
@@ -163,7 +166,7 @@ public class BingServices {
 	 * @param points 
 	 * @return Path of newly saved .JPG/XML or NULL
 	 */
-	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points) {
+	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points, int width, int height) {
 
 		String file = null;
 
@@ -178,7 +181,7 @@ public class BingServices {
 			}
 
 			// concatenate with BING key
-			urlString = urlString + "&mapSize=1000,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
+			urlString = urlString + "&mapSize=" + width +"," + height + "&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
 
 			// Construct POST Request
 			

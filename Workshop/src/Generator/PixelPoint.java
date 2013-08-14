@@ -7,6 +7,7 @@ public class PixelPoint{
 	public int getY() {
 		return this.y;
 	}
+	
 	public int getX() {
 		return this.x;
 	}
