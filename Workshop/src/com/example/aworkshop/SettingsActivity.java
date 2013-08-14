@@ -49,42 +49,42 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
-//
-//		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-//		observer.startWatching();
-//		SmartModeService.startService();
-//
+		//
+		//		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
+		//		observer.startWatching();
+		//		SmartModeService.startService();
+		//
 
-//		// disable time picker
-//		timePicker = (TimePicker) findViewById(R.id.timePicker);
-//		timePicker.setOnClickListener(new TimePickerFragment());
-//		timePicker.setEnabled(false);
+		//		// disable time picker
+		//		timePicker = (TimePicker) findViewById(R.id.timePicker);
+		//		timePicker.setOnClickListener(new TimePickerFragment());
+		//		timePicker.setEnabled(false);
 
 
 		//		Omri's code
 
-				File directory = new File(PHOTO_DIR);
-				if (!directory.exists())
-					return;
-				File[] arrayOfPic =  directory.listFiles();
-				Photo tempPhoho = null;
-				List<Photo> photosToCluster = new LinkedList<Photo>(); 
-				for (File file : arrayOfPic)
-				{
-					try
-					{
-						tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-					}
-					catch (Exception ex)
-					{
-					}
-					if (tempPhoho != null)
-						photosToCluster.add(tempPhoho);
-				}
-				DBScan algorithmDbScan = new DBScan(photosToCluster);
-				List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
-				return;
-		
+		File directory = new File(PHOTO_DIR);
+		if (!directory.exists())
+			return;
+		File[] arrayOfPic =  directory.listFiles();
+		Photo tempPhoho = null;
+		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		for (File file : arrayOfPic)
+		{
+			try
+			{
+				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+			}
+			catch (Exception ex)
+			{
+			}
+			if (tempPhoho != null)
+				photosToCluster.add(tempPhoho);
+		}
+		DBScan algorithmDbScan = new DBScan(photosToCluster);
+		List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
+		return;
+
 
 	}
 
