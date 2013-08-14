@@ -14,8 +14,8 @@ import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
 
 import ActivationManager.ActivationManager;
-import Common.Photo;
 import Common.GPSPoint;
+import Common.Photo;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
