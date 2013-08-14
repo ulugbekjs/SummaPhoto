@@ -13,9 +13,9 @@ public class Template {
 	public static final int TEMPLATE_3 = 3;
 
 	//private instance fields
-	private Slot[] slots = null;
-	private int filledSlotsCounter = 0;
-	private StaticMap map = null;
+	private Slot[] slots = null; // slots[0] == Top Left Photo
+	private StaticMap map = null; // map in center of collage
+	private int filledSlotsCounter = 0; // current number of slots filled
 
 	/**
 	 * Template can only be created by static methods

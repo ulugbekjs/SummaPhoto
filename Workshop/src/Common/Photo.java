@@ -12,6 +12,7 @@ import android.R.string;
 public class Photo implements Comparable<Photo> {
 
 	private DateTime takenDate;
+//	private Date takenDate;
 	private GPSPoint location;
 	private boolean isHorizontal;
 	private int height;
@@ -85,6 +86,9 @@ public class Photo implements Comparable<Photo> {
 		DateTime otherTime = new DateTime(otherPhoto.getTakenDate());
 
 		return Math.abs(Seconds.secondsBetween(otherTime,thisTime).getSeconds());
+		
+//		Date otherTime = otherPhoto.getTakenDate();
+//		return (int) Math.abs((otherTime.getTime() - this.takenDate.getTime()) / 1000);
 	}
 
 	@Override

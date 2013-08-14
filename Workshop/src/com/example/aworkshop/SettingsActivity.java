@@ -1,12 +1,12 @@
 package com.example.aworkshop;
 
 import java.io.File;
-import java.security.PublicKey;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.joda.time.DateTime;
+
 
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeService;
@@ -14,16 +14,10 @@ import Common.Photo;
 import Partitioning.Cluster;
 import Partitioning.DBScan;
 import PhotoListener.PhotoListenerThread;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.R.integer;
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.TimePickerDialog;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.support.v4.app.FragmentActivity;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.View;
 import android.widget.RadioButton;
@@ -41,50 +35,62 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	// private fields
 	private TimePicker timePicker;
-	private int pickerHour = -1;
-	private int pickerMin = -1;
+	private int pickerHour = 20;
+	private int pickerMin = 0;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
-		//
-		//		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-		//		observer.startWatching();
-		//		SmartModeService.startService();
+
+		// 		Yonatan's code
 		//
 
-		//		// disable time picker
-		//		timePicker = (TimePicker) findViewById(R.id.timePicker);
-		//		timePicker.setOnClickListener(new TimePickerFragment());
-		//		timePicker.setEnabled(false);
+		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
+		observer.startWatching();
+
+		// disable time picker
+		timePicker = (TimePicker) findViewById(R.id.timePicker);
+		timePicker.setIs24HourView(true);
+		timePicker.setCurrentHour(20);
+		timePicker.setCurrentMinute(0);
+		timePicker.setEnabled(false);
+		timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+			@Override
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+				SettingsActivity.this.pickerHour = hourOfDay;
+				SettingsActivity.this.pickerMin = minute;
+				dailyButtonClicked();
+			}
+		});
 
 
 		//		Omri's code
 
-		File directory = new File(PHOTO_DIR);
-		if (!directory.exists())
-			return;
-		File[] arrayOfPic =  directory.listFiles();
-		Photo tempPhoho = null;
-		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		for (File file : arrayOfPic)
-		{
-			try
-			{
-				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-			}
-			catch (Exception ex)
-			{
-			}
-			if (tempPhoho != null)
-				photosToCluster.add(tempPhoho);
-		}
-		DBScan algorithmDbScan = new DBScan(photosToCluster);
-		List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
-		return;
-
+		//		File directory = new File(PHOTO_DIR);
+		//		if (!directory.exists())
+		//			return;
+		//		File[] arrayOfPic =  directory.listFiles();
+		//		Photo tempPhoho = null;
+		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		//		for (File file : arrayOfPic)
+		//		{
+		//			try
+		//			{
+		//				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+		//			}
+		//			catch (Exception ex)
+		//			{
+		//			}
+		//			if (tempPhoho != null)
+		//				photosToCluster.add(tempPhoho);
+		//		}
+		//		DBScan algorithmDbScan = new DBScan(photosToCluster);
+		//		List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
+		//		return;
+		//
 
 	}
 
@@ -105,10 +111,10 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			if (checked) {
 				smartButtonClicked();
 			}
-
 			break;
 		case R.id.radioDaily:
 			if (checked) {
+				dailyButtonClicked();
 			}
 			break;
 		case R.id.radioOff: 
@@ -133,12 +139,22 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	}
 
 	private void dailyButtonClicked() {
-		timePicker.setEnabled(true);
-		turnOffSmartMode();
 
-		if (pickerHour != -1 && pickerMin != -1)
-			ScheduledModeService.startService(this.pickerHour, this.pickerMin);
+		if (!timePicker.isEnabled())
+			timePicker.setEnabled(true);
 
+		if (SmartModeService.isServiceRunning())
+			turnOffSmartMode();
+
+		Thread thread = new Thread() {
+
+			@Override
+			public void run() {
+				ScheduledModeService.startService(SettingsActivity.this.pickerHour, SettingsActivity.this.pickerMin);
+			}
+		};
+
+		thread.run();
 	}
 
 	private void smartButtonClicked() {
@@ -146,7 +162,15 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		timePicker.setEnabled(false);
 		turnOffDailyMode();
 
-		SmartModeService.startService();
+		Thread thread = new Thread() {
+
+			@Override
+			public void run() {
+				SmartModeService.startService(); 
+			}
+		};
+
+		thread.run();
 
 	}
 
@@ -160,37 +184,48 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			ScheduledModeService.stopService();
 	}
 
-	public class TimePickerFragment extends DialogFragment implements OnTimeSetListener {
+	//	public class TimePickerFragment extends DialogFragment implements OnTimeSetListener {
+	//
+	//		@Override
+	//		public Dialog onCreateDialog(Bundle savedInstanceState) {
+	//			// Use the current time as the default values for the picker
+	//			final Calendar c = Calendar.getInstance();
+	//			int hour = c.get(Calendar.HOUR_OF_DAY);
+	//			int minute = c.get(Calendar.MINUTE);
+	//
+	//			// Create a new instance of TimePickerDialog and return it
+	//			return new TimePickerDialog(getActivity(), this, hour, minute,
+	//					DateFormat.is24HourFormat(getActivity()));
+	//		}
+	//
+	//		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+	//			SettingsActivity.this.pickerHour = hourOfDay;
+	//			SettingsActivity.this.pickerMin = minute; 
+	//		}
+	//	}
+	//
+	//	public void showTimePickerDialog(View v) {
+	//		TimePickerFragment newFragment = new TimePickerFragment();
+	//		newFragment.show(getFragmentManager(), "timePicker"); 
+	//	}
 
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			// Use the current time as the default values for the picker
-			final Calendar c = Calendar.getInstance();
-			int hour = c.get(Calendar.HOUR_OF_DAY);
-			int minute = c.get(Calendar.MINUTE);
-
-			// Create a new instance of TimePickerDialog and return it
-			return new TimePickerDialog(getActivity(), this, hour, minute,
-					DateFormat.is24HourFormat(getActivity()));
-		}
-
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			SettingsActivity.this.pickerHour = hourOfDay;
-			SettingsActivity.this.pickerMin = minute; 
-		}
-	}
-
-	public void showTimePickerDialog(View v) {
-		TimePickerFragment newFragment = new TimePickerFragment();
-		newFragment.show(getFragmentManager(), "timePicker"); 
-	}
-
-	public int getScheduledHour() {
-		return this.pickerHour;
-	}
-
-	public int getScheduledMinute() {
-		return this.pickerMin;
-	}
+//	private class ServiceAsyncTask extends AsyncTask<Integer, Integer, Exception> {
+//
+//		@Override
+//		protected Exception doInBackground(Integer... params) {
+//			Exception ret = null;
+//			try {
+//				if (params[0] == 1)
+//
+//
+//					if (params[0] == 2)
+//			}
+//			catch (Exception exception) {
+//				ret = exception;
+//			}
+//			return ret;
+//		}
+//
+//	}
 
 }

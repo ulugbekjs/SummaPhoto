@@ -29,22 +29,23 @@ public class ScheduledModeService{
 
 			// calculate time until next waking of thread
 
-			DateTime now = DateTime.now();
+			DateTime now = new DateTime(new Date());
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(calendar.get(Calendar.YEAR),
 					calendar.get(Calendar.MONTH),
 					calendar.get(Calendar.DAY_OF_MONTH),
 					hour, min);
 
+			// this line is slow in the first time
 			DateTime scheduledTime = new DateTime(calendar.getTime());
 
 			DateTimeComparator comparator = DateTimeComparator.getTimeOnlyInstance();
 			int timeToWake = 0;
-			if (comparator.compare(now, scheduledTime) < 0) { // scheduledTime already passed for today
-				timeToWake = Seconds.secondsBetween(DateTime.now(),scheduledTime.plusDays(1)).getSeconds();
+			if (comparator.compare(now,scheduledTime) < 0) { // scheduledTime already passed for today
+				timeToWake = Seconds.secondsBetween(DateTime.now(),scheduledTime).getSeconds();
 			}
 			else {
-				timeToWake = Seconds.secondsBetween(DateTime.now(),scheduledTime).getSeconds();
+				timeToWake = Seconds.secondsBetween(DateTime.now(),scheduledTime.plusDays(1)).getSeconds();
 			}
 
 			// waits INTERVAL_IN_SECONDS seconds after end of last execution
