@@ -68,7 +68,6 @@ public class StaticMap {
 		return this.pixelHeight;
 	}
 	
-	
 	private void fillMapWithMetaData() {
 
 		SAXBuilder builder = new SAXBuilder();

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 
 
 import ActivationManager.ScheduledModeService;
@@ -132,9 +133,13 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		timePicker.setEnabled(false);
 
-		// turn off active mode
-		turnOffSmartMode();
-		turnOffDailyMode();
+		// turn off active modes
+		if (SmartModeService.isServiceRunning()) {
+			turnOffSmartMode();
+		}
+		if (ScheduledModeService.isServiceRunning()) {
+			turnOffDailyMode();
+		}
 
 	}
 
@@ -209,23 +214,23 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	//		newFragment.show(getFragmentManager(), "timePicker"); 
 	//	}
 
-//	private class ServiceAsyncTask extends AsyncTask<Integer, Integer, Exception> {
-//
-//		@Override
-//		protected Exception doInBackground(Integer... params) {
-//			Exception ret = null;
-//			try {
-//				if (params[0] == 1)
-//
-//
-//					if (params[0] == 2)
-//			}
-//			catch (Exception exception) {
-//				ret = exception;
-//			}
-//			return ret;
-//		}
-//
-//	}
+	//	private class ServiceAsyncTask extends AsyncTask<Integer, Integer, Exception> {
+	//
+	//		@Override
+	//		protected Exception doInBackground(Integer... params) {
+	//			Exception ret = null;
+	//			try {
+	//				if (params[0] == 1)
+	//
+	//
+	//					if (params[0] == 2)
+	//			}
+	//			catch (Exception exception) {
+	//				ret = exception;
+	//			}
+	//			return ret;
+	//		}
+	//
+	//	}
 
 }
