@@ -36,18 +36,18 @@ public class Template {
 	public boolean isTemplateFull() {
 		return (slots.length == filledSlotsCounter);
 	}
-	
-	public double getMapWidth() {
+
+	public double getMapPixelWidth() {
 		return mapSlot.getWidth();
 	}
-	
-	public double getMapHeight() {
+
+	public double getMapPixelHeight() {
 		return mapSlot.getHeight();
 	}
-	
+
 	public boolean setMap(StaticMap newMap) {
-		if (newMap.getPixelWidth() == this.map.getPixelWidth() && // only add map if it meets the planned map dimension
-				newMap.getPixelHeight() == this.map.getPixelHeight()) {
+		if (newMap.getPixelWidth() == this.getMapPixelWidth() && // only add map if it meets the planned map dimension
+				newMap.getPixelHeight() == this.getMapPixelHeight()) {
 			map = newMap;
 			return true;
 		}
@@ -71,7 +71,7 @@ public class Template {
 	 */
 	private static Template getTemplate1() {
 		Template template = new Template(8);
-		
+
 		// building slots - Counter Clockwise, starting with topLeft
 		template.slots[0] = new Slot(new PixelPoint(0, 367), new PixelPoint(642, 1224));
 		template.slots[1] = new Slot(new PixelPoint(0, 1224), new PixelPoint(642, 2080));
@@ -83,7 +83,7 @@ public class Template {
 		template.slots[5] = new Slot(new PixelPoint(775, 0), new PixelPoint(1632, 642));
 
 		template.mapSlot = new Slot(new PixelPoint(642, 642), new PixelPoint(2621, 1805));
-		
+
 		return template;
 	}
 
