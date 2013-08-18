@@ -1,12 +1,16 @@
 package ActivationManager;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import Bing.BingServices;
+import Bing.StaticMap;
 import Common.Photo;
 import Common.GPSPoint;
+import Generator.MapCollageBuilder;
+import Generator.Template;
 
 public class ActivationManager {
 
@@ -107,6 +111,11 @@ public class ActivationManager {
 			setToRegularMode(); // upon decision to create collage, switch to REGULAR_MODE
 			// TODO: call clustering algorithm
 		}
+		
+		Template template = Template.getTemplate(1);
+		StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
+		template.setMap(map);
+		File collageFile = MapCollageBuilder.BuildCollage(template);
 	}
 
 	public void addToBuffer(Photo p) {

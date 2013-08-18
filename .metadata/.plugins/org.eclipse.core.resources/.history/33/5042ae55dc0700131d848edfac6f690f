@@ -1,0 +1,11 @@
+package Generator;
+
+import android.os.Build;
+
+public class MapCollageBuilder {
+	
+	public BuildCollage(Template template) {
+		
+	}
+
+}

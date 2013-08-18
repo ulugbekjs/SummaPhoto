@@ -51,7 +51,7 @@ public class BingServices {
 
 			map = new StaticMap(width, height);
 			map.setJpgPath(getJPG(points, width, height));
-			map.setMetadataPath(getJPGMetadata(points));
+			map.setMetadataPath(getJPGMetadata(points, width, height));
 			
 			if (map.getJpgPath() == null || map.getMetadataPath() == null) {
 				map = null;  // free map for GC
@@ -69,12 +69,12 @@ public class BingServices {
 		return createHTTPRequest(false, points, width, height);
 	}
 
-	private static String getJPGMetadata(List<GPSPoint> points) {
-		return createHTTPRequest(true, points, -1, -1);
+	private static String getJPGMetadata(List<GPSPoint> points, int width, int height) {
+		return createHTTPRequest(true, points, width, height);
 	}
 
 	/**
-	 * creates a List of Points to be sent to BING from all cuurent ActualEvents in ActualEventContainer
+	 * creates a List of Points to be sent to BING from all current ActualEvents in ActualEventContainer
 	 * @return List of all Points in ActualEventContainer
 	 */
 	public static List<GPSPoint> getImagesPointsList() {
@@ -87,78 +87,6 @@ public class BingServices {
 		}
 		return points;
 	}
-
-	//
-	//	private static String getStaticMapOrMetadataFile(boolean metadata, List<Point> points) {
-	//
-	//		File file = null;
-	//		try {
-	//
-	//			URL                 url;
-	//			URLConnection   urlConn;
-	//			DataOutputStream    printout;
-	//			DataInputStream     input;
-	//
-	//			String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
-	//			//Make the actual connection
-	//			if (metadata) {
-	//				urlString += "mmd=1&o=xml";
-	//			}
-	//			else {
-	//				urlString += "mmd=0";
-	//			}
-	//
-	//			urlString = urlString + "&mapSize=700,600&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
-	//
-	//			url = new URL(urlString);
-	//			urlConn = url.openConnection();
-	//			urlConn.setDoInput (true);
-	//			urlConn.setDoOutput (true); // POST Request
-	//			urlConn.setUseCaches (false);
-	//			urlConn.setRequestProperty("Content-Type", "text/plain");
-	//			urlConn.setRequestProperty("charset",  "charset=utf-8");
-	//
-	//			// adding pushpins coordinates to BING request
-	//			StringBuilder builder = new StringBuilder();
-	//
-	//			for (Point point : points)  {
-	//				builder.append("pp=");
-	//				builder.append(point.toString());
-	//				builder.append(";14;\r\n");
-	//			}
-	//
-	//			String strContent = builder.toString();
-	//
-	//			urlConn.setRequestProperty("Content-Length", Integer.valueOf(strContent.getBytes().length).toString()); 
-	//			printout = new DataOutputStream (urlConn.getOutputStream ());
-	//			printout.writeBytes (strContent);
-	//			printout.flush ();
-	//
-	//			// Get response
-	//			input = new DataInputStream (urlConn.getInputStream());
-	//
-	//			File externalStorageDir = Environment.getExternalStorageDirectory();
-	//			File testsDir = new File(externalStorageDir, "Tests");
-	//			file = new File(testsDir, "moshiko.");
-	//
-	//			if (!metadata) {
-	//				// TODO: make jpg data work with imageIO and not with file
-	//				file = new File(file.getPath() + "jpg");
-	//			}
-	//			else {
-	//				file = new File(file.getPath()  + "xml");
-	//			}
-	//
-	//			readFromStreamAndWriteToFile(input, testsDir, file);
-	//
-	//
-	//		} catch (IOException e) {
-	//			// TODO Auto-generated catch block
-	//			e.printStackTrace();
-	//		}   
-	//
-	//		return file.getPath();
-	//	}
 
 	/**
 	 * Queries Bing for JPG or Metadata
@@ -244,7 +172,6 @@ public class BingServices {
 			e.printStackTrace();
 		}
 		
-		// an error occured
 		return file;
 	}
 
@@ -287,6 +214,7 @@ public class BingServices {
 		out.writeTo(outputStream);
 		out.flush();
 		out.close();
+		out = null;
 		
 		return file.getPath();
 	}

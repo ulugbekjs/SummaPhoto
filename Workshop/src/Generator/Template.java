@@ -3,6 +3,7 @@ package Generator;
 import android.R.integer;
 import Bing.StaticMap;
 
+
 public class Template {
 
 	//static fields
@@ -12,9 +13,10 @@ public class Template {
 
 	//private instance fields
 	private Slot[] slots = null; // slots[0] == Top Left Photo
+	private Slot mapSlot;
+
 	private StaticMap map = null; // map in center of collage
 	private int filledSlotsCounter = 0; // current number of slots filled
-	private Slot mapSlot;
 	/**
 	 * Template can only be created by static methods
 	 * @param slotsInTemplate
@@ -32,11 +34,19 @@ public class Template {
 	public int getFullNumberOfSlots() {
 		return slots.length;
 	}
+	
+	public Slot getSlot(int number) {
+		return slots[number];
+	}
 
 	public boolean isTemplateFull() {
 		return (slots.length == filledSlotsCounter);
 	}
-
+	
+	public Slot getMapSlot() {
+		return this.mapSlot;
+	}
+	
 	public double getMapPixelWidth() {
 		return mapSlot.getWidth();
 	}
@@ -56,13 +66,15 @@ public class Template {
 		}
 	}
 	public static Template getTemplate(int num) {
+		Template template = null;
 		switch (num) {
 		case 1:
-			return getTemplate1();
+			template =  getTemplate1();
 		default:
 			break;
 		}
-		return null;
+		
+		return template;
 	}
 
 	/**
@@ -85,6 +97,19 @@ public class Template {
 		template.mapSlot = new Slot(new PixelPoint(642, 642), new PixelPoint(2621, 1805));
 
 		return template;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer("[");
+		for (int i = 0; i<slots.length; i++) {
+			buffer.append(i + "=" + slots[i].getWidth() + "," + slots[i].getHeight() + ";" );
+		}
+		
+		buffer.append("map=" + mapSlot.getWidth() + "," + mapSlot.getHeight());
+		buffer.append("]");
+		
+		return buffer.toString();
 	}
 
 }

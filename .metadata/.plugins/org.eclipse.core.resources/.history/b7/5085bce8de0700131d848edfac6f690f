@@ -1,0 +1,14 @@
+package Generator;
+
+import android.os.Build;
+
+public class MapCollageBuilder {
+	
+	public void BuildCollage(Template template) {
+		
+		// Canvas
+		BufferedImage mainImg = new BufferedImage(3264,2448,
+				BufferedImage.TYPE_INT_RGB);
+	}
+
+}
