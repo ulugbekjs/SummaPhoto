@@ -20,6 +20,11 @@ import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
 
+/**
+ * The thread that observes the camera's folder
+ * @author yonatan
+ *
+ */
 public class PhotoListenerThread extends FileObserver {
 
 	private final String TAG = PhotoListenerThread.class.getName();
@@ -62,6 +67,7 @@ public class PhotoListenerThread extends FileObserver {
 		}
 		else {
 			Log.d(TAG,"External storage is not readable");
+			// TODO: error to user
 		}
 	}
 
@@ -114,7 +120,6 @@ public class PhotoListenerThread extends FileObserver {
 		return photo;
 	}
 
-	// TODO: switch to private
 	/* Checks if external storage is available to at least read */
 	private static boolean isExternalStorageReadable() {
 		String state = Environment.getExternalStorageState();

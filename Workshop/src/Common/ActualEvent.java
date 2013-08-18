@@ -1,9 +1,12 @@
 package Common;
 
-import java.util.Date;
-
 import org.joda.time.DateTime;
 
+/**
+ * Represents a solid event after clustering of photos into events 
+ * @author yonatan
+ *
+ */
 public class ActualEvent extends AbstractEvent {
 	
 	private DateTime startTime = null;

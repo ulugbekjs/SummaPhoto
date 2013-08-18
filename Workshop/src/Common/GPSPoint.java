@@ -19,8 +19,14 @@ public class GPSPoint  {
 		this.latitude = latitude;
 	}
 	
+	/**
+	 * method to return real distance between two GPS Points
+	 * @param p
+	 * @return
+	 */
 	public float distanceFrom(GPSPoint p) {
 		float[] results = new float[3]; 
+		// Using Android's Location.distanceBetween to ensure that calculation of distance is more accurate 
 		Location.distanceBetween(this.latitude, this.longitude, p.getLatitude(), p.getLongitude(), results);
 		return results[0];
 	}

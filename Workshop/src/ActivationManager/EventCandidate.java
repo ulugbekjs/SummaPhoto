@@ -3,6 +3,11 @@ package ActivationManager;
 import Common.AbstractEvent;
 import Common.Photo;
 
+/**
+ * Represents a tentative event created by activation manager 
+ * @author yonatan
+ *
+ */
 public class EventCandidate extends AbstractEvent {
 
 	private Photo lastAddedPhoto = null;

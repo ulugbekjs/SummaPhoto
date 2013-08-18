@@ -4,6 +4,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
+/**
+ * Abstract class for the two types of Events in the system
+ * @author yonatan
+ *
+ */
 public abstract class AbstractEvent {
 	
 	private UUID eventID;

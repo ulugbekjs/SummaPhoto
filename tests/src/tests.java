@@ -49,7 +49,6 @@ public class tests {
 				PixelPoint topleftPixelPoint = slots[i].getTopLeft();
 				PixelPoint bottomRightPixelPoint =  slots[i++].getBottomRight();
 
-
 				graphics.drawImage(resized,
 						topleftPixelPoint.getX(),
 						topleftPixelPoint.getY(),

@@ -1,6 +1,5 @@
 package Generator;
 
-import android.R.integer;
 import Bing.StaticMap;
 
 

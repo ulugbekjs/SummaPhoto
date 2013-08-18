@@ -18,6 +18,11 @@ import android.R.integer;
 import Common.GeoBoundingBox;
 import Common.GPSPoint;
 
+/**
+ * Includes Bing Map and Metadata returned from Bing Services
+ * @author yonatan
+ *
+ */
 public class StaticMap {
 
 	private UUID requestUuid;

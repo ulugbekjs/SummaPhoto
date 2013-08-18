@@ -9,6 +9,11 @@ import org.joda.time.Seconds;
 
 import android.R.string;
 
+/**
+ * Represents a photo in the gallery that was taken by the user
+ * @author yonatan
+ *
+ */
 public class Photo implements Comparable<Photo> {
 
 	private DateTime takenDate;
@@ -76,7 +81,6 @@ public class Photo implements Comparable<Photo> {
 			parentActualEvent = event;
 	}
 
-	// TODO: Use google Location DistanceTO
 	public double distanceFrom(Photo otherPhoto) {
 		return this.getLocation().distanceFrom(otherPhoto.getLocation());
 	}

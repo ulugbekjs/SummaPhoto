@@ -3,8 +3,6 @@ package Common;
 import java.util.Set;
 import java.util.TreeSet;
 
-
-
 public class ActualEventContainerSingelton  {
 
 	private static final ActualEventContainerSingelton instance = new ActualEventContainerSingelton();

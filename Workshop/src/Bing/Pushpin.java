@@ -2,6 +2,11 @@ package Bing;
 
 import Common.GPSPoint;
 
+/**
+ * Represents a pushpin returned from Bing
+ * @author yonatan
+ *
+ */
 public class Pushpin {
 	private GPSPoint point;
 	private int[] anchor;
