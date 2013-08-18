@@ -15,7 +15,6 @@ public class Template {
 	private Slot[] slots = null; // slots[0] == Top Left Photo
 	private Slot mapSlot;
 
-	private StaticMap map = null; // map in center of collage
 	private int filledSlotsCounter = 0; // current number of slots filled
 	/**
 	 * Template can only be created by static methods
@@ -31,7 +30,7 @@ public class Template {
 		return filledSlotsCounter;
 	}
 
-	public int getNumberOfSlots() {
+	public int getFullNumberOfSlots() {
 		return slots.length;
 	}
 	
@@ -55,16 +54,16 @@ public class Template {
 		return mapSlot.getHeight();
 	}
 
-	public boolean setMap(StaticMap newMap) {
-		if (newMap.getPixelWidth() == this.getMapPixelWidth() && // only add map if it meets the planned map dimension
-				newMap.getPixelHeight() == this.getMapPixelHeight()) {
-			map = newMap;
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
+//	public boolean setMap(StaticMap newMap) {
+//		if (newMap.getPixelWidth() == this.getMapPixelWidth() && // only add map if it meets the planned map dimension
+//				newMap.getPixelHeight() == this.getMapPixelHeight()) {
+//			map = newMap;
+//			return true;
+//		}
+//		else {
+//			return false;
+//		}
+//	}
 	public static Template getTemplate(int num) {
 		Template template = null;
 		switch (num) {

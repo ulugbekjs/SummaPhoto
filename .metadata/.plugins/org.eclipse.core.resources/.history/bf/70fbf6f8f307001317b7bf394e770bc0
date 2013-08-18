@@ -114,6 +114,7 @@ public class ActivationManager {
 		
 		Template template = Template.getTemplate(1);
 		StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
+		template.setMap(map);
 		File collageFile = MapCollageBuilder.BuildCollage(template);
 	}
 
