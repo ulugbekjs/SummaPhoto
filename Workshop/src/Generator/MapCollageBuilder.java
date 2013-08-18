@@ -4,11 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import ActivationManager.EventCandidate;
-import ActivationManager.EventCandidateContainer;
-import Bing.StaticMap;
-import Common.Photo;
-import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,6 +12,7 @@ import android.graphics.Rect;
 import android.os.Environment;
 
 public class MapCollageBuilder {
+	
 
 	/**
 	 * Saves a map collage on disk
@@ -33,7 +29,7 @@ public class MapCollageBuilder {
 		canvas = new Canvas(bmpBase);
 
 		// draw images saved in Template onto canvas
-		for (int slot = 0; slot < template.getFullNumberOfSlots(); slot ++) {
+		for (int slot = 0; slot < template.getNumberOfSlots(); slot ++) {
 			try {
 				addSlotImageToCanvas(canvas, template.getSlot(slot));
 			}

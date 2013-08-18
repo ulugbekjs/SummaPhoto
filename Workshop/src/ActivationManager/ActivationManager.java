@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.junit.experimental.max.MaxCore;
+
 import Bing.BingServices;
 import Bing.StaticMap;
 import Common.Photo;
@@ -26,6 +28,8 @@ public class ActivationManager {
 
 	//instance fields
 	private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
+	private BlockingQueue<DedicatedRequest> requestBuffer = new LinkedBlockingQueue<DedicatedRequest>();
+
 	private int currentState = 0; // start in REGULAR_MODE;
 	private int remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE;
 	private int remainingHorizontal = 0;
@@ -111,7 +115,7 @@ public class ActivationManager {
 			setToRegularMode(); // upon decision to create collage, switch to REGULAR_MODE
 			// TODO: call clustering algorithm
 		}
-		
+
 		Template template = Template.getTemplate(1);
 		StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
 		File collageFile = MapCollageBuilder.BuildCollage(template);
@@ -125,22 +129,33 @@ public class ActivationManager {
 			e.printStackTrace();
 		}
 	}
-
-	public boolean consumeDedictedRequest(DedicatedRequest request) {
-		// make sure dedicated request has information
-		if ((request.getEventsNeeded() != 0 || request.getVerticalNeeded() !=0 || request.getHorizontalNeeded() != 0)) {
-			setToDedicatedMode(request);
+	
+	public void addRequestToBuffer(DedicatedRequest request) {
+		try {
+			requestBuffer.put(request);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return true;
+	}
+
+	public void consumeDedictedRequests() {
+		while (!requestBuffer.isEmpty()) {
+			DedicatedRequest request = requestBuffer.remove();
+			// make sure dedicated request has information
+			if ((request.getEventsNeeded() != 0 || request.getVerticalNeeded() !=0 || request.getHorizontalNeeded() != 0)) {
+				setToDedicatedMode(request);
+			}
+		}
 	}
 
 	private void setMode(int newState, DedicatedRequest request) {
 		switch (newState) {
 		case DEDICATED_MODE: {
 			if (request != null) {
-				this.remainingEvents = request.getEventsNeeded();
-				this.remainingHorizontal = request.getHorizontalNeeded();
-				this.remainingVertical = request.getVerticalNeeded();
+				this.remainingEvents = Math.max(this.remainingEvents, request.getEventsNeeded());
+				this.remainingHorizontal = Math.max(this.remainingHorizontal, request.getHorizontalNeeded());
+				this.remainingVertical = Math.max(this.remainingVertical, request.getVerticalNeeded());
 				currentState = DEDICATED_MODE;
 			}
 			break;

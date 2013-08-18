@@ -19,7 +19,9 @@ public class SmartModeService {
 			scheduler.scheduleWithFixedDelay(new Runnable() {
 				@Override
 				public void run() {
+					manager.consumeDedictedRequests(); 
 					manager.processPhotoBuffer();
+					
 				}
 			},
 			20,
