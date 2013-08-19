@@ -21,7 +21,7 @@
             android:drawablePadding="4dp"
             android:paddingLeft="4dp"
             android:text="@string/Mode"
-            android:textSize="14sp" />
+            android:textSize="20sp" />
 
         <ImageView
             android:layout_width="fill_parent"
@@ -61,12 +61,6 @@
                 android:text="@string/Daily" />
 
             <TextView android:text="@string/DailyDescription" />
-            
-            <TimePicker
-                android:id="@+id/timePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
             
         </RadioGroup>
     </LinearLayout>

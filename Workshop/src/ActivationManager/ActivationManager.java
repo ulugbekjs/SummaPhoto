@@ -23,8 +23,8 @@ public class ActivationManager {
 	private static final int DEDICATED_MODE = 1;
 
 	// TODO: maybe do this by number of photos for collage
-	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 2;
-	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 1;
+	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 4;
+	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 1800;
 
 	//instance fields
 	private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
@@ -88,17 +88,15 @@ public class ActivationManager {
 			remainingVertical--;
 		}
 
-		if (isCollageNeeded()) {
-			return true;
-		}
-		else 
-			return false;
+		return isCollageNeeded();
 	}
+
 
 	/**
 	 * Empties buffer and decides if to trigger clustering
+	 * @return true iff collage is needed
 	 */
-	public void processPhotoBuffer() {
+	public boolean processPhotoBuffer() {
 
 		boolean isCollageNeeded = false;
 		// empty the buffer
@@ -113,12 +111,9 @@ public class ActivationManager {
 		// advance in collage process if necessary
 		if (isCollageNeeded) {
 			setToRegularMode(); // upon decision to create collage, switch to REGULAR_MODE
-			// TODO: call clustering algorithm
 		}
-
-		Template template = Template.getTemplate(1);
-		StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
-		File collageFile = MapCollageBuilder.BuildCollage(template);
+		
+		return isCollageNeeded;
 	}
 
 	public void addToBuffer(Photo p) {
@@ -161,7 +156,7 @@ public class ActivationManager {
 			break;
 		}
 		case REGULAR_MODE: {
-			remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE;
+			remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE; 
 			remainingHorizontal = 0;
 			remainingVertical = 0;
 			currentState = REGULAR_MODE;

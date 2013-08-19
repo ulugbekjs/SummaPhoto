@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
 
 import org.joda.time.DateTime;
 import org.junit.Ignore;
@@ -15,6 +16,11 @@ import Common.Photo;
 import Partitioning.Cluster;
 import Partitioning.DBScan;
 import PhotoListener.PhotoListenerThread;
+import android.app.AlertDialog;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +28,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TimePicker;
 
 public class SettingsActivity extends FragmentActivity { // Extends FragmentActivity to support < Android 3.0
@@ -29,16 +36,21 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	//		File dataDirectory = new File(root + "/DCIM/Camera/");
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+
 
 	// global fields
 	PhotoListenerThread observer;
 
 	// private fields
-	private TimePicker timePicker;
+	//private TimePickerDialog timePickerDialog;
+	private RadioButton dailyRadioBtn;
+	private RadioGroup modeGroup;
+	private RadioButton lastCheckedButton;
+
 	private int pickerHour = 20;
 	private int pickerMin = 0;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +63,40 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
 
-		// disable time picker
-		timePicker = (TimePicker) findViewById(R.id.timePicker);
-		timePicker.setIs24HourView(true);
-		timePicker.setCurrentHour(20);
-		timePicker.setCurrentMinute(0);
-		timePicker.setEnabled(false);
-		timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
+		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+
+		dailyRadioBtn.setOnClickListener(new View.OnClickListener() { 
+
 
 			@Override
-			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-				SettingsActivity.this.pickerHour = hourOfDay;
-				SettingsActivity.this.pickerMin = minute;
-				dailyButtonClicked();
+			public void onClick(View v) {
+
+				final TimePicker timePickerDialog = new TimePicker(v.getContext());
+				timePickerDialog.setIs24HourView(true);
+				timePickerDialog.setCurrentHour(pickerHour);
+				timePickerDialog.setCurrentMinute(pickerMin);
+
+				// creating AlertDialog because of no cancel button in TimePickerDialog
+				new AlertDialog.Builder(v.getContext())
+				.setTitle("Test")
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						SettingsActivity.this.pickerHour = timePickerDialog.getCurrentHour();
+						SettingsActivity.this.pickerMin = timePickerDialog.getCurrentMinute();
+						dailyButtonClicked();
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog,	int which) {
+						modeGroup.check(lastCheckedButton.getId());
+					}
+				}).setView(timePickerDialog).show();
 			}
 		});
 
@@ -104,7 +137,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	public void onRadioButtonClicked(View view) {
 
-		boolean checked = ((RadioButton) view).isChecked();
+		lastCheckedButton = (RadioButton) view;
+		boolean checked = lastCheckedButton.isChecked();
 
 		// Check which radio button was clicked
 		switch(view.getId()) {
@@ -120,7 +154,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			break;
 		case R.id.radioOff: 
 			if (checked) {
-
+				offButtonClicked();
 			}
 
 		}
@@ -130,8 +164,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	 * when off button is pressed, services need to be turned off
 	 */
 	private void offButtonClicked() {
-
-		timePicker.setEnabled(false);
 
 		// turn off active modes
 		if (SmartModeService.isServiceRunning()) {
@@ -144,9 +176,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	}
 
 	private void dailyButtonClicked() {
-
-		if (!timePicker.isEnabled())
-			timePicker.setEnabled(true);
 
 		if (SmartModeService.isServiceRunning())
 			turnOffSmartMode();
@@ -164,7 +193,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	private void smartButtonClicked() {
 
-		timePicker.setEnabled(false);
 		turnOffDailyMode();
 
 		Thread thread = new Thread() {
@@ -232,5 +260,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	//		}
 	//
 	//	}
+
+
 
 }
