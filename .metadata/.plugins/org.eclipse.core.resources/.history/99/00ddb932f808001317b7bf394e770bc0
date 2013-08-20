@@ -27,7 +27,6 @@ import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
@@ -49,6 +48,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	private RadioButton dailyRadioBtn;
 	private RadioGroup modeGroup;
 	private RadioButton lastCheckedButton;
+	final TimePicker timePickerDialog 
 
 	private int pickerHour = 20;
 	private int pickerMin = 0;
@@ -67,9 +67,39 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
 		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+		
+		timePickerDialog = new TimePicker(v.getContext());
 
-		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-		dailyRadioBtn.setOnClickListener(listener);
+		dailyRadioBtn.setOnClickListener(new View.OnClickListener() { 
+
+			@Override
+			public void onClick(View v) {
+
+				timePickerDialog.setIs24HourView(true);
+				timePickerDialog.setCurrentHour(pickerHour);
+				timePickerDialog.setCurrentMinute(pickerMin);
+
+				// creating AlertDialog because of no cancel button in TimePickerDialog
+				new AlertDialog.Builder(v.getContext())
+				.setTitle("Choose Time...")
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						SettingsActivity.this.pickerHour = timePickerDialog.getCurrentHour();
+						SettingsActivity.this.pickerMin = timePickerDialog.getCurrentMinute();
+						dailyButtonClicked();
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog,	int which) {
+						modeGroup.check(lastCheckedButton.getId());
+					}
+				}).setView(timePickerDialog).show();
+			}
+		});
 
 
 		//		Omri's code
@@ -186,39 +216,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	private void turnOffDailyMode() {
 		if (ScheduledModeService.isServiceRunning())
 			ScheduledModeService.stopService();
-	}
-	
-	private class ScheduledModeListener implements View.OnClickListener { 
-
-
-		@Override
-		public void onClick(View v) {
-
-			final TimePicker timePickerDialog = new TimePicker(v.getContext());
-			timePickerDialog.setIs24HourView(true);
-			timePickerDialog.setCurrentHour(pickerHour);
-			timePickerDialog.setCurrentMinute(pickerMin);
-
-			// creating AlertDialog because of no cancel button in TimePickerDialog
-			new AlertDialog.Builder(v.getContext())
-			.setTitle("Choose Time...")
-			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					SettingsActivity.this.pickerHour = timePickerDialog.getCurrentHour();
-					SettingsActivity.this.pickerMin = timePickerDialog.getCurrentMinute();
-					dailyButtonClicked();
-				}
-			})
-			.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog,	int which) {
-					modeGroup.check(lastCheckedButton.getId());
-				}
-			}).setView(timePickerDialog).show();
-		}
 	}
 
 	//	public class TimePickerFragment extends DialogFragment implements OnTimeSetListener {

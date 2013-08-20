@@ -190,11 +190,11 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	
 	private class ScheduledModeListener implements View.OnClickListener { 
 
+		final TimePicker timePickerDialog = new TimePicker(SettingsActivity.this);
 
 		@Override
 		public void onClick(View v) {
-
-			final TimePicker timePickerDialog = new TimePicker(v.getContext());
+			
 			timePickerDialog.setIs24HourView(true);
 			timePickerDialog.setCurrentHour(pickerHour);
 			timePickerDialog.setCurrentMinute(pickerMin);

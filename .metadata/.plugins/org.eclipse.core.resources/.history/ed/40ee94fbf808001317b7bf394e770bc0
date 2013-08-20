@@ -68,8 +68,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
 		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
 
-		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-		dailyRadioBtn.setOnClickListener(listener);
+		OnClickListener listener = new ScheduledModeListener();
+		dailyRadioBtn.setOnClickListener(listener();
 
 
 		//		Omri's code

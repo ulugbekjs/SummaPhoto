@@ -27,7 +27,6 @@ import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
@@ -68,8 +67,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
 		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
 
-		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-		dailyRadioBtn.setOnClickListener(listener);
+		ScheduledModeListener listener = new ScheduledModeListener();
+		dailyRadioBtn.setOnClickListener(;
 
 
 		//		Omri's code
