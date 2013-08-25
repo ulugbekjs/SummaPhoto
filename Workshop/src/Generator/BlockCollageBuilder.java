@@ -109,7 +109,10 @@ public class BlockCollageBuilder {
 				}
 				catch (IOException e) {
 					// TODO: deal with error
+					int x= 5;
+					String xString = e.getMessage();
 					e.printStackTrace();
+					
 				}
 			}
 
@@ -120,14 +123,16 @@ public class BlockCollageBuilder {
 
 	private void addSlotImageToCanvas(Canvas canvas, Slot slot) {
 
+		try {
+			
 		// get Image bitmap
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		Bitmap bitmap = BitmapFactory.decodeFile(slot.getPhotoPath(), options);
+		Bitmap bitmap = BitmapFactory.decodeFile(slot.getPhotoPath());
 
 		// resize image
-		int[] dimensions = slot.getProportionateDimensions(bitmap.getWidth(), bitmap.getHeight());
-		bitmap = Bitmap.createScaledBitmap(bitmap, dimensions[0], dimensions[1], false);
+		int[] dimensions = slot.getProportionateDimensionsForSlot(bitmap.getWidth(), bitmap.getHeight());
+		bitmap = Bitmap.createScaledBitmap(bitmap, dimensions[0], dimensions[1], true);
 
 		// crop image
 		bitmap = Bitmap.createBitmap(bitmap, 0,0, (int)slot.getSlotWidth(), (int) slot.getSlotHeight());
@@ -143,6 +148,13 @@ public class BlockCollageBuilder {
 						bottomRightPixelPoint.getX(), 
 						bottomRightPixelPoint.getY()), 
 						null);
+
+		//free bitmap
+		bitmap.recycle();
+		}
+		catch (Exception exception) {
+			int x =5;
+		}
 	}
 
 }

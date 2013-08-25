@@ -61,7 +61,7 @@ public class Slot{
 	public boolean isHorizontal() {
 		return this.horizontal;
 	}
-	
+
 	public double getSlotWidth() {
 		return Math.abs(bottomRight.distanceFrom(new PixelPoint(topLeft.getX(), bottomRight.getY())));
 	}
@@ -69,31 +69,38 @@ public class Slot{
 	public double getSlotHeight() {
 		return Math.abs(bottomRight.distanceFrom(new PixelPoint(bottomRight.getX(), topLeft.getY())));
 	}
-	
+
 	/**
 	 * calculate minimum image size that respects original ratio AND bigger than slot dimensions
-	 * Important: Assuming that Slot dimensions are always smaller than p dimensions
 	 * @param p - photo to calculate new dimensions for
 	 * @return [0] == width, [1] == height, 
 	 * s.t. width>=slot.getWidth() && height>=slot.getHeight && (width/height) == (p.getWidth()/p.getheight)
 	 */
-	public int[] getProportionateDimensions(int sourceWidth, int sourceHeight) {
-	
-		int newWidth;
-		int newHeight;
-		
-		if (horizontal) { 
-			newWidth = (int) getSlotWidth();
-			newHeight = (int) (sourceHeight * (getSlotWidth() / sourceWidth));
-			}
-		else {
-			newHeight = (int) getSlotHeight();
-			newWidth = (int) (sourceWidth * (getSlotHeight() / sourceHeight));
+	public int[] getProportionateDimensionsForSlot(int sourceWidth, int sourceHeight) {
+
+		int targetWidth = (int) getSlotWidth(); ;
+		int targetHeight = (int) getSlotHeight();
+
+		double ratioWidths;
+		double ratioHeights;
+
+		ratioWidths = ((double) targetWidth / (double) sourceWidth);
+		ratioHeights = ((double) targetHeight / (double) sourceHeight );
+
+		int[] ret = {-1, -1};
+
+		if (ratioWidths > ratioHeights) {
+			ret[0] = targetWidth;
+			ret[1] = (int) (sourceHeight * ratioWidths); 	// scale height
 		}
-		
-		int[] ret = {newWidth, newHeight};
+		else {
+			ret[0] = (int) (sourceWidth * ratioHeights); // scale width
+			ret[1] = targetHeight;
+		}
+
+
 		return ret;
-		
+
 	}
 
 

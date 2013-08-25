@@ -2,3 +2,5 @@
 1377419881073	Rename method 'getSlorHeight'
 1377427447420	Delete element
 1377430408630	Rename type 'Template'
+1377449666072	Rename local variable 'factorWidths'
+1377449691627	Rename local variable 'factorHeights'

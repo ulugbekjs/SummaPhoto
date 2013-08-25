@@ -1,8 +1,5 @@
 package Generator;
 
-import android.R.integer;
-
-
 public class BlockTemplate extends AbstractTemplate{
 
 	private BlockTemplate(int blocks) {
