@@ -29,7 +29,7 @@ public class BlockTemplate extends AbstractTemplate{
 		template.addSlot(new Slot(new PixelPoint(2432, 1014), new PixelPoint(2850, 1775)), 5);
 		template.addSlot(new Slot(new PixelPoint(2851, 1014), new PixelPoint(3264, 1775)), 6);
 		template.addSlot(new Slot(new PixelPoint(1762, 1725), new PixelPoint(2432, 2448)), 7);
-		template.addSlot(new Slot(new PixelPoint(2432, 1776), new PixelPoint(3264, 2448)), 8);
+		template.addSlot(new Slot(new PixelPoint(2432, 1775), new PixelPoint(3264, 2448)), 8);
 
 		return template;
 	}

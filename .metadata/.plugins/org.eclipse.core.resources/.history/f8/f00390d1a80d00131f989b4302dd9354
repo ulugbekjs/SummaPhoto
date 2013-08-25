@@ -107,7 +107,7 @@ public class BlockCollageBuilder {
 					fos.close();
 					fos = null;
 				}
-				catch (Exception e) {
+				catch (IOException e) {
 					// TODO: deal with error
 					int x= 5;
 					String xString = e.getMessage();
