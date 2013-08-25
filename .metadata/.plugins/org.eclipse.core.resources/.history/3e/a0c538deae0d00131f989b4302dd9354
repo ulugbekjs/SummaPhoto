@@ -9,14 +9,8 @@ public class BlockTemplate extends AbstractTemplate{
 	public static BlockTemplate getTemplate(int num) {
 		BlockTemplate template = null;
 		switch (num) {
-		case 1: {
+		case 1:
 			template =  getTemplate1();
-			break;
-		}
-		case 2: {
-			template =  getTemplate2();
-			break;
-		}
 		default:
 			break;
 		}
@@ -52,9 +46,7 @@ public class BlockTemplate extends AbstractTemplate{
 		template.addSlot(new Slot(new PixelPoint(1953, 901), new PixelPoint(2684, 2006)), 6);
 		template.addSlot(new Slot(new PixelPoint(2685, 901), new PixelPoint(3264, 2006)), 7);
 		template.addSlot(new Slot(new PixelPoint(1953, 2007), new PixelPoint(2773, 2448)), 8);
-		template.addSlot(new Slot(new PixelPoint(2774, 2007), new PixelPoint(3264, 2448)), 9);
-		
-		return template;
+		template.addSlot(new Slot(new PixelPoint(1953, 2007), new PixelPoint(2773, 2448)), 9);
 	}
 
 }

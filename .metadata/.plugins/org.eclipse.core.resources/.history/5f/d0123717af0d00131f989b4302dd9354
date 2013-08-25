@@ -14,7 +14,7 @@ public class BlockTemplate extends AbstractTemplate{
 			break;
 		}
 		case 2: {
-			template =  getTemplate2();
+			template =  getTemplate1();
 			break;
 		}
 		default:

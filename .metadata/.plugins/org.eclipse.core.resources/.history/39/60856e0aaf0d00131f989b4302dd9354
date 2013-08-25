@@ -9,14 +9,8 @@ public class BlockTemplate extends AbstractTemplate{
 	public static BlockTemplate getTemplate(int num) {
 		BlockTemplate template = null;
 		switch (num) {
-		case 1: {
+		case 1:
 			template =  getTemplate1();
-			break;
-		}
-		case 2: {
-			template =  getTemplate2();
-			break;
-		}
 		default:
 			break;
 		}
