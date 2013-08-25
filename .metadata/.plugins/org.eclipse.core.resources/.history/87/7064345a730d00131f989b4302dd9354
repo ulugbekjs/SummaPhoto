@@ -1,0 +1,19 @@
+package Generator;
+
+import android.text.style.SuperscriptSpan;
+
+public class BlockTemplate extends Template{
+	
+	private BlockTemplate(int blocks) {
+		super(blocks);
+	}
+	
+	public static BlockTemplate getTemplate(int num) {
+		
+	}
+	
+	private static BlockTemplate getTemplate1() {
+		
+	}
+
+}

@@ -1,18 +1,8 @@
 package ActivationManager;
 
-import java.io.File;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import org.junit.experimental.max.MaxCore;
-
-import Bing.BingServices;
-import Bing.StaticMap;
 import Common.Photo;
-import Common.GPSPoint;
-import Generator.MapCollageBuilder;
-import Generator.Template;
 
 public class ActivationManager {
 

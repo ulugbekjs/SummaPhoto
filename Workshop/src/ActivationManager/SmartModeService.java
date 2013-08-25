@@ -7,8 +7,10 @@ import java.util.concurrent.TimeUnit;
 
 import Bing.BingServices;
 import Bing.StaticMap;
+import Generator.BlockCollageBuilder;
+import Generator.BlockTemplate;
 import Generator.MapCollageBuilder;
-import Generator.Template;
+import Generator.MapTemplate;
 
 public class SmartModeService {
 	private static ScheduledExecutorService scheduler = null;
@@ -29,9 +31,14 @@ public class SmartModeService {
 					boolean collageNeeded = manager.processPhotoBuffer();
 
 					if (collageNeeded) {
-						Template template = Template.getTemplate(1);
-						StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
-						File collageFile = MapCollageBuilder.BuildCollage(template);
+//						MapTemplate template = MapTemplate.getTemplate(1);
+//						StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
+						//File collageFile = MapCollageBuilder.BuildCollage(template);
+						BlockTemplate template = BlockTemplate.getTemplate(1); 
+						BlockCollageBuilder builder = new BlockCollageBuilder(template, EventCandidateContainer.getInstance().getAllEventsInContainer());
+						builder.populateTemplate();
+						builder.BuildCollage();
+						
 					}
 				}
 			},

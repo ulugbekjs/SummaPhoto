@@ -1,0 +1,63 @@
+package Generator;
+
+import java.util.List;
+
+import android.R.integer;
+
+public abstract class AbstractTemplate {
+
+	//static fields
+	public static final int TEMPLATE_1 = 1;
+	public static final int TEMPLATE_2 = 2;
+	public static final int TEMPLATE_3 = 3;
+
+	//private instance fields
+	protected Slot[] slots = null; // slots[0] == Top Left Photo
+	protected List<Slot> verticalSlots;
+	protected List<Slot> horizontalSlots;
+
+	public AbstractTemplate(int slotsInTemplate) {
+		slots = new Slot[slotsInTemplate];
+	}
+
+	public int getCurrentNumberOfSlots() {
+		return getNumberOfSlots() - horizontalSlots.size() - verticalSlots.size();
+	}
+
+	public int getNumberOfSlots() {
+		return slots.length;
+	}
+
+	public Slot getSlot(int number) {
+		return slots[number];
+	}
+
+	public boolean isTemplateFull() {
+		return (slots.length == getCurrentNumberOfSlots());
+	}
+
+	public Slot getMapSlot() {
+		return this.mapSlot;
+	}
+	
+	public getRemainingVerticalSlots() {
+		
+	}
+
+	public Slot removeNextEmptyVerticalCount() {
+		if (hasMoreVerticalSlots()) {
+			return verticalSlots.remove(0);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public Slot re
+
+	public int getEmptyHorizontalCount() {
+		return this.remainingHorizontalSlots;
+	}
+
+}
+

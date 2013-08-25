@@ -1,15 +1,6 @@
 package com.example.aworkshop;
 
 import java.io.File;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-
-import org.joda.time.DateTime;
-import org.junit.Ignore;
-
-
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeService;
 import Common.Photo;
@@ -17,11 +8,7 @@ import Partitioning.Cluster;
 import Partitioning.DBScan;
 import PhotoListener.PhotoListenerThread;
 import android.app.AlertDialog;
-import android.app.TimePickerDialog;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;

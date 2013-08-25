@@ -1,5 +1,9 @@
 package Generator;
 
+import org.joda.time.tz.UTCProvider;
+import org.junit.experimental.max.MaxCore;
+
+import android.R.integer;
 import Common.Photo;
 
 /**
@@ -22,7 +26,7 @@ public class Slot{
 		this.bottomRight = bottomRight;
 		this.topRight = new PixelPoint(bottomRight.getX(), topLeft.getY());
 		this.bottomLeft = new PixelPoint(topLeft.getX(), bottomRight.getY());
-		this.horizontal = (getWidth() > getHeight()); 
+		this.horizontal = (getSlotWidth() > getSlotHeight()); 
 	}
 
 	public void assignToPhoto(Photo photo) {
@@ -57,13 +61,41 @@ public class Slot{
 	public boolean isHorizontal() {
 		return this.horizontal;
 	}
-
-	public double getWidth() {
+	
+	public double getSlotWidth() {
 		return Math.abs(bottomRight.distanceFrom(new PixelPoint(topLeft.getX(), bottomRight.getY())));
 	}
 
-	public double getHeight() {
+	public double getSlotHeight() {
 		return Math.abs(bottomRight.distanceFrom(new PixelPoint(bottomRight.getX(), topLeft.getY())));
 	}
+	
+	/**
+	 * calculate minimum image size that respects original ratio AND bigger than slot dimensions
+	 * Important: Assuming that Slot dimensions are always smaller than p dimensions
+	 * @param p - photo to calculate new dimensions for
+	 * @return [0] == width, [1] == height, 
+	 * s.t. width>=slot.getWidth() && height>=slot.getHeight && (width/height) == (p.getWidth()/p.getheight)
+	 */
+	public int[] getProportionateDimensions(int sourceWidth, int sourceHeight) {
+	
+		int newWidth;
+		int newHeight;
+		
+		if (horizontal) { 
+			newWidth = (int) getSlotWidth();
+			newHeight = (int) (sourceHeight * (getSlotWidth() / sourceWidth));
+			}
+		else {
+			newHeight = (int) getSlotHeight();
+			newWidth = (int) (sourceWidth * (getSlotHeight() / sourceHeight));
+		}
+		
+		int[] ret = {newWidth, newHeight};
+		return ret;
+		
+	}
+
+
 
 }

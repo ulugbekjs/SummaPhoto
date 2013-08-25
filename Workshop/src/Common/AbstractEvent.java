@@ -1,5 +1,8 @@
 package Common;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -12,14 +15,15 @@ import java.util.UUID;
 public abstract class AbstractEvent {
 	
 	private UUID eventID;
-	protected Set<Photo> eventPhotos = new TreeSet<Photo>();
+	protected List<Photo> verticalPhotos = new ArrayList<Photo>();
+	protected List<Photo> horizontalPhotos = new ArrayList<Photo>();
 	
 	public AbstractEvent() {
 		eventID = UUID.randomUUID();
 	}
 	
 	public boolean isEmpty() {
-		return (this.eventPhotos.size() == 0); 
+		return (getEventSize() == 0); 
 	}
 
 	public UUID getEventID() {
@@ -27,15 +31,27 @@ public abstract class AbstractEvent {
 	}
 
 	public int getEventSize() {
-		return this.eventPhotos.size();
+		return this.horizontalPhotos.size() + this.verticalPhotos.size();
 	}
 
 	public boolean isPhotoInEvent(Photo photo) {
-		return eventPhotos.contains(photo);
+		return (verticalPhotos.contains(photo) || horizontalPhotos.contains(photo));
 	}
 	
-	public Set<Photo> getEventPhotos() {
-		return eventPhotos;
+	public List<Photo> verticalPhotos() {
+		return verticalPhotos;
+	}	
+	
+	public List<Photo> horizontalPhotos() {
+		return horizontalPhotos;
+	}
+	
+	public List<Photo> getEventPhotos() {
+		List<Photo> retList = new ArrayList<Photo>();
+		retList.addAll(horizontalPhotos);
+		retList.addAll(verticalPhotos);
+		
+		return retList;
 	}
 	
 	public abstract void addPhoto(Photo photo);

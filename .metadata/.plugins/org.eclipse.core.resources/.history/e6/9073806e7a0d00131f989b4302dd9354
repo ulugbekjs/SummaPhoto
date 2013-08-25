@@ -1,0 +1,9 @@
+package Generator;
+
+public abstract class AbstractTemplate {
+
+	//static fields
+	public static final int TEMPLATE_1 = 1;
+	public static final int TEMPLATE_2 = 2;
+	public static final int TEMPLATE_3 = 3;
+}

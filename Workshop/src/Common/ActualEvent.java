@@ -68,7 +68,12 @@ public class ActualEvent extends AbstractEvent {
 		endTime = photo.getTakenDate();
 
 		// double-sided linking
-		eventPhotos.add(photo); 
+		if (photo.isHorizontal()) {
+			horizontalPhotos.add(photo);
+		}
+		else {
+			verticalPhotos.add(photo);
+		}
 		photo.attachToEvent(this);
 	}
 }

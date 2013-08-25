@@ -1,0 +1,11 @@
+package Generator;
+
+import android.R.integer;
+
+public class BlockTemplate extends Template{
+	
+	public BlockTemplate(int blocks) {
+		super(blocks)l
+	}
+
+}

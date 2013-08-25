@@ -23,7 +23,11 @@ public class EventCandidate extends AbstractEvent {
 	
 	@Override
 	public void addPhoto(Photo photo) {
-		eventPhotos.add(photo);
+		if (photo.isHorizontal())
+			horizontalPhotos.add(photo);
+		else 
+			verticalPhotos.add(photo);
+		
 		lastAddedPhoto = photo;
 	}
 	

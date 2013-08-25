@@ -1,8 +1,6 @@
 package Bing;
 
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,9 +19,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
-
-import android.R.integer;
-import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
 import ActivationManager.EventCandidate;

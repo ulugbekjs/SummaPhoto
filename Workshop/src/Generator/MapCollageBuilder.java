@@ -19,7 +19,7 @@ public class MapCollageBuilder {
 	 * @param template - the template with the photos already arranged in Slots
 	 * @return
 	 */
-	public static File BuildCollage(Template template) {
+	public static File BuildCollage(MapTemplate template) {
 
 		Canvas canvas = null;
 		FileOutputStream fos = null;
