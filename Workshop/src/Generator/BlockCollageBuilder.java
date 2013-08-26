@@ -101,22 +101,22 @@ public class BlockCollageBuilder {
 			// TODO: deal with error
 			e.printStackTrace();
 		}
-		finally {
-			if (fos != null) {
-				try {
-					fos.close();
-					fos = null;
-				}
-				catch (Exception e) {
-					// TODO: deal with error
-					int x= 5;
-					String xString = e.getMessage();
-					e.printStackTrace();
-					
-				}
-			}
-
-		}
+//		finally {
+//			if (fos != null) {
+//				try {
+//					fos.close();
+//					fos = null;
+//				}
+//				catch (Exception e) {
+//					// TODO: deal with error
+//					int x= 5;
+//					String xString = e.getMessage();
+//					e.printStackTrace();
+//					
+//				}
+//			}
+//
+//		}
 
 		return file;
 	}

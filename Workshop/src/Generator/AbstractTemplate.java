@@ -65,6 +65,6 @@ public abstract class AbstractTemplate {
 		else {
 			this.verticalSlots.add(index);
 		}
-	}
+	}	
 }
 
