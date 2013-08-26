@@ -1,11 +1,15 @@
 package com.example.aworkshop;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeService;
 import Common.Photo;
 import Partitioning.Cluster;
 import Partitioning.DBScan;
+import Partitioning.TestDBScan;
 import PhotoListener.PhotoListenerThread;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,7 +29,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	//		File dataDirectory = new File(root + "/DCIM/Camera/");
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 
 
 	// global fields
@@ -61,28 +65,30 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		//		Omri's code
 
-		//		File directory = new File(PHOTO_DIR);
-		//		if (!directory.exists())
-		//			return;
-		//		File[] arrayOfPic =  directory.listFiles();
-		//		Photo tempPhoho = null;
-		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		//		for (File file : arrayOfPic)
-		//		{
-		//			try
-		//			{
-		//				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-		//			}
-		//			catch (Exception ex)
-		//			{
-		//			}
-		//			if (tempPhoho != null)
-		//				photosToCluster.add(tempPhoho);
-		//		}
-		//		DBScan algorithmDbScan = new DBScan(photosToCluster);
-		//		List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
-		//		return;
-		//
+			File directory = new File(PHOTO_DIR);
+				if (!directory.exists())
+					return;
+				File[] arrayOfPic =  directory.listFiles();
+				Photo tempPhoho = null;
+				List<Photo> photosToCluster = new LinkedList<Photo>(); 
+				for (File file : arrayOfPic)
+				{
+					try
+					{
+						tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+					}
+					catch (Exception ex)
+					{
+					}
+					if (tempPhoho != null)
+						photosToCluster.add(tempPhoho);
+				}
+				DBScan algorithmDbScan = new DBScan(photosToCluster);
+				List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
+				TestDBScan dbScanTester = new TestDBScan();
+				dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
+				return;
+		
 
 	}
 
