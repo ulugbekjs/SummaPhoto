@@ -1,5 +1,11 @@
 package Partitioning;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.AbstractQueue;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -8,7 +14,9 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import android.R.bool;
 import android.R.integer;
+import android.R.string;
 import android.webkit.WebChromeClient.CustomViewCallback;
 import Common.*;
 
@@ -30,10 +38,9 @@ public class DBScan {
 		unvisitedPhotos = new Hashtable<Double, PhotoObjectForClustering>();
 		if (photosData != null) {
 			for (Photo p : photosData) {
-				if (p != null)
-				{
-				tempObject = new PhotoObjectForClustering(p);
-				unvisitedPhotos.put(p.getID(), tempObject);
+				if (p != null) {
+					tempObject = new PhotoObjectForClustering(p);
+					unvisitedPhotos.put(p.getID(), tempObject);
 				}
 			}
 		}
@@ -49,8 +56,7 @@ public class DBScan {
 			Queue<PhotoObjectForClustering> neighborsList = regionQueryList(arbitraryUnvisitedPhoto);
 			if (neighborsList.size() < minNumberOfPointsInCluster) {
 				arbitraryUnvisitedPhoto.isNoise = true;
-			} 
-			else {
+			} else {
 				Cluster cluster = new Cluster();
 				clustersList.add(cluster);
 				arbitraryUnvisitedPhoto.addPointToCluster(cluster);
@@ -64,14 +70,9 @@ public class DBScan {
 			Queue<PhotoObjectForClustering> neighbors) {
 		if (neighbors != null) {
 			Queue<PhotoObjectForClustering> subNeighborsList;
-			
-			
-			
-			
-			
+
 			PhotoObjectForClustering neighbor;
-			while (!neighbors.isEmpty()) 
-			{
+			while (!neighbors.isEmpty()) {
 				neighbor = neighbors.remove();
 				if (!neighbor.isVisited) {
 					moveToVisited(neighbor);
@@ -82,7 +83,7 @@ public class DBScan {
 					}
 				}
 				if (neighbor.cluster == null) {
-					p.addPointToCluster(c);
+					neighbor.addPointToCluster(c);
 				}
 			}
 		}
@@ -119,13 +120,15 @@ public class DBScan {
 		return photosEpsilonClose;
 	}
 
-	private PhotoObjectForClustering getArbitraryPhotoFromHashTableClustering (Hashtable<Double, PhotoObjectForClustering> hashTable)
-	{
-		if ((hashTable == null)|| (hashTable.isEmpty()))
-		{
+	private PhotoObjectForClustering getArbitraryPhotoFromHashTableClustering(
+			Hashtable<Double, PhotoObjectForClustering> hashTable) {
+		if ((hashTable == null) || (hashTable.isEmpty())) {
 			return null;
 		}
 		double tempKey = hashTable.keys().nextElement();
 		return hashTable.get(tempKey);
 	}
+
+	
+
 }
