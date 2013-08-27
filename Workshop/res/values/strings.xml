@@ -12,5 +12,8 @@
     <string name="OffDescription">SummaPhoto will not generate any collages</string>
     <string name="Mode">Mode</string>
     <string name="ModeHeader">Mode</string>
+    <string name="TypeHeader">Collage Type</string>
+    <string name="Map">Map</string>
+    <string name="Blocks">Blocks</string>
 
 </resources>

@@ -10,14 +10,12 @@ import com.example.aworkshop.SettingsActivity;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
-import Common.PhotoFilter;
 import Generator.BlockCollageBuilder;
 import Generator.BlockTemplate;
 

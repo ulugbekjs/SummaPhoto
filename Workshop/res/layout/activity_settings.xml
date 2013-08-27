@@ -20,6 +20,7 @@
             android:layout_marginTop="8dp"
             android:drawablePadding="4dp"
             android:paddingLeft="4dp"
+            android:paddingBottom="8dp"
             android:text="@string/Mode"
             android:textSize="20sp" />
 
@@ -63,6 +64,44 @@
             <TextView android:text="@string/DailyDescription" />
             
         </RadioGroup>
+        
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawablePadding="4dp"
+            android:paddingLeft="4dp"
+            android:paddingBottom="8dp"
+            
+            android:text="@string/TypeHeader"
+            android:textSize="20sp" />
+        
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:scaleType="fitXY"
+            android:src="?android:attr/listDivider" />
+        
+         <RadioGroup
+            android:id="@+id/OutputType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            
+             <RadioButton
+                android:id="@+id/mapType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/Map" />
+            
+            <RadioButton
+                android:id="@+id/blocksType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Blocks" />
+           </RadioGroup>
+        
     </LinearLayout>
 
 </RelativeLayout>

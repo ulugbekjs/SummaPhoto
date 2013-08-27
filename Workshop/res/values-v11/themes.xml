@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-     <style name="SummaPhotoTheme" parent="@android:style/Theme.Holo">
+
+    <style name="SummaPhotoTheme" parent="@android:style/Theme.Holo">
         <!-- Any customizations for your app running on 3.0+ devices here -->
     </style>
+
+    <style name="Splash" parent="android:Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFrame">@null</item>
+    </style>
+
 </resources>

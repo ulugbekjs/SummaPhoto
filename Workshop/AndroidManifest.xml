@@ -20,11 +20,18 @@
         android:theme="@style/SummaPhotoTheme" >
         <activity
             android:name="com.example.aworkshop.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:theme="@style/SummaPhotoTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.aworkshop.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Splash" >
         </activity>
     </application>
 

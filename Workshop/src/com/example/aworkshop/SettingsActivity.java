@@ -69,7 +69,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
 		
-		PhotoFilter.filter();
+	//	PhotoFilter.filter();
 
 		
 
