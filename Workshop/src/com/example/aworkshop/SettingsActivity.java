@@ -7,15 +7,19 @@ import java.util.List;
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeService;
 import Common.Photo;
+import Common.PhotoFilter;
 import Partitioning.Cluster;
 import Partitioning.DBScan;
 import Partitioning.TestDBScan;
 import PhotoListener.PhotoListenerThread;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NotificationCompat;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,10 +30,11 @@ import android.widget.TimePicker;
 public class SettingsActivity extends FragmentActivity { // Extends FragmentActivity to support < Android 3.0
 
 	// static final fields
+	public static Context CONTEXT = null;
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	//		File dataDirectory = new File(root + "/DCIM/Camera/");
-	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 
 
 	// global fields
@@ -49,9 +54,11 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 
-		// 		Yonatan's code
-		//
+		CONTEXT = this;
 
+		//		// 		Yonatan's code
+		//		//
+		//
 		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
 
@@ -61,34 +68,37 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
-
-
-		//		Omri's code
-
-			File directory = new File(PHOTO_DIR);
-				if (!directory.exists())
-					return;
-				File[] arrayOfPic =  directory.listFiles();
-				Photo tempPhoho = null;
-				List<Photo> photosToCluster = new LinkedList<Photo>(); 
-				for (File file : arrayOfPic)
-				{
-					try
-					{
-						tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-					}
-					catch (Exception ex)
-					{
-					}
-					if (tempPhoho != null)
-						photosToCluster.add(tempPhoho);
-				}
-				DBScan algorithmDbScan = new DBScan(photosToCluster);
-				List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
-				TestDBScan dbScanTester = new TestDBScan();
-				dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
-				return;
 		
+		PhotoFilter.filter();
+
+		
+
+		//		//		Omri's code
+		//
+		//			File directory = new File(PHOTO_DIR);
+		//				if (!directory.exists())
+		//					return;
+		//				File[] arrayOfPic =  directory.listFiles();
+		//				Photo tempPhoho = null;
+		//				List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		//				for (File file : arrayOfPic)
+		//				{
+		//					try
+		//					{
+		//						tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+		//					}
+		//					catch (Exception ex)
+		//					{
+		//					}
+		//					if (tempPhoho != null)
+		//						photosToCluster.add(tempPhoho);
+		//				}
+		//				DBScan algorithmDbScan = new DBScan(photosToCluster);
+		//				List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
+		//				TestDBScan dbScanTester = new TestDBScan();
+		//				dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
+		//				return;
+		//		
 
 	}
 
@@ -180,7 +190,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		if (ScheduledModeService.isServiceRunning())
 			ScheduledModeService.stopService();
 	}
-	
+
 	private class ScheduledModeListener implements View.OnClickListener { 
 
 
@@ -214,50 +224,10 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		}
 	}
 
-	//	public class TimePickerFragment extends DialogFragment implements OnTimeSetListener {
-	//
-	//		@Override
-	//		public Dialog onCreateDialog(Bundle savedInstanceState) {
-	//			// Use the current time as the default values for the picker
-	//			final Calendar c = Calendar.getInstance();
-	//			int hour = c.get(Calendar.HOUR_OF_DAY);
-	//			int minute = c.get(Calendar.MINUTE);
-	//
-	//			// Create a new instance of TimePickerDialog and return it
-	//			return new TimePickerDialog(getActivity(), this, hour, minute,
-	//					DateFormat.is24HourFormat(getActivity()));
-	//		}
-	//
-	//		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-	//			SettingsActivity.this.pickerHour = hourOfDay;
-	//			SettingsActivity.this.pickerMin = minute; 
-	//		}
-	//	}
-	//
-	//	public void showTimePickerDialog(View v) {
-	//		TimePickerFragment newFragment = new TimePickerFragment();
-	//		newFragment.show(getFragmentManager(), "timePicker"); 
-	//	}
-
-	//	private class ServiceAsyncTask extends AsyncTask<Integer, Integer, Exception> {
-	//
-	//		@Override
-	//		protected Exception doInBackground(Integer... params) {
-	//			Exception ret = null;
-	//			try {
-	//				if (params[0] == 1)
-	//
-	//
-	//					if (params[0] == 2)
-	//			}
-	//			catch (Exception exception) {
-	//				ret = exception;
-	//			}
-	//			return ret;
-	//		}
-	//
-	//	}
-
-
+	@Override
+	protected void onDestroy() {
+		offButtonClicked(); // shutdown all services
+		super.onDestroy();
+	}
 
 }

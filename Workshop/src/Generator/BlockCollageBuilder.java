@@ -10,15 +10,24 @@ import java.util.Set;
 
 import org.im4java.core.UFRawCmd;
 
+import com.example.aworkshop.R;
+import com.example.aworkshop.SettingsActivity;
+
 import ActivationManager.EventCandidate;
 import Common.ActualEvent;
 import Common.Photo;
 import android.R.integer;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.app.NotificationCompat;
 
 public class BlockCollageBuilder {
 
@@ -91,45 +100,47 @@ public class BlockCollageBuilder {
 			file = new File(testsDir, "output.jpg");
 
 			fos = new FileOutputStream(file);
-			bmpBase.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+			bmpBase.compress(Bitmap.CompressFormat.JPEG, 50, fos);
 
 			fos.flush();
 			fos.close();
 			fos = null;
+			
+			bmpBase.recycle();
+			bmpBase = null;
 		}
 		catch (IOException e) {
 			// TODO: deal with error
 			e.printStackTrace();
 		}
-//		finally {
-//			if (fos != null) {
-//				try {
-//					fos.close();
-//					fos = null;
-//				}
-//				catch (Exception e) {
-//					// TODO: deal with error
-//					int x= 5;
-//					String xString = e.getMessage();
-//					e.printStackTrace();
-//					
-//				}
-//			}
-//
-//		}
+		//		finally {
+		//			if (fos != null) {
+		//				try {
+		//					fos.close();
+		//					fos = null;
+		//				}
+		//				catch (Exception e) {
+		//					// TODO: deal with error
+		//					int x= 5;
+		//					String xString = e.getMessage();
+		//					e.printStackTrace();
+		//					
+		//				}
+		//			}
+		//
+		//		}
 
 		return file;
 	}
 
 	private void addSlotImageToCanvas(Canvas canvas, Slot slot) {
 
-		try {
-			
 		// get Image bitmap
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		Bitmap bitmap = BitmapFactory.decodeFile(slot.getPhotoPath());
-
+//		Bitmap bitmap = BitmapFactory.decodeFile(slot.getPhoto().getFilePath());
+		Bitmap bitmap = decodeScaledBitmapFromSdCard(slot.getPhoto().getFilePath(), slot.getPhoto().getWidth(), slot.getPhoto().getWidth());
+		
 		// resize image
 		int[] dimensions = slot.getProportionateDimensionsForSlot(bitmap.getWidth(), bitmap.getHeight());
 		bitmap = Bitmap.createScaledBitmap(bitmap, dimensions[0], dimensions[1], true);
@@ -151,10 +162,46 @@ public class BlockCollageBuilder {
 
 		//free bitmap
 		bitmap.recycle();
-		}
-		catch (Exception exception) {
-			int x =5;
-		}
+		bitmap = null;
 	}
+	
+	private static Bitmap decodeScaledBitmapFromSdCard(String filePath,
+	        int reqWidth, int reqHeight) {
+
+	    // First decode with inJustDecodeBounds=true to check dimensions
+	    final BitmapFactory.Options options = new BitmapFactory.Options();
+	    options.inJustDecodeBounds = true;
+	    BitmapFactory.decodeFile(filePath, options);
+
+	    // Calculate inSampleSize
+	    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+	    // Decode bitmap with inSampleSize set
+	    options.inJustDecodeBounds = false;
+	    return BitmapFactory.decodeFile(filePath, options);
+	}
+
+	private static int calculateInSampleSize(
+	        BitmapFactory.Options options, int reqWidth, int reqHeight) {
+	    // Raw height and width of image
+	    final int height = options.outHeight;
+	    final int width = options.outWidth;
+	    int inSampleSize = 1;
+
+	    if (height > reqHeight || width > reqWidth) {
+
+	        // Calculate ratios of height and width to requested height and width
+	        final int heightRatio = Math.round((float) height / (float) reqHeight);
+	        final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+	        // Choose the smallest ratio as inSampleSize value, this will guarantee
+	        // a final image with both dimensions larger than or equal to the
+	        // requested height and width.
+	        inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+	    }
+
+	    return inSampleSize;
+	}
+
 
 }

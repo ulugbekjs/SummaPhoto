@@ -61,7 +61,7 @@ public class MapCollageBuilder {
 			file = new File(testsDir, "output.jpg");
 
 			fos = new FileOutputStream(file);
-			bmpBase.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+			bmpBase.compress(Bitmap.CompressFormat.JPEG, 50, fos);
 
 			fos.flush();
 			fos.close();
@@ -93,7 +93,7 @@ public class MapCollageBuilder {
 		// get Image bitmap
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		Bitmap bitmap = BitmapFactory.decodeFile(slot.getPhotoPath(), options);
+		Bitmap bitmap = BitmapFactory.decodeFile(slot.getPhoto().getFilePath(), options);
 
 		// draw bitmap onto canvas
 		PixelPoint topleftPixelPoint = slot.getTopLeft();

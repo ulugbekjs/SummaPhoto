@@ -2,9 +2,5 @@
 <dirs>
 <entry loc="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home" stamp="1374003069000"/>
 <entry loc="/Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home" stamp="1370497387000"/>
-<<<<<<< HEAD
 <entry loc="C:\Program Files\Java\jre7" stamp="1350856716249"/>
-=======
-<entry loc="C:\Program Files\Java\jre7" stamp="1320436102856"/>
->>>>>>> bac269e3efdfa369d59410a8adc8309161072d98
 </dirs>

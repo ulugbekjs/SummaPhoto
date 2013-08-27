@@ -19,7 +19,7 @@ public class Slot{
 	private PixelPoint bottomLeft;
 
 	private boolean horizontal;	
-	private String path = null; // the photo that fills the slot
+	private Photo photo = null; // the photo that fills the slot
 
 	public Slot(PixelPoint topLeft, PixelPoint bottomRight) {
 		this.topLeft = topLeft;
@@ -31,15 +31,15 @@ public class Slot{
 
 	public void assignToPhoto(Photo photo) {
 		if (photo != null) {
-			this.path = photo.getFilePath();
+			this.photo = photo;
 		}
 	}
 
-	public String getPhotoPath() {
-		return this.path;
+	public Photo getPhoto() {
+		return this.photo;
 	}
 	public boolean isAssignedToPhoto() {
-		return (path != null);
+		return (photo != null);
 	}
 
 	public PixelPoint getTopLeft() {
