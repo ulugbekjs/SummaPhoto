@@ -2,6 +2,8 @@ package Generator;
 
 public class BlockTemplate extends AbstractTemplate{
 
+	public static final int BLOCK_TEMPLATES_NUM = 3;
+	
 	private BlockTemplate(int blocks) {
 		super(blocks);
 	}

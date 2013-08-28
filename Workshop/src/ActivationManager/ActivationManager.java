@@ -1,5 +1,7 @@
 package ActivationManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import Common.Photo;
@@ -19,6 +21,7 @@ public class ActivationManager {
 	//instance fields
 	private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
 	private BlockingQueue<DedicatedRequest> requestBuffer = new LinkedBlockingQueue<DedicatedRequest>();
+	private List<Photo> processedPhotos = new ArrayList<Photo>();
 
 	private int currentState = 0; // start in REGULAR_MODE;
 	private int remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE;
@@ -34,6 +37,10 @@ public class ActivationManager {
 
 	public static ActivationManager getInstance() {
 		return instance;
+	}
+	
+	public List<Photo> getProcessedPhotos() {
+		return processedPhotos;
 	}
 
 	private boolean isNewEventCandidate(Photo newPhoto) {
@@ -105,6 +112,7 @@ public class ActivationManager {
 			photo = buffer.remove();
 			if (photo != null) {
 				isCollageNeeded = processPhoto(photo);
+				processedPhotos.add(photo); 
 			}
 		}
 
@@ -138,7 +146,7 @@ public class ActivationManager {
 		while (!requestBuffer.isEmpty()) {
 			DedicatedRequest request = requestBuffer.remove();
 			// make sure dedicated request has information
-			if ((request.getEventsNeeded() != 0 || request.getVerticalNeeded() !=0 || request.getHorizontalNeeded() != 0)) {
+			if (!request.isEmptyRequest()) {
 				setToDedicatedMode(request);
 			}
 		}
@@ -148,7 +156,6 @@ public class ActivationManager {
 		switch (newState) {
 		case DEDICATED_MODE: {
 			if (request != null) {
-				this.remainingEvents = Math.max(this.remainingEvents, request.getEventsNeeded());
 				this.remainingHorizontal = Math.max(this.remainingHorizontal, request.getHorizontalNeeded());
 				this.remainingVertical = Math.max(this.remainingVertical, request.getVerticalNeeded());
 				currentState = DEDICATED_MODE;

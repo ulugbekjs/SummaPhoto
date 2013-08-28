@@ -1,9 +1,5 @@
 package Generator;
 
-import org.joda.time.tz.UTCProvider;
-import org.junit.experimental.max.MaxCore;
-
-import android.R.integer;
 import Common.Photo;
 
 /**

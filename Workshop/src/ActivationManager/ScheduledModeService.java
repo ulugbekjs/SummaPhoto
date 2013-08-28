@@ -1,17 +1,10 @@
 package ActivationManager;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeComparator;
-import org.joda.time.Seconds;
-
-import android.R.integer;
 
 public class ScheduledModeService{
 

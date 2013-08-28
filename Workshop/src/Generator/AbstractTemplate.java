@@ -1,10 +1,10 @@
 package Generator;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import android.R.integer;
+import Common.ActualEventsBundle;
+import Common.Photo;
 
 public abstract class AbstractTemplate {
 
@@ -13,7 +13,7 @@ public abstract class AbstractTemplate {
 	public static final int TEMPLATE_2 = 2;
 	public static final int TEMPLATE_3 = 3;
 
-	//private instance fields
+	//protected instance fields
 	protected Slot[] slots = null; // slots[0] == Top Left Photo
 	protected List<Integer> verticalSlots;
 	protected List<Integer> horizontalSlots;
