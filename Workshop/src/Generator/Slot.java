@@ -98,7 +98,6 @@ public class Slot{
 			ret[1] = targetHeight;
 		}
 
-
 		return ret;
 
 	}

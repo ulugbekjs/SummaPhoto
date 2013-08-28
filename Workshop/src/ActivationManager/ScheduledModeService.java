@@ -1,5 +1,6 @@
 package ActivationManager;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.Executors;
@@ -9,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeComparator;
 import org.joda.time.Seconds;
+
+import android.R.integer;
 
 public class ScheduledModeService{
 
@@ -26,27 +29,7 @@ public class ScheduledModeService{
 		if (scheduler == null) {
 			scheduler =  Executors.newScheduledThreadPool(1);
 
-
-			// calculate time until next waking of thread
-
-			DateTime now = new DateTime(new Date());
-			Calendar calendar = Calendar.getInstance();
-			calendar.set(calendar.get(Calendar.YEAR),
-					calendar.get(Calendar.MONTH),
-					calendar.get(Calendar.DAY_OF_MONTH),
-					hour, min);
-
-			// this line is slow in the first time
-			DateTime scheduledTime = new DateTime(calendar.getTime());
-
-			DateTimeComparator comparator = DateTimeComparator.getTimeOnlyInstance();
-			int timeToWake = 0;
-			if (comparator.compare(now,scheduledTime) < 0) { // scheduledTime already passed for today
-				timeToWake = Seconds.secondsBetween(DateTime.now(),scheduledTime).getSeconds();
-			}
-			else {
-				timeToWake = Seconds.secondsBetween(DateTime.now(),scheduledTime.plusDays(1)).getSeconds();
-			}
+			int timeToWakeInSeconds = calcTimeToWakeInSeconds(hour, min);
 
 			// waits INTERVAL_IN_SECONDS seconds after end of last execution
 			scheduler.scheduleWithFixedDelay(new Runnable() {
@@ -55,10 +38,59 @@ public class ScheduledModeService{
 					manager.processPhotoBuffer();
 				}
 			},
-			timeToWake,
+			timeToWakeInSeconds,
 			86400, // DAY
 			TimeUnit.SECONDS);	
 		}
+	}
+
+	private static int calcTimeToWakeInSeconds(int hour, int min) {
+		// calculate time until next waking of thread
+
+		Calendar calendar = Calendar.getInstance();
+		Date currentDateTime =  calendar.getTime();
+
+		int year = calendar.get(Calendar.YEAR);
+		int month = calendar.get(Calendar.MONTH);
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		calendar.set(year,
+				month,
+				day,
+				hour, min, 0);
+
+		Date scheduledTime = calendar.getTime();
+
+		int timeToWakeInSeconds = 0;
+		if (compareTimes(scheduledTime, currentDateTime) < 0) { // scheduledTime passed today
+			scheduledTime = plusDay(year, month, day, hour, min);
+			timeToWakeInSeconds = (int) ((scheduledTime.getTime() - currentDateTime.getTime()) / 1000);
+		}
+		else {
+			timeToWakeInSeconds = (int) ((scheduledTime.getTime() - currentDateTime.getTime()) / 1000);
+		}
+		
+		return timeToWakeInSeconds;
+	}
+
+	private static int compareTimes(Date d1, Date d2)
+	{
+		int     t1;
+		int     t2;
+
+		t1 = (int) (d1.getTime() % (24*60*60*1000L));
+		t2 = (int) (d2.getTime() % (24*60*60*1000L));
+
+		return (t1 - t2);
+	}
+	
+	private static Date plusDay(int year, int month, int day, int hour, int min) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year,
+				month,
+				day + 1,
+				hour, min, 0);
+		return calendar.getTime();
+		
 	}
 
 	public static void stopService() {
