@@ -1,8 +1,11 @@
 package PhotoListener;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -16,6 +19,8 @@ import com.drew.metadata.jpeg.JpegDirectory;
 import ActivationManager.ActivationManager;
 import Common.GPSPoint;
 import Common.Photo;
+import android.R.integer;
+import android.os.Build;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
@@ -30,49 +35,139 @@ public class PhotoListenerThread extends FileObserver {
 	private final String TAG = PhotoListenerThread.class.getName();
 	String absolutePath;
 
+	private Set<String> cache = new HashSet<String>();
+
+
 	public PhotoListenerThread(String path) {
 		super(path, FileObserver.CLOSE_WRITE);
 		this.absolutePath = path;
 	}
 
+	//	@Override
+	//	public void onEvent(int event, String path) {
+	//		try{
+	//			if (isExternalStorageReadable()) {
+	//				if (path.endsWith(".jpg")) {
+	//					Photo photo = null;
+	//					GeoLocation location = null;
+	//					while (photo == null) {
+	//						String file = absolutePath + path;
+	//						try {
+	//							photo = createPhotoFromFile(file, location );
+	//						}
+	//						catch (ImageProcessingException e) { // this means photo was not saved fully
+	//							Log.e(TAG, "Sleeping until photo completely saved");
+	//							int counter = 0;
+	//							try {
+	//								counter++;
+	//								if (counter < 5)
+	//									Thread.sleep(1000, 0);
+	//								else {
+	//									// give up
+	//									return;
+	//								}
+	//							} catch (InterruptedException e1) {
+	//								Log.d(TAG, "onEvent: InterruptedException");
+	//							}
+	//						}
+	//					}
+	//					if (photo != null)
+	//						ActivationManager.getInstance().addToBuffer(photo);
+	//				}
+	//			}
+	//			else {
+	//				Log.d(TAG,"External storage is not readable");
+	//				// TODO: error to user
+	//			}
+	//		}
+	//		catch (NullPointerException exception) {
+	//			int x = 5;
+	//			x++;
+	//		}
+	//	}
+
+	//	@Override
+	//	public void onEvent(int event, String path) {
+	//
+	//		if (isExternalStorageReadable()) {
+	//			if (path.endsWith(".jpg")) {
+	//				boolean isJellyBean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+	//
+	//				Photo photo = null;
+	//				String file = absolutePath + path;
+	//
+	//				if ((event & FileObserver.CLOSE_WRITE) > 0) {
+	//					if (isJellyBean) {
+	//						cache.add(file);
+	//						Log.e(TAG, "Photo was saved to cache");
+	//					} else {
+	//						try {
+	//							photo = createPhotoFromFile(file);
+	//							Log.e(TAG, "Photo was saved straight to file");
+	//
+	//						} catch (ImageProcessingException e) {
+	//							// TODO Auto-generated catch block
+	//							e.printStackTrace();
+	//						}
+	//
+	//					}
+	//				} else if ((event & FileObserver.MOVED_TO) > 0 && isJellyBean && cache.contains(path)) {
+	//					try {
+	//						photo = createPhotoFromFile(file );
+	//						Log.e(TAG, "Photo was saved from tmp to file");
+	//
+	//					} catch (ImageProcessingException e) {
+	//						// TODO Auto-generated catch block
+	//						e.printStackTrace();
+	//					}
+	//					cache.remove(path);
+	//				}
+	//				if (photo != null)
+	//					ActivationManager.getInstance().addToBuffer(photo);
+	//			}
+	//
+	//		}
+	//		else {
+	//			Log.d(TAG,"External storage is not readable");
+	//			// TODO: error to user
+	//		}
+	//	}
+
 	@Override
 	public void onEvent(int event, String path) {
+
 		if (isExternalStorageReadable()) {
 			if (path.endsWith(".jpg")) {
+
 				Photo photo = null;
-				while (photo == null) {
-					String file = absolutePath + path;
+				String file = absolutePath + path;
+
+				if ((event & FileObserver.CLOSE_WRITE) > 0) {
 					try {
 						photo = createPhotoFromFile(file);
-					}
-					catch (ImageProcessingException e) { // this means photo was not saved fully
-						Log.e(TAG, "Sleeping until photo completely saved");
-						int counter = 0;
-						try {
-							counter++;
-							if (counter < 10)
-								Thread.sleep(2000, 0);
-							else {
-								// give up
-								return;
-							}
-						} catch (InterruptedException e1) {
-							Log.d(TAG, "onEvent: InterruptedException");
-						}
+						Log.d(TAG, "Photo taken: " + file + " was read from file");
+
+					} catch (ImageProcessingException e) {
+						Log.e(TAG, "Photo taken: " + "was NOT read from file properly");
 					}
 				}
+
 				if (photo != null)
 					ActivationManager.getInstance().addToBuffer(photo);
 			}
 		}
 		else {
-			Log.d(TAG,"External storage is not readable");
-			// TODO: error to user
+			Log.wtf(TAG,"External storage is not readable!");
 		}
 	}
 
 
+
+
+
 	public static Photo createPhotoFromFile(String file) throws ImageProcessingException {
+
+		Photo photo = null;
 
 		File path = new File(file);
 
@@ -81,15 +176,14 @@ public class PhotoListenerThread extends FileObserver {
 		try {
 			metadata = ImageMetadataReader.readMetadata(path);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ImageProcessingException(e);
 		}
 
 		//get location
 		GpsDirectory directory1 = metadata.getDirectory(GpsDirectory.class);
 
 		GeoLocation location = directory1.getGeoLocation();
-		if (location == null) { // photo has not location
+		if (location == null) { // photo has no location
 			return null;
 		}
 
@@ -98,7 +192,6 @@ public class PhotoListenerThread extends FileObserver {
 
 		Date date = directory2.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
 
-		Photo photo = null;
 
 		//get dimensions
 		JpegDirectory jpgDirectory = metadata.getDirectory(JpegDirectory.class);

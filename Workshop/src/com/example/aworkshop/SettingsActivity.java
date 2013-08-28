@@ -13,6 +13,7 @@ import Partitioning.Cluster;
 import Partitioning.DBScan;
 import Partitioning.TestDBScan;
 import PhotoListener.PhotoListenerThread;
+import android.R.integer;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -21,6 +22,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,13 +33,17 @@ import android.widget.TimePicker;
 public class SettingsActivity extends FragmentActivity { // Extends FragmentActivity to support < Android 3.0
 
 	// static final fields
-	public static Context CONTEXT = null;
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-	//		File dataDirectory = new File(root + "/DCIM/Camera/");
+//	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
 	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
+	private static final int MAP_TYPE = 1;
+	private static final int BLOCK_TYPE = 2;
 
-
+	// public static fields
+	public static Context CONTEXT = null;
+	public static int COLLAGE_TYPE = 1;
+	
 	// global fields
 	PhotoListenerThread observer;
 
@@ -69,36 +75,39 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
-		
-		
 
-		
 
-		//		//		Omri's code
-		//
-					File directory = new File(PHOTO_DIR);
-						if (!directory.exists())
-							return;
-						File[] arrayOfPic =  directory.listFiles();
-						Photo tempPhoho = null;
-						List<Photo> photosToCluster = new LinkedList<Photo>(); 
-						for (File file : arrayOfPic)
-						{
-							try
-							{
-								tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-							}
-							catch (Exception ex)
-							{
-							}
-							if (tempPhoho != null)
-								photosToCluster.add(tempPhoho);
-						}
-						DBScan algorithmDbScan = new DBScan(photosToCluster);
-						List<ActualEvent> clusterts = algorithmDbScan.runAlgorithmClusters();
-					
-		//				return;
-		//		
+
+
+
+//		//		//		Omri's code
+//		//
+//		File directory = new File(PHOTO_DIR);
+//		if (!directory.exists())
+//			return;
+//		File[] arrayOfPic =  directory.listFiles();
+//		Photo tempPhoho = null;
+//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+//		for (File file : arrayOfPic)
+//		{
+//			try
+//			{
+//				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+//			}
+//			catch (Exception ex)
+//			{
+//			}
+//			if (tempPhoho != null)
+//				photosToCluster.add(tempPhoho);
+//		}
+//		DBScan algorithmDbScan = new DBScan(photosToCluster);
+//		List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
+//
+//		ActualEvent event = new ActualEvent(clusterts.get(0));
+//		TestDBScan dbScanTester = new TestDBScan();
+//		dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
+//		//				return;
+//		//		
 
 	}
 

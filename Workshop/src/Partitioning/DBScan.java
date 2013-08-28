@@ -47,7 +47,11 @@ public class DBScan {
 		visitedPhotos = new Hashtable<Double, PhotoObjectForClustering>();
 	}
 
-	public List<ActualEvent> runAlgorithmClusters() {
+	/**
+	 * Takes photos and sorts them to ActualEvents
+	 * @return ActualEventBundle containing the events containing photos
+	 */
+	public List<Cluster> runAlgorithmClusters() {
 		List<Cluster> clustersList = new LinkedList<Cluster>();
 		PhotoObjectForClustering arbitraryUnvisitedPhoto;
 		while (!unvisitedPhotos.isEmpty()) {
@@ -63,14 +67,17 @@ public class DBScan {
 				expandCluster(cluster, arbitraryUnvisitedPhoto, neighborsList);
 			}
 		}
-		 List<ActualEvent> actualEventsList = new LinkedList<ActualEvent>();
-		 for (Cluster cluster: clustersList)
-		 {
-			 actualEventsList.add(new ActualEvent(cluster));
-		 }
-		 return actualEventsList;
+		return getActualEventsList(clustersList);
 	}
 	
+	private ActualEventsBundle getActualEventsList(List<Cluster> clusterList) {
+		List<ActualEvent> events = new LinkedList<ActualEvent>();
+		for (Cluster cluster : clusterList) {
+			events.add(new ActualEvent(cluster));
+		}
+		return new ActualEventsBundle(events);
+	}
+
 	private void expandCluster(Cluster c, PhotoObjectForClustering p,
 			Queue<PhotoObjectForClustering> neighbors) {
 		if (neighbors != null) {

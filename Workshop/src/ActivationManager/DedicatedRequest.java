@@ -9,7 +9,6 @@ public class DedicatedRequest {
 
 	private int horizontalNeeded = 0;
 	private int verticalNeeded = 0;
-	private int eventsNeeded = 0;
 	
 	public int getHorizontalNeeded() {
 		return horizontalNeeded;
@@ -34,17 +33,9 @@ public class DedicatedRequest {
 	public void setVerticalNeeded(int verticalNeeded) {
 		this.verticalNeeded = verticalNeeded;
 	}
-
-	public int getEventsNeeded() {
-		return eventsNeeded;
-	}
-
-	/**
-	 * set number of needed events
-	 * @param eventsNeeded
-	 */
-	public void setEventsNeeded(int eventsNeeded) {
-		this.eventsNeeded = eventsNeeded;
+	
+	public boolean isEmptyRequest() {
+		return (horizontalNeeded !=0 || verticalNeeded != 0);
 	}
 
 	public DedicatedRequest() {

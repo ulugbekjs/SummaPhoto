@@ -26,9 +26,22 @@ public class ActualEvent{
 	private int verticalPhotosCount = 0;
 	
 
-	public ActualEvent() {
+	private ActualEvent() {
 		eventID = UUID.randomUUID();
 	}
+
+	/**
+	 * This constructor receives a cluster as parameter and initiates a actual event with the photos of the cluster 
+	 * @param cluster
+	 */
+	public ActualEvent (Cluster cluster)
+	{
+		this();
+		cluster.sortPhotosInClusterByData();	
+		for (Photo photo: cluster.photosInCluster)
+			addPhoto(photo);
+	}
+	
 	
 	public boolean isEmpty() {
 		return (getEventSize() == 0); 
@@ -62,15 +75,6 @@ public class ActualEvent{
 		return retList;
 	}
 
-
-	/** This constructor receives a cluster as parameter and initiates a actual event with the photos of the cluster **/
-	public ActualEvent (Cluster cluster)
-	{
-		cluster.sortPhotosInClusterByData();	
-		for (Photo photo: cluster.photosInCluster)
-			addPhoto(photo);
-	}
-	
 	public DateTime getEventStartTime() {
 		return this.startTime;
 	}
@@ -88,7 +92,11 @@ public class ActualEvent{
 	}
 	
 	
-	public void addPhoto(Photo photo) {
+	/**
+	 * adds a photo to the event
+	 * @param photo
+	 */
+	private void addPhoto(Photo photo) {
 		if (photo.isHorizontal()) 
 			horizontalPhotosCount++;
 		else 

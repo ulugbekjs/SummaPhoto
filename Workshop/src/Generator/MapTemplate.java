@@ -1,8 +1,5 @@
 package Generator;
 
-import java.util.List;
-
-import android.R.integer;
 import Bing.StaticMap;
 
 public class MapTemplate extends AbstractTemplate{

@@ -16,8 +16,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
+import Common.ActualEventsBundle;
 import Generator.BlockCollageBuilder;
 import Generator.BlockTemplate;
+import Partitioning.DBScan;
 
 public class SmartModeService {
 	private static ScheduledExecutorService scheduler = null;
@@ -33,24 +35,32 @@ public class SmartModeService {
 			// waits INTERVAL_IN_SECONDS seconds after end of last execution
 			scheduler.scheduleWithFixedDelay(new Runnable() {
 				@Override
-				public void run() {
-				//	notifyUser(null);
+				public void run() { // this is the main flow of the app
 
 					manager.consumeDedictedRequests(); 
 					boolean collageNeeded = manager.processPhotoBuffer();
 
-					if (collageNeeded) {
+					if (collageNeeded) { // ActivationManager decided clustering should be made
+						DBScan eventsClusterer = new DBScan(manager.getProcessedPhotos());
+						ActualEventsBundle events = eventsClusterer.runAlgorithmClusters();
+						
+						// build the collage from Bundle of photos
+						File collageFile = buildBlockCollage(events);
+						if (collageFile != null) {
+							notifyUser(collageFile);
+						}
 						//	MapTemplate template = MapTemplate.getTemplate(1);
 						//	StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
 						//File collageFile = MapCollageBuilder.BuildCollage(template);
-						BlockTemplate template = BlockTemplate.getTemplate(1); 
-					//	BlockCollageBuilder builder = new BlockCollageBuilder(template, CandidatePhotoContainer.getInstance().getAllEventsInContainer());
-//						builder.populateTemplate();
-//						builder.BuildCollage();
+						//BlockTemplate template = BlockTemplate.getTemplate(1); 
+						//	BlockCollageBuilder builder = new BlockCollageBuilder(template, CandidatePhotoContainer.getInstance().getAllEventsInContainer());
+						//						builder.populateTemplate();
+						//						builder.BuildCollage();
 
 					}
-
-
+					else {
+						// do nothing, advance to next iteration
+					}
 				}
 			},
 			20,
@@ -68,6 +78,19 @@ public class SmartModeService {
 		return (scheduler != null);
 	}
 
+	private static File buildBlockCollage(ActualEventsBundle bundle) {
+		DedicatedRequest request = new DedicatedRequest();
+		BlockTemplate template = BlockCollageBuilder.chooseTemplate(bundle, request);
+		if (!request.isEmptyRequest()) {
+			manager.addRequestToBuffer(request);
+			return null;
+		}
+		else { 
+			BlockCollageBuilder.populateTemplate(bundle, template);
+			return BlockCollageBuilder.BuildCollage(template);
+		}
+
+	}
 	public static void notifyUser(File file) {
 
 		final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");

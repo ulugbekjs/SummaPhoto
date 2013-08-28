@@ -1,9 +1,5 @@
 package Generator;
 
-import org.joda.time.tz.UTCProvider;
-import org.junit.experimental.max.MaxCore;
-
-import android.R.integer;
 import Common.Photo;
 
 /**
@@ -97,7 +93,6 @@ public class Slot{
 			ret[0] = (int) (sourceWidth * ratioHeights); // scale width
 			ret[1] = targetHeight;
 		}
-
 
 		return ret;
 
