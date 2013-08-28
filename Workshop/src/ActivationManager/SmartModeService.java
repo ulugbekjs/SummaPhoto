@@ -40,11 +40,11 @@ public class SmartModeService {
 					boolean collageNeeded = manager.processPhotoBuffer();
 
 					if (collageNeeded) {
-						//						MapTemplate template = MapTemplate.getTemplate(1);
-						//						StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
+						//	MapTemplate template = MapTemplate.getTemplate(1);
+						//	StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
 						//File collageFile = MapCollageBuilder.BuildCollage(template);
 						BlockTemplate template = BlockTemplate.getTemplate(1); 
-						BlockCollageBuilder builder = new BlockCollageBuilder(template, EventCandidateContainer.getInstance().getAllEventsInContainer());
+						BlockCollageBuilder builder = new BlockCollageBuilder(template, CandidatePhotoContainer.getInstance().getAllEventsInContainer());
 						builder.populateTemplate();
 						builder.BuildCollage();
 

@@ -1,5 +1,9 @@
 package Common;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.joda.time.DateTime;
 
 /**
@@ -7,7 +11,11 @@ import org.joda.time.DateTime;
  * @author yonatan
  *
  */
-public class ActualEvent extends AbstractEvent {
+public class ActualEvent{
+	
+	private UUID eventID;
+	protected List<Photo> verticalPhotos = new ArrayList<Photo>();
+	protected List<Photo> horizontalPhotos = new ArrayList<Photo>();
 	
 	private DateTime startTime = null;
 	private DateTime endTime = null;
@@ -20,6 +28,39 @@ public class ActualEvent extends AbstractEvent {
 	private GeoBoundingBox box;
 
 	public ActualEvent() {
+		eventID = UUID.randomUUID();
+	}
+	
+	public boolean isEmpty() {
+		return (getEventSize() == 0); 
+	}
+
+	public UUID getEventID() {
+		return this.eventID;	
+	}
+
+	public int getEventSize() {
+		return this.horizontalPhotos.size() + this.verticalPhotos.size();
+	}
+
+	public boolean isPhotoInEvent(Photo photo) {
+		return (verticalPhotos.contains(photo) || horizontalPhotos.contains(photo));
+	}
+	
+	public List<Photo> verticalPhotos() {
+		return verticalPhotos;
+	}	
+	
+	public List<Photo> horizontalPhotos() {
+		return horizontalPhotos;
+	}
+	
+	public List<Photo> getEventPhotos() {
+		List<Photo> retList = new ArrayList<Photo>();
+		retList.addAll(horizontalPhotos);
+		retList.addAll(verticalPhotos);
+		
+		return retList;
 	}
 
 	public DateTime getEventStartTime() {
@@ -56,7 +97,6 @@ public class ActualEvent extends AbstractEvent {
 		
 	}
 
-	@Override
 	public void addPhoto(Photo photo) {
 		if (photo.isHorizontal()) 
 			horizontalPhotosCount++;

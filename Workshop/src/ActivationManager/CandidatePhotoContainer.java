@@ -3,9 +3,9 @@ package ActivationManager;
 import java.util.LinkedList;
 import java.util.List;
 
-public class EventCandidateContainer {
+public class CandidatePhotoContainer {
 
-	private static final EventCandidateContainer instance = new EventCandidateContainer(); 
+	private static final CandidatePhotoContainer instance = new CandidatePhotoContainer(); 
 	
 	private List<EventCandidate> events = new LinkedList<EventCandidate>();
 
@@ -21,9 +21,9 @@ public class EventCandidateContainer {
 		return events.get(events.size()-1);
 	}
 	
-	private EventCandidateContainer() {}
+	private CandidatePhotoContainer() {}
 	
-	public static EventCandidateContainer getInstance() {
+	public static CandidatePhotoContainer getInstance() {
 		return instance;
 	}
 	

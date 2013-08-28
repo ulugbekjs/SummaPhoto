@@ -24,6 +24,8 @@ public class ActivationManager {
 	private int remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE;
 	private int remainingHorizontal = 0;
 	private int remainingVertical = 0;
+	
+	private Photo lastRecievedPhoto = null;
 
 
 	private ActivationManager() {
@@ -35,9 +37,15 @@ public class ActivationManager {
 	}
 
 	private boolean isNewEventCandidate(Photo newPhoto) {
-		Photo lastPhoto = EventCandidateContainer.getInstance().getLastAddedEvent().getLastAddedPhoto();
-		int delta = lastPhoto.timeDeltaInSecondsFrom(newPhoto);
-		return (delta > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
+		Photo lastPhoto = CandidatePhotoContainer.getInstance().getLastAddedEvent().getLastAddedPhoto();
+		if (newPhoto.getTakenDate().isAfter(lastRecievedPhoto.getTakenDate())) { // should always be true
+			int delta = lastPhoto.timeDeltaInSecondsFrom(newPhoto);
+			return (delta > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
+		}
+		else { // should not happen, except on daylight savings time switch
+			return false;
+		}
+		
 	}
 
 	private boolean isCollageNeeded() {
@@ -46,30 +54,33 @@ public class ActivationManager {
 				((remainingHorizontal == 0) ||
 						(remainingVertical == 0)))); 
 	}
+	
+	private boolean isFirstEvent() {
+		return (lastRecievedPhoto == null);
+	}
+	
 	/**
-	 * 
 	 * @param photo
 	 * @return TRUE if next module should be awakened
 	 */
 	private boolean processPhoto(Photo photo) {
-		EventCandidate event = null;
-		if (EventCandidateContainer.getInstance().isEmpty() || isNewEventCandidate(photo)) {  // new event
+		if (isFirstEvent() || isNewEventCandidate(photo)) {  // new event
 			event = new EventCandidate(photo);
-			EventCandidateContainer.getInstance().addEvent(event);
+			lastRecievedPhoto = photo;
 
 			if (remainingEvents > 0) { 
 				remainingEvents--;
 			}
 		}
-		else  { // add photo to last added event in container
-			event = EventCandidateContainer.getInstance().getLastAddedEvent();
-			if (!event.isPhotoInEvent(photo)) {
-				event.addPhoto(photo);
-			}
-			else {
-				// TODO: handle this situation that should not happen
-			}
-		}
+//		else  { // add photo to last added event in container
+//			event = CandidatePhotoContainer.getInstance().getLastAddedEvent();
+//			if (!event.isPhotoInEvent(photo)) {
+//				event.addPhoto(photo);
+//			}
+//			else {
+//				// TODO: handle this situation that should not happen
+//			}
+//		}
 
 		if (currentState == DEDICATED_MODE && photo.isHorizontal()) {
 			remainingHorizontal--;

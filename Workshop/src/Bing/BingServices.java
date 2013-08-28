@@ -22,7 +22,7 @@ import org.apache.http.protocol.HTTP;
 import android.os.Environment;
 import android.util.Log;
 import ActivationManager.EventCandidate;
-import ActivationManager.EventCandidateContainer;
+import ActivationManager.CandidatePhotoContainer;
 
 import Common.Photo;
 import Common.GPSPoint;
@@ -75,7 +75,7 @@ public class BingServices {
 	public static List<GPSPoint> getImagesPointsList() {
 		List<GPSPoint> points = new ArrayList<GPSPoint>();
 		//TODO: this should work with the ActualEventContainer
-		for (EventCandidate event: EventCandidateContainer.getInstance().getAllEventsInContainer()) {
+		for (EventCandidate event: CandidatePhotoContainer.getInstance().getAllEventsInContainer()) {
 			for (Photo photo : event.getEventPhotos()) {
 				points.add(photo.getLocation());
 			}
