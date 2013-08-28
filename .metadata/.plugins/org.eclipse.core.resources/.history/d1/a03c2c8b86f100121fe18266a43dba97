@@ -1,7 +1,0 @@
-package Common;
-
-public abstract class AbstractContainer<T> {
-	Object insta
-	
-	  public abstract void addItem(Class<? extends Object> object);
-}

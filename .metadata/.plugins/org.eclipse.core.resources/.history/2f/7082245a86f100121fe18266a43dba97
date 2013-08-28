@@ -1,6 +1,0 @@
-package Common;
-
-public abstract class AbstractContainer {
-	
-	  public abstract Boolean addItem(Class<? extends Object> aObject);
-}

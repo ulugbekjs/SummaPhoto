@@ -1,9 +1,0 @@
-package com.androidworkshop;
-
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
-
-public class MAinS
-
-}

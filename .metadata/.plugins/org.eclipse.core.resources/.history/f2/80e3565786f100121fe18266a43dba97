@@ -1,5 +1,0 @@
-package Common;
-
-public abstract class AbstractContainer {
-
-}

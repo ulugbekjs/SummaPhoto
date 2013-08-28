@@ -1,7 +1,0 @@
-package Generator;
-
-import Common.BoundingBox;
-
-public class SlotBoundingBox implements BoundingBox{
-
-}

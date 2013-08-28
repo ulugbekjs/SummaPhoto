@@ -1,5 +1,0 @@
-package com.workshopandriod.test;
-
-public class ServiceTestCase extends android.test.ServiceTestCase<MainService> {
-
-}

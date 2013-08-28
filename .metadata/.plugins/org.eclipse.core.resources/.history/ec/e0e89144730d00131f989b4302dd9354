@@ -1,6 +1,0 @@
-package Generator;
-
-public interface CollageBuilder {
-
-	
-}

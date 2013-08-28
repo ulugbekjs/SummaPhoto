@@ -69,32 +69,35 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
 		
-	//	PhotoFilter.filter();
+		PhotoFilter.filter();
 
 		
 
 		//		//		Omri's code
 		//
-		//			File directory = new File(PHOTO_DIR);
-		//				if (!directory.exists())
-		//					return;
-		//				File[] arrayOfPic =  directory.listFiles();
-		//				Photo tempPhoho = null;
-		//				List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		//				for (File file : arrayOfPic)
-		//				{
-		//					try
-		//					{
-		//						tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-		//					}
-		//					catch (Exception ex)
-		//					{
-		//					}
-		//					if (tempPhoho != null)
-		//						photosToCluster.add(tempPhoho);
-		//				}
-		//				DBScan algorithmDbScan = new DBScan(photosToCluster);
-		//				List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
+					File directory = new File(PHOTO_DIR);
+						if (!directory.exists())
+							return;
+						File[] arrayOfPic =  directory.listFiles();
+						Photo tempPhoho = null;
+						List<Photo> photosToCluster = new LinkedList<Photo>(); 
+						for (File file : arrayOfPic)
+						{
+							try
+							{
+								tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+							}
+							catch (Exception ex)
+							{
+							}
+							if (tempPhoho != null)
+								photosToCluster.add(tempPhoho);
+						}
+						DBScan algorithmDbScan = new DBScan(photosToCluster);
+						List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
+						Cluster tempClusterForSotrting = clusterts.get(0);
+						tempClusterForSotrting.sortPhotosInClusterByData();
+						
 		//				TestDBScan dbScanTester = new TestDBScan();
 		//				dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
 		//				return;

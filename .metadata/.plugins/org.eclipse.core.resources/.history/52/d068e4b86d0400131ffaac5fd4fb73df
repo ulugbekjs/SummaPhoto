@@ -1,8 +1,0 @@
-package Common;
-
-public interface Point {
-	
-	public double getLongitude();
-	public double getLatitude();
-	
-	public float distanceFrom(Point p);
