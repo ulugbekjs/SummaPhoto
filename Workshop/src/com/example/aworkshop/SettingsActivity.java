@@ -6,6 +6,7 @@ import java.util.List;
 
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeService;
+import Common.ActualEvent;
 import Common.Photo;
 import Common.PhotoFilter;
 import Partitioning.Cluster;
@@ -69,7 +70,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
 		
-		PhotoFilter.filter();
+		
 
 		
 
@@ -95,11 +96,10 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 						}
 						DBScan algorithmDbScan = new DBScan(photosToCluster);
 						List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
-						Cluster tempClusterForSotrting = clusterts.get(0);
-						tempClusterForSotrting.sortPhotosInClusterByData();
 						
-		//				TestDBScan dbScanTester = new TestDBScan();
-		//				dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
+						ActualEvent event = new ActualEvent(clusterts.get(0));
+						TestDBScan dbScanTester = new TestDBScan();
+						dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
 		//				return;
 		//		
 

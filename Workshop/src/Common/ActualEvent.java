@@ -1,6 +1,10 @@
 package Common;
 
+import java.security.PublicKey;
+
 import org.joda.time.DateTime;
+
+import Partitioning.Cluster;
 
 /**
  * Represents a solid event after clustering of photos into events 
@@ -15,13 +19,19 @@ public class ActualEvent extends AbstractEvent {
 	private int horizontalPhotosCount = 0;
 	private int verticalPhotosCount = 0;
 	
-	//geographic data fields
-	private GPSPoint centerPoint;
-	private GeoBoundingBox box;
 
 	public ActualEvent() {
 	}
 
+
+	/** This constructor receives a cluster as parameter and initiates a actual event with the photos of the cluster **/
+	public ActualEvent (Cluster cluster)
+	{
+		cluster.sortPhotosInClusterByData();	
+		for (Photo photo: cluster.photosInCluster)
+			addPhoto(photo);
+	}
+	
 	public DateTime getEventStartTime() {
 		return this.startTime;
 	}
@@ -38,34 +48,21 @@ public class ActualEvent extends AbstractEvent {
 		return verticalPhotosCount;
 	}
 	
-	public void calculateEventBoundingBox() {
-		//TODO bounding box calculation
-	}
 	
-	public GeoBoundingBox getBoundingBox() {
-		return box;
-		
-	}
-	
-	public void calculateCenterPoint() {
-		//TODO square point calculation
-	}
-	
-	public GPSPoint getCenterPoint() {
-		return centerPoint;
-		
-	}
-
 	@Override
 	public void addPhoto(Photo photo) {
 		if (photo.isHorizontal()) 
 			horizontalPhotosCount++;
 		else 
 			verticalPhotosCount++;
-
-		if (startTime == null) // update only on first added photo
-			startTime = photo.getTakenDate();
-		endTime = photo.getTakenDate();
+		
+		DateTime photoTakenTime = photo.getTakenDate();
+		
+		// updating starting time and ending time of actual event according to photo data (if needed) 
+		if ((startTime == null) || (photoTakenTime.compareTo(startTime) < 0))
+			startTime = photoTakenTime;
+		if ((endTime == null) || (photoTakenTime.compareTo(endTime) > 0))
+			endTime = photoTakenTime;
 
 		// double-sided linking
 		if (photo.isHorizontal()) {
