@@ -37,9 +37,9 @@ public class ActivationManager {
 	}
 
 	private boolean isNewEventCandidate(Photo newPhoto) {
-		Photo lastPhoto = CandidatePhotoContainer.getInstance().getLastAddedEvent().getLastAddedPhoto();
+		
 		if (newPhoto.getTakenDate().isAfter(lastRecievedPhoto.getTakenDate())) { // should always be true
-			int delta = lastPhoto.timeDeltaInSecondsFrom(newPhoto);
+			int delta = lastRecievedPhoto.timeDeltaInSecondsFrom(newPhoto);
 			return (delta > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
 		}
 		else { // should not happen, except on daylight savings time switch
@@ -64,8 +64,7 @@ public class ActivationManager {
 	 * @return TRUE if next module should be awakened
 	 */
 	private boolean processPhoto(Photo photo) {
-		if (isFirstEvent() || isNewEventCandidate(photo)) {  // new event
-			event = new EventCandidate(photo);
+		if (isFirstEvent() || isNewEventCandidate(photo)) {  // new event candidate
 			lastRecievedPhoto = photo;
 
 			if (remainingEvents > 0) { 

@@ -1,8 +1,12 @@
 package Common;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+=======
+import java.security.PublicKey;
+>>>>>>> 06c5aa93f57de8638b8e9e90ab3e83731e542eb0
 
 import org.joda.time.DateTime;
 
@@ -88,6 +92,19 @@ public class ActualEvent{
 	}
 	
 	
+<<<<<<< HEAD
+	public void calculateCenterPoint() {
+		//TODO square point calculation
+	}
+	
+	public GPSPoint getCenterPoint() {
+		return centerPoint;
+		
+	}
+
+=======
+	@Override
+>>>>>>> 06c5aa93f57de8638b8e9e90ab3e83731e542eb0
 	public void addPhoto(Photo photo) {
 		if (photo.isHorizontal()) 
 			horizontalPhotosCount++;

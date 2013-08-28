@@ -3,38 +3,22 @@ package Generator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-
-import org.im4java.core.UFRawCmd;
-
-import com.example.aworkshop.R;
-import com.example.aworkshop.SettingsActivity;
-
-import ActivationManager.EventCandidate;
 import Common.ActualEvent;
 import Common.Photo;
-import android.R.integer;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Environment;
-import android.support.v4.app.NotificationCompat;
 
 public class BlockCollageBuilder {
 
 	BlockTemplate template;
-	List<EventCandidate> events;
+	List<ActualEvent> events;
 
-	public BlockCollageBuilder(BlockTemplate template, List<EventCandidate> events) {
+	public BlockCollageBuilder(BlockTemplate template, List<ActualEvent> events) {
 		this.template = template;
 		this.events = events;
 	}
@@ -48,7 +32,7 @@ public class BlockCollageBuilder {
 
 		while (!horizontals.isEmpty()) {
 
-			for (EventCandidate event: events) {
+			for (ActualEvent event: events) {
 				horizontalPhotos = event.horizontalPhotos();
 
 				if (!horizontalPhotos.isEmpty()) {
@@ -60,7 +44,7 @@ public class BlockCollageBuilder {
 
 		while (!verticals.isEmpty()) {
 
-			for (EventCandidate event: events) {
+			for (ActualEvent event: events) {
 				verticalPhotos = event.verticalPhotos();
 
 				if (!verticalPhotos.isEmpty()) {
