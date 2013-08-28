@@ -47,7 +47,7 @@ public class DBScan {
 		visitedPhotos = new Hashtable<Double, PhotoObjectForClustering>();
 	}
 
-	public List<Cluster> runAlgorithmClusters() {
+	public List<ActualEvent> runAlgorithmClusters() {
 		List<Cluster> clustersList = new LinkedList<Cluster>();
 		PhotoObjectForClustering arbitraryUnvisitedPhoto;
 		while (!unvisitedPhotos.isEmpty()) {
@@ -63,9 +63,14 @@ public class DBScan {
 				expandCluster(cluster, arbitraryUnvisitedPhoto, neighborsList);
 			}
 		}
-		return clustersList;
+		 List<ActualEvent> actualEventsList = new LinkedList<ActualEvent>();
+		 for (Cluster cluster: clustersList)
+		 {
+			 actualEventsList.add(new ActualEvent(cluster));
+		 }
+		 return actualEventsList;
 	}
-
+	
 	private void expandCluster(Cluster c, PhotoObjectForClustering p,
 			Queue<PhotoObjectForClustering> neighbors) {
 		if (neighbors != null) {

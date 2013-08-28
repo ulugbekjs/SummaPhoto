@@ -95,11 +95,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 								photosToCluster.add(tempPhoho);
 						}
 						DBScan algorithmDbScan = new DBScan(photosToCluster);
-						List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
-						
-						ActualEvent event = new ActualEvent(clusterts.get(0));
-						TestDBScan dbScanTester = new TestDBScan();
-						dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
+						List<ActualEvent> clusterts = algorithmDbScan.runAlgorithmClusters();
+					
 		//				return;
 		//		
 
