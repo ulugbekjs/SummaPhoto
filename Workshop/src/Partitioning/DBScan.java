@@ -140,7 +140,4 @@ public class DBScan {
 		double tempKey = hashTable.keys().nextElement();
 		return hashTable.get(tempKey);
 	}
-
-	
-
 }

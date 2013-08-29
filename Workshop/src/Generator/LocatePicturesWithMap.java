@@ -1,5 +1,6 @@
 package Generator;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -21,10 +22,10 @@ public class LocatePicturesWithMap {
 
 
 	// Subsets of above sets for recursive algorithm issues
-	private Set<PixelPoint> firstSetubSetofPointsOnFrameSet;
+	private Set<PixelPoint> firstSebSetofPointsOnFrameSet;
 	private Set<PixelPoint> firstSubSetOfPicturesOnMapSet;
 
-	private Set<PixelPoint> secondSetubSetofPointsOnFrameSet;
+	private Set<PixelPoint> secondSubSetofPointsOnFrameSet;
 	private Set<PixelPoint> secondSubSetOfPicturesOnMapSet;
 
 	private List<PointsTuple> pointsTupleList;
@@ -49,17 +50,23 @@ public class LocatePicturesWithMap {
 	private void splitSetsEqualPointsTuple (Set<PixelPoint> picturesOnMapSubSet, Set<PixelPoint> pointsOnFrameSubSetSet)
 	{
 		PixelPoint closestPoint;
-		if (picturesOnMapSubSet.size() == 1)
+		if (picturesOnMapSubSet.size() == 0)
+			return;
+		if (picturesOnMapSubSet.size() == 1){
 			pointsTupleList.add(new PointsTuple(picturesOnMapSubSet.iterator().next(),pointsOnFrameSubSetSet.iterator().next()));
-		for (PixelPoint pointInA: picturesOnMapSubSet)
-		{
+			return;
+		}
+		
+		
+		for (PixelPoint pointInA : picturesOnMapSubSet) {
 			// First try to split the sets with closest point in pointsOnFrameSubSetSet to the chosen point
 			closestPoint = findClosestPointInSet(pointInA,pointsOnFrameSubSetSet);
 			if (isSplitingEqual(picturesOnMapSubSet, pointsOnFrameSubSetSet,pointInA, closestPoint))
 			{
 				pointsTupleList.add(new PointsTuple(pointInA, closestPoint));
-				splitSetsEqualPointsTuple (firstSetubSetofPointsOnFrameSet,firstSubSetOfPicturesOnMapSet);
-				splitSetsEqualPointsTuple (secondSetubSetofPointsOnFrameSet, secondSubSetOfPicturesOnMapSet);
+				splitSetsEqualPointsTuple (firstSebSetofPointsOnFrameSet,firstSubSetOfPicturesOnMapSet);
+				splitSetsEqualPointsTuple (secondSubSetofPointsOnFrameSet, secondSubSetOfPicturesOnMapSet);
+				return;
 			}
 			else {
 				for (PixelPoint pointInB : pointsOnFrameSubSetSet)
@@ -67,13 +74,14 @@ public class LocatePicturesWithMap {
 					if (isSplitingEqual(picturesOnMapSubSet, pointsOnFrameSubSetSet,pointInA , pointInB))
 					{
 						pointsTupleList.add(new PointsTuple(pointInA, pointInB));
-						splitSetsEqualPointsTuple (firstSetubSetofPointsOnFrameSet,firstSubSetOfPicturesOnMapSet);
-						splitSetsEqualPointsTuple (secondSetubSetofPointsOnFrameSet, secondSubSetOfPicturesOnMapSet);
-						break;
+						splitSetsEqualPointsTuple (firstSebSetofPointsOnFrameSet,firstSubSetOfPicturesOnMapSet);
+						splitSetsEqualPointsTuple (secondSubSetofPointsOnFrameSet, secondSubSetOfPicturesOnMapSet);
+						return;
 					}
 				}
 			}
 		}
+
 	}
 
 
@@ -86,7 +94,7 @@ public class LocatePicturesWithMap {
 	private PixelPoint findClosestPointInSet (PixelPoint point,Set<PixelPoint> setOfPoints)
 	{
 		PixelPoint closestPoint = null;
-		double minDistance = 0;
+		double minDistance = Double.MAX_VALUE;
 		for (PixelPoint pointInSet :setOfPoints )
 		{
 			if (point.distanceFrom(pointInSet) <minDistance )
@@ -112,40 +120,87 @@ public class LocatePicturesWithMap {
 	private Boolean isSplitingEqual (Set<PixelPoint> picturesOnMapSubSet, Set<PixelPoint> pointsOnFrameSubSetSet,
 			PixelPoint pointInA, PixelPoint pointInB)
 	{
-		// the equation of the line between those points is: Y = slope * x + constant
-		double slope = (pointInA.getY() - pointInB.getY()) / (pointInA.getX() - pointInB.getX());
-		double constant = pointInA.getY() - slope * pointInA.getX();
-		Integer numberOfPointsInGroupAboveLine = 0;
+		double slope;
+		Integer numberOfPointsInGroupAAboveLine = 0;
 		Integer numberOfPointsInGroupBAboveLine = 0;
-
+		
 		//initiating sub-sets which will be used for recursion
-		firstSubSetOfPicturesOnMapSet = new TreeSet<PixelPoint>();
-		secondSubSetOfPicturesOnMapSet = new TreeSet<PixelPoint>();
-		firstSetubSetofPointsOnFrameSet = new TreeSet<PixelPoint>();
-		secondSetubSetofPointsOnFrameSet = new TreeSet<PixelPoint>();
-		for (PixelPoint pointinA :picturesOnMapSubSet )
+		firstSubSetOfPicturesOnMapSet = new HashSet<PixelPoint>();
+		secondSubSetOfPicturesOnMapSet = new HashSet<PixelPoint>();
+		firstSebSetofPointsOnFrameSet = new HashSet<PixelPoint>();
+		secondSubSetofPointsOnFrameSet = new HashSet<PixelPoint>();
+		
+		Boolean isUndefinedSlope = pointInA.getX() == pointInB.getX();
+		
+		// the equation of the line between those points is: Y = slope * x + constant
+		if (!isUndefinedSlope)
 		{
-			if (isPointAboveLine(pointinA, slope, constant))
-			{
-				numberOfPointsInGroupAboveLine++;
-				firstSubSetOfPicturesOnMapSet.add(pointinA);
+			Double deltaY;
+			Double deltaX;
+			if (pointInA.getX() > pointInB.getX() ){
+			 deltaY = (double) (pointInA.getY() - pointInB.getY());
+			 deltaX = (double) (pointInA.getX() - pointInB.getX());
 			}
 			else {
-				secondSubSetOfPicturesOnMapSet.add(pointinA);
+				 deltaY = (double) (pointInB.getY() - pointInA.getY() );
+				 deltaX = (double) (pointInB.getX()- pointInA.getX());
 			}
-		}
-		for (PixelPoint pointinB :pointsOnFrameSubSetSet )
-		{
-			if (isPointAboveLine(pointinB, slope, constant))
+			slope = deltaY / deltaX;
+			double constant = pointInA.getY() - slope * pointInA.getX();
+			for (PixelPoint tempPointInA :picturesOnMapSubSet )
 			{
-				numberOfPointsInGroupBAboveLine++;
-				firstSetubSetofPointsOnFrameSet.add(pointinB);
+				if (tempPointInA == pointInA)
+					continue;
+				if (isPointAboveLine(tempPointInA, slope, constant))
+				{
+					numberOfPointsInGroupAAboveLine++;
+					firstSubSetOfPicturesOnMapSet.add(tempPointInA);
+				}
+				else {
+					secondSubSetOfPicturesOnMapSet.add(tempPointInA);
+				}
 			}
-			else {
-				secondSetubSetofPointsOnFrameSet.add(pointInB);
+			for (PixelPoint tempPointInB :pointsOnFrameSubSetSet )
+			{
+				if (tempPointInB == pointInB)
+					continue;
+				if (isPointAboveLine(tempPointInB, slope, constant))
+				{
+					numberOfPointsInGroupBAboveLine++;
+					firstSebSetofPointsOnFrameSet.add(tempPointInB);
+				}
+				else {
+					secondSubSetofPointsOnFrameSet.add(tempPointInB);
+				}
 			}
 		}
-		return (numberOfPointsInGroupAboveLine == numberOfPointsInGroupBAboveLine);
+		else 
+		{
+			double verticalLineX = pointInA.getX();
+			for (PixelPoint pointinA :picturesOnMapSubSet )
+			{
+				if (pointInA.getX() > verticalLineX)
+				{
+					numberOfPointsInGroupAAboveLine++;
+					firstSubSetOfPicturesOnMapSet.add(pointinA);
+				}
+				else {
+					secondSubSetOfPicturesOnMapSet.add(pointinA);
+				}
+			}
+			for (PixelPoint pointinB :pointsOnFrameSubSetSet )
+			{
+				if (pointinB.getX() > verticalLineX)
+				{
+					numberOfPointsInGroupAAboveLine++;
+					firstSubSetOfPicturesOnMapSet.add(pointinB);
+				}
+				else {
+					secondSubSetOfPicturesOnMapSet.add(pointinB);
+				}
+			}
+		}
+		return (numberOfPointsInGroupAAboveLine == numberOfPointsInGroupBAboveLine);
 	}
 
 
@@ -156,7 +211,8 @@ public class LocatePicturesWithMap {
 			return true;
 		return false;
 	}
-
+	
+	
 
 
 
