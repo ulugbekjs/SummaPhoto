@@ -23,7 +23,7 @@ import Generator.BlockTemplate;
 import Partitioning.DBScan;
 
 public class SmartModeService {
-	
+
 	private static final String TAG = "ActivationManager.SmartModeService";
 	private static ScheduledExecutorService scheduler = null;
 	private static ActivationManager manager = ActivationManager.getInstance();  
@@ -44,9 +44,8 @@ public class SmartModeService {
 					boolean collageNeeded = manager.processPhotoBuffer();
 
 					if (collageNeeded) { // ActivationManager decided clustering should be made
-						DBScan eventsClusterer = new DBScan(manager.getProcessedPhotos());
-						ActualEventsBundle events = eventsClusterer.runAlgorithmClusters();
-						
+						ActualEventsBundle events = partiotionToEvents();
+
 						// build the collage from Bundle of photos
 						File collageFile = buildBlockCollage(events);
 						if (collageFile != null) {
@@ -64,6 +63,16 @@ public class SmartModeService {
 					else {
 						// do nothing, advance to next iteration
 					}
+				}
+
+				/**
+				 * run the DBScan algorithm to cluster photos to ActualEvents
+				 * @return
+				 */
+				private ActualEventsBundle partiotionToEvents() {
+					DBScan eventsClusterer = new DBScan(manager.getProcessedPhotos());
+					ActualEventsBundle events = eventsClusterer.runAlgorithmClusters();
+					return events;
 				}
 			},
 			20,

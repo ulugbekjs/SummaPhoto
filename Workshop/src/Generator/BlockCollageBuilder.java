@@ -104,7 +104,7 @@ public class BlockCollageBuilder {
 		successful = populateSubSlots(horizontals, true);
 		
 		// placing vertical photos
-		successful = populateSubSlots(horizontals, false);
+		successful = populateSubSlots(verticals, false);
 		
 		return successful;
 	}
