@@ -23,6 +23,7 @@ public class Photo implements Comparable<Photo> {
 	private int height;
 	private int width;
 	private String path; // 
+	private String fileName;
 	private ActualEvent parentActualEvent;
 	private double ID; //unique per Photo
 
@@ -33,16 +34,12 @@ public class Photo implements Comparable<Photo> {
 		this.width = width;
 		this.isHorizontal = (width > height);
 		this.path = path;
+		this.fileName = new File(path).getName();
 		this.ID = takenDate.getMillis();
 	}
-	
-	public File getPhotoFile() throws FileNotFoundException {
-		File file = null;
-		file = new File(path);
-		if (!file.exists()) {
-			throw new FileNotFoundException();
-		}
-		return file;
+
+	public String getFileName() {
+		return fileName;
 	}
 
 	public boolean isHorizontal() {

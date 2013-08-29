@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import android.R.integer;
 import android.util.Log;
 import Common.Photo;
 
@@ -17,8 +18,8 @@ public class ActivationManager {
 	private static final int DEDICATED_MODE = 1;
 
 	// TODO: maybe do this by number of photos for collage
-	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 3;
-	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 1200;
+	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 1;
+	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 600;
 	private static final String TAG = "ActionManager.ActionManager";
 
 
@@ -31,7 +32,7 @@ public class ActivationManager {
 	private int remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE;
 	private int remainingHorizontal = 0;
 	private int remainingVertical = 0;
-	
+
 	private Photo lastRecievedPhoto = null;
 
 
@@ -42,23 +43,23 @@ public class ActivationManager {
 	public static ActivationManager getInstance() {
 		return instance;
 	}
-	
+
 	public List<Photo> getProcessedPhotos() {
 		return processedPhotos;
 	}
 
 	private boolean isNewEventCandidate(Photo newPhoto) {
-		
+
 		//TODO : uncomment the if
 		//if (newPhoto.getTakenDate().isAfter(lastRecievedPhoto.getTakenDate())) { // should always be true
-			int delta = lastRecievedPhoto.timeDeltaInSecondsFrom(newPhoto);
-			Log.d(TAG, "diff from last photo: " + delta);
-			return (delta > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
+		int delta = lastRecievedPhoto.timeDeltaInSecondsFrom(newPhoto);
+		Log.d(TAG, "diff from last photo: " + delta);
+		return (delta > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
 		//}
-	//	else { // should not happen, except on daylight savings time switch
+		//	else { // should not happen, except on daylight savings time switch
 		//	return false;
-	//	}
-		
+		//	}
+
 	}
 
 	private boolean isCollageNeeded() {
@@ -67,11 +68,11 @@ public class ActivationManager {
 				((remainingHorizontal == 0) ||
 						(remainingVertical == 0)))); 
 	}
-	
+
 	private boolean isFirstEvent() {
 		return (lastRecievedPhoto == null);
 	}
-	
+
 	/**
 	 * @param photo
 	 * @return TRUE if next module should be awakened
@@ -84,21 +85,23 @@ public class ActivationManager {
 				remainingEvents--;
 			}
 		}
-//		else  { // add photo to last added event in container
-//			event = CandidatePhotoContainer.getInstance().getLastAddedEvent();
-//			if (!event.isPhotoInEvent(photo)) {
-//				event.addPhoto(photo);
-//			}
-//			else {
-//				// TODO: handle this situation that should not happen
-//			}
-//		}
+		//		else  { // add photo to last added event in container
+		//			event = CandidatePhotoContainer.getInstance().getLastAddedEvent();
+		//			if (!event.isPhotoInEvent(photo)) {
+		//				event.addPhoto(photo);
+		//			}
+		//			else {
+		//				// TODO: handle this situation that should not happen
+		//			}
+		//		}
 
 		if (currentState == DEDICATED_MODE && photo.isHorizontal()) {
-			remainingHorizontal--;
+			if (remainingHorizontal > 0) 
+				remainingHorizontal--;
 		}
 		if ((currentState == DEDICATED_MODE && !photo.isHorizontal())) {
-			remainingVertical--;
+			if (remainingVertical > 0)
+				remainingVertical--;
 		}
 
 		return isCollageNeeded();
@@ -126,7 +129,7 @@ public class ActivationManager {
 		if (isCollageNeeded) {
 			setToRegularMode(); // upon decision to create collage, switch to REGULAR_MODE
 		}
-		
+
 		return isCollageNeeded;
 	}
 
@@ -138,7 +141,7 @@ public class ActivationManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void addRequestToBuffer(DedicatedRequest request) {
 		try {
 			requestBuffer.put(request);

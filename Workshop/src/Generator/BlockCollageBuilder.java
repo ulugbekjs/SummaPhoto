@@ -68,7 +68,8 @@ public class BlockCollageBuilder {
 		int min = Integer.MAX_VALUE, minIndex = -1;
 
 		for (int i = 0; i<BlockTemplate.BLOCK_TEMPLATES_NUM; i++) {
-			if (templateDiffs[i] == 0) { // template fits perfectly for bundle
+			if (templates[i].getHorizontalSlots().size() <= bundle.horizontalCount() &&
+					templates[i].getVerticalSlots().size() <= bundle.verticalCount()) { // template fits perfectly for bundle
 				chosenTemplate = templates[i];
 				break;
 			}
@@ -146,7 +147,7 @@ public class BlockCollageBuilder {
 		return queue;
 	}
 
-	public File BuildCollage() {
+	public Photo BuildCollage() {
 
 		Canvas canvas = null;
 		FileOutputStream fos = null;
@@ -169,13 +170,13 @@ public class BlockCollageBuilder {
 		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Output");
 		File file = null;
 
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
+		file = new File
+				(testsDir, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
+		
 		// Save Bitmap to File
 		try	{
-			Calendar calendar = Calendar.getInstance();
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
-			file = new File
-					(testsDir, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
-
 			fos = new FileOutputStream(file);
 			bmpBase.compress(Bitmap.CompressFormat.JPEG, 70, fos);
 
@@ -193,7 +194,7 @@ public class BlockCollageBuilder {
 			e.printStackTrace();
 		}
 
-		return file;
+		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
 	}
 
 	private void addSlotImageToCanvas(Canvas canvas, Slot slot) {

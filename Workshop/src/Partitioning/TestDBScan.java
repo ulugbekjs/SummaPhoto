@@ -43,7 +43,7 @@ public class TestDBScan {
 					if (photo == null)
 						return false;
 					newFilePathString = subDirectoryPathString + File.separator
-							+ photo.getPhotoFile().getName();
+							+ photo.getFileName();
 					savePhotoToMemory(photo, newFilePathString);
 				}
 				i++;
@@ -63,7 +63,8 @@ public class TestDBScan {
 		File destionationFile;
 		try {
 
-			originalFile = p.getPhotoFile();
+			
+			originalFile = new File(p.getFilePath());
 			if (originalFile == null)
 				return false;
 			destionationFile = new File(newFilePath);

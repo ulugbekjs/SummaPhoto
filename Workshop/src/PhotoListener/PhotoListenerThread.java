@@ -35,9 +35,6 @@ public class PhotoListenerThread extends FileObserver {
 	private final String TAG = PhotoListenerThread.class.getName();
 	String absolutePath;
 
-	private Set<String> cache = new HashSet<String>();
-
-
 	public PhotoListenerThread(String path) {
 		super(path, FileObserver.CLOSE_WRITE);
 		this.absolutePath = path;
