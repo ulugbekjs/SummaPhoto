@@ -51,7 +51,7 @@ public class DBScan {
 	 * Takes photos and sorts them to ActualEvents
 	 * @return ActualEventBundle containing the events containing photos
 	 */
-	public ActualEventsBundle runAlgorithmClusters() {
+	public List<Cluster> runAlgorithmClusters() {
 		List<Cluster> clustersList = new LinkedList<Cluster>();
 		PhotoObjectForClustering arbitraryUnvisitedPhoto;
 		while (!unvisitedPhotos.isEmpty()) {
