@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import android.util.Log;
 import Common.Photo;
 
 public class ActivationManager {
@@ -15,8 +17,10 @@ public class ActivationManager {
 	private static final int DEDICATED_MODE = 1;
 
 	// TODO: maybe do this by number of photos for collage
-	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 4;
-	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 1800;
+	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 3;
+	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 900;
+	private static final String TAG = "ActionManager.ActionManager";
+
 
 	//instance fields
 	private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
@@ -45,13 +49,15 @@ public class ActivationManager {
 
 	private boolean isNewEventCandidate(Photo newPhoto) {
 		
-		if (newPhoto.getTakenDate().isAfter(lastRecievedPhoto.getTakenDate())) { // should always be true
+		//TODO : uncomment the if
+		//if (newPhoto.getTakenDate().isAfter(lastRecievedPhoto.getTakenDate())) { // should always be true
 			int delta = lastRecievedPhoto.timeDeltaInSecondsFrom(newPhoto);
+			Log.d(TAG, "diff from last photo: " + delta);
 			return (delta > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
-		}
-		else { // should not happen, except on daylight savings time switch
-			return false;
-		}
+		//}
+	//	else { // should not happen, except on daylight savings time switch
+		//	return false;
+	//	}
 		
 	}
 

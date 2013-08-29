@@ -3,6 +3,7 @@ package Generator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,8 +24,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Environment;
+import android.util.Log;
 
 public class BlockCollageBuilder {
+	
+	private static final String TAG = "Generator.BlockCollageBuilder";
 
 	public BlockCollageBuilder(ActualEventsBundle bundle) {
 	}
@@ -137,16 +141,12 @@ public class BlockCollageBuilder {
 		try	{
 			Date date = new Date();
 			Calendar calendar = Calendar.getInstance();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 			file = new File
-					(testsDir, calendar.get(Calendar.YEAR) + "/" +
-					calendar.get(Calendar.MONTH) + "/" +
-					calendar.get(Calendar.DATE) + "_" +
-					calendar.get(Calendar.HOUR) + ":" +
-					calendar.get(Calendar.MINUTE) +
-					".jpg");
+					(testsDir, formatter.format(calendar.getTime()) + ".jpg");
 
 			fos = new FileOutputStream(file);
-			bmpBase.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+			bmpBase.compress(Bitmap.CompressFormat.JPEG, 60, fos);
 
 			fos.flush();
 			fos.close();
@@ -156,7 +156,9 @@ public class BlockCollageBuilder {
 			bmpBase = null;
 		}
 		catch (IOException e) {
-			// TODO: deal with error
+			Log.e(TAG, "Error when saving collage file +" + file.getPath());
+			// TODO: notify user about error in saving collage
+			file = null;
 			e.printStackTrace();
 		}
 		//		finally {

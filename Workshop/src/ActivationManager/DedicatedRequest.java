@@ -35,7 +35,7 @@ public class DedicatedRequest {
 	}
 	
 	public boolean isEmptyRequest() {
-		return (horizontalNeeded !=0 || verticalNeeded != 0);
+		return (horizontalNeeded == 0 && verticalNeeded == 0);
 	}
 
 	public DedicatedRequest() {

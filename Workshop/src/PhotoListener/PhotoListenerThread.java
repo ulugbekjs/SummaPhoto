@@ -161,10 +161,6 @@ public class PhotoListenerThread extends FileObserver {
 		}
 	}
 
-
-
-
-
 	public static Photo createPhotoFromFile(String file) throws ImageProcessingException {
 
 		Photo photo = null;
