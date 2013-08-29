@@ -28,6 +28,7 @@ public class ScheduledModeService{
 			scheduler.scheduleWithFixedDelay(new Runnable() {
 				@Override
 				public void run() {
+					// in this flow there are no dedicated requests
 					manager.processPhotoBuffer();
 				}
 			},

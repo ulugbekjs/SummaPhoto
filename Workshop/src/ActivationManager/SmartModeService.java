@@ -16,12 +16,15 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import Common.ActualEventsBundle;
 import Generator.BlockCollageBuilder;
 import Generator.BlockTemplate;
 import Partitioning.DBScan;
 
 public class SmartModeService {
+	
+	private static final String TAG = "ActivationManager.SmartModeService";
 	private static ScheduledExecutorService scheduler = null;
 	private static ActivationManager manager = ActivationManager.getInstance();  
 	private static final int INTERVAL_IN_SECONDS = 30;
@@ -79,29 +82,32 @@ public class SmartModeService {
 	}
 
 	private static File buildBlockCollage(ActualEventsBundle bundle) {
-		DedicatedRequest request = new DedicatedRequest();
-		BlockTemplate template = BlockCollageBuilder.chooseTemplate(bundle, request);
-		if (!request.isEmptyRequest()) {
+		BlockCollageBuilder builder = new BlockCollageBuilder(bundle);
+		DedicatedRequest request = builder.setTemplate();
+		if (request != null) {
 			manager.addRequestToBuffer(request);
 			return null;
 		}
 		else { 
-			BlockCollageBuilder.populateTemplate(bundle, template);
-			return BlockCollageBuilder.BuildCollage(template);
+			builder.populateTemplate();
+			File collageFile = builder.BuildCollage();
+			return collageFile;
 		}
 
 	}
 	public static void notifyUser(File file) {
 
 		final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-		final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator + "IMG_20130804_130626.jpg";
+		final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator + file.getName();
 
 		File photoFile = new File(PHOTO_DIR);
-		if (!photoFile.exists())
+		if (!photoFile.exists()) {
+			Log.e(TAG, "Error finding file for notification");
 			return;
+		}
 
 		Context context = SettingsActivity.CONTEXT;
-		Uri uri = Uri.withAppendedPath(Uri.fromFile(ROOT), "Tests" + File.separator + "IMG_20130804_130626.jpg");
+		Uri uri = Uri.withAppendedPath(Uri.fromFile(ROOT), "Tests" + File.separator + file.getName());
 		Intent it = new Intent();
 		it.setDataAndType(uri, "image/jpeg");
 		it.setAction(Intent.ACTION_VIEW);

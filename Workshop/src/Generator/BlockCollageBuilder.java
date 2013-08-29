@@ -6,18 +6,24 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Random;
 
 import javax.xml.transform.Templates;
 
+import org.joda.time.DateTime;
 import org.junit.experimental.max.MaxCore;
 
 import ActivationManager.DedicatedRequest;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Photo;
+import Partitioning.Cluster;
 import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,10 +33,13 @@ import android.os.Environment;
 import android.util.Log;
 
 public class BlockCollageBuilder {
-	
+
 	private static final String TAG = "Generator.BlockCollageBuilder";
+	ActualEventsBundle bundle = null;
+	BlockTemplate template = null;
 
 	public BlockCollageBuilder(ActualEventsBundle bundle) {
+		this.bundle = bundle;
 	}
 
 	/**
@@ -39,7 +48,7 @@ public class BlockCollageBuilder {
 	 * @param bundle - this bundle with the events
 	 * @return chosen Template
 	 */
-	public static BlockTemplate chooseTemplate(ActualEventsBundle bundle, DedicatedRequest request) {
+	public DedicatedRequest setTemplate() {
 		int[] templateDiffs = new int[BlockTemplate.BLOCK_TEMPLATES_NUM];
 
 		BlockTemplate[] templates = new BlockTemplate[BlockTemplate.BLOCK_TEMPLATES_NUM];
@@ -68,8 +77,10 @@ public class BlockCollageBuilder {
 			}
 		}
 
+		DedicatedRequest request = null;
+
 		if (chosenTemplate != null) { // template was chosen
-			return chosenTemplate;
+			this.template = chosenTemplate;
 		}
 		else { // need to fill DedicatedRequest
 			if (minIndex != -1)  { // should be true
@@ -77,44 +88,115 @@ public class BlockCollageBuilder {
 				request.setHorizontalNeeded(templates[minIndex].horizontalSlots.size() - bundle.horizontalCount());
 				request.setVerticalNeeded(templates[minIndex].verticalSlots.size() - bundle.verticalCount());
 			}
-			return null;
 		}
+		
+		return request;
 	}
 
-	public static boolean populateTemplate(ActualEventsBundle bundle, BlockTemplate template) {
-
+	public boolean populateTemplate() {
+		
+		boolean successful = true;
+		
 		List<Integer> horizontals = new LinkedList<Integer>(template.getHorizontalSlots());
 		List<Integer> verticals = new LinkedList<Integer>(template.getVerticalSlots());
-		List<Photo> horizontalPhotos;
-		List<Photo> verticalPhotos;
-
-		while (!horizontals.isEmpty()) {
-
-			for (ActualEvent event: bundle.getActualEvents()) {
-				horizontalPhotos = event.horizontalPhotos();
-
-				if (!horizontalPhotos.isEmpty()) {
-					template.getSlot(horizontals.remove(0)).assignToPhoto(horizontalPhotos.remove(0));
-					break;
-				}
-			}
-		}
-
-		while (!verticals.isEmpty()) {
-
-			for (ActualEvent event: bundle.getActualEvents()) {
-				verticalPhotos = event.verticalPhotos();
-
-				if (!verticalPhotos.isEmpty()) {
-					template.getSlot(verticals.remove(0)).assignToPhoto(verticalPhotos.remove(0));
-					break;
-				}
-			}
-		}
-		return false;
+		
+		// placing horizontal photos
+		successful = populateSubSlots(horizontals, true);
+		
+		// placing vertical photos
+		successful = populateSubSlots(horizontals, false);
+		
+		return successful;
 	}
 
-	public static File BuildCollage(BlockTemplate template) {
+	private boolean populateSubSlots(List<Integer> slotsToFill, boolean horizontalPhotos) {
+		
+		Queue<ActualEvent> queue = getQueue();
+
+		while (!slotsToFill.isEmpty() && !queue.isEmpty()) {
+			ActualEvent event = queue.remove();
+			
+			List<Photo> photosInEvent = (horizontalPhotos) ? event.horizontalPhotos() : event.verticalPhotos(); 
+			
+			if (!photosInEvent.isEmpty()) { // horizontal photos in event
+				Random random = new Random(new Date().getTime());
+				int rand = random.nextInt(event.getEventSize()); 
+				template.getSlot(slotsToFill.remove(0)).assignToPhoto(photosInEvent.remove(rand));
+			}
+			
+			if (!photosInEvent.isEmpty()) { // still horizontal photos left in event 
+				queue.add(event); // return to queue
+			}
+		}
+		
+		if (!slotsToFill.isEmpty()) { // events ran out before full population
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+		
+		
+		
+		
+//		// placing vertical photos in slots
+//		Queue<ComparableActualEvent> queue = getComparableEventPriorityQueue();
+
+
+//		old brute force algorithm
+//		List<Integer> horizontals = new LinkedList<Integer>(template.getHorizontalSlots());
+//		List<Integer> verticals = new LinkedList<Integer>(template.getVerticalSlots());
+//		List<Photo> horizontalPhotos;
+//		List<Photo> verticalPhotos;
+//
+//		while (!horizontals.isEmpty()) {
+//			Random rand = new Random(new Date().getTime());
+//			int  n = rand.nextInt(50) + 1;
+//
+//
+//			for (ActualEvent event: bundle.getActualEvents()) {
+//				horizontalPhotos = event.horizontalPhotos();
+//
+//				if (!horizontalPhotos.isEmpty()) {
+//					template.getSlot(horizontals.remove(0)).assignToPhoto(horizontalPhotos.remove(0));
+//					break;
+//				}
+//			}
+//		}
+//
+//		while (!verticals.isEmpty()) {
+//
+//			for (ActualEvent event: bundle.getActualEvents()) {
+//				verticalPhotos = event.verticalPhotos();
+//
+//				if (!verticalPhotos.isEmpty()) {
+//					template.getSlot(verticals.remove(0)).assignToPhoto(verticalPhotos.remove(0));
+//					break;
+//				}
+//			}
+//		}
+//		return false;
+//	}
+
+	private Queue<ActualEvent> getQueue() {
+//		Queue<ComparableActualEvent> queue = new PriorityQueue<ComparableActualEvent>(bundle.getActualEvents().size(), new Comparator<ComparableActualEvent>() {
+//
+//			@Override
+//			public int compare(ComparableActualEvent lhs,
+//					ComparableActualEvent rhs) {
+//				return Integer.valueOf(lhs.photosRemoved).compareTo(rhs.photosRemoved);
+//			}
+//		});
+		
+		Queue<ActualEvent> queue = new LinkedList<ActualEvent>();
+		for (ActualEvent event: bundle.getActualEvents()) {
+			queue.add(event);
+		}
+		return queue;
+	}
+
+	public File BuildCollage() {
 
 		Canvas canvas = null;
 		FileOutputStream fos = null;
@@ -139,14 +221,13 @@ public class BlockCollageBuilder {
 
 		// Save Bitmap to File
 		try	{
-			Date date = new Date();
 			Calendar calendar = Calendar.getInstance();
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+			SimpleDateFormat formatter = new SimpleDateFormat("summaphoto_yyyy_MM_dd_HH_mm");
 			file = new File
 					(testsDir, formatter.format(calendar.getTime()) + ".jpg");
 
 			fos = new FileOutputStream(file);
-			bmpBase.compress(Bitmap.CompressFormat.JPEG, 60, fos);
+			bmpBase.compress(Bitmap.CompressFormat.JPEG, 70, fos);
 
 			fos.flush();
 			fos.close();
@@ -161,27 +242,11 @@ public class BlockCollageBuilder {
 			file = null;
 			e.printStackTrace();
 		}
-		//		finally {
-		//			if (fos != null) {
-		//				try {
-		//					fos.close();
-		//					fos = null;
-		//				}
-		//				catch (Exception e) {
-		//					// TODO: deal with error
-		//					int x= 5;
-		//					String xString = e.getMessage();
-		//					e.printStackTrace();
-		//					
-		//				}
-		//			}
-		//
-		//		}
 
 		return file;
 	}
 
-	private static void addSlotImageToCanvas(Canvas canvas, Slot slot) {
+	private void addSlotImageToCanvas(Canvas canvas, Slot slot) {
 
 		// get Image bitmap
 		BitmapFactory.Options options = new BitmapFactory.Options();
@@ -213,7 +278,7 @@ public class BlockCollageBuilder {
 		bitmap = null;
 	}
 
-	private static Bitmap decodeScaledBitmapFromSdCard(String filePath,
+	private Bitmap decodeScaledBitmapFromSdCard(String filePath,
 			int reqWidth, int reqHeight) {
 
 		// First decode with inJustDecodeBounds=true to check dimensions
@@ -229,7 +294,7 @@ public class BlockCollageBuilder {
 		return BitmapFactory.decodeFile(filePath, options);
 	}
 
-	private static int calculateInSampleSize(
+	private int calculateInSampleSize(
 			BitmapFactory.Options options, int reqWidth, int reqHeight) {
 		// Raw height and width of image
 		final int height = options.outHeight;
@@ -250,6 +315,5 @@ public class BlockCollageBuilder {
 
 		return inSampleSize;
 	}
-
-
+ 
 }
