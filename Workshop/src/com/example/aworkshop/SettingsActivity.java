@@ -34,8 +34,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-//	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 	private static final int MAP_TYPE = 1;
 	private static final int BLOCK_TYPE = 2;
@@ -48,7 +48,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	PhotoListenerThread observer;
 
 	// private fields
-	//private TimePickerDialog timePickerDialog;
 	private RadioButton dailyRadioBtn;
 	private RadioGroup modeGroup;
 	private RadioButton lastCheckedButton;

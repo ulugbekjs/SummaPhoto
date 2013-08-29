@@ -106,8 +106,8 @@ public class SmartModeService {
 	}
 	public static void notifyUser(File file) {
 
-		final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-		final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator + file.getName();
+		final File ROOT = new File(Environment.getExternalStorageDirectory(), "Pictures");
+		final String  PHOTO_DIR = ROOT + File.separator + "Output" + File.separator + file.getName();
 
 		File photoFile = new File(PHOTO_DIR);
 		if (!photoFile.exists()) {
@@ -116,7 +116,7 @@ public class SmartModeService {
 		}
 
 		Context context = SettingsActivity.CONTEXT;
-		Uri uri = Uri.withAppendedPath(Uri.fromFile(ROOT), "Tests" + File.separator + file.getName());
+		Uri uri = Uri.withAppendedPath(Uri.fromFile(ROOT), "Output" + File.separator + file.getName());
 		Intent it = new Intent();
 		it.setDataAndType(uri, "image/jpeg");
 		it.setAction(Intent.ACTION_VIEW);

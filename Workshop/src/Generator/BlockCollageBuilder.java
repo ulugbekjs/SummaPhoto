@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
@@ -71,7 +72,7 @@ public class BlockCollageBuilder {
 				chosenTemplate = templates[i];
 				break;
 			}
-			if (templateDiffs[i] < min) {  // template has better (lower) diff
+			if (templateDiffs[i] < min) { 
 				min = templateDiffs[i];
 				minIndex = i;
 			}
@@ -101,8 +102,7 @@ public class BlockCollageBuilder {
 		List<Integer> verticals = new LinkedList<Integer>(template.getVerticalSlots());
 		
 		// placing horizontal photos
-		successful = populateSubSlots(horizontals, true);
-		
+		successful = populateSubSlots(horizontals, true);	
 		// placing vertical photos
 		successful = populateSubSlots(verticals, false);
 		
@@ -112,6 +112,7 @@ public class BlockCollageBuilder {
 	private boolean populateSubSlots(List<Integer> slotsToFill, boolean horizontalPhotos) {
 		
 		Queue<ActualEvent> queue = getQueue();
+		Collections.shuffle(slotsToFill);
 
 		while (!slotsToFill.isEmpty() && !queue.isEmpty()) {
 			ActualEvent event = queue.remove();
@@ -120,7 +121,7 @@ public class BlockCollageBuilder {
 			
 			if (!photosInEvent.isEmpty()) { // horizontal photos in event
 				Random random = new Random(new Date().getTime());
-				int rand = random.nextInt(event.getEventSize()); 
+				int rand = random.nextInt(photosInEvent.size()); 
 				template.getSlot(slotsToFill.remove(0)).assignToPhoto(photosInEvent.remove(rand));
 			}
 			
@@ -136,59 +137,8 @@ public class BlockCollageBuilder {
 			return true;
 		}
 	}
-		
-		
-		
-		
-//		// placing vertical photos in slots
-//		Queue<ComparableActualEvent> queue = getComparableEventPriorityQueue();
-
-
-//		old brute force algorithm
-//		List<Integer> horizontals = new LinkedList<Integer>(template.getHorizontalSlots());
-//		List<Integer> verticals = new LinkedList<Integer>(template.getVerticalSlots());
-//		List<Photo> horizontalPhotos;
-//		List<Photo> verticalPhotos;
-//
-//		while (!horizontals.isEmpty()) {
-//			Random rand = new Random(new Date().getTime());
-//			int  n = rand.nextInt(50) + 1;
-//
-//
-//			for (ActualEvent event: bundle.getActualEvents()) {
-//				horizontalPhotos = event.horizontalPhotos();
-//
-//				if (!horizontalPhotos.isEmpty()) {
-//					template.getSlot(horizontals.remove(0)).assignToPhoto(horizontalPhotos.remove(0));
-//					break;
-//				}
-//			}
-//		}
-//
-//		while (!verticals.isEmpty()) {
-//
-//			for (ActualEvent event: bundle.getActualEvents()) {
-//				verticalPhotos = event.verticalPhotos();
-//
-//				if (!verticalPhotos.isEmpty()) {
-//					template.getSlot(verticals.remove(0)).assignToPhoto(verticalPhotos.remove(0));
-//					break;
-//				}
-//			}
-//		}
-//		return false;
-//	}
 
 	private Queue<ActualEvent> getQueue() {
-//		Queue<ComparableActualEvent> queue = new PriorityQueue<ComparableActualEvent>(bundle.getActualEvents().size(), new Comparator<ComparableActualEvent>() {
-//
-//			@Override
-//			public int compare(ComparableActualEvent lhs,
-//					ComparableActualEvent rhs) {
-//				return Integer.valueOf(lhs.photosRemoved).compareTo(rhs.photosRemoved);
-//			}
-//		});
-		
 		Queue<ActualEvent> queue = new LinkedList<ActualEvent>();
 		for (ActualEvent event: bundle.getActualEvents()) {
 			queue.add(event);
@@ -222,9 +172,9 @@ public class BlockCollageBuilder {
 		// Save Bitmap to File
 		try	{
 			Calendar calendar = Calendar.getInstance();
-			SimpleDateFormat formatter = new SimpleDateFormat("summaphoto_yyyy_MM_dd_HH_mm");
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
 			file = new File
-					(testsDir, formatter.format(calendar.getTime()) + ".jpg");
+					(testsDir, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
 
 			fos = new FileOutputStream(file);
 			bmpBase.compress(Bitmap.CompressFormat.JPEG, 70, fos);
