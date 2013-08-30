@@ -1,6 +1,8 @@
 package Generator;
 
 import java.io.IOException;
+
+import ActivationManager.DedicatedRequest;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import android.graphics.Bitmap;
@@ -71,6 +73,12 @@ public class MapCollageBuilder extends AbstractBuilder{
 	public boolean populateTemplate() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public DedicatedRequest setTemplate() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

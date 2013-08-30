@@ -20,10 +20,14 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.SeekBar;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.PhotoContainer;
+import Generator.AbstractBuilder;
+import Generator.AbstractTemplate;
 import Generator.BlockCollageBuilder;
+import Generator.MapCollageBuilder;
 import Partitioning.DBScan;
 
 public class SmartModeService {
@@ -51,7 +55,13 @@ public class SmartModeService {
 						ActualEventsBundle events = partiotionToEvents();
 
 						// build the collage from Bundle of photos
-						Photo collage = buildBlockCollage(events);
+						Photo collage = null;
+						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
+							collage = buildCollage(new BlockCollageBuilder(events));
+						}
+						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
+							collage = buildCollage(new MapCollageBuilder(events));
+						}
 						if (collage != null) {
 							notifyUser(collage);
 						}
@@ -87,8 +97,7 @@ public class SmartModeService {
 		return (scheduler != null);
 	}
 
-	private static Photo buildBlockCollage(ActualEventsBundle bundle) {
-		BlockCollageBuilder builder = new BlockCollageBuilder(bundle);
+	private static Photo buildCollage(AbstractBuilder builder) {
 		DedicatedRequest request = builder.setTemplate();
 		if (request != null) {
 			manager.addRequestToBuffer(request);
@@ -98,8 +107,9 @@ public class SmartModeService {
 			builder.populateTemplate();
 			return builder.buildCollage();
 		}
-
 	}
+	
+	
 	public static void notifyUser(Photo photo) {
 
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "Pictures");

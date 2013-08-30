@@ -89,17 +89,21 @@
             android:layout_height="wrap_content" >
             
              <RadioButton
-                android:id="@+id/mapType"
+                android:id="@+id/radioMapType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/Map" />
+                android:text="@string/Map"
+                android:onClick="onTypeRadioButtonClicked"
+                 />
             
             <RadioButton
-                android:id="@+id/blocksType"
+                android:id="@+id/radioBlocksType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Blocks" />
+                android:text="@string/Blocks" 
+                android:onClick="onTypeRadioButtonClicked"
+                />
            </RadioGroup>
         
     </LinearLayout>

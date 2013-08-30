@@ -25,12 +25,7 @@ public class BlockCollageBuilder extends AbstractBuilder {
 		super(bundle);
 	}
 
-	/**
-	 * Get a template, or fill a request with needed parameters
-	 * @param request - this will be filled if no template is fitting
-	 * @param bundle - this bundle with the events
-	 * @return chosen Template
-	 */
+	@Override
 	public DedicatedRequest setTemplate() {
 		int[] templateDiffs = new int[BlockTemplate.BLOCK_TEMPLATES_NUM];
 

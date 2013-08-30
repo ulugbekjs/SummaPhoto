@@ -39,10 +39,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     public static final class id {
         public static final int OutputType=0x7f090006;
         public static final int action_settings=0x7f09000a;
-        public static final int blocksType=0x7f090008;
         public static final int imgLogo=0x7f090009;
-        public static final int mapType=0x7f090007;
+        public static final int radioBlocksType=0x7f090008;
         public static final int radioDaily=0x7f090004;
+        public static final int radioMapType=0x7f090007;
         public static final int radioMode=0x7f090001;
         public static final int radioOff=0x7f090002;
         public static final int radioSmart=0x7f090003;
