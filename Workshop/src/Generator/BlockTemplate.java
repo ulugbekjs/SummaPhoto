@@ -2,7 +2,7 @@ package Generator;
 
 public class BlockTemplate extends AbstractTemplate{
 
-	public static final int BLOCK_TEMPLATES_NUM = 3;
+	public static final int BLOCK_TEMPLATES_NUM = 3; // number of templates existing for this template type
 	
 	private BlockTemplate(int blocks) {
 		super(blocks);

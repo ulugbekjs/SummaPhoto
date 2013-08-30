@@ -12,6 +12,7 @@ import ActivationManager.DedicatedRequest;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Photo;
+import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
@@ -28,6 +29,7 @@ public class BlockCollageBuilder extends AbstractBuilder {
 	@Override
 	public DedicatedRequest setTemplate() {
 		int[] templateDiffs = new int[BlockTemplate.BLOCK_TEMPLATES_NUM];
+		int[] templateRemaining = new int[BlockTemplate.BLOCK_TEMPLATES_NUM];
 
 		BlockTemplate[] templates = new BlockTemplate[BlockTemplate.BLOCK_TEMPLATES_NUM];
 		for (int i=0; i<BlockTemplate.BLOCK_TEMPLATES_NUM; i++) {
@@ -39,19 +41,28 @@ public class BlockCollageBuilder extends AbstractBuilder {
 			int diffHorizontal = Math.max(0, templates[t].horizontalSlots.size() - bundle.horizontalCount());
 			int diffVertical = Math.max(0, templates[t].verticalSlots.size() - bundle.verticalCount());
 			templateDiffs[t] = Math.abs(diffHorizontal - diffVertical);
+			templateRemaining[t] = diffHorizontal + diffVertical;
+		}
+		
+		// calculate compatibility scores
+		double[] templateScores = new double[BlockTemplate.BLOCK_TEMPLATES_NUM];
+		for (int i = 0; i<BlockTemplate.BLOCK_TEMPLATES_NUM; i++) {
+			templateScores[i] = templateDiffs[i] * 0.3 + templateRemaining[i] * 0.7;
 		}
 
 		BlockTemplate chosenTemplate = null;
-		int min = Integer.MAX_VALUE, minIndex = -1;
+		double min = Double.MAX_VALUE;
+		int minIndex = -1;
 
+		// get a fitting template or pick the "closest" one
 		for (int i = 0; i<BlockTemplate.BLOCK_TEMPLATES_NUM; i++) {
 			if (templates[i].getHorizontalSlots().size() <= bundle.horizontalCount() &&
 					templates[i].getVerticalSlots().size() <= bundle.verticalCount()) { // template fits perfectly for bundle
 				chosenTemplate = templates[i];
 				break;
 			}
-			if (templateDiffs[i] < min) { 
-				min = templateDiffs[i];
+			if (templateScores[i] < min) { 
+				min = templateScores[i];
 				minIndex = i;
 			}
 		}
