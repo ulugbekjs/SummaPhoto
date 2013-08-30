@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import android.R.integer;
 import android.util.Log;
 import Common.Photo;
+import Common.PhotoContainer;
 
 public class ActivationManager {
 
@@ -24,9 +24,8 @@ public class ActivationManager {
 
 
 	//instance fields
-	private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
+	
 	private BlockingQueue<DedicatedRequest> requestBuffer = new LinkedBlockingQueue<DedicatedRequest>();
-	private List<Photo> processedPhotos = new ArrayList<Photo>();
 
 	private int currentState = 0; // start in REGULAR_MODE;
 	private int remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE;
@@ -34,19 +33,17 @@ public class ActivationManager {
 	private int remainingVertical = 0;
 
 	private Photo lastRecievedPhoto = null;
+	private PhotoContainer photoContainer = null;
 
 
 	private ActivationManager() {
-
+		photoContainer = PhotoContainer.getInstance();
 	}
 
 	public static ActivationManager getInstance() {
 		return instance;
 	}
 
-	public List<Photo> getProcessedPhotos() {
-		return processedPhotos;
-	}
 
 	private boolean isNewEventCandidate(Photo newPhoto) {
 
@@ -103,6 +100,8 @@ public class ActivationManager {
 			if (remainingVertical > 0)
 				remainingVertical--;
 		}
+		
+		photoContainer.moveToProcessedPhotos(photo);
 
 		return isCollageNeeded();
 	}
@@ -117,11 +116,10 @@ public class ActivationManager {
 		boolean isCollageNeeded = false;
 		// empty the buffer
 		Photo photo = null;
-		while (!buffer.isEmpty()) { 
-			photo = buffer.remove();
+		while (!photoContainer.isEmpty()) { 
+			photo = photoContainer.getNextPhotoFromBuffer();
 			if (photo != null) {
 				isCollageNeeded = processPhoto(photo);
-				processedPhotos.add(photo); 
 			}
 		}
 
@@ -133,14 +131,7 @@ public class ActivationManager {
 		return isCollageNeeded;
 	}
 
-	public void addToBuffer(Photo p) {
-		try {
-			buffer.put(p);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
 
 	public void addRequestToBuffer(DedicatedRequest request) {
 		try {

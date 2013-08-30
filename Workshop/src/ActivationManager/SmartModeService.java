@@ -24,6 +24,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import Common.ActualEventsBundle;
 import Common.Photo;
+import Common.PhotoContainer;
 import Generator.BlockCollageBuilder;
 import Generator.BlockTemplate;
 import Partitioning.DBScan;
@@ -76,7 +77,7 @@ public class SmartModeService {
 				 * @return
 				 */
 				private ActualEventsBundle partiotionToEvents() {
-					DBScan eventsClusterer = new DBScan(manager.getProcessedPhotos());
+					DBScan eventsClusterer = new DBScan(PhotoContainer.getInstance().getProcessedPhotos());
 					ActualEventsBundle events = eventsClusterer.runAlgorithmClusters();
 					return events;
 				}

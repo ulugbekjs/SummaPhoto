@@ -1,23 +1,11 @@
 package Partitioning;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.AbstractQueue;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import android.R.bool;
-import android.R.integer;
-import android.R.string;
-import android.webkit.WebChromeClient.CustomViewCallback;
 import Common.*;
 
 public class DBScan {

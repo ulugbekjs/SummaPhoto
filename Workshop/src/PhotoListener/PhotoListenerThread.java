@@ -19,6 +19,7 @@ import com.drew.metadata.jpeg.JpegDirectory;
 import ActivationManager.ActivationManager;
 import Common.GPSPoint;
 import Common.Photo;
+import Common.PhotoContainer;
 import android.R.integer;
 import android.os.Build;
 import android.os.Environment;
@@ -147,10 +148,14 @@ public class PhotoListenerThread extends FileObserver {
 					} catch (ImageProcessingException e) {
 						Log.e(TAG, "Photo taken: " + "was NOT read from file properly");
 					}
+					
+					if (photo != null)
+						PhotoContainer.getInstance().addToBuffer(photo);
 				}
-
-				if (photo != null)
-					ActivationManager.getInstance().addToBuffer(photo);
+				
+				if ((event & FileObserver.DELETE) > 0) {
+					PhotoContainer.getInstance().onDelete(file);
+				}
 			}
 		}
 		else {

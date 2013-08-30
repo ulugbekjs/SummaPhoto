@@ -33,14 +33,13 @@ import android.graphics.Rect;
 import android.os.Environment;
 import android.util.Log;
 
-public class BlockCollageBuilder {
+public class BlockCollageBuilder extends Builder {
 
 	private static final String TAG = "Generator.BlockCollageBuilder";
-	ActualEventsBundle bundle = null;
 	BlockTemplate template = null;
 
 	public BlockCollageBuilder(ActualEventsBundle bundle) {
-		this.bundle = bundle;
+		super(bundle);
 	}
 
 	/**
@@ -91,46 +90,47 @@ public class BlockCollageBuilder {
 				request.setVerticalNeeded(templates[minIndex].verticalSlots.size() - bundle.verticalCount());
 			}
 		}
-		
+
 		return request;
 	}
 
+	@Override
 	public boolean populateTemplate() {
-		
+
 		boolean successful = true;
-		
+
 		List<Integer> horizontals = new LinkedList<Integer>(template.getHorizontalSlots());
 		List<Integer> verticals = new LinkedList<Integer>(template.getVerticalSlots());
-		
+
 		// placing horizontal photos
 		successful = populateSubSlots(horizontals, true);	
 		// placing vertical photos
 		successful = populateSubSlots(verticals, false);
-		
+
 		return successful;
 	}
 
 	private boolean populateSubSlots(List<Integer> slotsToFill, boolean horizontalPhotos) {
-		
+
 		Queue<ActualEvent> queue = getQueue();
 		Collections.shuffle(slotsToFill);
 
 		while (!slotsToFill.isEmpty() && !queue.isEmpty()) {
 			ActualEvent event = queue.remove();
-			
+
 			List<Photo> photosInEvent = (horizontalPhotos) ? event.horizontalPhotos() : event.verticalPhotos(); 
-			
+
 			if (!photosInEvent.isEmpty()) { // horizontal photos in event
 				Random random = new Random(new Date().getTime());
 				int rand = random.nextInt(photosInEvent.size()); 
 				template.getSlot(slotsToFill.remove(0)).assignToPhoto(photosInEvent.remove(rand));
 			}
-			
+
 			if (!photosInEvent.isEmpty()) { // still horizontal photos left in event 
 				queue.add(event); // return to queue
 			}
 		}
-		
+
 		if (!slotsToFill.isEmpty()) { // events ran out before full population
 			return false;
 		}
@@ -150,7 +150,7 @@ public class BlockCollageBuilder {
 	public Photo BuildCollage() {
 
 		Canvas canvas = null;
-		FileOutputStream fos = null;
+
 		Bitmap bmpBase = null;
 
 		bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
@@ -166,105 +166,25 @@ public class BlockCollageBuilder {
 			}
 		}
 
-		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "Pictures");
-		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Output");
-		File file = null;
-
+		File collageFile = null;
 		Calendar calendar = Calendar.getInstance();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
-		file = new File
-				(testsDir, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
-		
-		// Save Bitmap to File
-		try	{
-			fos = new FileOutputStream(file);
-			bmpBase.compress(Bitmap.CompressFormat.JPEG, 70, fos);
 
-			fos.flush();
-			fos.close();
-			fos = null;
-
-			bmpBase.recycle();
-			bmpBase = null;
+		try {
+			collageFile = saveCollage(bmpBase, calendar.getTime()); 
 		}
-		catch (IOException e) {
-			Log.e(TAG, "Error when saving collage file +" + file.getPath());
+		catch (IOException exception) {
+			Log.e(TAG, "Error when saving collage file");
 			// TODO: notify user about error in saving collage
-			file = null;
-			e.printStackTrace();
+			return null;
 		}
+		
+		clearProcessPhotos(); // clear photos in container so they are not used again
 
-		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
+		return new Photo(calendar.getTime(), 3264, 2488, null, collageFile.getAbsolutePath());
 	}
 
-	private void addSlotImageToCanvas(Canvas canvas, Slot slot) {
 
-		// get Image bitmap
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		//		Bitmap bitmap = BitmapFactory.decodeFile(slot.getPhoto().getFilePath());
-		Bitmap bitmap = decodeScaledBitmapFromSdCard(slot.getPhoto().getFilePath(), slot.getPhoto().getWidth(), slot.getPhoto().getWidth());
 
-		// resize image
-		int[] dimensions = slot.getProportionateDimensionsForSlot(bitmap.getWidth(), bitmap.getHeight());
-		bitmap = Bitmap.createScaledBitmap(bitmap, dimensions[0], dimensions[1], true);
 
-		// crop image
-		bitmap = Bitmap.createBitmap(bitmap, 0,0, (int)slot.getSlotWidth(), (int) slot.getSlotHeight());
 
-		// draw bitmap onto canvas
-		PixelPoint topleftPixelPoint = slot.getTopLeft();
-		PixelPoint bottomRightPixelPoint = slot.getBottomRight();
-
-		canvas.drawBitmap(bitmap,
-				new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()), // take all source photo
-				new Rect(topleftPixelPoint.getX(), // place in output photo
-						topleftPixelPoint.getY(),
-						bottomRightPixelPoint.getX(), 
-						bottomRightPixelPoint.getY()), 
-						null);
-
-		//free bitmap
-		bitmap.recycle();
-		bitmap = null;
-	}
-
-	private Bitmap decodeScaledBitmapFromSdCard(String filePath,
-			int reqWidth, int reqHeight) {
-
-		// First decode with inJustDecodeBounds=true to check dimensions
-		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(filePath, options);
-
-		// Calculate inSampleSize
-		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-		// Decode bitmap with inSampleSize set
-		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeFile(filePath, options);
-	}
-
-	private int calculateInSampleSize(
-			BitmapFactory.Options options, int reqWidth, int reqHeight) {
-		// Raw height and width of image
-		final int height = options.outHeight;
-		final int width = options.outWidth;
-		int inSampleSize = 1;
-
-		if (height > reqHeight || width > reqWidth) {
-
-			// Calculate ratios of height and width to requested height and width
-			final int heightRatio = Math.round((float) height / (float) reqHeight);
-			final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-			// Choose the smallest ratio as inSampleSize value, this will guarantee
-			// a final image with both dimensions larger than or equal to the
-			// requested height and width.
-			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-		}
-
-		return inSampleSize;
-	}
- 
 }
