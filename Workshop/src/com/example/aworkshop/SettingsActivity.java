@@ -37,14 +37,14 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+//	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 
 
 	// public static fields
 	public static Context CONTEXT = null;
-	public static int COLLAGE_TYPE = 1;
+	public static int COLLAGE_TYPE = 2;
 
 	// global fields
 	PhotoListenerThread observer;

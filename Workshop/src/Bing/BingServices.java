@@ -19,10 +19,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
+
+import android.graphics.Point;
 import android.os.Environment;
 import android.util.Log;
 
 import Common.ActualEvent;
+import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.GPSPoint;
 
@@ -37,8 +40,10 @@ public class BingServices {
 	 * @param height height in pixels
 	 * @return StaticMap, or NULL if map could not be created
 	 */
-	public static StaticMap getStaticMap(List<GPSPoint> points, int width, int height) {
+	public static StaticMap getStaticMap(ActualEventsBundle bundle, int width, int height) {
 
+		List<GPSPoint> points = getImagesPointsList(bundle.getActualEvents());
+		
 		StaticMap map = null;
 
 		if (points.size()  > 0) { // Request only iff there is at least one photo
