@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import ActivationManager.DedicatedRequest;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import android.graphics.Bitmap;
