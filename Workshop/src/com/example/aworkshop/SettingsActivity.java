@@ -10,6 +10,7 @@ import Common.ActualEvent;
 import Common.Photo;
 import Common.PhotoFilter;
 import Common.TestsClass;
+import Generator.AbstractTemplate;
 import Generator.LocatePicturesWithMap.PointsTuple;
 import Partitioning.Cluster;
 import Partitioning.DBScan;
@@ -37,15 +38,14 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
-	private static final int MAP_TYPE = 1;
-	private static final int BLOCK_TYPE = 2;
+
 
 	// public static fields
 	public static Context CONTEXT = null;
 	public static int COLLAGE_TYPE = 1;
-	
+
 	// global fields
 	PhotoListenerThread observer;
 
@@ -83,34 +83,34 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 
 
-//		//		//		Omri's code
-//		//
-//		File directory = new File(PHOTO_DIR);
-//		if (!directory.exists())
-//			return;
-//		File[] arrayOfPic =  directory.listFiles();
-//		Photo tempPhoho = null;
-//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-//		for (File file : arrayOfPic)
-//		{
-//			try
-//			{
-//				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-//			}
-//			catch (Exception ex)
-//			{
-//			}
-//			if (tempPhoho != null)
-//				photosToCluster.add(tempPhoho);
-//		}
-//		DBScan algorithmDbScan = new DBScan(photosToCluster);
-//		List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
-//
-//		ActualEvent event = new ActualEvent(clusterts.get(0));
-//		TestDBScan dbScanTester = new TestDBScan();
-//		dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
-//		//				return;
-//		//		
+		//		//		//		Omri's code
+		//		//
+		//		File directory = new File(PHOTO_DIR);
+		//		if (!directory.exists())
+		//			return;
+		//		File[] arrayOfPic =  directory.listFiles();
+		//		Photo tempPhoho = null;
+		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		//		for (File file : arrayOfPic)
+		//		{
+		//			try
+		//			{
+		//				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+		//			}
+		//			catch (Exception ex)
+		//			{
+		//			}
+		//			if (tempPhoho != null)
+		//				photosToCluster.add(tempPhoho);
+		//		}
+		//		DBScan algorithmDbScan = new DBScan(photosToCluster);
+		//		List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
+		//
+		//		ActualEvent event = new ActualEvent(clusterts.get(0));
+		//		TestDBScan dbScanTester = new TestDBScan();
+		//		dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
+		//		//				return;
+		//		//		
 
 	}
 
@@ -142,7 +142,31 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			if (checked) {
 				offButtonClicked();
 			}
+		default: {
+			
+		}
+		}
+	}
 
+	public void onTypeRadioButtonClicked(View view) {
+		lastCheckedButton = (RadioButton) view;
+		boolean checked = lastCheckedButton.isChecked();
+
+		// Check which radio button was clicked
+		switch(view.getId()) {
+		case R.id.radioMapType:
+			if (checked) {
+				mapTypeButtonClicked();
+			}
+			break;
+		case R.id.radioBlocksType:
+			if (checked) {
+				blocksTypeButtonClicked();
+			}
+			break;
+		default: {
+
+		}
 		}
 	}
 
@@ -191,6 +215,14 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		thread.run();
 
+	}
+
+	private void mapTypeButtonClicked() {
+		COLLAGE_TYPE = AbstractTemplate.MAP_TYPE;
+	}
+
+	private void blocksTypeButtonClicked() {
+		COLLAGE_TYPE = AbstractTemplate.BLOCK_TYPE;
 	}
 
 	private void turnOffSmartMode() {

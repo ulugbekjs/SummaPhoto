@@ -79,5 +79,12 @@ public class MapCollageBuilder extends AbstractBuilder{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public DedicatedRequest setTemplate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

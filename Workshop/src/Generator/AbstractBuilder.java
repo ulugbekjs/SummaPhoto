@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import ActivationManager.DedicatedRequest;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.PhotoContainer;
@@ -31,6 +32,8 @@ public abstract class AbstractBuilder {
 	
 	public abstract boolean populateTemplate();
 	public abstract Photo buildCollage();
+	public abstract DedicatedRequest setTemplate();
+
 
 	protected Bitmap decodeScaledBitmapFromSdCard(String filePath,
 			int reqWidth, int reqHeight) {

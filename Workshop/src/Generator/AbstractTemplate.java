@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractTemplate {
+	
+	public static final int MAP_TYPE = 1;
+	public static final int BLOCK_TYPE = 2;
 
 	//static fields
-	public static final int TEMPLATE_1 = 1;
-	public static final int TEMPLATE_2 = 2;
-	public static final int TEMPLATE_3 = 3;
+	private static final int TEMPLATE_1 = 1;
+	private static final int TEMPLATE_2 = 2;
+	private static final int TEMPLATE_3 = 3;
 
 	//protected instance fields
 	protected Slot[] slots = null; // slots[0] == Top Left Photo
