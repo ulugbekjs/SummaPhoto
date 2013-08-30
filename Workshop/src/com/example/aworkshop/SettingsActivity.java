@@ -7,18 +7,20 @@ import java.util.List;
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeService;
 import Common.ActualEvent;
+import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.PhotoFilter;
 import Common.TestsClass;
 import Generator.AbstractTemplate;
-import Generator.LocatePicturesWithMap.PointsTuple;
+import Generator.LocatePicturesWithMap.SlotPushPinTuple;
+import Generator.MapCollageBuilder;
 import Partitioning.Cluster;
 import Partitioning.DBScan;
+import Partitioning.PhotoObjectForClustering;
 import Partitioning.TestDBScan;
 import PhotoListener.PhotoListenerThread;
 import android.R.integer;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -38,7 +40,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 //	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests3" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 
 
@@ -67,6 +69,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		//		// 		Yonatan's code
 		//		//
 		//
+		/**
 		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
 
@@ -76,41 +79,41 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
-		TestsClass testsClass = new TestsClass();
-		testsClass.testLocatePictuersOnMapList2();
-
-
-
-
+	**/
 
 		//		//		//		Omri's code
 		//		//
-		//		File directory = new File(PHOTO_DIR);
-		//		if (!directory.exists())
-		//			return;
-		//		File[] arrayOfPic =  directory.listFiles();
-		//		Photo tempPhoho = null;
-		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		//		for (File file : arrayOfPic)
-		//		{
-		//			try
-		//			{
-		//				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-		//			}
-		//			catch (Exception ex)
-		//			{
-		//			}
-		//			if (tempPhoho != null)
-		//				photosToCluster.add(tempPhoho);
-		//		}
-		//		DBScan algorithmDbScan = new DBScan(photosToCluster);
-		//		List<Cluster> clusterts = algorithmDbScan.runAlgorithmClusters();
-		//
-		//		ActualEvent event = new ActualEvent(clusterts.get(0));
-		//		TestDBScan dbScanTester = new TestDBScan();
-		//		dbScanTester.savePicturesAccordingToClusters(clusterts, PHOTO_DIR);
-		//		//				return;
-		//		//		
+				File directory = new File(PHOTO_DIR);
+				if (!directory.exists())
+					return;
+				File[] arrayOfPic =  directory.listFiles();
+				Photo tempPhoho = null;
+				List<Photo> photosToCluster = new LinkedList<Photo>(); 
+				for (File file : arrayOfPic)
+				{
+					try
+					{
+						tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+					}
+					catch (Exception ex)
+					{
+					}
+					if (tempPhoho != null)
+						photosToCluster.add(tempPhoho);
+				}
+				List<ActualEvent> events = new LinkedList<ActualEvent>();
+				Cluster tempCluster;
+				for (Photo p :photosToCluster)
+				{
+					tempCluster = new Cluster();
+					tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+					events.add(new ActualEvent(tempCluster));
+				}
+				ActualEventsBundle bundle = new ActualEventsBundle(events);
+				MapCollageBuilder builder = new MapCollageBuilder(bundle);
+				builder.buildCollage();
+				return;
+				//		
 
 	}
 

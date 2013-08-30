@@ -40,9 +40,9 @@ public class BingServices {
 	 * @param height height in pixels
 	 * @return StaticMap, or NULL if map could not be created
 	 */
-	public static StaticMap getStaticMap(ActualEventsBundle bundle, int width, int height) {
+	public static StaticMap getStaticMap(List<Photo> photos, int width, int height) {
 
-		List<GPSPoint> points = getImagesPointsList(bundle.getActualEvents());
+		List<GPSPoint> points = getImagesPointsList(photos);
 		
 		StaticMap map = null;
 
@@ -76,14 +76,14 @@ public class BingServices {
 	 * creates a List of Points to be sent to BING from all current ActualEvents in ActualEventContainer
 	 * @return List of all Points in ActualEventContainer
 	 */
-	public static List<GPSPoint> getImagesPointsList(List<ActualEvent> events) {
+	public static List<GPSPoint> getImagesPointsList(List<Photo> photos) {
 		List<GPSPoint> points = new ArrayList<GPSPoint>();
 		//TODO: this should work with the ActualEventContainer
-		for (ActualEvent event: events) {
-			for (Photo photo : event.getEventPhotos()) {
-				points.add(photo.getLocation());
-			}
+
+		for (Photo photo : photos) {
+			points.add(photo.getLocation());
 		}
+
 		return points;
 	}
 

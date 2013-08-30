@@ -8,12 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.Timestamp;
 import java.util.List;
 
-import android.R.string;
-
 import Common.Photo;
+
 
 public class TestDBScan {
 
@@ -23,6 +21,7 @@ public class TestDBScan {
 	 * pictures according to clustreing desicion
 	 */
 
+	/**
 	public Boolean savePicturesAccordingToClusters(List<Cluster> clustersList,
 			String memoryPathInDevice) {
 		String subDirectoryPathString;
@@ -56,7 +55,7 @@ public class TestDBScan {
 		}
 		return true;
 	}
-
+**/
 	/** save one photo to memory. newFilePath is the new path for saving the photo **/
 	private Boolean savePhotoToMemory(Photo p, String newFilePath) {
 		File originalFile;

@@ -1,80 +1,89 @@
 package Generator;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
-import android.R.bool;
-import android.R.integer;
+import Bing.Pushpin;
 
-import com.example.aworkshop.SettingsActivity;
 
 
 /** This class provides methods to locate the different pictures around the map in good positions **/
 public class LocatePicturesWithMap {
 
+
+	private HashMap<PixelPoint,Slot> pixelPointToSlotDictionary;
+	private HashMap<PixelPoint,Pushpin> pixelPointToPushPinDictionary;
+
 	// This set includes the location of each picture on the map 
-	private Set<PixelPoint> picturesOnMapSet;
+	private Set<PixelPoint> pushPinPointsSet;
 	// This set includes the location of each different points on the frame around the map
-	private Set<PixelPoint> pointsOnFrameSet;
+	private Set<PixelPoint> slotPointsSet;
 
 
 	// Subsets of pointsOnFrameSet and  picturesOnMapSet for recursive algorithm issues
-	private Set<PixelPoint> firstSebSetofPointsOnFrameSet;
-	private Set<PixelPoint> firstSubSetOfPicturesOnMapSet;
-	private Set<PixelPoint> secondSubSetofPointsOnFrameSet;
-	private Set<PixelPoint> secondSubSetOfPicturesOnMapSet;
+	private Set<PixelPoint> firstSubSetofSlotsPoints;
+	private Set<PixelPoint> firstSubSetOfPushPinPoints;
+	private Set<PixelPoint> secondSubSetofSlotsPoints;
+	private Set<PixelPoint> secondSubSetOfPushPinPoints;
 
-	private List<PointsTuple> pointsTupleList;
+	private List<SlotPushPinTuple> slotsToPushPinList;
 
-	public LocatePicturesWithMap ( Set<PixelPoint> picturesOnMapSet, Set<PixelPoint> pointsOnFrameSet )
+	public LocatePicturesWithMap (HashMap<PixelPoint,Slot> pixelPointToSlotDictionary,
+			HashMap<PixelPoint,Pushpin> pixelPointToPushPinDictionary)
 	{
-		this.picturesOnMapSet =  picturesOnMapSet;
-		this.pointsOnFrameSet = pointsOnFrameSet;
+		this.pixelPointToPushPinDictionary = pixelPointToPushPinDictionary;
+		this.pixelPointToSlotDictionary = pixelPointToSlotDictionary;
+		this.pushPinPointsSet =  pixelPointToPushPinDictionary.keySet();
+		this.slotPointsSet = pixelPointToSlotDictionary.keySet();
 	}
 
-	/*
-	 * This function returns a list of PointsTuple: each tuple contains one point from the map and one point on the frame.
-	 * After drawing a line between the points in each tuple there WONT be any intersections between the lines.
+	/**
+	 * @return list of slotsPushPinTuple which indicated contains the data which pushPin related to every slot in the template
 	 */
-	public List<PointsTuple> matchPictureOnMapToPointOnFrame ()
+	public List<SlotPushPinTuple> matchPictureOnMapToPointOnFrame ()
 	{
-		pointsTupleList = new LinkedList<PointsTuple>();
-		splitSetsEqualPointsTuple (picturesOnMapSet,pointsOnFrameSet);
-		return pointsTupleList;
+		slotsToPushPinList = new LinkedList<SlotPushPinTuple>();
+		splitSetsEqualPointsTuple (pushPinPointsSet,slotPointsSet);
+		return slotsToPushPinList;
 	}
 
-	private void splitSetsEqualPointsTuple (Set<PixelPoint> picturesOnMapSubSet, Set<PixelPoint> pointsOnFrameSubSetSet)
+	private void splitSetsEqualPointsTuple (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet)
 	{
-		PixelPoint closestPoint;
-		if (picturesOnMapSubSet.size() == 0)
+		PixelPoint closestSlot;
+		if (pushPinsSubSet.size() == 0)
 			return;
-		if (picturesOnMapSubSet.size() == 1){
-			pointsTupleList.add(new PointsTuple(picturesOnMapSubSet.iterator().next(),pointsOnFrameSubSetSet.iterator().next()));
+		if (pushPinsSubSet.size() == 1){
+			PixelPoint lastPointofMapSet = pushPinsSubSet.iterator().next();
+			PixelPoint lastPointOnFramePixelPoint = slotsSubSet.iterator().next();
+			slotsToPushPinList.add(new SlotPushPinTuple (lastPointofMapSet, pixelPointToPushPinDictionary.get(lastPointofMapSet),
+					lastPointOnFramePixelPoint,pixelPointToSlotDictionary.get(lastPointOnFramePixelPoint)));
 			return;
 		}
-		
-		
-		for (PixelPoint pointInA : picturesOnMapSubSet) {
+
+
+		for (PixelPoint pushPinPoint : pushPinsSubSet) {
 			// First try to split the sets with closest point in pointsOnFrameSubSetSet to the chosen point
-			closestPoint = findClosestPointInSet(pointInA,pointsOnFrameSubSetSet);
-			if (isSplitingEqual(picturesOnMapSubSet, pointsOnFrameSubSetSet,pointInA, closestPoint))
+			closestSlot = findClosestPointInSet(pushPinPoint,slotsSubSet);
+			if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint, closestSlot))
 			{
-				pointsTupleList.add(new PointsTuple(pointInA, closestPoint));
-				splitSetsEqualPointsTuple (firstSebSetofPointsOnFrameSet,firstSubSetOfPicturesOnMapSet);
-				splitSetsEqualPointsTuple (secondSubSetofPointsOnFrameSet, secondSubSetOfPicturesOnMapSet);
+				slotsToPushPinList.add(new SlotPushPinTuple(pushPinPoint, pixelPointToPushPinDictionary.get(pushPinPoint), 
+						closestSlot,pixelPointToSlotDictionary.get(closestSlot) ));
+				splitSetsEqualPointsTuple (firstSubSetofSlotsPoints,firstSubSetOfPushPinPoints);
+				splitSetsEqualPointsTuple (secondSubSetofSlotsPoints, secondSubSetOfPushPinPoints);
 				return;
 			}
 			else {
-				for (PixelPoint pointInB : pointsOnFrameSubSetSet)
+				for (PixelPoint slotPoint : slotsSubSet)
 				{
-					if (isSplitingEqual(picturesOnMapSubSet, pointsOnFrameSubSetSet,pointInA , pointInB))
+					if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint , slotPoint))
 					{
-						pointsTupleList.add(new PointsTuple(pointInA, pointInB));
-						splitSetsEqualPointsTuple (firstSebSetofPointsOnFrameSet,firstSubSetOfPicturesOnMapSet);
-						splitSetsEqualPointsTuple (secondSubSetofPointsOnFrameSet, secondSubSetOfPicturesOnMapSet);
+						slotsToPushPinList.add(new SlotPushPinTuple(pushPinPoint,pixelPointToPushPinDictionary.get(pushPinPoint), 
+								slotPoint,pixelPointToSlotDictionary.get(slotPoint)));
+						splitSetsEqualPointsTuple (firstSubSetofSlotsPoints,firstSubSetOfPushPinPoints);
+						splitSetsEqualPointsTuple (secondSubSetofSlotsPoints, secondSubSetOfPushPinPoints);
 						return;
 					}
 				}
@@ -107,99 +116,103 @@ public class LocatePicturesWithMap {
 
 
 	/**
-	 * @param points in sub set of picturesOnMapSet
-	 * @param point in sub set of pointsOnFrameSet
-	 * @param selected point in  sub set of picturesOnMapSet
-	 * @param selected point in  sub set of pointsOnFrameSet
-	 * @return True if the line between pointInA and pointInB divides the 2D plate in such way that
-	 * the number of point from  picturesOnMapSet that are "above" the line equals to number of points in pointsOnFrameSet 
-	 * that are above line. If the method returns true, it updates firstSubSetofPointsOnFramSet, firstSubSetOfPicturesOnMapSet 
-	 * secondSubSetofPointsOnFramSet, secondSubSetOfPicturesOnMapSet  with relevant point from group A and group B.
+	 * @param pushPinsSubSet - sub set of pushPins that had to be matched to slots
+	 * @param slotsSubSet - sub set of slots that had to me matched to push pins
+	 * @param pushPinCandidate - push pin candidate
+	 * @param slotCandidate - slot candidate
+	 * @return True if the pushPin candidate and slot candidate split the plane in such way that the line between them won't
+	 * intersect other lines between pushPins and slots
 	 */
-	private Boolean isSplitingEqual (Set<PixelPoint> picturesOnMapSubSet, Set<PixelPoint> pointsOnFrameSubSetSet,
-			PixelPoint pointInA, PixelPoint pointInB)
+	private Boolean isSplitingEqual (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
+			PixelPoint pushPinCandidate, PixelPoint slotCandidate)
 	{
 		double slope;
-		Integer numberOfPointsInGroupAAboveLine = 0;
-		Integer numberOfPointsInGroupBAboveLine = 0;
-		
+		Integer numberOfPushPinsAboveLine = 0;
+		Integer numberOfSlotsAboveLine = 0;
+
 		//initiating sub-sets which will be used for recursion
-		firstSubSetOfPicturesOnMapSet = new HashSet<PixelPoint>();
-		secondSubSetOfPicturesOnMapSet = new HashSet<PixelPoint>();
-		firstSebSetofPointsOnFrameSet = new HashSet<PixelPoint>();
-		secondSubSetofPointsOnFrameSet = new HashSet<PixelPoint>();
-		
-		Boolean isUndefinedSlope = pointInA.getX() == pointInB.getX();
-		
+		firstSubSetOfPushPinPoints = new HashSet<PixelPoint>();
+		secondSubSetOfPushPinPoints = new HashSet<PixelPoint>();
+		firstSubSetofSlotsPoints = new HashSet<PixelPoint>();
+		secondSubSetofSlotsPoints = new HashSet<PixelPoint>();
+
+		Boolean isUndefinedSlope = pushPinCandidate.getX() == slotCandidate.getX();
+
 		// the equation of the line between those points is: Y = slope * x + constant
 		if (!isUndefinedSlope)
 		{
-			Double deltaY;
-			Double deltaX;
-			if (pointInA.getX() > pointInB.getX() ){
-			 deltaY = (double) (pointInA.getY() - pointInB.getY());
-			 deltaX = (double) (pointInA.getX() - pointInB.getX());
-			}
-			else {
-				 deltaY = (double) (pointInB.getY() - pointInA.getY() );
-				 deltaX = (double) (pointInB.getX()- pointInA.getX());
-			}
-			slope = deltaY / deltaX;
-			double constant = pointInA.getY() - slope * pointInA.getX();
-			for (PixelPoint tempPointInA :picturesOnMapSubSet )
+			slope = calculateSlope (pushPinCandidate,slotCandidate );
+			double constant = pushPinCandidate.getY() - slope * pushPinCandidate.getX();
+			for (PixelPoint pushPin :pushPinsSubSet)
 			{
-				if (tempPointInA == pointInA)
+				if (pushPin == pushPinCandidate)
 					continue;
-				if (isPointAboveLine(tempPointInA, slope, constant))
+				if (isPointAboveLine(pushPin, slope, constant))
 				{
-					numberOfPointsInGroupAAboveLine++;
-					firstSubSetOfPicturesOnMapSet.add(tempPointInA);
+					numberOfPushPinsAboveLine++;
+					firstSubSetOfPushPinPoints.add(pushPin);
 				}
 				else {
-					secondSubSetOfPicturesOnMapSet.add(tempPointInA);
+					secondSubSetOfPushPinPoints.add(pushPin);
 				}
 			}
-			for (PixelPoint tempPointInB :pointsOnFrameSubSetSet )
+			for (PixelPoint slot :slotsSubSet )
 			{
-				if (tempPointInB == pointInB)
+				if (slot == slotCandidate)
 					continue;
-				if (isPointAboveLine(tempPointInB, slope, constant))
+				if (isPointAboveLine(slot, slope, constant))
 				{
-					numberOfPointsInGroupBAboveLine++;
-					firstSebSetofPointsOnFrameSet.add(tempPointInB);
+					numberOfSlotsAboveLine++;
+					firstSubSetofSlotsPoints.add(slot);
 				}
 				else {
-					secondSubSetofPointsOnFrameSet.add(tempPointInB);
+					secondSubSetofSlotsPoints.add(slot);
 				}
 			}
 		}
 		else 
 		{
-			double verticalLineX = pointInA.getX();
-			for (PixelPoint pointinA :picturesOnMapSubSet )
+			return isSplitingEqualUndefinedSlope (pushPinsSubSet, slotsSubSet, pushPinCandidate, slotCandidate);
+		}
+		return (numberOfPushPinsAboveLine == numberOfSlotsAboveLine);
+	}
+	/**
+	 * @param pushPinsSubSet - sub set of pushPins that had to be matched to slots
+	 * @param slotsSubSet - sub set of slots that had to me matched to push pins
+	 * @param pushPinCandidate - push pin candidate
+	 * @param slotCandidate - slot candidate
+	 * @return True if the pushPin candidate and slot candidate split the plane in such way that the line between them won't
+	 * intersect other lines between pushPins and slots
+	 */
+	private Boolean isSplitingEqualUndefinedSlope (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
+			PixelPoint pushPinCandidate, PixelPoint slotCandidate)
+	{
+		Integer numberOfPushPinsAboveLine = 0;
+		Integer numberOfSlotsAboveLine = 0;
+		double verticalLineX = pushPinCandidate.getX();
+		for (PixelPoint pushPin :pushPinsSubSet )
+		{
+			if (pushPinCandidate.getX() > verticalLineX)
 			{
-				if (pointInA.getX() > verticalLineX)
-				{
-					numberOfPointsInGroupAAboveLine++;
-					firstSubSetOfPicturesOnMapSet.add(pointinA);
-				}
-				else {
-					secondSubSetOfPicturesOnMapSet.add(pointinA);
-				}
+				numberOfPushPinsAboveLine++;
+				firstSubSetOfPushPinPoints.add(pushPin);
 			}
-			for (PixelPoint pointinB :pointsOnFrameSubSetSet )
-			{
-				if (pointinB.getX() > verticalLineX)
-				{
-					numberOfPointsInGroupAAboveLine++;
-					firstSubSetOfPicturesOnMapSet.add(pointinB);
-				}
-				else {
-					secondSubSetOfPicturesOnMapSet.add(pointinB);
-				}
+			else {
+				secondSubSetOfPushPinPoints.add(pushPin);
 			}
 		}
-		return (numberOfPointsInGroupAAboveLine == numberOfPointsInGroupBAboveLine);
+		for (PixelPoint slot :slotsSubSet )
+		{
+			if (slot.getX() > verticalLineX)
+			{
+				numberOfSlotsAboveLine++;
+				firstSubSetofSlotsPoints.add(slot);
+			}
+			else {
+				secondSubSetofSlotsPoints.add(slot);
+			}
+		}
+		return (numberOfSlotsAboveLine == numberOfPushPinsAboveLine);
 	}
 
 
@@ -210,31 +223,72 @@ public class LocatePicturesWithMap {
 			return true;
 		return false;
 	}
-	
-	
 
-
-
-	public class PointsTuple
+	/**
+	 * 
+	 * @param pointA - first point
+	 * @param PointB - second point
+	 * @return the slope of the line which connect those two points
+	 */
+	private double calculateSlope (PixelPoint pointA, PixelPoint PointB)
 	{
-		private PixelPoint pointOnMap;
-		private PixelPoint pointOnFrame;
+		Double deltaY;
+		Double deltaX;
+		Double slope;
+		if (pointA.getX() > PointB.getX() ){
+			deltaY = (double) (pointA.getY() - PointB.getY());
+			deltaX = (double) (pointA.getX() - PointB.getX());
+		}
+		else {
+			deltaY = (double) (PointB.getY() - pointA.getY() );
+			deltaX = (double) (PointB.getX()- pointA.getX());
+		}
+		slope = deltaY / deltaX;
+		return slope;
+	}
 
-		public PointsTuple (PixelPoint pointOnMap, PixelPoint pointOnFrame)
+	/**
+	 * This class represents a slot-pushPin tupple, which indicates that in specific collage a pushPin is connected to a slot
+	 * @author omri
+	 *
+	 */
+	public class SlotPushPinTuple
+	{
+		private PixelPoint pushPinPoint;
+		private PixelPoint slotConnectionPoint;
+		private Slot slot;
+		private Pushpin pushPin;
+
+
+		public SlotPushPinTuple (PixelPoint pushPinPoint, Pushpin pushpin, PixelPoint slotConnectionPoint,  Slot slot)
 		{
-			this.pointOnMap = pointOnMap;
-			this.pointOnFrame = pointOnFrame;
+			this.pushPinPoint = pushPinPoint;
+			this.slotConnectionPoint = slotConnectionPoint;
+			this.pushPin = pushpin;
+			this.slot = slot;	
 		}
 
 		public PixelPoint getPointOnMapPixelPoint ()
 		{
-			return pointOnMap;
+			return pushPinPoint;
 		}
 
 		public PixelPoint getPointOnFrame ()
 		{
-			return pointOnFrame;
+			return slotConnectionPoint;
 		}
+
+		public Slot getSlot ()
+		{
+			return this.slot;
+		}
+
+
+		public Pushpin getPushpin()
+		{
+			return this.pushPin;
+		}
+
 	}
 
 
