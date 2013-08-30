@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Set;
 
 import ActivationManager.DedicatedRequest;
+<<<<<<< HEAD
 import Bing.Pushpin;
+=======
+>>>>>>> 90f8a1fc5b2538a73cc6a0b8f1aa5ea1b7910d27
 import Common.ActualEventsBundle;
 import Common.Photo;
 import android.R.integer;

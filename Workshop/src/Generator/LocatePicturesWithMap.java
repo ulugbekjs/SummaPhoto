@@ -24,7 +24,6 @@ public class LocatePicturesWithMap {
 	// Subsets of pointsOnFrameSet and  picturesOnMapSet for recursive algorithm issues
 	private Set<PixelPoint> firstSebSetofPointsOnFrameSet;
 	private Set<PixelPoint> firstSubSetOfPicturesOnMapSet;
-
 	private Set<PixelPoint> secondSubSetofPointsOnFrameSet;
 	private Set<PixelPoint> secondSubSetOfPicturesOnMapSet;
 
