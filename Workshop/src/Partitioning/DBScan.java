@@ -8,6 +8,11 @@ import java.util.Queue;
 
 import Common.*;
 
+
+/**
+ * This class provides an implementation for clustering the different photos that are retrieved from the activation manager 
+ * @author omri
+ */
 public class DBScan {
 
 	/*
@@ -21,6 +26,8 @@ public class DBScan {
 	private Hashtable<Double, PhotoObjectForClustering> unvisitedPhotos = null;
 	private Hashtable<Double, PhotoObjectForClustering> visitedPhotos = null;
 
+	
+	
 	public DBScan(List<Photo> photosData) {
 		PhotoObjectForClustering tempObject;
 		unvisitedPhotos = new Hashtable<Double, PhotoObjectForClustering>();
@@ -34,18 +41,21 @@ public class DBScan {
 		}
 		visitedPhotos = new Hashtable<Double, PhotoObjectForClustering>();
 	}
-
+	
+	
 	/**
-	 * Takes photos and sorts them to ActualEvents
+	 * Takes photos and sorts them to ActualEvents according to the algorithm
 	 * @return ActualEventBundle containing the events containing photos
 	 */
-	public ActualEventsBundle runAlgorithmClusters() {
+	public ActualEventsBundle runDBScanAlgorithm() {
 		List<Cluster> clustersList = new LinkedList<Cluster>();
 		PhotoObjectForClustering arbitraryUnvisitedPhoto;
+		
+		// continue the clustering operation while there are photos that are still unvisited
 		while (!unvisitedPhotos.isEmpty()) {
 			arbitraryUnvisitedPhoto = getArbitraryPhotoFromHashTableClustering(unvisitedPhotos);
 			moveToVisited(arbitraryUnvisitedPhoto);
-			Queue<PhotoObjectForClustering> neighborsList = regionQueryList(arbitraryUnvisitedPhoto);
+			Queue<PhotoObjectForClustering> neighborsList = getNeighbors(arbitraryUnvisitedPhoto);
 			if (neighborsList.size() < minNumberOfPointsInCluster) {
 				arbitraryUnvisitedPhoto.isNoise = true;
 			} else {
@@ -58,6 +68,11 @@ public class DBScan {
 		return getActualEventsList(clustersList);
 	}
 	
+	
+	/**
+	 * @param clusterList
+	 * @return ActualEventBundle which is constructed according to the clusters in list
+	 */
 	private ActualEventsBundle getActualEventsList(List<Cluster> clusterList) {
 		List<ActualEvent> events = new LinkedList<ActualEvent>();
 		for (Cluster cluster : clusterList) {
@@ -66,7 +81,14 @@ public class DBScan {
 		return new ActualEventsBundle(events);
 	}
 
-	private void expandCluster(Cluster c, PhotoObjectForClustering p,
+	/**
+	 * 
+	 * @param cluster
+	 * @param photo
+	 * @param neighbors
+	 * This method expand the cluster by iterating the photo's neighbors that might be added to the cluster
+	 */
+	private void expandCluster(Cluster cluster, PhotoObjectForClustering photo,
 			Queue<PhotoObjectForClustering> neighbors) {
 		if (neighbors != null) {
 			Queue<PhotoObjectForClustering> subNeighborsList;
@@ -76,14 +98,14 @@ public class DBScan {
 				neighbor = neighbors.remove();
 				if (!neighbor.isVisited) {
 					moveToVisited(neighbor);
-					subNeighborsList = regionQueryList(neighbor);
+					subNeighborsList = getNeighbors(neighbor);
 					if ((subNeighborsList != null)
 							&& (subNeighborsList.size() >= minNumberOfPointsInCluster)) {
 						neighbors.addAll(subNeighborsList);
 					}
 				}
 				if (neighbor.cluster == null) {
-					neighbor.addPointToCluster(c);
+					neighbor.addPointToCluster(cluster);
 				}
 			}
 		}
@@ -103,8 +125,7 @@ public class DBScan {
 		return false;
 	}
 
-	private Queue<PhotoObjectForClustering> regionQueryList(
-			PhotoObjectForClustering p) {
+	private Queue<PhotoObjectForClustering> getNeighbors(PhotoObjectForClustering p) {
 		Queue<PhotoObjectForClustering> photosEpsilonClose = new PriorityQueue<PhotoObjectForClustering>();
 		for (PhotoObjectForClustering photoCandidate : unvisitedPhotos.values()) {
 			if (isEpsilonDistanced(p, photoCandidate)) {

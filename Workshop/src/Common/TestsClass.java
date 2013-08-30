@@ -3,15 +3,12 @@ package Common;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-
-import Generator.LocatePicturesWithMap;
 import Generator.PixelPoint;
-import Generator.LocatePicturesWithMap.PointsTuple;
+import Generator.LocatePicturesWithMap.SlotPushPinTuple;
 
 public class TestsClass {
 	
-	public List<PointsTuple> testLocatePictuersOnMapList ()
+	public List<SlotPushPinTuple> testLocatePictuersOnMapList ()
 	{
 		Set<PixelPoint> firstSet = new HashSet<PixelPoint>();
 		firstSet.add(new PixelPoint(30, 60));
@@ -24,12 +21,12 @@ public class TestsClass {
 		secondSet.add(new PixelPoint(30, 40));
 		secondSet.add(new PixelPoint(30,45));
 		secondSet.add(new PixelPoint(30,55));
-		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(firstSet, secondSet);
-		List<LocatePicturesWithMap.PointsTuple> result = locatePicturesWithMap.matchPictureOnMapToPointOnFrame();
-		return result;
+		//LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(firstSet, secondSet);
+		//List<LocatePicturesWithMap.PointsTuple> result = locatePicturesWithMap.matchPictureOnMapToPointOnFrame();
+		return null;
 	
 	}
-	public List<PointsTuple> testLocatePictuersOnMapList2 ()
+	public List<SlotPushPinTuple> testLocatePictuersOnMapList2 ()
 	{
 		Set<PixelPoint> firstSet = new HashSet<PixelPoint>();
 		firstSet.add(new PixelPoint(1, 1));
@@ -44,9 +41,9 @@ public class TestsClass {
 		secondSet.add(new PixelPoint(13, 5));
 		secondSet.add(new PixelPoint(11, 1));
 	
-		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(firstSet, secondSet);
-		List<LocatePicturesWithMap.PointsTuple> result = locatePicturesWithMap.matchPictureOnMapToPointOnFrame();
-		return result;
+		//LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(firstSet, secondSet);
+		//List<LocatePicturesWithMap.PointsTuple> result = locatePicturesWithMap.matchPictureOnMapToPointOnFrame();
+		return null;
 	
 	}
 

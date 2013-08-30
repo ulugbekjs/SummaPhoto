@@ -35,4 +35,16 @@ public class GPSPoint  {
 	public String toString() {
 		return (latitude + "," + longitude);
 	}
+	
+	@Override
+	public boolean equals(Object other)
+	{
+		if (other == null)
+			return false;
+		if (!(other instanceof GPSPoint))
+			return false;
+		GPSPoint otherGPSPoint = (GPSPoint) other;
+		return ((otherGPSPoint.getLatitude() == latitude) && (otherGPSPoint.getLongitude() == longitude));
+	}
+	
 }

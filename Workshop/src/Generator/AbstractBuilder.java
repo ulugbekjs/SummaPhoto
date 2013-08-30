@@ -138,15 +138,5 @@ public abstract class AbstractBuilder {
 	}
 
 	
-	/** Naive implementation of choosing the actual photos that will populate the output **/
-	protected List<Photo> selectPhotosFromBundle ()
-	{
-		List<Photo> selectedPhotos = new LinkedList<Photo>();
-		for (ActualEvent event: bundle.getActualEvents())
-		{
-			// from each event choose first photo
-			selectedPhotos.add(event.getEventPhotos().get(0));
-		}
-		return selectedPhotos;
-	}
+	
 }

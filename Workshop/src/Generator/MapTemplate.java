@@ -26,11 +26,11 @@ public class MapTemplate extends AbstractTemplate{
 		super(slotsInTemplate);
 	}
 
-	public double getMapPixelWidth() {
+	public int getMapPixelWidth() {
 		return mapSlot.getSlotWidth();
 	}
 
-	public double getMapPixelHeight() {
+	public int getMapPixelHeight() {
 		return mapSlot.getSlotHeight();
 	}
 
@@ -67,6 +67,7 @@ public class MapTemplate extends AbstractTemplate{
 		}
 		return connectionPoints;
 	}
+	
 	
 	public static MapTemplate getTemplate(int num) {
 		MapTemplate template = null;

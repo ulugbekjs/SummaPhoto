@@ -1,5 +1,6 @@
 package Generator;
 
+import android.R.integer;
 import Common.Photo;
 
 /**
@@ -78,12 +79,15 @@ public class Slot{
 
 	
 	
-	public double getSlotWidth() {
-		return Math.abs(bottomRight.distanceFrom(new PixelPoint(topLeft.getX(), bottomRight.getY())));
+	public int getSlotWidth() {
+		
+		Double doubleValue = new Double(Math.abs(bottomRight.distanceFrom(new PixelPoint(topLeft.getX(), bottomRight.getY())))) ;
+		return doubleValue.intValue();
 	}
 
-	public double getSlotHeight() {
-		return Math.abs(bottomRight.distanceFrom(new PixelPoint(bottomRight.getX(), topLeft.getY())));
+	public int getSlotHeight() {
+		Double doubleValue = new Double( Math.abs(bottomRight.distanceFrom(new PixelPoint(bottomRight.getX(), topLeft.getY()))));
+		return doubleValue.intValue();
 	}
 
 	/**

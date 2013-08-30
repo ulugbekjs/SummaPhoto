@@ -1,6 +1,7 @@
 package Common;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -118,4 +119,12 @@ public class ActualEvent{
 			verticalPhotos.add(photo);
 		}
 	}
+	
+	/** Naive implementation of choosing the actual photos that will populate the output **/
+	public Photo selectPhotoFromEvent()
+	{
+		return horizontalPhotos.get(0);
+	}
+	
+	
 }
