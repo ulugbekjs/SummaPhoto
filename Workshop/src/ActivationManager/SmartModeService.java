@@ -106,7 +106,7 @@ public class SmartModeService {
 		}
 		else { 
 			builder.populateTemplate();
-			return builder.BuildCollage();
+			return builder.buildCollage();
 		}
 
 	}
