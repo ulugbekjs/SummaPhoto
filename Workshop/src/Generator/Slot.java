@@ -13,6 +13,8 @@ public class Slot{
 	private PixelPoint bottomRight;
 	private PixelPoint topRight;
 	private PixelPoint bottomLeft;
+	
+	private PixelPoint connectingLinePoint; // the point where the lint starts for MapCollage
 
 	private boolean horizontal;	
 	private Photo photo = null; // the photo that fills the slot
@@ -23,6 +25,11 @@ public class Slot{
 		this.topRight = new PixelPoint(bottomRight.getX(), topLeft.getY());
 		this.bottomLeft = new PixelPoint(topLeft.getX(), bottomRight.getY());
 		this.horizontal = (getSlotWidth() > getSlotHeight()); 
+	}
+	
+	public Slot(PixelPoint topLeft, PixelPoint bottomRight, PixelPoint connectingLinePoint) {
+		this(topLeft, bottomRight);
+		this.connectingLinePoint = connectingLinePoint;
 	}
 
 	public void assignToPhoto(Photo photo) {
@@ -41,6 +48,7 @@ public class Slot{
 	public PixelPoint getTopLeft() {
 		return this.topLeft;
 	}
+	
 
 	public PixelPoint getTopRight() {
 		return this.topRight;
@@ -54,10 +62,22 @@ public class Slot{
 		return this.bottomRight;
 	}
 
+	
+	public PixelPoint getConnectingLinePoint() {
+		return this.connectingLinePoint;
+	}
+	
 	public boolean isHorizontal() {
 		return this.horizontal;
 	}
+	
+	public boolean hasConnectingLinePoint()
+	{
+		return (this.connectingLinePoint != null);
+	}
 
+	
+	
 	public double getSlotWidth() {
 		return Math.abs(bottomRight.distanceFrom(new PixelPoint(topLeft.getX(), bottomRight.getY())));
 	}

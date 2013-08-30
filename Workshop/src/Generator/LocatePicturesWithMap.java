@@ -21,7 +21,7 @@ public class LocatePicturesWithMap {
 	private Set<PixelPoint> pointsOnFrameSet;
 
 
-	// Subsets of above sets for recursive algorithm issues
+	// Subsets of pointsOnFrameSet and  picturesOnMapSet for recursive algorithm issues
 	private Set<PixelPoint> firstSebSetofPointsOnFrameSet;
 	private Set<PixelPoint> firstSubSetOfPicturesOnMapSet;
 
@@ -204,7 +204,7 @@ public class LocatePicturesWithMap {
 	}
 
 
-	/** This methods return checks whether the point is above the line represented by the slope and constant **/ 
+	/** This methods checks whether the point is above the line represented by the slope and constant **/ 
 	private Boolean isPointAboveLine (PixelPoint point, double slope, double constant)
 	{
 		if (point.getX() * slope + constant < point.getY())

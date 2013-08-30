@@ -1,8 +1,9 @@
 package Generator;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
-import ActivationManager.DedicatedRequest;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import android.graphics.Bitmap;
@@ -71,6 +72,10 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 	@Override
 	public boolean populateTemplate() {
+		
+		template = MapTemplate.getTemplate(2);
+		Set<PixelPoint> connectionPixelPoints = template.getLinesConnectionPoints();
+		
 		// TODO Auto-generated method stub
 		return false;
 	}
