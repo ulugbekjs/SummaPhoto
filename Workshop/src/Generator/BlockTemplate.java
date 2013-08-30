@@ -23,10 +23,6 @@ public class BlockTemplate extends AbstractTemplate{
 			template =  getTemplate3();
 			break;
 		}
-		case 4: {
-			template =  getTemplate4();
-			break;
-		}
 		default:
 			break;
 		}
@@ -79,24 +75,4 @@ public class BlockTemplate extends AbstractTemplate{
 		
 		return template;
 	}
-	
-	private static BlockTemplate getTemplate4() {
-		BlockTemplate template = new BlockTemplate(12);
-
-		template.addSlot(new Slot(new PixelPoint(0, 642), new PixelPoint(642, 1224)), 0);
-		template.addSlot(new Slot(new PixelPoint(0, 1224), new PixelPoint(642, 1805)), 1);
-		template.addSlot(new Slot(new PixelPoint(775, 1805), new PixelPoint (1632, 2448)), 2);
-		template.addSlot(new Slot(new PixelPoint(1632, 1805), new PixelPoint (2488, 2448)), 3);
-		template.addSlot(new Slot(new PixelPoint(2621, 1224), new PixelPoint (3264, 1805)), 4);
-		template.addSlot(new Slot(new PixelPoint(2621, 642), new PixelPoint(3264, 1224)), 5);
-		template.addSlot(new Slot(new PixelPoint(1632, 0), new PixelPoint(2488, 642)), 6);
-		template.addSlot(new Slot(new PixelPoint(775, 0), new PixelPoint(1632, 642)), 7);
-		template.addSlot(new Slot(new PixelPoint(0, 0), new PixelPoint (775, 642)), 8);
-		template.addSlot(new Slot(new PixelPoint(0, 1805), new PixelPoint(775, 2448)), 9);
-		template.addSlot(new Slot(new PixelPoint(2488, 1805), new PixelPoint(3264, 2448)), 10);
-		template.addSlot(new Slot(new PixelPoint(2488, 0), new PixelPoint(3264, 642)), 11);
-		return template;
-	}
-		
-
 }
