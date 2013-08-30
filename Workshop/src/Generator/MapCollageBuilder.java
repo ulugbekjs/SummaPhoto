@@ -3,23 +3,34 @@ package Generator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
+import Common.ActualEventsBundle;
+import Common.Photo;
+import Common.PhotoContainer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Environment;
+import android.util.Log;
 
-public class MapCollageBuilder {
+public class MapCollageBuilder extends Builder{
 	
+	private static final String TAG = MapCollageBuilder.class.getName();
+
+	public MapCollageBuilder(ActualEventsBundle bundle) {
+		super(bundle);
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * Saves a map collage on disk
 	 * @param template - the template with the photos already arranged in Slots
 	 * @return
 	 */
-	public static File BuildCollage(MapTemplate template) {
+	public Photo BuildCollage(MapTemplate template) {
 
 		Canvas canvas = null;
 		FileOutputStream fos = null;
@@ -52,60 +63,26 @@ public class MapCollageBuilder {
 		paint.setStrokeWidth(3f);
 		canvas.drawLine(642, 2080, 2448, 642, paint);
 
-		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "Pictures");
-		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Output");
-		File file = null;
-
-		// Save Bitmap to File
-		try	{
-			file = new File(testsDir, "output.jpg");
-
-			fos = new FileOutputStream(file);
-			bmpBase.compress(Bitmap.CompressFormat.JPEG, 50, fos);
-
-			fos.flush();
-			fos.close();
-			fos = null;
+		Photo collage;
+		try {
+			collage = saveCollage(bmpBase);
 		}
-		catch (IOException e) {
-			// TODO: deal with error
-			e.printStackTrace();
-		}
-		finally {
-			if (fos != null) {
-				try {
-					fos.close();
-					fos = null;
-				}
-				catch (IOException e) {
-					// TODO: deal with error
-					e.printStackTrace();
-				}
-			}
-
+		catch (IOException exception) {
+			Log.e(TAG, "Error when saving collage file");
+			// TODO: notify user about error in saving collage
+			return null;
 		}
 
-		return file;
+		clearProcessPhotos(); // not to reuse same photos
+		
+		return collage;
 	}
 
-	private static void addSlotImageToCanvas(Canvas canvas, Slot slot) {
-
-		// get Image bitmap
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		Bitmap bitmap = BitmapFactory.decodeFile(slot.getPhoto().getFilePath(), options);
-
-		// draw bitmap onto canvas
-		PixelPoint topleftPixelPoint = slot.getTopLeft();
-		PixelPoint bottomRightPixelPoint = slot.getBottomRight();
-
-		canvas.drawBitmap(bitmap,
-				new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()), // take all source photo
-				new Rect(topleftPixelPoint.getX(), // place in output photo
-						topleftPixelPoint.getY(),
-						bottomRightPixelPoint.getX(), 
-						bottomRightPixelPoint.getY()), 
-						null);
+	@Override
+	public boolean populateTemplate() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
+	
 }

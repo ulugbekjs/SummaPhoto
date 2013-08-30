@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import Common.ActualEventsBundle;
+import Common.Photo;
 import Common.PhotoContainer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -97,7 +98,8 @@ public abstract class Builder {
 		bitmap = null;
 	}
 
-	protected File saveCollage(Bitmap bmpBase, Date creationTime) throws IOException {
+	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
+		Calendar calendar = Calendar.getInstance();
 		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "Pictures");
 		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Output");
 		File file = null;
@@ -105,7 +107,7 @@ public abstract class Builder {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
 		file = new File
-				(testsDir, "summaphoto_" + formatter.format(creationTime) + ".jpg");
+				(testsDir, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
 
 		// Save Bitmap to File
 		fos = new FileOutputStream(file);
@@ -118,7 +120,7 @@ public abstract class Builder {
 		bmpBase.recycle();
 		bmpBase = null;
 
-		return file;
+		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
 	}
 	
 	protected void clearProcessPhotos() {

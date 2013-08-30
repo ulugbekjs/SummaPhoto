@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import Common.Photo;
-
 public class Cluster {
 
 	public List<PhotoObjectForClustering> photosInCluster = null;

@@ -166,11 +166,10 @@ public class BlockCollageBuilder extends Builder {
 			}
 		}
 
-		File collageFile = null;
-		Calendar calendar = Calendar.getInstance();
-
+		Photo collage = null;
+	
 		try {
-			collageFile = saveCollage(bmpBase, calendar.getTime()); 
+			collage = saveCollage(bmpBase); 
 		}
 		catch (IOException exception) {
 			Log.e(TAG, "Error when saving collage file");
@@ -179,8 +178,9 @@ public class BlockCollageBuilder extends Builder {
 		}
 		
 		clearProcessPhotos(); // clear photos in container so they are not used again
+		
+		return collage;
 
-		return new Photo(calendar.getTime(), 3264, 2488, null, collageFile.getAbsolutePath());
 	}
 
 
