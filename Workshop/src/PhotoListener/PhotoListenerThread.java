@@ -37,7 +37,7 @@ public class PhotoListenerThread extends FileObserver {
 	String absolutePath;
 
 	public PhotoListenerThread(String path) {
-		super(path, FileObserver.CLOSE_WRITE);
+		super(path, FileObserver.CLOSE_WRITE | FileObserver.DELETE);
 		this.absolutePath = path;
 	}
 
@@ -146,7 +146,18 @@ public class PhotoListenerThread extends FileObserver {
 						Log.d(TAG, "Photo taken: " + file + " was read from file");
 
 					} catch (ImageProcessingException e) {
-						Log.e(TAG, "Photo taken: " + "was NOT read from file properly");
+						Log.e(TAG, "Photo taken: " + "was not yet fully saved properly");
+						try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						try { // try reading again
+							photo = createPhotoFromFile(file);
+						} catch (ImageProcessingException e1) {
+							Log.e(TAG, "Photo taken: " + "was NOT read from file properly");
+						}
 					}
 					
 					if (photo != null)
