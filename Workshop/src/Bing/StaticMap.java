@@ -14,6 +14,7 @@ import org.jdom2.input.SAXBuilder;
 
 import Common.GeoBoundingBox;
 import Common.GPSPoint;
+import Generator.PixelPoint;
 
 /**
  * Includes Bing Map and Metadata returned from Bing Services
@@ -45,6 +46,12 @@ public class StaticMap {
 	public String getJpgPath() {
 		return jpgPath;
 	}
+	
+	public List<Pushpin> getPushPins()
+	{
+		return pins;
+	}
+	
 	public void setJpgPath(String jpgPath) {
 		this.jpgPath = jpgPath;
 	}
@@ -138,7 +145,7 @@ public class StaticMap {
 				int by = Integer.valueOf(node.getChildText("Y", namespace));	
 
 				pins.add(new Pushpin(new GPSPoint(latitude,longitude),
-						new int[] {ax, ay},
+						new PixelPoint(ax, ay),
 						new int[] {tx, ty},
 						new int[] {bx, by}));
 			}

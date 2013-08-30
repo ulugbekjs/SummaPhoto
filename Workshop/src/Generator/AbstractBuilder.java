@@ -5,8 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import ActivationManager.DedicatedRequest;
+import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.PhotoContainer;
@@ -134,4 +137,16 @@ public abstract class AbstractBuilder {
 		PhotoContainer.getInstance().clearProcessPhotos();
 	}
 
+	
+	/** Naive implementation of choosing the actual photos that will populate the output **/
+	protected List<Photo> selectPhotosFromBundle ()
+	{
+		List<Photo> selectedPhotos = new LinkedList<Photo>();
+		for (ActualEvent event: bundle.getActualEvents())
+		{
+			// from each event choose first photo
+			selectedPhotos.add(event.getEventPhotos().get(0));
+		}
+		return selectedPhotos;
+	}
 }

@@ -1,15 +1,11 @@
 package Generator;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ActivationManager.DedicatedRequest;
-import Bing.Pushpin;
 import Common.ActualEventsBundle;
 import Common.Photo;
-import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -83,34 +79,5 @@ public class MapCollageBuilder extends AbstractBuilder{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	@Override
-	public DedicatedRequest setTemplate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	/**
-	 * @param pushPins - the list of pushPins on map retrieved from bing
-	 * @return list which contains the actual pixel of the pushPin in the output colage 
-	 */
-	
-	private Set<PixelPoint> adjustPushPinsLocationToMap(List<Pushpin> pushPins)
-	{
-		if (pushPins == null)
-			return null;
-		Integer xInterval = template.getMapSlot().getTopLeft().getX();
-		Integer yInterval = template.getMapSlot().getTopLeft().getY();
-		Set<PixelPoint> adjustedPushPinsPixelPoints = new HashSet<PixelPoint>();
-		
-		// the adjusted pixel point for each pushPin its is originalX + the top left X coordinate of the map (the same for Y coordinate)
-		for (Pushpin pin: pushPins)
-		{
-			adjustedPushPinsPixelPoints.add(new PixelPoint(xInterval + pin.getAnchor().getX(), yInterval + pin.getAnchor().getY()));
-		}
-		return adjustedPushPinsPixelPoints ;
-	}
-	
-	
 	
 }
