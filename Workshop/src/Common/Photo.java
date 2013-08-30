@@ -1,13 +1,10 @@
 package Common;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
-
-import android.R.string;
 
 /**
  * Represents a photo in the gallery that was taken by the user
@@ -24,7 +21,6 @@ public class Photo implements Comparable<Photo> {
 	private int width;
 	private String path; // 
 	private String fileName;
-	private ActualEvent parentActualEvent;
 	private double ID; //unique per Photo
 
 	public Photo(Date date, int width, int height, GPSPoint location, String path) {
@@ -68,11 +64,6 @@ public class Photo implements Comparable<Photo> {
 
 	public DateTime getTakenDate() {
 		return this.takenDate;
-	}
-
-	public void attachToEvent(ActualEvent event) {
-		if (event == null)
-			parentActualEvent = event;
 	}
 
 	public double distanceFrom(Photo otherPhoto) {

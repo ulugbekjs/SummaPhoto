@@ -1,11 +1,9 @@
 package ActivationManager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.jar.Attributes.Name;
 
 import com.example.aworkshop.R;
 import com.example.aworkshop.SettingsActivity;
@@ -26,7 +24,6 @@ import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.PhotoContainer;
 import Generator.BlockCollageBuilder;
-import Generator.BlockTemplate;
 import Partitioning.DBScan;
 
 public class SmartModeService {
@@ -58,13 +55,6 @@ public class SmartModeService {
 						if (collage != null) {
 							notifyUser(collage);
 						}
-						//	MapTemplate template = MapTemplate.getTemplate(1);
-						//	StaticMap map = BingServices.getStaticMap(BingServices.getImagesPointsList(),890,523);
-						//File collageFile = MapCollageBuilder.BuildCollage(template);
-						//BlockTemplate template = BlockTemplate.getTemplate(1); 
-						//	BlockCollageBuilder builder = new BlockCollageBuilder(template, CandidatePhotoContainer.getInstance().getAllEventsInContainer());
-						//						builder.populateTemplate();
-						//						builder.BuildCollage();
 
 					}
 					else {

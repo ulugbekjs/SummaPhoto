@@ -3,9 +3,6 @@ package Generator;
 import java.util.ArrayList;
 import java.util.List;
 
-import Common.ActualEventsBundle;
-import Common.Photo;
-
 public abstract class AbstractTemplate {
 
 	//static fields

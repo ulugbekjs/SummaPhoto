@@ -1,24 +1,17 @@
 package Generator;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
-
 import Common.ActualEventsBundle;
 import Common.Photo;
-import Common.PhotoContainer;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.os.Environment;
 import android.util.Log;
 
 public class MapCollageBuilder extends AbstractBuilder{
 	
 	MapTemplate template = null;
+	
 	private static final String TAG = MapCollageBuilder.class.getName();
 
 	public MapCollageBuilder(ActualEventsBundle bundle) {
@@ -30,7 +23,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 	public Photo buildCollage() {
 
 		Canvas canvas = null;
-		FileOutputStream fos = null;
 		Bitmap bmpBase = null;
 
 		bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);

@@ -117,6 +117,5 @@ public class ActualEvent{
 		else {
 			verticalPhotos.add(photo);
 		}
-		photo.attachToEvent(this);
 	}
 }

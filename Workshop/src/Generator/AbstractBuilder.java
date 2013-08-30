@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import Common.ActualEventsBundle;
 import Common.Photo;
@@ -15,7 +14,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Environment;
-import android.util.Log;
 
 /**
  * This is an abstract class for Builder objects which contain logic of choosing a template, populating it with photos and drawing them onto the template

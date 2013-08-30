@@ -1,41 +1,24 @@
 package Generator;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
-
-import javax.xml.transform.Templates;
-
-import org.joda.time.DateTime;
-import org.junit.experimental.max.MaxCore;
 
 import ActivationManager.DedicatedRequest;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Photo;
-import Partitioning.Cluster;
-import android.R.integer;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.os.Environment;
 import android.util.Log;
 
 public class BlockCollageBuilder extends AbstractBuilder {
 
-	private static final String TAG = "Generator.BlockCollageBuilder";
+	private static final String TAG = BlockCollageBuilder.class.getName();
 	BlockTemplate template = null;
 
 	public BlockCollageBuilder(ActualEventsBundle bundle) {

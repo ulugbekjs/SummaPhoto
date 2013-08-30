@@ -5,8 +5,7 @@ import org.joda.time.DateTime;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
+
 
 
 
