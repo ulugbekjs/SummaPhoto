@@ -9,7 +9,6 @@ import ActivationManager.DedicatedRequest;
 import Bing.Pushpin;
 import Common.ActualEventsBundle;
 import Common.Photo;
-import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
