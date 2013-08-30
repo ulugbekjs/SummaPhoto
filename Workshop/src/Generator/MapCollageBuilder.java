@@ -16,8 +16,9 @@ import android.graphics.Rect;
 import android.os.Environment;
 import android.util.Log;
 
-public class MapCollageBuilder extends Builder{
+public class MapCollageBuilder extends AbstractBuilder{
 	
+	MapTemplate template = null;
 	private static final String TAG = MapCollageBuilder.class.getName();
 
 	public MapCollageBuilder(ActualEventsBundle bundle) {
@@ -25,12 +26,8 @@ public class MapCollageBuilder extends Builder{
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * Saves a map collage on disk
-	 * @param template - the template with the photos already arranged in Slots
-	 * @return
-	 */
-	public Photo BuildCollage(MapTemplate template) {
+	@Override
+	public Photo buildCollage() {
 
 		Canvas canvas = null;
 		FileOutputStream fos = null;

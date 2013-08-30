@@ -33,7 +33,7 @@ import android.graphics.Rect;
 import android.os.Environment;
 import android.util.Log;
 
-public class BlockCollageBuilder extends Builder {
+public class BlockCollageBuilder extends AbstractBuilder {
 
 	private static final String TAG = "Generator.BlockCollageBuilder";
 	BlockTemplate template = null;
@@ -147,10 +147,10 @@ public class BlockCollageBuilder extends Builder {
 		return queue;
 	}
 
-	public Photo BuildCollage() {
+	@Override
+	public Photo buildCollage() {
 
 		Canvas canvas = null;
-
 		Bitmap bmpBase = null;
 
 		bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
@@ -167,7 +167,6 @@ public class BlockCollageBuilder extends Builder {
 		}
 
 		Photo collage = null;
-	
 		try {
 			collage = saveCollage(bmpBase); 
 		}

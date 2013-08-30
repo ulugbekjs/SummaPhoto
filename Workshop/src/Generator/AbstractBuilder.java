@@ -17,16 +17,22 @@ import android.graphics.Rect;
 import android.os.Environment;
 import android.util.Log;
 
-public abstract class Builder {
+/**
+ * This is an abstract class for Builder objects which contain logic of choosing a template, populating it with photos and drawing them onto the template
+ * @author yonatan
+ *
+ */
+public abstract class AbstractBuilder {
 
 	ActualEventsBundle bundle;
 	
-	public Builder(ActualEventsBundle bundle) {
+	public AbstractBuilder(ActualEventsBundle bundle) {
 		this.bundle = bundle;
 	}
 	
 	
 	public abstract boolean populateTemplate();
+	public abstract Photo buildCollage();
 
 	protected Bitmap decodeScaledBitmapFromSdCard(String filePath,
 			int reqWidth, int reqHeight) {
