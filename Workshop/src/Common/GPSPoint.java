@@ -1,7 +1,5 @@
 package Common;
 
-import java.text.DecimalFormat;
-
 import android.location.Location;
 
 public class GPSPoint  {
