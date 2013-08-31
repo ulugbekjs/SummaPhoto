@@ -19,13 +19,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
-
-import android.graphics.Point;
 import android.os.Environment;
 import android.util.Log;
-
-import Common.ActualEvent;
-import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.GPSPoint;
 
@@ -41,14 +36,14 @@ public class BingServices {
 	 * @return StaticMap, or NULL if map could not be created
 	 */
 	public static StaticMap getStaticMap(List<Photo> photos, int width, int height) {
-
-		List<GPSPoint> points = getImagesPointsList(photos);
 		
 		StaticMap map = null;
 
-		if (points.size()  > 0) { // Request only iff there is at least one photo
+		if (photos.size()  > 0) { // Request only iff there is at least one photo
 
-			map = new StaticMap(width, height);
+			map = new StaticMap(photos, width, height);
+			
+			List<GPSPoint> points = getImagesPointsList(photos);
 			map.setJpgPath(getJPG(points, width, height), width, height);
 			map.setMetadataPath(getJPGMetadata(points, width, height));
 			
@@ -74,11 +69,10 @@ public class BingServices {
 
 	/**
 	 * creates a List of Points to be sent to BING from all current ActualEvents in ActualEventContainer
-	 * @return List of all Points in ActualEventContainer
+	 * @return List of all GPSPoints in photo list
 	 */
 	public static List<GPSPoint> getImagesPointsList(List<Photo> photos) {
 		List<GPSPoint> points = new ArrayList<GPSPoint>();
-		//TODO: this should work with the ActualEventContainer
 
 		for (Photo photo : photos) {
 			points.add(photo.getLocation());
@@ -121,6 +115,7 @@ public class BingServices {
 				builder.append(point.toString());
 				builder.append(";14;\r\n");
 			}
+			
 			StringEntity entity = null;
 			try {
 				entity = new StringEntity(builder.toString(), HTTP.UTF_8);

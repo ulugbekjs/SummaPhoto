@@ -1,6 +1,7 @@
 package Bing;
 
 import Common.GPSPoint;
+import Common.Photo;
 import Generator.PixelPoint;
 
 /**
@@ -9,13 +10,18 @@ import Generator.PixelPoint;
  *
  */
 public class Pushpin {
-	private GPSPoint point;
+	//private GPSPoint point;
 	private PixelPoint anchor;
 	private int[] topLeftOffset;
 	private int[] bottomRightOffset;
+	private Photo photo;
 	
 	public GPSPoint getPoint() {
-		return point;
+		return photo.getLocation();
+	}
+	
+	public Photo getPhoto() {
+		return this.photo;
 	}
 
 	public PixelPoint getAnchor() {
@@ -29,11 +35,19 @@ public class Pushpin {
 	public int[] getBottomRightOffset() {
 		return bottomRightOffset;
 	}
-
-	public Pushpin(GPSPoint point, PixelPoint anchor, int[] topLeftOffset, int[] bottomRightOffset) {
-		this.point = point;
+//
+//	public Pushpin(GPSPoint point, PixelPoint anchor, int[] topLeftOffset, int[] bottomRightOffset) {
+//		this.point = point;
+//		this.anchor = anchor;
+//		this.topLeftOffset = topLeftOffset;
+//		this.bottomRightOffset = bottomRightOffset;
+//	}
+//	
+	public Pushpin(Photo photo) {
+		this.photo = photo;
+	}
+	
+	public void setAnchor(PixelPoint anchor) {
 		this.anchor = anchor;
-		this.topLeftOffset = topLeftOffset;
-		this.bottomRightOffset = bottomRightOffset;
 	}
 }

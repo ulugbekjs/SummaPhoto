@@ -82,6 +82,12 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		dailyRadioBtn.setOnClickListener(listener);
 		 **/
 
+		//TODO: remove, this is because of netwrok on main thread error
+		if (android.os.Build.VERSION.SDK_INT > 9) {
+			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
+			StrictMode.setThreadPolicy(policy);
+		}
+		
 		//		//		//		Omri's code
 		//		//
 		File directory = new File(PHOTO_DIR);

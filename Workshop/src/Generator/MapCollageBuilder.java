@@ -194,16 +194,9 @@ public class MapCollageBuilder extends AbstractBuilder{
 				}
 			
 			}
-		}
-		for (SlotPushPinTuple tuple : tuples)
-		{
-			if (tuple.getSlot().getPhoto() == null)
-			{
-				Integer x = 3;
-				return false;
-			}
-		}
+			// means that there was an error to connect photo to slot
 			
+		}
 		return true;
 	}
 	
