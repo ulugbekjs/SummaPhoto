@@ -17,8 +17,8 @@ public class GPSPoint  {
 	}
 	
 	public GPSPoint(double latitude, double longitude) {
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.longitude = roundDouble(longitude);
+		this.latitude = roundDouble(latitude);
 	}
 	
 	/**
@@ -39,31 +39,37 @@ public class GPSPoint  {
 	}
 	
 	@Override
-	public boolean equals(Object other)
-	{ 
-		if (other == null)
-			return false;
-		if (other == this)
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(latitude);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(longitude);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		if (!(other instanceof GPSPoint))
+		if (obj == null)
 			return false;
-		GPSPoint otherGPSPoint = (GPSPoint) other;
-		
-		double roundedThisLong = roundDouble(longitude) ;
-		double roundedThisLat =  roundDouble(latitude);
-		double roundedOtherLong = roundDouble(otherGPSPoint.getLongitude());
-		double roundedOtherLat = roundDouble(otherGPSPoint.getLatitude());
-		return (otherGPSPoint.distanceFrom(this) < 2);
-		
-		/**
-		// because of accuracy bugs of double number, we will consider only 7 digits after dot
-		return ((roundedOtherLat == roundedThisLat) && (roundedOtherLong == roundedThisLong));
-		**/
+		if (getClass() != obj.getClass())
+			return false;
+		GPSPoint other = (GPSPoint) obj;
+		if (Double.doubleToLongBits(latitude) != Double
+				.doubleToLongBits(other.latitude))
+			return false;
+		if (Double.doubleToLongBits(longitude) != Double
+				.doubleToLongBits(other.longitude))
+			return false;
+		return true;
 	}
 	
 	private double roundDouble (double num)
 	{
-		return (Math.floor(num * 10000000) / 10000000);
+		return (Math.round(num * Math.pow(10, 13)) / Math.pow(10, 13));
 	}
 	
 }
