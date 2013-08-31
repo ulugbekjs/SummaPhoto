@@ -82,6 +82,11 @@ public class MapTemplate extends AbstractTemplate{
 			template =  getTemplate2();
 			break;
 		}
+		case 3:
+		{
+			template =  getTemplate3();
+			break;
+		}
 		default:
 			break;
 		}
@@ -136,8 +141,7 @@ public class MapTemplate extends AbstractTemplate{
 	
 	
 	/**
-	 * Constructing hard-coded template2
-	 * @return
+	 * Constructing hard-coded template2. Bug: the map size is bigger than Bing service can supply
 	 */
 	private static MapTemplate getTemplate2() {
 		
@@ -157,6 +161,31 @@ public class MapTemplate extends AbstractTemplate{
 		template.addSlot(new Slot(new PixelPoint(2488, 0), new PixelPoint(3264, 642), new PixelPoint (2554, 642)), 11);
 		
 		template.mapSlot = new Slot (new PixelPoint(642, 642), new PixelPoint(2621, 1805));
+		
+		return template;
+	}
+	
+	/**
+	 * Same as template 2, but every coordinate is factorized by 0.45 so the map will be small enough
+	 */
+	private static MapTemplate getTemplate3() {
+		
+		MapTemplate template = new MapTemplate(12);
+
+		template.addSlot(new Slot(new PixelPoint(0, 289), new PixelPoint(289, 551),new PixelPoint  (289, 420)) , 0);
+		template.addSlot(new Slot(new PixelPoint(0, 551), new PixelPoint(289, 812), new PixelPoint  (289, 681)), 1);
+		template.addSlot(new Slot(new PixelPoint(349, 812), new PixelPoint (735, 1102), new PixelPoint  (542, 812)), 2);
+		template.addSlot(new Slot(new PixelPoint(735, 812), new PixelPoint (1120, 1102), new PixelPoint  (927, 812)), 3);
+		template.addSlot(new Slot(new PixelPoint(1179, 551), new PixelPoint (1469, 812), new PixelPoint  (1179, 681)), 4);
+		template.addSlot(new Slot(new PixelPoint(1179, 289), new PixelPoint(1469, 551), new PixelPoint  (1179, 420)), 5);
+		template.addSlot(new Slot(new PixelPoint(735, 0), new PixelPoint(1120, 289), new PixelPoint (927, 289)), 6);
+		template.addSlot(new Slot(new PixelPoint(349, 0), new PixelPoint(735, 289), new PixelPoint (542, 289)), 7);
+		template.addSlot(new Slot(new PixelPoint(0, 0), new PixelPoint (349, 289), new PixelPoint (319, 289)), 8);
+		template.addSlot(new Slot(new PixelPoint(0, 812), new PixelPoint(349, 1102),  new PixelPoint (319, 812)), 9);
+		template.addSlot(new Slot(new PixelPoint(1120, 812), new PixelPoint(1469, 1102), new PixelPoint (1149, 812)), 10);
+		template.addSlot(new Slot(new PixelPoint(1120, 0), new PixelPoint(1469, 289), new PixelPoint (1149, 289)), 11);
+		
+		template.mapSlot = new Slot (new PixelPoint(289, 289), new PixelPoint(1179, 812));
 		
 		return template;
 	}

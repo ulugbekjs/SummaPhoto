@@ -23,12 +23,6 @@ public class LocatePicturesWithMap {
 	private Set<PixelPoint> slotPointsSet;
 
 
-	// Subsets of pointsOnFrameSet and  picturesOnMapSet for recursive algorithm issues
-	private Set<PixelPoint> firstSubSetofSlotsPoints;
-	private Set<PixelPoint> firstSubSetOfPushPinPoints;
-	private Set<PixelPoint> secondSubSetofSlotsPoints;
-	private Set<PixelPoint> secondSubSetOfPushPinPoints;
-
 	private List<SlotPushPinTuple> slotsToPushPinList;
 
 	public LocatePicturesWithMap (HashMap<PixelPoint,Slot> pixelPointToSlotDictionary,
@@ -52,6 +46,18 @@ public class LocatePicturesWithMap {
 
 	private void splitSetsEqualPointsTuple (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet)
 	{
+		// Subsets of pointsOnFrameSet and  picturesOnMapSet for recursive algorithm issues
+		Set<PixelPoint> firstSubSetofSlotsPoints =new HashSet<PixelPoint>();
+		Set<PixelPoint> firstSubSetOfPushPinPoints = new HashSet<PixelPoint>();
+		Set<PixelPoint> secondSubSetofSlotsPoints =new HashSet<PixelPoint>();
+		Set<PixelPoint> secondSubSetOfPushPinPoints =new HashSet<PixelPoint>();
+
+		List<Set<PixelPoint>> listOfSplitedPixelPointSets = new LinkedList<Set<PixelPoint>>();
+		listOfSplitedPixelPointSets.add(firstSubSetofSlotsPoints);
+		listOfSplitedPixelPointSets.add(firstSubSetOfPushPinPoints);
+		listOfSplitedPixelPointSets.add(secondSubSetofSlotsPoints);
+		listOfSplitedPixelPointSets.add(secondSubSetOfPushPinPoints);
+
 		PixelPoint closestSlot;
 		if (pushPinsSubSet.size() == 0)
 			return;
@@ -67,7 +73,7 @@ public class LocatePicturesWithMap {
 		for (PixelPoint pushPinPoint : pushPinsSubSet) {
 			// First try to split the sets with closest point in pointsOnFrameSubSetSet to the chosen point
 			closestSlot = findClosestPointInSet(pushPinPoint,slotsSubSet);
-			if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint, closestSlot))
+			if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint, closestSlot, listOfSplitedPixelPointSets))
 			{
 				slotsToPushPinList.add(new SlotPushPinTuple(pushPinPoint, pixelPointToPushPinDictionary.get(pushPinPoint), 
 						closestSlot,pixelPointToSlotDictionary.get(closestSlot) ));
@@ -78,7 +84,7 @@ public class LocatePicturesWithMap {
 			else {
 				for (PixelPoint slotPoint : slotsSubSet)
 				{
-					if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint , slotPoint))
+					if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint , slotPoint, listOfSplitedPixelPointSets))
 					{
 						slotsToPushPinList.add(new SlotPushPinTuple(pushPinPoint,pixelPointToPushPinDictionary.get(pushPinPoint), 
 								slotPoint,pixelPointToSlotDictionary.get(slotPoint)));
@@ -124,17 +130,22 @@ public class LocatePicturesWithMap {
 	 * intersect other lines between pushPins and slots
 	 */
 	private Boolean isSplitingEqual (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
-			PixelPoint pushPinCandidate, PixelPoint slotCandidate)
+			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
 	{
+
+		Set<PixelPoint> firstSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(0);
+		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
+		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
+		Set<PixelPoint> secondSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(3);
+		firstSubSetofSlotsPoints.clear();
+		firstSubSetOfPushPinPoints.clear();
+		secondSubSetofSlotsPoints.clear();
+		secondSubSetOfPushPinPoints.clear();
+
+		
 		double slope;
 		Integer numberOfPushPinsAboveLine = 0;
 		Integer numberOfSlotsAboveLine = 0;
-
-		//initiating sub-sets which will be used for recursion
-		firstSubSetOfPushPinPoints = new HashSet<PixelPoint>();
-		secondSubSetOfPushPinPoints = new HashSet<PixelPoint>();
-		firstSubSetofSlotsPoints = new HashSet<PixelPoint>();
-		secondSubSetofSlotsPoints = new HashSet<PixelPoint>();
 
 		Boolean isUndefinedSlope = pushPinCandidate.getX() == slotCandidate.getX();
 
@@ -172,7 +183,7 @@ public class LocatePicturesWithMap {
 		}
 		else 
 		{
-			return isSplitingEqualUndefinedSlope (pushPinsSubSet, slotsSubSet, pushPinCandidate, slotCandidate);
+			return isSplitingEqualUndefinedSlope (pushPinsSubSet, slotsSubSet, pushPinCandidate, slotCandidate, listOfSplitedPixelPointSets);
 		}
 		return (numberOfPushPinsAboveLine == numberOfSlotsAboveLine);
 	}
@@ -185,8 +196,13 @@ public class LocatePicturesWithMap {
 	 * intersect other lines between pushPins and slots
 	 */
 	private Boolean isSplitingEqualUndefinedSlope (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
-			PixelPoint pushPinCandidate, PixelPoint slotCandidate)
+			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
 	{
+
+		Set<PixelPoint> firstSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(0);
+		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
+		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
+		Set<PixelPoint> secondSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(3);
 		Integer numberOfPushPinsAboveLine = 0;
 		Integer numberOfSlotsAboveLine = 0;
 		double verticalLineX = pushPinCandidate.getX();

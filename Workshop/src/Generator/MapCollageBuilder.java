@@ -87,7 +87,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 	 */
 	public boolean populateTemplate() {
 		
-		template = MapTemplate.getTemplate(2);
+		template = MapTemplate.getTemplate(3);
 		Set<PixelPoint> connectionPixelPoints = template.getLinesConnectionPoints();
 		List<Photo> photosList = new LinkedList<Photo>();
 		for (ActualEvent event: bundle.getActualEvents() )
