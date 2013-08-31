@@ -20,7 +20,6 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.SeekBar;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.PhotoContainer;

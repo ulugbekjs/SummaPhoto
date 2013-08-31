@@ -53,6 +53,11 @@ public class StaticMap {
 			pins.add(new Pushpin(photo));
 		}
 	}
+	
+	public Photo getPhotoObject() {
+		return this.map;
+	}
+	
 
 	public GPSPoint getCenterPoint() {
 		return centerPoint;
