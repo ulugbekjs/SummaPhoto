@@ -114,12 +114,13 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 		StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, template.getMapPixelWidth(), template.getMapPixelHeight());
 		//StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, 899,833);
-		template.setMap(mapFromDataSource);
+		
 		HashMap<PixelPoint, Pushpin> pixelPointsToPushPins = getAdjustedPixelPointPushPinDictionary(mapFromDataSource.getPushPins());
 		HashMap<PixelPoint, Slot> pixelPointsToSlot = getPixelPointSlotDictionaryHashMap(template.slots);
 		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(pixelPointsToSlot, pixelPointsToPushPins);
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPictureOnMapToPointOnFrame();
 		updatePicturesOfSlots (tuples,photosList);
+		template.setMap(mapFromDataSource);
 		return true;
 	}
 	
@@ -197,7 +198,11 @@ public class MapCollageBuilder extends AbstractBuilder{
 				}
 			
 			}
-			// means that there was an error to connect photo to slot
+			if (tuple.getSlot().getPhoto() == null)
+			{
+				Integer xInteger = 5;
+				return false;
+			}
 			
 		}
 		return true;

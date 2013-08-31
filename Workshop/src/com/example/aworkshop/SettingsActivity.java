@@ -9,7 +9,7 @@ import ActivationManager.SmartModeService;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Photo;
-import Common.PhotoFilter;
+//import Common.PhotoFilter;
 import Common.TestsClass;
 import Generator.AbstractTemplate;
 import Generator.LocatePicturesWithMap.SlotPushPinTuple;

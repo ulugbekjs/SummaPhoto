@@ -12,6 +12,7 @@ import android.R.integer;
 
 import Bing.StaticMap;
 import Common.Photo;
+import PhotoListener.PhotoListenerThread;
 
 public class MapTemplate extends AbstractTemplate{
 
@@ -41,15 +42,15 @@ public class MapTemplate extends AbstractTemplate{
 		if (newMap.getPixelWidth() == this.getMapPixelWidth() && // only add map if it meets the planned map dimension
 				newMap.getPixelHeight() == this.getMapPixelHeight()) {
 			map = newMap;
-//			try {
-//				Photo mapPhoto = Common.Utils.createPhotoFromFile(newMap.getJpgPath());
-//				mapSlot.assignToPhoto(mapPhoto);
-//			}
-//			catch (ImageProcessingException ex)
-//			{
-//				/** TODO: add exceptionsHandling **/ 
-//				return false;
-//			}
+			try {
+				Photo mapPhoto = PhotoListenerThread.createPhotoFromFile(newMap.getJpgPath());
+				mapSlot.assignToPhoto(mapPhoto);
+			}
+			catch (ImageProcessingException ex)
+			{
+				/** TODO: add exceptionsHandling **/ 
+				return false;
+			}
 			return true;
 		}
 		else {
