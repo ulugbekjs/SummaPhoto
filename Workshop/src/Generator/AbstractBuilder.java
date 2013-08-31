@@ -3,6 +3,7 @@ package Generator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -27,12 +28,12 @@ import android.os.Environment;
 public abstract class AbstractBuilder {
 
 	ActualEventsBundle bundle;
-	
+
 	public AbstractBuilder(ActualEventsBundle bundle) {
 		this.bundle = bundle;
 	}
-	
-	
+
+
 	public abstract boolean populateTemplate();
 	public abstract Photo buildCollage();
 	public abstract DedicatedRequest setTemplate();
@@ -76,15 +77,26 @@ public abstract class AbstractBuilder {
 		return inSampleSize;
 	}
 
-	protected void addSlotImageToCanvas(Canvas canvas, Slot slot) {
+	protected void addSlotImageToCanvas(Bitmap bitmap, Canvas canvas, Slot slot) {
 
 		// get Image bitmap
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		//		Bitmap bitmap = BitmapFactory.decodeFile(slot.getPhoto().getFilePath());
-		Bitmap bitmap = decodeScaledBitmapFromSdCard(slot.getPhoto().getFilePath(), slot.getPhoto().getWidth(), slot.getPhoto().getWidth());
+		options.inPurgeable = true;
+		options.inSampleSize = 8;
+		options.inDither = false;
+		options.inInputShareable = true;
+		options.inTempStorage = new byte[32 * 1024];
+
+		bitmap = BitmapFactory.decodeFile(slot.getPhoto().getFilePath(), options);
+		WeakReference<Bitmap> bitmapReference = new WeakReference<Bitmap>(bitmap);
+
+		//		Bitmap bitmap = decodeScaledBitmapFromSdCard(slot.getPhoto().getFilePath(), slot.getPhoto().getWidth(), slot.getPhoto().getWidth());
 
 		// resize image
+		if (bitmapReference.get() != null) {
+			bitmap = bitmapReference.get();
+		}
 		int[] dimensions = slot.getProportionateDimensionsForSlot(bitmap.getWidth(), bitmap.getHeight());
 		bitmap = Bitmap.createScaledBitmap(bitmap, dimensions[0], dimensions[1], true);
 
@@ -103,9 +115,9 @@ public abstract class AbstractBuilder {
 						bottomRightPixelPoint.getY()), 
 						null);
 
-		//free bitmap
 		bitmap.recycle();
 		bitmap = null;
+
 	}
 
 	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
@@ -132,11 +144,11 @@ public abstract class AbstractBuilder {
 
 		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
 	}
-	
+
 	protected void clearProcessPhotos() {
 		PhotoContainer.getInstance().clearProcessPhotos();
 	}
 
-	
-	
+
+
 }

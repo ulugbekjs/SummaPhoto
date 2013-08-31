@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -39,8 +40,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-//	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 
 
@@ -79,41 +80,42 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
-	**/
+		 **/
 
 		//		//		//		Omri's code
 		//		//
-				File directory = new File(PHOTO_DIR);
-				if (!directory.exists())
-					return;
-				File[] arrayOfPic =  directory.listFiles();
-				Photo tempPhoho = null;
-				List<Photo> photosToCluster = new LinkedList<Photo>(); 
-				for (File file : arrayOfPic)
-				{
-					try
-					{
-						tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-					}
-					catch (Exception ex)
-					{
-					}
-					if (tempPhoho != null)
-						photosToCluster.add(tempPhoho);
-				}
-				List<ActualEvent> events = new LinkedList<ActualEvent>();
-				Cluster tempCluster;
-				for (Photo p :photosToCluster)
-				{
-					tempCluster = new Cluster();
-					tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-					events.add(new ActualEvent(tempCluster));
-				}
-				ActualEventsBundle bundle = new ActualEventsBundle(events);
-				MapCollageBuilder builder = new MapCollageBuilder(bundle);
-				builder.buildCollage();
-				return;
-				//		
+		File directory = new File(PHOTO_DIR);
+		if (!directory.exists())
+			return;
+		File[] arrayOfPic =  directory.listFiles();
+		Photo tempPhoho = null;
+		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		for (File file : arrayOfPic)
+		{
+			try
+			{
+				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+			}
+			catch (Exception ex)
+			{
+			}
+			if (tempPhoho != null)
+				photosToCluster.add(tempPhoho);
+		}
+		List<ActualEvent> events = new LinkedList<ActualEvent>();
+		Cluster tempCluster;
+		for (Photo p :photosToCluster)
+		{
+			tempCluster = new Cluster();
+			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+			events.add(new ActualEvent(tempCluster));
+		}
+		ActualEventsBundle bundle = new ActualEventsBundle(events);
+		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+		builder.buildCollage();
+
+		return;
+		//		
 
 	}
 
@@ -146,7 +148,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 				offButtonClicked();
 			}
 		default: {
-			
+
 		}
 		}
 	}

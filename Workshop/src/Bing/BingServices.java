@@ -49,7 +49,7 @@ public class BingServices {
 		if (points.size()  > 0) { // Request only iff there is at least one photo
 
 			map = new StaticMap(width, height);
-			map.setJpgPath(getJPG(points, width, height));
+			map.setJpgPath(getJPG(points, width, height), width, height);
 			map.setMetadataPath(getJPGMetadata(points, width, height));
 			
 			if (map.getJpgPath() == null || map.getMetadataPath() == null) {

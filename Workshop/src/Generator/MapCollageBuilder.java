@@ -25,6 +25,9 @@ import android.util.Log;
 public class MapCollageBuilder extends AbstractBuilder{
 	
 	MapTemplate template = null;
+	static {@SuppressWarnings("unused")
+	byte[] dummy = new byte[8 * 1024 * 1024];
+	}
 	
 	private static final String TAG = MapCollageBuilder.class.getName();
 
@@ -36,10 +39,10 @@ public class MapCollageBuilder extends AbstractBuilder{
 	@Override
 	public Photo buildCollage() {
 
+		System.gc();
 		Canvas canvas = null;
 		Bitmap bmpBase = null;
 
-		
 		// moved to comments since canvas size for map collage was changes
 		// bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
 		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.RGB_565);
@@ -48,24 +51,30 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		populateTemplate();
 		Slot slotToAddToCanvas;
+		Bitmap bitmap = null;
 		// draw images saved in Template onto canvas
 		for (int slot = 0; slot < template.getNumberOfSlots(); slot ++) {
 			try {
 				slotToAddToCanvas = template.getSlot(slot);
-				addSlotImageToCanvas(canvas,slotToAddToCanvas);
+				addSlotImageToCanvas(bitmap, canvas,slotToAddToCanvas);
 			}
 			catch (NullPointerException exception) {
 				// TODO: deal with error
+				int x = 5;
 			}
 		}
-
+		
 		// draw Bing map into output
 		try {
-			addSlotImageToCanvas(canvas, template.getMapSlot());
+			addSlotImageToCanvas(bitmap, canvas, template.getMapSlot());
 		}
 		catch (NullPointerException exception) {
 			//TODO: deal with error
 		}
+		
+		//free bitmap
+		bitmap.recycle();
+		bitmap = null;
 
 		// add lines
 		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);

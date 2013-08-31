@@ -144,15 +144,15 @@ public class BlockCollageBuilder extends AbstractBuilder {
 		bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
 		canvas = new Canvas(bmpBase);
 
-		// draw images saved in Template onto canvas
-		for (int slot = 0; slot < template.getNumberOfSlots(); slot ++) {
-			try {
-				addSlotImageToCanvas(canvas, template.getSlot(slot));
-			}
-			catch (NullPointerException exception) {
-				// TODO: deal with error
-			}
-		}
+//		// draw images saved in Template onto canvas
+//		for (int slot = 0; slot < template.getNumberOfSlots(); slot ++) {
+//			try {
+//				addSlotImageToCanvas(canvas, template.getSlot(slot));
+//			}
+//			catch (NullPointerException exception) {
+//				// TODO: deal with error
+//			}
+//		}
 
 		Photo collage = null;
 		try {

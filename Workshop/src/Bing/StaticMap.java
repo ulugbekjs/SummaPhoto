@@ -2,6 +2,7 @@ package Bing;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -12,8 +13,11 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
+import android.R.integer;
+
 import Common.GeoBoundingBox;
 import Common.GPSPoint;
+import Common.Photo;
 import Generator.PixelPoint;
 
 /**
@@ -29,6 +33,7 @@ public class StaticMap {
 	private int pixelWidth;
 	private int pixelHeight;
 	private String jpgPath;
+	private Photo map;
 	private String metadataPath;
 	
 	private List<Pushpin> pins = new LinkedList<Pushpin>(); 
@@ -52,8 +57,10 @@ public class StaticMap {
 		return pins;
 	}
 	
-	public void setJpgPath(String jpgPath) {
+	public void setJpgPath(String jpgPath, int width, int height) {
 		this.jpgPath = jpgPath;
+		this.map = new Photo(new Date(), width, height, null, jpgPath);
+		
 	}
 	public String getMetadataPath() {
 		return metadataPath;
