@@ -15,6 +15,7 @@ import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import Generator.LocatePicturesWithMap.SlotPushPinTuple;
+import android.R.bool;
 import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -38,15 +39,20 @@ public class MapCollageBuilder extends AbstractBuilder{
 		Canvas canvas = null;
 		Bitmap bmpBase = null;
 
-		bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
+		
+		// moved to comments since canvas size for map collage was changes
+		// bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
+		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.RGB_565);
 		canvas = new Canvas(bmpBase);
 
 		
 		populateTemplate();
+		Slot slotToAddToCanvas;
 		// draw images saved in Template onto canvas
 		for (int slot = 0; slot < template.getNumberOfSlots(); slot ++) {
 			try {
-				addSlotImageToCanvas(canvas, template.getSlot(slot));
+				slotToAddToCanvas = template.getSlot(slot);
+				addSlotImageToCanvas(canvas,slotToAddToCanvas);
 			}
 			catch (NullPointerException exception) {
 				// TODO: deal with error
@@ -94,8 +100,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 		{
 			photosList.add(event.selectPhotoFromEvent());
 		}
-		//StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, template.getMapPixelWidth(), template.getMapPixelHeight());
-		StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, 899,833);
+		StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, template.getMapPixelWidth(), template.getMapPixelHeight());
+		//StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, 899,833);
 		template.setMap(mapFromDataSource);
 		HashMap<PixelPoint, Pushpin> pixelPointsToPushPins = getAdjustedPixelPointPushPinDictionary(mapFromDataSource.getPushPins());
 		HashMap<PixelPoint, Slot> pixelPointsToSlot = getPixelPointSlotDictionaryHashMap(template.slots);
@@ -159,22 +165,30 @@ public class MapCollageBuilder extends AbstractBuilder{
 	 * @param photosList - list of photos in the collage
 	 * The method assign to each slot in the template its relevant picture
 	 */
-	private void updatePicturesOfSlots (List<SlotPushPinTuple> tuples, List<Photo> photosList)
+	private boolean updatePicturesOfSlots (List<SlotPushPinTuple> tuples, List<Photo> photosList)
 	{ 
 		if ((tuples == null) || (photosList == null))
-			return;
+			return false;
 		for (SlotPushPinTuple tuple : tuples)
 		{
+			if ((tuple.getPushpin() == null) || (tuple.getSlot() == null))
+			{
+				return false;
+			}
 			for (Photo photo: photosList)
 			{
+				if (photo.getLocation() == null)
+					return false;
 				if (photo.getLocation().equals(tuple.getPushpin().getPoint()))
 				{
 					tuple.getSlot().assignToPhoto(photo);
-				
 				}
 			
 			}
+			// means that there was an error to connect photo to slot
+			
 		}
+		return true;
 	}
 	
 	

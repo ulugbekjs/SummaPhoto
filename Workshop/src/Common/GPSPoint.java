@@ -1,5 +1,7 @@
 package Common;
 
+import java.text.DecimalFormat;
+
 import android.location.Location;
 
 public class GPSPoint  {
@@ -38,13 +40,29 @@ public class GPSPoint  {
 	
 	@Override
 	public boolean equals(Object other)
-	{
+	{ 
 		if (other == null)
 			return false;
+		if (other == this)
+			return true;
 		if (!(other instanceof GPSPoint))
 			return false;
 		GPSPoint otherGPSPoint = (GPSPoint) other;
-		return ((otherGPSPoint.getLatitude() == latitude) && (otherGPSPoint.getLongitude() == longitude));
+		
+		double roundedThisLong = roundDouble(longitude) ;
+		double roundedThisLat =  roundDouble(latitude);
+		double roundedOtherLong = roundDouble(otherGPSPoint.getLongitude());
+		double roundedOtherLat = roundDouble(otherGPSPoint.getLatitude());
+		
+		
+		
+		// because of accuracy bugs of double number, we will consider only 7 digits after dot
+		return ((roundedOtherLat == roundedThisLat) && (roundedOtherLong == roundedThisLong));
+	}
+	
+	private double roundDouble (double num)
+	{
+		return (Math.floor(num * 10000000) / 10000000);
 	}
 	
 }

@@ -57,15 +57,18 @@ public class LocatePicturesWithMap {
 		listOfSplitedPixelPointSets.add(firstSubSetOfPushPinPoints);
 		listOfSplitedPixelPointSets.add(secondSubSetofSlotsPoints);
 		listOfSplitedPixelPointSets.add(secondSubSetOfPushPinPoints);
+		
+		SlotPushPinTuple tempTupleToAdd;
 
 		PixelPoint closestSlot;
 		if (pushPinsSubSet.size() == 0)
 			return;
 		if (pushPinsSubSet.size() == 1){
-			PixelPoint lastPointofMapSet = pushPinsSubSet.iterator().next();
-			PixelPoint lastPointOnFramePixelPoint = slotsSubSet.iterator().next();
-			slotsToPushPinList.add(new SlotPushPinTuple (lastPointofMapSet, pixelPointToPushPinDictionary.get(lastPointofMapSet),
-					lastPointOnFramePixelPoint,pixelPointToSlotDictionary.get(lastPointOnFramePixelPoint)));
+			PixelPoint lastPushPin = pushPinsSubSet.iterator().next();
+			PixelPoint lastSlot = slotsSubSet.iterator().next();
+			tempTupleToAdd = new SlotPushPinTuple (lastPushPin, pixelPointToPushPinDictionary.get(lastPushPin),
+					lastSlot,pixelPointToSlotDictionary.get(lastSlot));
+			slotsToPushPinList.add(tempTupleToAdd);
 			return;
 		}
 
@@ -75,10 +78,11 @@ public class LocatePicturesWithMap {
 			closestSlot = findClosestPointInSet(pushPinPoint,slotsSubSet);
 			if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint, closestSlot, listOfSplitedPixelPointSets))
 			{
-				slotsToPushPinList.add(new SlotPushPinTuple(pushPinPoint, pixelPointToPushPinDictionary.get(pushPinPoint), 
-						closestSlot,pixelPointToSlotDictionary.get(closestSlot) ));
-				splitSetsEqualPointsTuple (firstSubSetofSlotsPoints,firstSubSetOfPushPinPoints);
-				splitSetsEqualPointsTuple (secondSubSetofSlotsPoints, secondSubSetOfPushPinPoints);
+				tempTupleToAdd = new SlotPushPinTuple (pushPinPoint, pixelPointToPushPinDictionary.get(pushPinPoint),
+						closestSlot,pixelPointToSlotDictionary.get(closestSlot));
+				slotsToPushPinList.add(tempTupleToAdd);
+				splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints);
+				splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints);
 				return;
 			}
 			else {
@@ -86,10 +90,11 @@ public class LocatePicturesWithMap {
 				{
 					if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint , slotPoint, listOfSplitedPixelPointSets))
 					{
-						slotsToPushPinList.add(new SlotPushPinTuple(pushPinPoint,pixelPointToPushPinDictionary.get(pushPinPoint), 
-								slotPoint,pixelPointToSlotDictionary.get(slotPoint)));
-						splitSetsEqualPointsTuple (firstSubSetofSlotsPoints,firstSubSetOfPushPinPoints);
-						splitSetsEqualPointsTuple (secondSubSetofSlotsPoints, secondSubSetOfPushPinPoints);
+						tempTupleToAdd = new SlotPushPinTuple (pushPinPoint, pixelPointToPushPinDictionary.get(pushPinPoint),
+								slotPoint,pixelPointToSlotDictionary.get(slotPoint));
+						slotsToPushPinList.add(tempTupleToAdd);
+						splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints);
+						splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints);
 						return;
 					}
 				}
