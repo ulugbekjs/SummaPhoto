@@ -76,14 +76,14 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 		
 		//free bitmap
-		bitmap.recycle();
-		bitmap = null;
-
-		// add lines
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setColor(android.graphics.Color.MAGENTA);
-		paint.setStrokeWidth(3f);
-		canvas.drawLine(642, 2080, 2448, 642, paint);
+//		bitmap.recycle();
+////		bitmap = null;
+//
+//		// add lines
+//		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//		paint.setColor(android.graphics.Color.MAGENTA);
+//		paint.setStrokeWidth(3f);
+//		canvas.drawLine(642, 2080, 2448, 642, paint);
 
 		Photo collage;
 		try {

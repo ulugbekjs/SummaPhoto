@@ -96,9 +96,11 @@ public class PhotoListenerThread extends FileObserver {
 		GpsDirectory directory1 = metadata.getDirectory(GpsDirectory.class);
 
 		GeoLocation location = directory1.getGeoLocation();
+		
 		if (location == null) { // photo has no location
 			return null;
 		}
+		
 
 		//get time
 		ExifSubIFDDirectory directory2 = metadata.getDirectory(ExifSubIFDDirectory.class);

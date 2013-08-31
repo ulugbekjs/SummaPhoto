@@ -43,10 +43,10 @@ public class MapTemplate extends AbstractTemplate{
 				newMap.getPixelHeight() == this.getMapPixelHeight()) {
 			map = newMap;
 			try {
-				Photo mapPhoto = PhotoListenerThread.createPhotoFromFile(newMap.getJpgPath());
-				mapSlot.assignToPhoto(mapPhoto);
+				
+				mapSlot.assignToPhoto(newMap.getPhotoObject());
 			}
-			catch (ImageProcessingException ex)
+			catch (Exception ex)
 			{
 				/** TODO: add exceptionsHandling **/ 
 				return false;
