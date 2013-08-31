@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.adobe.xmp.impl.Utils;
+import com.drew.imaging.ImageProcessingException;
+
 import ActivationManager.DedicatedRequest;
 import Bing.BingServices;
 import Bing.Pushpin;

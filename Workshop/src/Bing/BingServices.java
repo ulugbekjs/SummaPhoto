@@ -176,8 +176,8 @@ public class BingServices {
 
 	private static String createOutputFile(boolean metadata, ByteArrayOutputStream out) throws IOException {
 		
-		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "Pictures");
-		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Output");
+		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "DCIM");
+		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Tests");
 		File file = new File(testsDir, "moshiko.");
 
 		// Construct right file according to requested content
