@@ -17,8 +17,8 @@ public class GPSPoint  {
 	}
 	
 	public GPSPoint(double latitude, double longitude) {
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.longitude = roundDouble(longitude);
+		this.latitude = roundDouble(latitude);
 	}
 	
 	/**
@@ -37,38 +37,7 @@ public class GPSPoint  {
 	public String toString() {
 		return (latitude + "," + longitude);
 	}
-	/**
-	@Override
-	public boolean equals(Object other)
-	{ 
-		if (other == null)
-			return false;
-		if (other == this)
-			return true;
-		if (!(other instanceof GPSPoint))
-			return false;
-		GPSPoint otherGPSPoint = (GPSPoint) other;
-		
-		double roundedThisLong = roundDouble(longitude) ;
-		double roundedThisLat =  roundDouble(latitude);
-		double roundedOtherLong = roundDouble(otherGPSPoint.getLongitude());
-		double roundedOtherLat = roundDouble(otherGPSPoint.getLatitude());
-		return (otherGPSPoint.distanceFrom(this) < 2);
-		
-		/**
-		// because of accuracy bugs of double number, we will consider only 7 digits after dot
-		return ((roundedOtherLat == roundedThisLat) && (roundedOtherLong == roundedThisLong));
-		
-	}
-	 **/
 	
-	private double roundDouble (double num)
-	{
-		return (Math.floor(num * 10000000) / 10000000);
-	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -80,16 +49,13 @@ public class GPSPoint  {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof GPSPoint))
+		if (getClass() != obj.getClass())
 			return false;
 		GPSPoint other = (GPSPoint) obj;
 		if (Double.doubleToLongBits(latitude) != Double
@@ -99,6 +65,11 @@ public class GPSPoint  {
 				.doubleToLongBits(other.longitude))
 			return false;
 		return true;
+	}
+	
+	private double roundDouble (double num)
+	{
+		return (Math.round(num * Math.pow(10, 13)) / Math.pow(10, 13));
 	}
 	
 }

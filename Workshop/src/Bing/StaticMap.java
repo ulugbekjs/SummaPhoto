@@ -14,7 +14,11 @@ import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
 import android.R.integer;
+import android.nfc.Tag;
+import android.util.Log;
 
+import Common.ActualEvent;
+import Common.ActualEventsBundle;
 import Common.GeoBoundingBox;
 import Common.GPSPoint;
 import Common.Photo;
@@ -27,6 +31,7 @@ import Generator.PixelPoint;
  */
 public class StaticMap {
 
+	private static final String TAG = StaticMap.class.getName();
 	private UUID requestUuid;
 	private GeoBoundingBox box;
 	private GPSPoint centerPoint;
@@ -35,15 +40,20 @@ public class StaticMap {
 	private String jpgPath;
 	private Photo map;
 	private String metadataPath;
-	
+
 	private List<Pushpin> pins = new LinkedList<Pushpin>(); 
-	
-	public StaticMap(int width, int height) {
+
+	public StaticMap(List<Photo> photos, int width, int height) {
 		this.requestUuid = UUID.randomUUID();
 		pixelWidth = width;
 		pixelHeight = height;
+
+		// create pushpins with link to the relevant photo
+		for (Photo photo : photos) {
+			pins.add(new Pushpin(photo));
+		}
 	}
-			
+
 	public GPSPoint getCenterPoint() {
 		return centerPoint;
 	}
@@ -51,16 +61,16 @@ public class StaticMap {
 	public String getJpgPath() {
 		return jpgPath;
 	}
-	
+
 	public List<Pushpin> getPushPins()
 	{
 		return pins;
 	}
-	
+
 	public void setJpgPath(String jpgPath, int width, int height) {
 		this.jpgPath = jpgPath;
 		this.map = new Photo(new Date(), width, height, null, jpgPath);
-		
+
 	}
 	public String getMetadataPath() {
 		return metadataPath;
@@ -75,15 +85,15 @@ public class StaticMap {
 	public GeoBoundingBox getBox() {
 		return box;
 	}
-	
+
 	public int getPixelWidth() {
 		return this.pixelWidth;
 	}
-	
+
 	public int getPixelHeight() {
 		return this.pixelHeight;
 	}
-	
+
 	private void fillMapWithMetaData() {
 
 		SAXBuilder builder = new SAXBuilder();
@@ -133,6 +143,7 @@ public class StaticMap {
 			// get pushpins data: location, anchor & offsets
 			Element pushpinsNode =  metaNode.getChild("Pushpins", namespace);
 
+			int pushpin = 0;
 			for (Element pushpinNode : pushpinsNode.getChildren()) {
 
 				node = pushpinNode.getChild("Point", namespace);
@@ -143,23 +154,33 @@ public class StaticMap {
 				int ax = Integer.valueOf(node.getChildText("X", namespace));	
 				int ay = Integer.valueOf(node.getChildText("Y", namespace));	
 
-				node = pushpinNode.getChild("TopLeftOffset", namespace);
-				int tx = Integer.valueOf(node.getChildText("X", namespace));	
-				int ty = Integer.valueOf(node.getChildText("Y", namespace));	
+				//TODO : remove if not needed
+				//				node = pushpinNode.getChild("TopLeftOffset", namespace);
+				//				int tx = Integer.valueOf(node.getChildText("X", namespace));	
+				//				int ty = Integer.valueOf(node.getChildText("Y", namespace));	
+				//
+				//				node = pushpinNode.getChild("BottomRightOffset", namespace);
+				//				int bx = Integer.valueOf(node.getChildText("X", namespace));	
+				//				int by = Integer.valueOf(node.getChildText("Y", namespace));	
 
-				node = pushpinNode.getChild("BottomRightOffset", namespace);
-				int bx = Integer.valueOf(node.getChildText("X", namespace));	
-				int by = Integer.valueOf(node.getChildText("Y", namespace));	
+				// pushpins are returned in order they were sent
+				if (pins.get(pushpin).getPhoto().getLocation().equals(new GPSPoint(latitude, longitude))) { // verify returned pushpin to out pushpin by location
+					pins.get(pushpin).setAnchor(new PixelPoint(ax, ay));
+					pushpin++;
+				}
+				else {
+					Log.e(TAG, "Unexpected pushpin");
+				}
 
-				pins.add(new Pushpin(new GPSPoint(latitude,longitude),
-						new PixelPoint(ax, ay),
-						new int[] {tx, ty},
-						new int[] {bx, by}));
+				//				pins.add(new Pushpin(new GPSPoint(latitude,longitude),
+				//						new PixelPoint(ax, ay),
+				//						new int[] {tx, ty},
+				//						new int[] {bx, by}));
 			}
 		}
 		catch (NullPointerException exception) {
 			// TODO: handle null (nodes that are not found)
 		}
 	}
-	
+
 }
