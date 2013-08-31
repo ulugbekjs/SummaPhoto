@@ -53,11 +53,12 @@ public class GPSPoint  {
 		double roundedThisLat =  roundDouble(latitude);
 		double roundedOtherLong = roundDouble(otherGPSPoint.getLongitude());
 		double roundedOtherLat = roundDouble(otherGPSPoint.getLatitude());
+		return (otherGPSPoint.distanceFrom(this) < 2);
 		
-		
-		
+		/**
 		// because of accuracy bugs of double number, we will consider only 7 digits after dot
 		return ((roundedOtherLat == roundedThisLat) && (roundedOtherLong == roundedThisLong));
+		**/
 	}
 	
 	private double roundDouble (double num)
