@@ -41,7 +41,9 @@ public class PhotoContainer {
 	}
 
 	public void moveToProcessedPhotos(Photo photo) {
-		processedPhotos.add(photo);
+		if (!processedPhotos.contains(photo)) {
+			processedPhotos.add(photo);
+		}
 	}
 
 	public void onDelete(String deleted) {
