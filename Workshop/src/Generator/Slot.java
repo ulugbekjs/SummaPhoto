@@ -1,8 +1,5 @@
 package Generator;
 
-import android.R.integer;
-import Common.Photo;
-
 /**
  * Represents a fixed empty space for a photo in a template
  * @author yonatan

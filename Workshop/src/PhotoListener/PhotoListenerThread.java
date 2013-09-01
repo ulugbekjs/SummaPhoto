@@ -17,8 +17,6 @@ import Common.GPSPoint;
 import Common.Photo;
 import Common.PhotoContainer;
 import Common.Utils;
-import android.R.integer;
-import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
 

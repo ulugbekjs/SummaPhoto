@@ -1,7 +1,5 @@
 package Generator;
 
-import android.R.integer;
-
 /**
  * Represents a point in an image
  * @author yonatan
