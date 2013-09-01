@@ -1,6 +1,7 @@
 package com.example.aworkshop;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,7 +40,9 @@ import android.widget.RadioGroup;
 import android.widget.TimePicker;
 
 public class SettingsActivity extends FragmentActivity { // Extends FragmentActivity to support < Android 3.0
-
+	
+	private static final String TAG = SettingsActivity.class.getName();
+	
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 //		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
@@ -133,25 +136,34 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	}
 
 	private boolean createAppFolders() {
-		boolean successful_photo = false, successful_app_dir = false;
+		
+		if (!Common.Utils.isExternalStorageWritable())
+				return false;
 		
 		//create folders for app
 		File tmpFile = new File(APP_PHOTO_DIR);
-		if (Common.Utils.isExternalStorageWritable() && !tmpFile.exists()) {
+		if (!tmpFile.exists()) {
 			tmpFile.mkdirs();
-			successful_photo = true;
 		}
 		
 		tmpFile = new File(APP_TEMP_DIR);
-		if (Common.Utils.isExternalStorageWritable() && !tmpFile.exists()) {
+		if (!tmpFile.exists()) {
 			tmpFile.mkdirs();
-			successful_app_dir = true;
+		}
+		
+		File nomediaFile = new File(tmpFile, ".nomedia");
+		if (!nomediaFile.exists()) {
+			try {
+				nomediaFile.createNewFile();
+			} catch (IOException e) {
+				Log.e(TAG, "Could not create .nomedia file");
+			}
 		}
 		
 		tmpFile = null;
 		
 		
-		return successful_app_dir && successful_photo;
+		return true;
 	}
 
 	@Override
