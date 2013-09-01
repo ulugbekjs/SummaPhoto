@@ -56,7 +56,7 @@ public class Utils {
 	 * @param photo
 	 * @throws FileNotFoundException 
 	 */
-	public static void notifyUser(Photo photo) throws FileNotFoundException {
+	public static void notifyUserCollageCreated(Photo photo) throws FileNotFoundException {
 
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "Pictures");
 
@@ -98,6 +98,7 @@ public class Utils {
 	public static void notifyUserWithError(String title, String text) {
 		Context context = SettingsActivity.CONTEXT;
 
+		Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(context)
@@ -106,7 +107,8 @@ public class Utils {
 		.setContentText(text)
 		.setAutoCancel(true)
 		.setContentIntent(PendingIntent.getActivity(context, 0, new Intent(), 0)) // creates empty notfication
-		.setOnlyAlertOnce(true);
+		.setOnlyAlertOnce(true)
+		.setSound(alarmSound);
 
 
 		NotificationManager mNotifyMgr = 

@@ -51,7 +51,7 @@ public class SmartModeService {
 						}
 						if (collage != null) {
 							try {
-								Utils.notifyUser(collage);
+								Utils.notifyUserCollageCreated(collage);
 							} catch (FileNotFoundException e) {
 								Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
 							}

@@ -42,8 +42,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 	public static final String APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
 	public static final String APP_TEMP_DIR = new File(Environment.getExternalStorageDirectory(), "Summaphoto") + File.separator + "Temp" + File.separator;
@@ -77,19 +77,19 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		//		// 		Yonatan's code
 		//		//
 		//
-		/**
-		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-		observer.startWatching();
+		//
+//		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
+//		observer.startWatching();
+//
+//		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+//		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
+//		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+//
+//		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
+//		dailyRadioBtn.setOnClickListener(listener);
+		 
 
-		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
-		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
-		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
-
-		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-		dailyRadioBtn.setOnClickListener(listener);
-		 **/
-
-		//TODO: remove, this is because of netwrok on main thread error
+//		//TODO: remove, this is because of netwrok on main thread error
 		if (android.os.Build.VERSION.SDK_INT > 9) {
 			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
 			StrictMode.setThreadPolicy(policy);
