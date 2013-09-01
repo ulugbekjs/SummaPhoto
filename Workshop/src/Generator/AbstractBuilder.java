@@ -84,7 +84,7 @@ public abstract class AbstractBuilder {
 		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 		options.inJustDecodeBounds = false;
 		options.inPurgeable = true;
-		options.inSampleSize = 1;
+		options.inSampleSize = 4;
 		options.inDither = true;
 		options.inInputShareable = true;
 		options.inTempStorage = new byte[32 * 1024];
