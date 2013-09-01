@@ -72,6 +72,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		CONTEXT = this;
 
 		createAppFolders();
+		
+		Common.Utils.notifyUserWithError();
 
 		//		// 		Yonatan's code
 		//		//

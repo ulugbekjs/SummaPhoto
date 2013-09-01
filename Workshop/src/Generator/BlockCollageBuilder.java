@@ -157,14 +157,13 @@ public class BlockCollageBuilder extends AbstractBuilder {
 		Photo collage = null;
 		try {
 			collage = saveCollage(bmpBase); 
+			clearProcessedPhotos(); // clear photos in container so they are not used again
 		}
 		catch (IOException exception) {
 			Log.e(TAG, "Error when saving collage file");
-			// TODO: notify user about error in saving collage
 			return null;
 		}
 		
-		clearProcessedPhotos(); // clear photos in container so they are not used again
 		
 		return collage;
 

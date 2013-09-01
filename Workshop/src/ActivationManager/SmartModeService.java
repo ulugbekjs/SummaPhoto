@@ -57,6 +57,9 @@ public class SmartModeService {
 								Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
 							}
 						}
+						else { // there was an error, notify user
+							Utils.notifyUserWithError();
+						}
 
 					}
 					else {

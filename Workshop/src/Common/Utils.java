@@ -95,7 +95,7 @@ public class Utils {
 		mNotifyMgr.notify(1, mBuilder.build());
 	}
 	
-	private void notifyUserWithError() {
+	public static void notifyUserWithError() {
 		Context context = SettingsActivity.CONTEXT;
 
 
@@ -104,13 +104,16 @@ public class Utils {
 		.setSmallIcon(R.drawable.icon)
 		.setContentTitle("Error when building collage")
 		.setContentText("We're sorry, but Summaphoto failed building a collage for you.")
-		.setAutoCancel(true);
+		.setAutoCancel(true)
+		.setContentIntent(PendingIntent.getActivity(context, 0, new Intent(), 0)) // creates empty notfication
+		.setOnlyAlertOnce(true);
 
 
 		NotificationManager mNotifyMgr = 
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		// Builds the notification and issues it.
 		mNotifyMgr.notify(1, mBuilder.build());
+		
 	}
 
 	private static Uri addImageToGallery(Photo photo) {

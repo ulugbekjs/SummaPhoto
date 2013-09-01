@@ -37,6 +37,7 @@ public class Slot{
 		if (photo != null) {
 			this.photo = photo;
 		}
+		
 	}
 
 	public Photo getPhoto() {

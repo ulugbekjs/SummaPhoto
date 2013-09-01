@@ -1,17 +1,8 @@
 package Generator;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
-
-import com.drew.imaging.ImageProcessingException;
-
-import android.R.integer;
-
 import Bing.StaticMap;
-import Common.Photo;
-import PhotoListener.PhotoListenerThread;
 
 public class MapTemplate extends AbstractTemplate{
 

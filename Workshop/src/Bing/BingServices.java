@@ -185,7 +185,6 @@ public class BingServices {
 
 		// Construct right file according to requested content
 		if (!metadata) {
-			// TODO: make jpg data work with imageIO and not with file
 			file = new File(file.getPath() + "jpg");
 		}
 		else {

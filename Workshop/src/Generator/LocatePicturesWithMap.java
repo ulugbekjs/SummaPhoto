@@ -61,33 +61,31 @@ public class LocatePicturesWithMap {
 		SlotPushPinTuple tempTupleToAdd;
 
 		PixelPoint closestSlot;
-		if (pushPinsSubSet.size() == 0)
-			return;
-		if (pushPinsSubSet.size() == 1){
-			PixelPoint lastSlot = null;
-			PixelPoint lastPushPin = null;
-			if (pushPinsSubSet.iterator().hasNext() && slotsSubSet.iterator().hasNext()) {
-				lastPushPin = pushPinsSubSet.iterator().next(); 
-				lastSlot = slotsSubSet.iterator().next();
-				tempTupleToAdd = new SlotPushPinTuple (lastPushPin, pixelPointToPushPinDictionary.get(lastPushPin),
-						lastSlot,pixelPointToSlotDictionary.get(lastSlot));
-				slotsToPushPinList.add(tempTupleToAdd);
-			}
-			
-//			if (pushPinsSubSet.size() == 0)
-//				return;
-//			if (pushPinsSubSet.size() == 1){
-//				PixelPoint lastPushPin = pushPinsSubSet.iterator().next();
-//				PixelPoint lastSlot = slotsSubSet.iterator().next();
+//		if (pushPinsSubSet.size() == 0)
+//			return;
+//		if (pushPinsSubSet.size() == 1){
+//			PixelPoint lastSlot = null;
+//			PixelPoint lastPushPin = null;
+//			if (pushPinsSubSet.iterator().hasNext() && slotsSubSet.iterator().hasNext()) {
+//				lastPushPin = pushPinsSubSet.iterator().next(); 
+//				lastSlot = slotsSubSet.iterator().next();
 //				tempTupleToAdd = new SlotPushPinTuple (lastPushPin, pixelPointToPushPinDictionary.get(lastPushPin),
 //						lastSlot,pixelPointToSlotDictionary.get(lastSlot));
 //				slotsToPushPinList.add(tempTupleToAdd);
-//				return;
 //			}
+//		return;
 
 			
-			return;
-		}
+			if (pushPinsSubSet.size() == 0)
+				return;
+			if (pushPinsSubSet.size() == 1){
+				PixelPoint lastPushPin = pushPinsSubSet.iterator().next();
+				PixelPoint lastSlot = slotsSubSet.iterator().next();
+				tempTupleToAdd = new SlotPushPinTuple (lastPushPin, pixelPointToPushPinDictionary.get(lastPushPin),
+						lastSlot,pixelPointToSlotDictionary.get(lastSlot));
+				slotsToPushPinList.add(tempTupleToAdd);
+				return;
+			}
 
 
 		for (PixelPoint pushPinPoint : pushPinsSubSet) {

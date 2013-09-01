@@ -28,7 +28,7 @@ import android.util.Log;
  */
 public class PhotoListenerThread extends FileObserver {
 
-	private final String TAG = PhotoListenerThread.class.getName();
+	private static final String TAG = PhotoListenerThread.class.getName();
 	String absolutePath;
 
 	public PhotoListenerThread(String path) {
@@ -115,8 +115,8 @@ public class PhotoListenerThread extends FileObserver {
 					new GPSPoint(location.getLatitude(),location.getLongitude()),
 					path.getPath());
 		} catch (MetadataException e) {
-			// TODO ERROR reading EXIF details of photo
-			e.printStackTrace();
+			Log.e(TAG, "Error getting photo dimensions");
+			return null;
 		}
 
 		return photo;

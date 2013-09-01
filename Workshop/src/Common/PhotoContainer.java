@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import android.util.Log;
+
 public class PhotoContainer {
 
-	    private static final PhotoContainer instance = new PhotoContainer();
+	    private static final String TAG = PhotoContainer.class.getName();
+		private static final PhotoContainer instance = new PhotoContainer();
 	    
 		private List<Photo> processedPhotos = new ArrayList<Photo>();
 		private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
@@ -31,8 +34,7 @@ public class PhotoContainer {
 			try {
 				buffer.put(p);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(TAG, "Error adding new photo to container");
 			}
 		}
 		
