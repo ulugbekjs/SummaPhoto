@@ -103,7 +103,7 @@ public class Utils {
 				new NotificationCompat.Builder(context)
 		.setSmallIcon(R.drawable.icon)
 		.setContentTitle("Error when building collage")
-		.setContentText("We're sorry, but Summaphoto failed building a collage for you.")
+		.setContentText("Summaphoto has failed building your collage.")
 		.setAutoCancel(true)
 		.setContentIntent(PendingIntent.getActivity(context, 0, new Intent(), 0)) // creates empty notfication
 		.setOnlyAlertOnce(true);

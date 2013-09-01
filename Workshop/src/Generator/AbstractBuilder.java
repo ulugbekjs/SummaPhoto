@@ -89,6 +89,7 @@ public abstract class AbstractBuilder {
 		options.inTempStorage = new byte[32 * 1024];
 
 		bitmap = BitmapFactory.decodeFile(slot.getPhoto().getFilePath(), options);
+		bitmap.setHasAlpha(true);
 		WeakReference<Bitmap> bitmapReference = new WeakReference<Bitmap>(bitmap);
 
 		//		Bitmap bitmap = decodeScaledBitmapFromSdCard(slot.getPhoto().getFilePath(), slot.getPhoto().getWidth(), slot.getPhoto().getWidth());

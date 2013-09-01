@@ -155,7 +155,6 @@ public class BingServices {
 		} catch (ClientProtocolException e) {
 			throw new NetworkErrorException(e);
 		} catch (IOException e) { // connection to Bing
-			// TODO Auto-generated catch block
 			throw new NetworkErrorException(e);
 		}
 

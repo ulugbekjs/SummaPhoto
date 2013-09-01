@@ -36,7 +36,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 	public MapCollageBuilder(ActualEventsBundle bundle) {
 		super(bundle);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -49,6 +48,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		// TODO: remove. moved to comments since canvas size for map collage was changes
 		// bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
 		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
+		bmpBase.setHasAlpha(true);
 		canvas = new Canvas(bmpBase);
 
 		
@@ -93,7 +93,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 		catch (IOException exception) {
 			Log.e(TAG, "Error when saving collage file");
-			// TODO: notify user about error in saving collage
 			return null;
 		}
 		

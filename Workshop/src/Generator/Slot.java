@@ -82,12 +82,12 @@ public class Slot{
 	
 	public int getSlotWidth() {
 		
-		Double doubleValue = new Double(Math.abs(bottomRight.distanceFrom(new PixelPoint(topLeft.getX(), bottomRight.getY())))) ;
+		Double doubleValue = Double.valueOf(Math.abs(bottomRight.distanceFrom(new PixelPoint(topLeft.getX(), bottomRight.getY())))) ;
 		return doubleValue.intValue();
 	}
 
 	public int getSlotHeight() {
-		Double doubleValue = new Double( Math.abs(bottomRight.distanceFrom(new PixelPoint(bottomRight.getX(), topLeft.getY()))));
+		Double doubleValue = Double.valueOf(Math.abs(bottomRight.distanceFrom(new PixelPoint(bottomRight.getX(), topLeft.getY()))));
 		return doubleValue.intValue();
 	}
 
