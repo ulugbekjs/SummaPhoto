@@ -4,7 +4,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import javax.security.auth.PrivateCredentialPermission;
+
+import android.provider.SyncStateContract.Constants;
+import android.util.Log;
 
 import Bing.Pushpin;
 
@@ -12,39 +18,86 @@ import Bing.Pushpin;
 
 /** This class provides methods to locate the different pictures around the map in good positions **/
 public class LocatePicturesWithMap {
-
-
+	
+	
+	private final String TAG = "LoctePicturesOnMap" ;
 	private HashMap<PixelPoint,Slot> pixelPointToSlotDictionary;
 	private HashMap<PixelPoint,Pushpin> pixelPointToPushPinDictionary;
 
-	// This set includes the location of each picture on the map 
-	private Set<PixelPoint> pushPinPointsSet;
-	// This set includes the location of each different points on the frame around the map
-	private Set<PixelPoint> slotPointsSet;
+	// Those sets includes the location of each picture on the map 
+	private Set<PixelPoint> horizontalPushPinPointsSet;
+	private Set<PixelPoint> verticalPushPinPointsSet;
+	// Those sets includes the location of each different points on the frame around the map
+	private Set<PixelPoint> horizontalSlotPointsSet;
+	private Set<PixelPoint> verticalSlotPointsSet;
 
 
 	private List<SlotPushPinTuple> slotsToPushPinList;
 
-	public LocatePicturesWithMap (HashMap<PixelPoint,Slot> pixelPointToSlotDictionary,
+	public LocatePicturesWithMap (HashMap<PixelPoint,Slot> pixelPointToSlotDictionary, 
 			HashMap<PixelPoint,Pushpin> pixelPointToPushPinDictionary)
 	{
+		
 		this.pixelPointToPushPinDictionary = pixelPointToPushPinDictionary;
 		this.pixelPointToSlotDictionary = pixelPointToSlotDictionary;
-		this.pushPinPointsSet =  pixelPointToPushPinDictionary.keySet();
-		this.slotPointsSet = pixelPointToSlotDictionary.keySet();
+		verticalPushPinPointsSet = new HashSet<PixelPoint>();
+		verticalSlotPointsSet = new HashSet<PixelPoint>();
+		horizontalPushPinPointsSet = new HashSet<PixelPoint>();
+		horizontalSlotPointsSet = new HashSet<PixelPoint>();
+		initiateSlotsAndPushPinsSets (this.pixelPointToSlotDictionary, this.pixelPointToPushPinDictionary);
+		
 	}
 
 	/**
-	 * @return list of slotsPushPinTuple which indicated contains the data which pushPin related to every slot in the template
+	 * @param pixelPointToSlotDictionary
+	 * @param pixelPointToPushPinDictionary
+	 * The method initiates relevant sets for the algorithm 
 	 */
-	public List<SlotPushPinTuple> matchPictureOnMapToPointOnFrame ()
+	private void initiateSlotsAndPushPinsSets (HashMap<PixelPoint,Slot> pixelPointToSlotDictionary,
+			HashMap<PixelPoint,Pushpin> pixelPointToPushPinDictionary)
+	{
+		if ((pixelPointToSlotDictionary == null) || (pixelPointToPushPinDictionary == null))
+		{
+			Log.d(TAG, "one of the arguments for constructor is null");
+			return;
+		}
+		for (Map.Entry<PixelPoint,Slot> entry :pixelPointToSlotDictionary.entrySet())
+		{
+			if (entry.getValue().isHorizontal())
+			{
+				horizontalSlotPointsSet.add(entry.getKey());
+			}
+			else 
+			{
+				verticalSlotPointsSet.add(entry.getKey());
+			}
+		}
+		for (Map.Entry<PixelPoint,Pushpin> entry :pixelPointToPushPinDictionary.entrySet())
+		{
+			if (entry.getValue().getPhoto().isHorizontal())
+			{
+				horizontalPushPinPointsSet.add(entry.getKey());
+			}
+			else 
+			{
+				verticalPushPinPointsSet.add(entry.getKey());
+			}
+		}
+	}
+	
+
+	/**
+	 * @return list of slotsPushPinTuple which indicated the data which pushPin related to every slot in the template
+	 */
+	public List<SlotPushPinTuple> matchPicturesOnMapToPointOnFrame ()
 	{
 		slotsToPushPinList = new LinkedList<SlotPushPinTuple>();
-		splitSetsEqualPointsTuple (pushPinPointsSet,slotPointsSet);
+		splitSetsEqualPointsTuple (horizontalPushPinPointsSet,horizontalSlotPointsSet);
+		splitSetsEqualPointsTuple(verticalPushPinPointsSet, verticalSlotPointsSet);
 		return slotsToPushPinList;
 	}
 
-	private void splitSetsEqualPointsTuple (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet)
+	private Boolean splitSetsEqualPointsTuple (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet)
 	{
 		// Subsets of pointsOnFrameSet and  picturesOnMapSet for recursive algorithm issues
 		Set<PixelPoint> firstSubSetofSlotsPoints =new HashSet<PixelPoint>();
@@ -61,35 +114,29 @@ public class LocatePicturesWithMap {
 		SlotPushPinTuple tempTupleToAdd;
 
 		PixelPoint closestSlot;
-//				if (pushPinsSubSet.size() == 0)
-//					return;
-//				if (pushPinsSubSet.size() == 1){
-//					PixelPoint lastSlot = null;
-//					PixelPoint lastPushPin = null;
-//					if (pushPinsSubSet.iterator().hasNext() && slotsSubSet.iterator().hasNext()) {
-//						lastPushPin = pushPinsSubSet.iterator().next(); 
-//						lastSlot = slotsSubSet.iterator().next();
-//						tempTupleToAdd = new SlotPushPinTuple (lastPushPin, pixelPointToPushPinDictionary.get(lastPushPin),
-//								lastSlot,pixelPointToSlotDictionary.get(lastSlot));
-//						slotsToPushPinList.add(tempTupleToAdd);
-//						
-//					}
-//					return;
-//				}
-//				
-
-
-		if (pushPinsSubSet.size() == 0)
-			return;
-		if (pushPinsSubSet.size() == 1){
-			PixelPoint lastPushPin = pushPinsSubSet.iterator().next();
-			PixelPoint lastSlot = slotsSubSet.iterator().next();
-			tempTupleToAdd = new SlotPushPinTuple (lastPushPin, pixelPointToPushPinDictionary.get(lastPushPin),
-					lastSlot,pixelPointToSlotDictionary.get(lastSlot));
-			slotsToPushPinList.add(tempTupleToAdd);
-			return;
+		if (pushPinsSubSet.size() != slotsSubSet.size())
+		{
+			Log.d(TAG, "Number of slots and number of pictures is not equal");
+			return false;
 		}
+		if (pushPinsSubSet.size() == 0)
+			return true;
+		if (pushPinsSubSet.size() == 1){
+			PixelPoint lastSlot = null;
+			PixelPoint lastPushPin = null;
+			if (pushPinsSubSet.iterator().hasNext() && slotsSubSet.iterator().hasNext()) {
+				lastPushPin = pushPinsSubSet.iterator().next(); 
+				lastSlot = slotsSubSet.iterator().next();
+				tempTupleToAdd = new SlotPushPinTuple (lastPushPin, pixelPointToPushPinDictionary.get(lastPushPin),
+						lastSlot,pixelPointToSlotDictionary.get(lastSlot));
+				slotsToPushPinList.add(tempTupleToAdd);
+				return true;
 
+			}
+			else {
+				return false;
+			}
+		}
 
 		for (PixelPoint pushPinPoint : pushPinsSubSet) {
 			// First try to split the sets with closest point in pointsOnFrameSubSetSet to the chosen point
@@ -101,7 +148,7 @@ public class LocatePicturesWithMap {
 				slotsToPushPinList.add(tempTupleToAdd);
 				splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints);
 				splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints);
-				return;
+				return true;
 			}
 			else {
 				for (PixelPoint slotPoint : slotsSubSet)
@@ -113,11 +160,12 @@ public class LocatePicturesWithMap {
 						slotsToPushPinList.add(tempTupleToAdd);
 						splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints);
 						splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints);
-						return;
+						return true;
 					}
 				}
 			}
 		}
+		return true;
 
 	}
 
