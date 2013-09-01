@@ -82,6 +82,7 @@ public abstract class AbstractBuilder {
 		// get Image bitmap
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+		options.inJustDecodeBounds = false;
 		options.inPurgeable = true;
 		options.inSampleSize = 1;
 		options.inDither = true;

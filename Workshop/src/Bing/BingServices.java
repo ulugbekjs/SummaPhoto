@@ -7,7 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -20,6 +22,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.jdom2.JDOMException;
+
+import com.example.aworkshop.SettingsActivity;
 
 import android.accounts.NetworkErrorException;
 import android.os.Environment;
@@ -178,9 +182,7 @@ public class BingServices {
 
 	private static String createOutputFile(boolean metadata, ByteArrayOutputStream out) throws IOException {
 
-		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "DCIM");
-		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Tests");
-		File file = new File(testsDir, "moshiko.");
+		File file = new File(SettingsActivity.APP_TEMP_DIR, "map_temp.");
 
 		// Construct right file according to requested content
 		if (!metadata) {
@@ -190,13 +192,10 @@ public class BingServices {
 			file = new File(file.getPath()  + "xml");
 		}
 
-		// create Directories & files, if needed
-		if (!testsDir.exists()) {
-			testsDir.mkdirs();
-		}
 		if (file.exists()) {
 			file.delete();
 		}
+		
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 			Log.d("Test", "sdcard mounted and writable");

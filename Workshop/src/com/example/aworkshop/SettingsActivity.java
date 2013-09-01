@@ -45,7 +45,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
 	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
-	public static final String  APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
+	public static final String APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
+	public static final String APP_TEMP_DIR = new File(Environment.getExternalStorageDirectory(), "Summaphoto") + File.separator + "Temp" + File.separator;
 
 
 
@@ -72,7 +73,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		CONTEXT = this;
 
 		createAppFolders();
-		
+
 		//		// 		Yonatan's code
 		//		//
 		//
@@ -93,38 +94,38 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
 			StrictMode.setThreadPolicy(policy);
 		}
-				
-				//		//		//		Omri's code
-				//		//
-				File directory = new File(PHOTO_DIR);
-				if (!directory.exists())
-					return;
-				File[] arrayOfPic =  directory.listFiles();
-				Photo tempPhoho = null;
-				List<Photo> photosToCluster = new LinkedList<Photo>(); 
-				for (File file : arrayOfPic)
-				{
-					try
-					{
-						tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-					}
-					catch (Exception ex)
-					{
-					}
-					if (tempPhoho != null)
-						photosToCluster.add(tempPhoho);
-				}
-				List<ActualEvent> events = new LinkedList<ActualEvent>();
-				Cluster tempCluster;
-				for (Photo p :photosToCluster)
-				{
-					tempCluster = new Cluster();
-					tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-					events.add(new ActualEvent(tempCluster));
-				}
-				ActualEventsBundle bundle = new ActualEventsBundle(events);
-				MapCollageBuilder builder = new MapCollageBuilder(bundle);
-				builder.buildCollage();
+
+		//		//		//		Omri's code
+		//		//
+		File directory = new File(PHOTO_DIR);
+		if (!directory.exists())
+			return;
+		File[] arrayOfPic =  directory.listFiles();
+		Photo tempPhoho = null;
+		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		for (File file : arrayOfPic)
+		{
+			try
+			{
+				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+			}
+			catch (Exception ex)
+			{
+			}
+			if (tempPhoho != null)
+				photosToCluster.add(tempPhoho);
+		}
+		List<ActualEvent> events = new LinkedList<ActualEvent>();
+		Cluster tempCluster;
+		for (Photo p :photosToCluster)
+		{
+			tempCluster = new Cluster();
+			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+			events.add(new ActualEvent(tempCluster));
+		}
+		ActualEventsBundle bundle = new ActualEventsBundle(events);
+		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+		builder.buildCollage();
 
 		return;
 		//		
@@ -132,15 +133,25 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	}
 
 	private boolean createAppFolders() {
-		boolean successful = false;
+		boolean successful_photo = false, successful_app_dir = false;
+		
 		//create folders for app
 		File tmpFile = new File(APP_PHOTO_DIR);
 		if (Common.Utils.isExternalStorageWritable() && !tmpFile.exists()) {
 			tmpFile.mkdirs();
-			successful = true;
+			successful_photo = true;
 		}
+		
+		tmpFile = new File(APP_TEMP_DIR);
+		if (Common.Utils.isExternalStorageWritable() && !tmpFile.exists()) {
+			tmpFile.mkdirs();
+			successful_app_dir = true;
+		}
+		
 		tmpFile = null;
-		return successful;
+		
+		
+		return successful_app_dir && successful_photo;
 	}
 
 	@Override
