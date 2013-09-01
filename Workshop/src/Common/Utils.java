@@ -94,6 +94,24 @@ public class Utils {
 		// Builds the notification and issues it.
 		mNotifyMgr.notify(1, mBuilder.build());
 	}
+	
+	private void notifyUserWithError() {
+		Context context = SettingsActivity.CONTEXT;
+
+
+		NotificationCompat.Builder mBuilder =
+				new NotificationCompat.Builder(context)
+		.setSmallIcon(R.drawable.icon)
+		.setContentTitle("Error when building collage")
+		.setContentText("We're sorry, but Summaphoto failed building a collage for you.")
+		.setAutoCancel(true);
+
+
+		NotificationManager mNotifyMgr = 
+				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		// Builds the notification and issues it.
+		mNotifyMgr.notify(1, mBuilder.build());
+	}
 
 	private static Uri addImageToGallery(Photo photo) {
 		ContentValues image = new ContentValues();

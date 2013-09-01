@@ -17,9 +17,6 @@ public class Photo {
 //	private ActualEvent parentActualEvent;
 	private double ID; //unique per Photo
 
-
-	//TODO private Image photo;
-
 	public Photo(Date date, int width, int height, String path) {
 //		this.takenDate = new DateTime(date);
 //		this.location = location;

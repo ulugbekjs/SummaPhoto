@@ -145,7 +145,7 @@ public abstract class AbstractBuilder {
 		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
 	}
 
-	protected void clearProcessPhotos() {
+	protected void clearProcessedPhotos() {
 		PhotoContainer.getInstance().clearProcessPhotos();
 	}
 

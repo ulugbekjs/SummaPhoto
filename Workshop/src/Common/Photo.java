@@ -14,7 +14,6 @@ import org.joda.time.Seconds;
 public class Photo implements Comparable<Photo> {
 
 	private DateTime takenDate;
-//	private Date takenDate;
 	private GPSPoint location;
 	private boolean isHorizontal;
 	private int height;

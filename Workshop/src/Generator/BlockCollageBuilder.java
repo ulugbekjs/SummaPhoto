@@ -164,7 +164,7 @@ public class BlockCollageBuilder extends AbstractBuilder {
 			return null;
 		}
 		
-		clearProcessPhotos(); // clear photos in container so they are not used again
+		clearProcessedPhotos(); // clear photos in container so they are not used again
 		
 		return collage;
 

@@ -39,18 +39,20 @@ public class BingServices {
 	 * @return StaticMap, or NULL if map could not be created
 	 */
 	public static StaticMap getStaticMap(List<Photo> photos, int width, int height) {
-		
+
 		StaticMap map = null;
 
 		if (photos.size()  > 0) { // Request only iff there is at least one photo
 
 			map = new StaticMap(photos, width, height);
-			
+
 			List<GPSPoint> points = getImagesPointsList(photos);
 			try {
 				map.setJpgPath(getJPG(points, width, height), width, height);
 			} catch (NetworkErrorException e) {
 				Log.e(TAG, "Network error when getting map jpg from Bing");
+			} catch (IOException e) {
+				Log.e(TAG, "Error when writing / reading recieved jpg");
 			}
 			try {
 				map.setMetadataPath(getJPGMetadata(points, width, height));
@@ -59,9 +61,9 @@ public class BingServices {
 			} catch (JDOMException e) {
 				Log.e(TAG, "Error when parsing Bing xml");
 			} catch (IOException e) {
-				Log.e(TAG, "Bing Map XML not found on device");
+				Log.e(TAG, "Error while writing / reading recieved xml");
 			}
-			
+
 			if (map.getJpgPath() == null || map.getMetadataPath() == null) { // verify paths
 				return null;  // free map for GC
 			}
@@ -74,11 +76,11 @@ public class BingServices {
 		return map;
 	}
 
-	private static String getJPG(List<GPSPoint> points, int width, int height) throws NetworkErrorException {
+	private static String getJPG(List<GPSPoint> points, int width, int height) throws NetworkErrorException, IOException {
 		return createHTTPRequest(false, points, width, height);
 	}
 
-	private static String getJPGMetadata(List<GPSPoint> points, int width, int height) throws NetworkErrorException {
+	private static String getJPGMetadata(List<GPSPoint> points, int width, int height) throws NetworkErrorException, IOException {
 		return createHTTPRequest(true, points, width, height);
 	}
 
@@ -102,89 +104,81 @@ public class BingServices {
 	 * @param points 
 	 * @return Path of newly saved .JPG/XML or NULL
 	 * @throws NetworkErrorException 
+	 * @throws IOException 
+	 * @throws  
 	 */
-	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points, int width, int height) throws NetworkErrorException {
+	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points, int width, int height) throws NetworkErrorException, IOException {
 
 		String file = null;
 
+
+		String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
+		//Make the actual connection
+		if (metadata) {
+			urlString += "mmd=1&o=xml";
+		}
+		else {
+			urlString += "mmd=0";
+		}
+
+		// concatenate with BING key
+		urlString = urlString + "&mapSize=" + width +"," + height + "&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
+
+		// Construct POST Request
+
+		HttpPost postReq = new HttpPost(urlString);
+
+		// adding pushpins coordinates to BING request
+		StringBuilder builder = new StringBuilder();
+		for (GPSPoint point : points)  {
+			builder.append("pp=");
+			builder.append(point.toString());
+			builder.append(";14;\r\n");
+		}
+
+		StringEntity entity = null;
 		try {
-			String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
-			//Make the actual connection
-			if (metadata) {
-				urlString += "mmd=1&o=xml";
-			}
-			else {
-				urlString += "mmd=0";
-			}
-
-			// concatenate with BING key
-			urlString = urlString + "&mapSize=" + width +"," + height + "&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
-
-			// Construct POST Request
-			
-			HttpPost postReq = new HttpPost(urlString);
-
-			// adding pushpins coordinates to BING request
-			StringBuilder builder = new StringBuilder();
-			for (GPSPoint point : points)  {
-				builder.append("pp=");
-				builder.append(point.toString());
-				builder.append(";14;\r\n");
-			}
-			
-			StringEntity entity = null;
-			try {
-				entity = new StringEntity(builder.toString(), HTTP.UTF_8);
-			} catch (UnsupportedEncodingException e1) {
-				Log.e(TAG, "Error building request to Bing:\n" + builder.toString());
-			}
-			postReq.setEntity(entity);
-
-			// Set BING Requested headers
-			postReq.setHeader("Content-Type", "text/plain");
-			postReq.setHeader("charset",  "charset=utf-8");
-
-			HttpResponse response = null;
-			try {
-				HttpClient httpclient = new DefaultHttpClient();
-				response = httpclient.execute(postReq);
-			} catch (ClientProtocolException e) {
-				throw new NetworkErrorException(e);
-			} catch (IOException e) { // connection to Bing
-				// TODO Auto-generated catch block
-				throw new NetworkErrorException(e);
-			}
-
-			StatusLine statusLine = response.getStatusLine();
-			if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				response.getEntity().writeTo(out);
-				out.close();
-
-				// normal return
-				file = createOutputFile(metadata, out);
-
-			} else {
-				//Closes the connection.
-				response.getEntity().getContent().close();
-				throw new IOException(statusLine.getReasonPhrase());
-			}
+			entity = new StringEntity(builder.toString(), HTTP.UTF_8);
+		} catch (UnsupportedEncodingException e1) {
+			Log.e(TAG, "Error building request to Bing:\n" + builder.toString());
 		}
-		catch (FileNotFoundException exception) {
-			//TODO : DIE
-		} catch (IllegalStateException e) {
+		postReq.setEntity(entity);
+
+		// Set BING Requested headers
+		postReq.setHeader("Content-Type", "text/plain");
+		postReq.setHeader("charset",  "charset=utf-8");
+
+		HttpResponse response = null;
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+			response = httpclient.execute(postReq);
+		} catch (ClientProtocolException e) {
+			throw new NetworkErrorException(e);
+		} catch (IOException e) { // connection to Bing
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new NetworkErrorException(e);
 		}
-		
+
+		StatusLine statusLine = response.getStatusLine();
+		if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			response.getEntity().writeTo(out);
+			out.close();
+
+			// normal return
+			file = createOutputFile(metadata, out);
+
+		} else {
+			//Closes the connection.
+			response.getEntity().getContent().close();
+			throw new IOException(statusLine.getReasonPhrase());
+		}
+
 		return file;
 	}
 
 	private static String createOutputFile(boolean metadata, ByteArrayOutputStream out) throws IOException {
-		
+
 		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "DCIM");
 		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Tests");
 		File file = new File(testsDir, "moshiko.");
@@ -207,14 +201,14 @@ public class BingServices {
 		}
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
-		    Log.d("Test", "sdcard mounted and writable");
+			Log.d("Test", "sdcard mounted and writable");
 			file.createNewFile();
 		}
 		else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-		    Log.d("Test", "sdcard mounted readonly");
+			Log.d("Test", "sdcard mounted readonly");
 		}
 		else {
-		    Log.d("Test", "sdcard state: " + state);
+			Log.d("Test", "sdcard state: " + state);
 		}
 
 		// actual write to file
@@ -223,7 +217,7 @@ public class BingServices {
 		out.flush();
 		out.close();
 		out = null;
-		
+
 		return file.getPath();
 	}
 }

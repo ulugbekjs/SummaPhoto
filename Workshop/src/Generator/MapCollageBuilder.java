@@ -89,14 +89,13 @@ public class MapCollageBuilder extends AbstractBuilder{
 		Photo collage;
 		try {
 			collage = saveCollage(bmpBase);
+			clearProcessedPhotos(); // not to reuse same photos
 		}
 		catch (IOException exception) {
 			Log.e(TAG, "Error when saving collage file");
 			// TODO: notify user about error in saving collage
 			return null;
 		}
-
-		clearProcessPhotos(); // not to reuse same photos
 		
 		return collage;
 	}

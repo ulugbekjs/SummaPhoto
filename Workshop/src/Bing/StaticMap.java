@@ -178,7 +178,7 @@ public class StaticMap {
 			}
 		}
 		catch (NullPointerException exception) {
-			// TODO: handle null (nodes that are not found)
+			throw new JDOMException("Missing node when parsing XML");
 		}
 	}
 
