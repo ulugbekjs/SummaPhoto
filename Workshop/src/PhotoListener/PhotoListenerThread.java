@@ -16,6 +16,7 @@ import com.drew.metadata.jpeg.JpegDirectory;
 import Common.GPSPoint;
 import Common.Photo;
 import Common.PhotoContainer;
+import Common.Utils;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
@@ -38,7 +39,7 @@ public class PhotoListenerThread extends FileObserver {
 	@Override
 	public void onEvent(int event, String path) {
 
-		if (isExternalStorageReadable()) {
+		if (Utils.isExternalStorageReadable()) {
 			if (path.endsWith(".jpg")) {
 
 				Photo photo = null;
@@ -54,8 +55,7 @@ public class PhotoListenerThread extends FileObserver {
 						try {
 							Thread.sleep(2000);
 						} catch (InterruptedException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							Log.e(TAG, "Waiting for photo to be saved was interrupted");
 						}
 						try { // try reading again
 							photo = createPhotoFromFile(file);
@@ -81,7 +81,6 @@ public class PhotoListenerThread extends FileObserver {
 	public static Photo createPhotoFromFile(String file) throws ImageProcessingException {
 
 		Photo photo = null;
-
 		File path = new File(file);
 
 		// extract photo metadata
@@ -94,19 +93,14 @@ public class PhotoListenerThread extends FileObserver {
 
 		//get location
 		GpsDirectory directory1 = metadata.getDirectory(GpsDirectory.class);
-
 		GeoLocation location = directory1.getGeoLocation();
-		
-		if (location == null) { // photo has no location
+		if (location == null) { // photo has no location, dont create photo
 			return null;
 		}
 		
-
 		//get time
 		ExifSubIFDDirectory directory2 = metadata.getDirectory(ExifSubIFDDirectory.class);
-
 		Date date = directory2.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
-
 
 		//get dimensions
 		JpegDirectory jpgDirectory = metadata.getDirectory(JpegDirectory.class);
@@ -128,14 +122,6 @@ public class PhotoListenerThread extends FileObserver {
 		return photo;
 	}
 
-	/* Checks if external storage is available to at least read */
-	private static boolean isExternalStorageReadable() {
-		String state = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(state) ||
-				Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			return true;
-		}
-		return false;
-	}
+	
 
 }

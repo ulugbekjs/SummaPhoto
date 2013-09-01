@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.adobe.xmp.impl.Utils;
+
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeService;
 import Common.ActualEvent;
@@ -43,6 +45,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
 	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
+	public static final String  APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
+
 
 
 	// public static fields
@@ -67,6 +71,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		CONTEXT = this;
 
+		createAppFolders();
+
 		//		// 		Yonatan's code
 		//		//
 		//
@@ -87,42 +93,54 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
 			StrictMode.setThreadPolicy(policy);
 		}
-		
-		//		//		//		Omri's code
-		//		//
-		File directory = new File(PHOTO_DIR);
-		if (!directory.exists())
-			return;
-		File[] arrayOfPic =  directory.listFiles();
-		Photo tempPhoho = null;
-		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		for (File file : arrayOfPic)
-		{
-			try
-			{
-				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
-			}
-			catch (Exception ex)
-			{
-			}
-			if (tempPhoho != null)
-				photosToCluster.add(tempPhoho);
-		}
-		List<ActualEvent> events = new LinkedList<ActualEvent>();
-		Cluster tempCluster;
-		for (Photo p :photosToCluster)
-		{
-			tempCluster = new Cluster();
-			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-			events.add(new ActualEvent(tempCluster));
-		}
-		ActualEventsBundle bundle = new ActualEventsBundle(events);
-		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		builder.buildCollage();
+				
+				//		//		//		Omri's code
+				//		//
+				File directory = new File(PHOTO_DIR);
+				if (!directory.exists())
+					return;
+				File[] arrayOfPic =  directory.listFiles();
+				Photo tempPhoho = null;
+				List<Photo> photosToCluster = new LinkedList<Photo>(); 
+				for (File file : arrayOfPic)
+				{
+					try
+					{
+						tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+					}
+					catch (Exception ex)
+					{
+					}
+					if (tempPhoho != null)
+						photosToCluster.add(tempPhoho);
+				}
+				List<ActualEvent> events = new LinkedList<ActualEvent>();
+				Cluster tempCluster;
+				for (Photo p :photosToCluster)
+				{
+					tempCluster = new Cluster();
+					tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+					events.add(new ActualEvent(tempCluster));
+				}
+				ActualEventsBundle bundle = new ActualEventsBundle(events);
+				MapCollageBuilder builder = new MapCollageBuilder(bundle);
+				builder.buildCollage();
 
 		return;
 		//		
 
+	}
+
+	private boolean createAppFolders() {
+		boolean successful = false;
+		//create folders for app
+		File tmpFile = new File(APP_PHOTO_DIR);
+		if (Common.Utils.isExternalStorageWritable() && !tmpFile.exists()) {
+			tmpFile.mkdirs();
+			successful = true;
+		}
+		tmpFile = null;
+		return successful;
 	}
 
 	@Override

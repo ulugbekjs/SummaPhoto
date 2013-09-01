@@ -19,6 +19,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
+
+import android.accounts.NetworkErrorException;
 import android.os.Environment;
 import android.util.Log;
 import Common.Photo;
@@ -26,7 +28,7 @@ import Common.GPSPoint;
 
 public class BingServices {
 
-	private final static String TAG = "BingServices";
+	private final static String TAG = BingServices.class.getName();
 
 	/**
 	 * Queries BING for JPG & Metadata for ActualEvent points
@@ -44,11 +46,21 @@ public class BingServices {
 			map = new StaticMap(photos, width, height);
 			
 			List<GPSPoint> points = getImagesPointsList(photos);
-			map.setJpgPath(getJPG(points, width, height), width, height);
-			map.setMetadataPath(getJPGMetadata(points, width, height));
+			try {
+				map.setJpgPath(getJPG(points, width, height), width, height);
+			} catch (NetworkErrorException e) {
+				Log.e(TAG, "Network error when getting map jpg from Bing");
+				return null;
+			}
+			try {
+				map.setMetadataPath(getJPGMetadata(points, width, height));
+			} catch (NetworkErrorException e) {
+				Log.e(TAG, "Network error when getting map metadata from Bing");
+				return null;
+			}
 			
-			if (map.getJpgPath() == null || map.getMetadataPath() == null) {
-				map = null;  // free map for GC
+			if (map.getJpgPath() == null || map.getMetadataPath() == null) { // verify paths
+				return null;  // free map for GC
 			}
 
 		}
@@ -59,11 +71,11 @@ public class BingServices {
 		return map;
 	}
 
-	private static String getJPG(List<GPSPoint> points, int width, int height) {
+	private static String getJPG(List<GPSPoint> points, int width, int height) throws NetworkErrorException {
 		return createHTTPRequest(false, points, width, height);
 	}
 
-	private static String getJPGMetadata(List<GPSPoint> points, int width, int height) {
+	private static String getJPGMetadata(List<GPSPoint> points, int width, int height) throws NetworkErrorException {
 		return createHTTPRequest(true, points, width, height);
 	}
 
@@ -86,8 +98,9 @@ public class BingServices {
 	 * @param metadata TRUE if method should query for Metadata, FALSE if method should query for JPG
 	 * @param points 
 	 * @return Path of newly saved .JPG/XML or NULL
+	 * @throws NetworkErrorException 
 	 */
-	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points, int width, int height) {
+	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points, int width, int height) throws NetworkErrorException {
 
 		String file = null;
 
@@ -136,9 +149,10 @@ public class BingServices {
 			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (IOException e) {
+			} catch (IOException e) { // connection to Bing
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new NetworkErrorException(e);
 			}
 
 			StatusLine statusLine = response.getStatusLine();

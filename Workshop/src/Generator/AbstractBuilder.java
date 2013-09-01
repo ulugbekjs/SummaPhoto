@@ -83,8 +83,8 @@ public abstract class AbstractBuilder {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 		options.inPurgeable = true;
-		options.inSampleSize = 8;
-		options.inDither = false;
+		options.inSampleSize = 1;
+		options.inDither = true;
 		options.inInputShareable = true;
 		options.inTempStorage = new byte[32 * 1024];
 

@@ -80,15 +80,6 @@ public class ActivationManager {
 				remainingEvents--;
 			}
 		}
-		//		else  { // add photo to last added event in container
-		//			event = CandidatePhotoContainer.getInstance().getLastAddedEvent();
-		//			if (!event.isPhotoInEvent(photo)) {
-		//				event.addPhoto(photo);
-		//			}
-		//			else {
-		//				// TODO: handle this situation that should not happen
-		//			}
-		//		}
 
 		if (currentState == DEDICATED_MODE && photo.isHorizontal()) {
 			if (remainingHorizontal > 0) 
@@ -135,8 +126,7 @@ public class ActivationManager {
 		try {
 			requestBuffer.put(request);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(TAG, "Error when adding Dedicated request to  request buffer");
 		}
 	}
 
