@@ -80,7 +80,7 @@ public class StaticMap {
 	public String getMetadataPath() {
 		return metadataPath;
 	}
-	public void setMetadataPath(String metadataPath) {
+	public void setMetadataPath(String metadataPath) throws JDOMException, IOException {
 		this.metadataPath = metadataPath;
 		fillMapWithMetaData();
 	}
@@ -99,24 +99,18 @@ public class StaticMap {
 		return this.pixelHeight;
 	}
 
-	private void fillMapWithMetaData() {
+	private void fillMapWithMetaData() throws JDOMException, IOException {
 
 		SAXBuilder builder = new SAXBuilder();
 
 		Document document = null;
-		try {
 			File xmlFile = new File(this.metadataPath);
 			if (!xmlFile.exists()) { // check that xml file still exists
 				throw new IOException();
 			}
 			document = (Document) builder.build (xmlFile);
-		} catch (JDOMException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+
 		Element rootNode = document.getRootElement();
 		Namespace namespace = rootNode.getNamespace();
 

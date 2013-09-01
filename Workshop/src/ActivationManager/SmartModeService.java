@@ -91,7 +91,7 @@ public class SmartModeService {
 
 	private static Photo buildCollage(AbstractBuilder builder) {
 		DedicatedRequest request = builder.setTemplate();
-		if (request != null) {
+		if (request != null) { // not enough photos for collage
 			manager.addRequestToBuffer(request);
 			return null;
 		}

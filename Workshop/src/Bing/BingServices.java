@@ -19,6 +19,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
+import org.jdom2.JDOMException;
 
 import android.accounts.NetworkErrorException;
 import android.os.Environment;
@@ -50,13 +51,15 @@ public class BingServices {
 				map.setJpgPath(getJPG(points, width, height), width, height);
 			} catch (NetworkErrorException e) {
 				Log.e(TAG, "Network error when getting map jpg from Bing");
-				return null;
 			}
 			try {
 				map.setMetadataPath(getJPGMetadata(points, width, height));
 			} catch (NetworkErrorException e) {
 				Log.e(TAG, "Network error when getting map metadata from Bing");
-				return null;
+			} catch (JDOMException e) {
+				Log.e(TAG, "Error when parsing Bing xml");
+			} catch (IOException e) {
+				Log.e(TAG, "Bing Map XML not found on device");
 			}
 			
 			if (map.getJpgPath() == null || map.getMetadataPath() == null) { // verify paths
@@ -133,8 +136,7 @@ public class BingServices {
 			try {
 				entity = new StringEntity(builder.toString(), HTTP.UTF_8);
 			} catch (UnsupportedEncodingException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				Log.e(TAG, "Error building request to Bing:\n" + builder.toString());
 			}
 			postReq.setEntity(entity);
 
@@ -147,11 +149,9 @@ public class BingServices {
 				HttpClient httpclient = new DefaultHttpClient();
 				response = httpclient.execute(postReq);
 			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new NetworkErrorException(e);
 			} catch (IOException e) { // connection to Bing
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 				throw new NetworkErrorException(e);
 			}
 
