@@ -1,6 +1,5 @@
 package ActivationManager;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -58,7 +57,8 @@ public class SmartModeService {
 							}
 						}
 						else { // there was an error, notify user
-							Utils.notifyUserWithError();
+							Utils.notifyUserWithError("Error when building collage",
+									"Summaphoto has failed building your collage.");
 						}
 
 					}

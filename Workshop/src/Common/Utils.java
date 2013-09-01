@@ -95,15 +95,15 @@ public class Utils {
 		mNotifyMgr.notify(1, mBuilder.build());
 	}
 	
-	public static void notifyUserWithError() {
+	public static void notifyUserWithError(String title, String text) {
 		Context context = SettingsActivity.CONTEXT;
 
 
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(context)
 		.setSmallIcon(R.drawable.icon)
-		.setContentTitle("Error when building collage")
-		.setContentText("Summaphoto has failed building your collage.")
+		.setContentTitle(title)
+		.setContentText(text)
 		.setAutoCancel(true)
 		.setContentIntent(PendingIntent.getActivity(context, 0, new Intent(), 0)) // creates empty notfication
 		.setOnlyAlertOnce(true);
@@ -140,4 +140,49 @@ public class Utils {
 
 		return SettingsActivity.CONTEXT.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, image);
 	}
+	
+	// TODO: remove, this is for Omri
+	public static Photo createPhotoFromFile(String file) throws ImageProcessingException {
+
+		Photo photo = null;
+		File path = new File(file);
+
+		// extract photo metadata
+		Metadata metadata = null;
+		try {
+			metadata = ImageMetadataReader.readMetadata(path);
+		} catch (IOException e) {
+			throw new ImageProcessingException(e);
+		}
+
+		//get location
+		GpsDirectory directory1 = metadata.getDirectory(GpsDirectory.class);
+		GeoLocation location = directory1.getGeoLocation();
+		if (location == null) { // photo has no location, dont create photo
+			return null;
+		}
+		
+		//get time
+		ExifSubIFDDirectory directory2 = metadata.getDirectory(ExifSubIFDDirectory.class);
+		Date date = directory2.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+
+		//get dimensions
+		JpegDirectory jpgDirectory = metadata.getDirectory(JpegDirectory.class);
+		try {
+			int width = jpgDirectory.getImageWidth();
+			int	height = jpgDirectory.getImageHeight();
+
+			photo = new Photo(
+					date,
+					width,
+					height,
+					new GPSPoint(location.getLatitude(),location.getLongitude()),
+					path.getPath());
+		} catch (MetadataException e) {
+			return null;
+		}
+
+		return photo;
+	}
+
 }

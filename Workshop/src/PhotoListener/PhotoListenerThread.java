@@ -17,6 +17,7 @@ import Common.GPSPoint;
 import Common.Photo;
 import Common.PhotoContainer;
 import Common.Utils;
+import android.R.integer;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.util.Log;
@@ -30,6 +31,8 @@ public class PhotoListenerThread extends FileObserver {
 
 	private static final String TAG = PhotoListenerThread.class.getName();
 	String absolutePath;
+	
+	private int locationlessPhotos = 0; 
 
 	public PhotoListenerThread(String path) {
 		super(path, FileObserver.CLOSE_WRITE | FileObserver.DELETE);
@@ -66,6 +69,12 @@ public class PhotoListenerThread extends FileObserver {
 					
 					if (photo != null)
 						PhotoContainer.getInstance().addToBuffer(photo);
+					else {
+						if (locationlessPhotos > 10) {
+							Utils.notifyUserWithError("Photos have no location", "Make sure geo-tagging is on in your device.");
+							locationlessPhotos = 0;
+						}
+					}
 				}
 				
 				if ((event & FileObserver.DELETE) > 0) {
@@ -78,7 +87,7 @@ public class PhotoListenerThread extends FileObserver {
 		}
 	}
 
-	public static Photo createPhotoFromFile(String file) throws ImageProcessingException {
+	private Photo createPhotoFromFile(String file) throws ImageProcessingException {
 
 		Photo photo = null;
 		File path = new File(file);
@@ -94,7 +103,8 @@ public class PhotoListenerThread extends FileObserver {
 		//get location
 		GpsDirectory directory1 = metadata.getDirectory(GpsDirectory.class);
 		GeoLocation location = directory1.getGeoLocation();
-		if (location == null) { // photo has no location, dont create photo
+		if (location == null) { // photo has no location, don't create photo
+			this.locationlessPhotos++;
 			return null;
 		}
 		

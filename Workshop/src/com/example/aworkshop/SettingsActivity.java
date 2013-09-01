@@ -107,7 +107,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		{
 			try
 			{
-				tempPhoho = PhotoListenerThread.createPhotoFromFile(file.getAbsolutePath());
+				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
 			}
 			catch (Exception ex)
 			{
