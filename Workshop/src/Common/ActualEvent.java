@@ -122,7 +122,11 @@ public class ActualEvent{
 	/** Naive implementation of choosing the actual photos that will populate the output **/
 	public Photo selectPhotoFromEvent()
 	{
-		return horizontalPhotos.get(0);
+		if (horizontalPhotos.size() > 0)
+			return horizontalPhotos.get(0);
+		else {
+			return verticalPhotos.get(0);
+		}
 	}
 	
 	

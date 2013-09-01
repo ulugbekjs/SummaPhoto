@@ -117,7 +117,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		HashMap<PixelPoint, Pushpin> pixelPointsToPushPins = getAdjustedPixelPointPushPinDictionary(mapFromDataSource.getPushPins());
 		HashMap<PixelPoint, Slot> pixelPointsToSlot = getPixelPointSlotDictionaryHashMap(template.slots);
 		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(pixelPointsToSlot, pixelPointsToPushPins);
-		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPictureOnMapToPointOnFrame();
+		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
 		updatePicturesOfSlots (tuples,photosList);
 		template.setMap(mapFromDataSource);
 		return true;
