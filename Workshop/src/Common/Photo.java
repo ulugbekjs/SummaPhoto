@@ -65,6 +65,39 @@ public class Photo implements Comparable<Photo> {
 		return this.takenDate;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((fileName == null) ? 0 : fileName.hashCode());
+		result = prime * result
+				+ ((takenDate == null) ? 0 : takenDate.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Photo other = (Photo) obj;
+		if (fileName == null) {
+			if (other.fileName != null)
+				return false;
+		} else if (!fileName.equals(other.fileName))
+			return false;
+		if (takenDate == null) {
+			if (other.takenDate != null)
+				return false;
+		} else if (!takenDate.equals(other.takenDate))
+			return false;
+		return true;
+	}
+
 	public double distanceFrom(Photo otherPhoto) {
 		return this.getLocation().distanceFrom(otherPhoto.getLocation());
 	}

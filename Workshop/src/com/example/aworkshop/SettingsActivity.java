@@ -1,7 +1,12 @@
 package com.example.aworkshop;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,6 +17,7 @@ import ActivationManager.SmartModeService;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Photo;
+import Common.Tester;
 //import Common.PhotoFilter;
 import Common.TestsClass;
 import Generator.AbstractTemplate;
@@ -22,10 +28,20 @@ import Partitioning.DBScan;
 import Partitioning.PhotoObjectForClustering;
 import Partitioning.TestDBScan;
 import PhotoListener.PhotoListenerThread;
+import android.R.drawable;
 import android.R.integer;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -46,7 +62,9 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 //		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
+
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 	public static final String APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
 	public static final String APP_TEMP_DIR = new File(Environment.getExternalStorageDirectory(), "Summaphoto") + File.separator + "Temp" + File.separator;
@@ -76,14 +94,48 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		CONTEXT = this;
 
 		createAppFolders();
+	
+		Tester.insertFilesToObservedDir();
+		
+//		Canvas canvas = null;
+//		Bitmap bmpBase = null;
+//
+//		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
+//		bmpBase.setHasAlpha(true);
+//		canvas = new Canvas(bmpBase);
+//		
+//		 //add lines
+//		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//		//paint.setColor(android.graphics.Color.MAGENTA);
+//		paint.setShader(new LinearGradient(0, 0, 200, 200, Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
+//		paint.setStrokeWidth(5f);
+//	    paint.setStrokeJoin(Paint.Join.ROUND);
+//		canvas.drawLine(200, 200, 400, 400, paint);
+//		Path path = getArrowHead(400, 400);
+//		canvas.drawPath(path, paint);
+//		Photo photo = null;
+//		try {
+//			photo = saveCollage(bmpBase);
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		
+//		try {
+//			Common.Utils.notifyUserCollageCreated(photo);
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		//		// 		Yonatan's code
 		//		//
 		//
 		//
+
 //		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 //		observer.startWatching();
-//
 //		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
 //		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
 //		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
@@ -97,42 +149,86 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
 			StrictMode.setThreadPolicy(policy);
 		}
-
-		//		//		//		Omri's code
-		//		//
-		File directory = new File(PHOTO_DIR);
-		if (!directory.exists())
-			return;
-		File[] arrayOfPic =  directory.listFiles();
-		Photo tempPhoho = null;
-		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		for (File file : arrayOfPic)
-		{
-			try
-			{
-				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-			}
-			catch (Exception ex)
-			{
-			}
-			if (tempPhoho != null)
-				photosToCluster.add(tempPhoho);
-		}
-		List<ActualEvent> events = new LinkedList<ActualEvent>();
-		Cluster tempCluster;
-		for (Photo p :photosToCluster)
-		{
-			tempCluster = new Cluster();
-			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-			events.add(new ActualEvent(tempCluster));
-		}
-		ActualEventsBundle bundle = new ActualEventsBundle(events);
-		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		builder.buildCollage();
-
-		return;
+//
+//		//		//		//		Omri's code
+//		//		//
+//		File directory = new File(PHOTO_DIR);
+//		if (!directory.exists())
+//			return;
+//		File[] arrayOfPic =  directory.listFiles();
+//		Photo tempPhoho = null;
+//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+//		for (File file : arrayOfPic)
+//		{
+//			try
+//			{
+//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+//			}
+//			catch (Exception ex)
+//			{
+//			}
+//			if (tempPhoho != null)
+//				photosToCluster.add(tempPhoho);
+//		}
+//		List<ActualEvent> events = new LinkedList<ActualEvent>();
+//		Cluster tempCluster;
+//		for (Photo p :photosToCluster)
+//		{
+//			tempCluster = new Cluster();
+//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+//			events.add(new ActualEvent(tempCluster));
+//		}
+//		ActualEventsBundle bundle = new ActualEventsBundle(events);
+//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+//		builder.buildCollage();
+//
+//		return;
 		//		
 
+	}
+	
+	private Path getArrowHead(int tipX, int tipY) {
+		Path path = new Path();
+		path.moveTo(tipX, tipY);
+        path.lineTo(tipX - 20, tipY +  60);
+        path.lineTo(tipX, tipY + 50);
+        path.lineTo(tipX + 20, tipY + 60);
+        path.close();
+        
+        Matrix mMatrix = new Matrix();
+        RectF bounds = new RectF();
+        path.computeBounds(bounds, true);
+        mMatrix.postRotate(90, 
+                           (bounds.right + bounds.left)/2, 
+                           (bounds.bottom + bounds.top)/2);
+        path.transform(mMatrix);
+		return path;
+	}
+
+	// TODO: remove
+	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
+		Calendar calendar = Calendar.getInstance();
+		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "Pictures");
+		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Output");
+		File file = null;
+		FileOutputStream fos = null;
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
+		file = new File
+				(testsDir, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
+
+		// Save Bitmap to File
+		fos = new FileOutputStream(file);
+		bmpBase.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+
+		fos.flush();
+		fos.close();
+		fos = null;
+
+		bmpBase.recycle();
+		bmpBase = null;
+
+		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
 	}
 
 	private boolean createAppFolders() {

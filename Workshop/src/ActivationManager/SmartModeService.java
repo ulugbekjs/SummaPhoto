@@ -38,18 +38,19 @@ public class SmartModeService {
 					manager.consumeDedictedRequests(); 
 					boolean collageNeeded = manager.processPhotoBuffer();
 
+					boolean successful = true;
 					if (collageNeeded) { // ActivationManager decided clustering should be made
 						ActualEventsBundle events = partiotionToEvents();
 
 						// build the collage from Bundle of photos
 						Photo collage = null;
 						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
-							collage = buildCollage(new BlockCollageBuilder(events));
+							successful &= buildCollage(collage, new BlockCollageBuilder(events));
 						}
 						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
-							collage = buildCollage(new MapCollageBuilder(events));
+							successful &= buildCollage(collage, new MapCollageBuilder(events));
 						}
-						if (collage != null) {
+						if (successful) {
 							try {
 								Utils.notifyUserCollageCreated(collage);
 							} catch (FileNotFoundException e) {
@@ -92,15 +93,16 @@ public class SmartModeService {
 		return (scheduler != null);
 	}
 
-	private static Photo buildCollage(AbstractBuilder builder) {
+	private static boolean buildCollage(Photo collage, AbstractBuilder builder) {
 		DedicatedRequest request = builder.setTemplate();
 		if (request != null) { // not enough photos for collage
 			manager.addRequestToBuffer(request);
-			return null;
+			return false;
 		}
 		else { 
 			builder.populateTemplate();
-			return builder.buildCollage();
+			collage =  builder.buildCollage();
+			return true;
 		}
 	}
 	
