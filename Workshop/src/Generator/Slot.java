@@ -1,5 +1,7 @@
 package Generator;
 
+import Common.Photo;
+
 /**
  * Represents a fixed empty space for a photo in a template
  * @author yonatan

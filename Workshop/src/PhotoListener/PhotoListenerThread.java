@@ -68,7 +68,7 @@ public class PhotoListenerThread extends FileObserver {
 					if (photo != null)
 						PhotoContainer.getInstance().addToBuffer(photo);
 					else {
-						if (locationlessPhotos > 10) {
+						if (locationlessPhotos > 3) {
 							Utils.notifyUserWithError("Photos have no location", "Make sure geo-tagging is on in your device.");
 							locationlessPhotos = 0;
 						}
