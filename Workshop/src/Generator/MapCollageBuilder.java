@@ -68,7 +68,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		for (int slot = 0; slot < template.getNumberOfSlots(); slot ++) {
 			try {
 				slotToAddToCanvas = template.getSlot(slot);
-				addSlotImageToCanvas(bitmap, canvas,slotToAddToCanvas);
+				super.addSlotImageToCanvasBySampling(bitmap, canvas,slotToAddToCanvas, 4);
 			}
 			catch (NullPointerException exception) {
 				// TODO: deal with error
@@ -79,7 +79,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		// draw Bing map into output
 		try {
-			addSlotImageToCanvas(bitmap, canvas, template.getMapSlot());
+			addSlotImageToCanvasBySampling(bitmap, canvas, template.getMapSlot(), 1);
 		}
 		catch (NullPointerException exception) {
 			//TODO: deal with error
@@ -122,9 +122,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 		return collage;
 	}
 	
-	private addSlotMapToImage() {
-		
-	}
 
 	/**
 	 * This method locate the different pictures in the relevant slots. Return true upon success. 

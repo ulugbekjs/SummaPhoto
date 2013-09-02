@@ -213,11 +213,8 @@ public abstract class AbstractBuilder {
 		return inSampleSize;
 	}
 
-	protected void addSlotImageToCanvas(Bitmap bitmap, Canvas canvas, Slot slot) {
-		addSlotImageToCanvasBySampling(bitmap, canvas, slot, 4);
-	}
 
-	private void addSlotImageToCanvasBySampling(Bitmap bitmap, Canvas canvas, Slot slot, int sampleSize) {
+	protected void addSlotImageToCanvasBySampling(Bitmap bitmap, Canvas canvas, Slot slot, int sampleSize) {
 
 		// get Image bitmap
 		BitmapFactory.Options options = new BitmapFactory.Options();
