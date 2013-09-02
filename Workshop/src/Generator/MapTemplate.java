@@ -198,16 +198,16 @@ public class MapTemplate extends AbstractTemplate{
 		return template;
 	}
 	
-	/** template of size 1469*1102. slot 0 and 4 are vertical **/
+	/** template of size 1469*1102. slot 0 and 3 are vertical **/
 	
 	private static MapTemplate getTemplate4() {
 		
 		MapTemplate template = new MapTemplate(10);
 
-		template.addSlot(new Slot(new PixelPoint(0, 289), new PixelPoint(349, 812),new PixelPoint  (349, 262)) , 0);
+		template.addSlot(new Slot(new PixelPoint(0, 289), new PixelPoint(349, 812),new PixelPoint  (349, 523)) , 0);
 		template.addSlot(new Slot(new PixelPoint(349, 812), new PixelPoint (735, 1102), new PixelPoint  (542, 812)), 1);
 		template.addSlot(new Slot(new PixelPoint(735, 812), new PixelPoint (1120, 1102), new PixelPoint  (927, 812)), 2);
-		template.addSlot(new Slot(new PixelPoint(1120, 289), new PixelPoint(1469, 812), new PixelPoint  (1078, 262)), 3);
+		template.addSlot(new Slot(new PixelPoint(1120, 289), new PixelPoint(1469, 812), new PixelPoint  (1120, 523)), 3);
 		template.addSlot(new Slot(new PixelPoint(735, 0), new PixelPoint(1120, 289), new PixelPoint (927, 289)), 4);
 		template.addSlot(new Slot(new PixelPoint(349, 0), new PixelPoint(735, 289), new PixelPoint (542, 289)), 5);
 		template.addSlot(new Slot(new PixelPoint(0, 0), new PixelPoint (349, 289), new PixelPoint (319, 289)), 6);

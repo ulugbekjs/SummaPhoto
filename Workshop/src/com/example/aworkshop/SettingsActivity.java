@@ -64,7 +64,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 //		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests2" + File.separator;
 //	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
@@ -173,15 +173,18 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			if (tempPhoho != null)
 				photosToCluster.add(tempPhoho);
 		}
-		List<ActualEvent> events = new LinkedList<ActualEvent>();
-		Cluster tempCluster;
-		for (Photo p :photosToCluster)
-		{
-			tempCluster = new Cluster();
-			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-			events.add(new ActualEvent(tempCluster));
-		}
-		ActualEventsBundle bundle = new ActualEventsBundle(events);
+		DBScan algo = new DBScan(photosToCluster);
+		ActualEventsBundle bundle = algo.runDBScanAlgorithm();
+//		
+//		List<ActualEvent> events = new LinkedList<ActualEvent>();
+//		Cluster tempCluster;
+//		for (Photo p :photosToCluster)
+//		{
+//			tempCluster = new Cluster();
+//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+//			events.add(new ActualEvent(tempCluster));
+//		}
+//		 = new ActualEventsBundle(events);
 		MapCollageBuilder builder = new MapCollageBuilder(bundle);
 		builder.buildCollage();
 

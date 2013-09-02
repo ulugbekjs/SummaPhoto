@@ -35,7 +35,6 @@ import android.util.Log;
 
 public class MapCollageBuilder extends AbstractBuilder{
 	
-	MapTemplate template = null;
 	List<Line> linesList = null;
 	//static {@SuppressWarnings("unused")
 	//byte[] dummy = new byte[36 * 1024 * 1024];
@@ -79,7 +78,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		// draw Bing map into output
 		try {
-			addSlotImageToCanvasBySampling(bitmap, canvas, template.getMapSlot(), 1);
+			addSlotImageToCanvasBySampling(bitmap, canvas,((MapTemplate) template).getMapSlot(), 1);
 		}
 		catch (NullPointerException exception) {
 			//TODO: deal with error
@@ -95,8 +94,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 			canvas.drawLine(line.getFromPoint().getX(), line.getFromPoint().getY(),
 					line.getToPoint().getX(), line.getToPoint().getY(), 
 					paint);
-			Path path = getArrowHead(line.getToPoint().getX(), line.getToPoint().getY(),  line.getTetaFromYAxis());
-			canvas.drawPath(path, paint);
+			//Path path = getArrowHead(line.getToPoint().getX(), line.getToPoint().getY(),  line.getTetaFromYAxis());
+			//canvas.drawPath(path, paint);
 		}
 		
 		//free bitmap
@@ -128,13 +127,14 @@ public class MapCollageBuilder extends AbstractBuilder{
 	public boolean populateTemplate() {
 		
 		template = MapTemplate.getTemplate(4);
-		Set<PixelPoint> connectionPixelPoints = template.getLinesConnectionPoints();
+		List<Photo> hoerizontalPhotosList = new LinkedList<Photo>();
+		getHorizontalPhotosForTemplate(hoerizontalPhotosList);
+		List<Photo> verticalPhotosList = new LinkedList<Photo>();
+		getVerticalPhotosForTemplate(verticalPhotosList);
 		List<Photo> photosList = new LinkedList<Photo>();
-		for (ActualEvent event: bundle.getActualEvents() )
-		{
-			photosList.add(event.selectPhotoFromEvent());
-		}
-		StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, template.getMapPixelWidth(), template.getMapPixelHeight());
+		photosList.addAll(verticalPhotosList);
+		photosList.addAll(hoerizontalPhotosList);
+		StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, ((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
 		//StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, 899,833);
 		
 		HashMap<PixelPoint, Pushpin> pixelPointsToPushPins = getAdjustedPixelPointPushPinDictionary(mapFromDataSource.getPushPins());
@@ -142,7 +142,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(pixelPointsToSlot, pixelPointsToPushPins);
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
 		updatePicturesOfSlots (tuples,photosList);
-		template.setMap(mapFromDataSource);
+		((MapTemplate)template).setMap(mapFromDataSource);
 		linesList = convertTupplesToLines(tuples);
 		
 		return true;
@@ -199,8 +199,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 	{
 		if (pushPins == null)
 			return null;
-		Integer xInterval = template.getMapSlot().getTopLeft().getX();
-		Integer yInterval = template.getMapSlot().getTopLeft().getY();
+		Integer xInterval = ((MapTemplate)template).getMapSlot().getTopLeft().getX();
+		Integer yInterval = ((MapTemplate)template).getMapSlot().getTopLeft().getY();
 		HashMap<PixelPoint, Pushpin> adjustedPushPinsPixelPoints = new HashMap<PixelPoint, Pushpin>();
 		
 		
