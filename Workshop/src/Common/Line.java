@@ -14,15 +14,15 @@ public class Line {
 	
 	private double constant;
 	
-	private PixelPoint pointA;
-	private PixelPoint pointB;
+	private PixelPoint fromPoint;
+	private PixelPoint toPoint;
 	
 	private boolean isUndefinedSlope = false;
 	
-	public Line (PixelPoint pointA, PixelPoint pointB)
+	public Line (PixelPoint fromPoint, PixelPoint toPoint)
 	{
-		this.pointA = pointA;
-		this.pointB = pointB;
+		this.fromPoint = fromPoint;
+		this.toPoint = toPoint;
 		slope = calculateSlope();
 		constant = calculateConst();
 	}
@@ -48,12 +48,12 @@ public class Line {
 	}
 	
 	
-	public PixelPoint getPointA() {
-		return pointA;
+	public PixelPoint getFromPoint() {
+		return fromPoint;
 	}
 	
-	public PixelPoint getPointB() {
-		return pointB;
+	public PixelPoint getToPoint() {
+		return toPoint;
 	}
 	
 	/** 
@@ -74,7 +74,7 @@ public class Line {
 		}
 		return angle;
 		**/
-		float angle = (float) Math.toDegrees(Math.atan2(pointB.getX() - pointA.getX(), pointB.getY() - pointA.getY()));
+		float angle = (float) Math.toDegrees(Math.atan2(toPoint.getX() - fromPoint.getX(), toPoint.getY() - fromPoint.getY()));
 
 	    if(angle < 0){
 	        angle += 360;
@@ -92,23 +92,23 @@ public class Line {
 		Double deltaY;
 		Double deltaX;
 		Double slope;
-		if ((pointA == null) || (pointB == null))
+		if ((fromPoint == null) || (toPoint == null))
 		{
 			return Double.NaN;
 		}
-		if (pointA.getX() ==  pointB.getX())
+		if (fromPoint.getX() ==  toPoint.getX())
 		{
 			isUndefinedSlope = true;
 			return Double.NaN;
 		}
 			
-		if (pointA.getX() > pointB.getX() ){
-			deltaY = (double) (pointA.getY() - pointB.getY());
-			deltaX = (double) (pointA.getX() - pointB.getX());
+		if (fromPoint.getX() > toPoint.getX() ){
+			deltaY = (double) (fromPoint.getY() - toPoint.getY());
+			deltaX = (double) (fromPoint.getX() - toPoint.getX());
 		}
 		else {
-			deltaY = (double) (pointB.getY() - pointA.getY() );
-			deltaX = (double) (pointB.getX()- pointA.getX());
+			deltaY = (double) (toPoint.getY() - fromPoint.getY() );
+			deltaX = (double) (toPoint.getX()- fromPoint.getX());
 		}
 		slope = deltaY / deltaX;
 		return slope;
@@ -121,7 +121,7 @@ public class Line {
 	{
 		if (Double.isNaN(slope))
 			return Double.NaN;
-		return (pointA.getY() - constant*pointA.getX());
+		return (fromPoint.getY() - constant*fromPoint.getX());
 	}
 	
 	
@@ -136,7 +136,7 @@ public class Line {
 			return false;
 		if (isUndefinedSlope)
 		{
-			return  (point.getX()> pointA.getX()); 
+			return  (point.getX()> fromPoint.getX()); 
 		}
 		if (point.getX() * slope + constant < point.getY())
 			return true;
