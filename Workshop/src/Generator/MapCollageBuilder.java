@@ -99,13 +99,12 @@ public class MapCollageBuilder extends AbstractBuilder{
 			canvas.drawLine(line.getFromPoint().getX(), line.getFromPoint().getY(),
 					line.getToPoint().getX(), line.getToPoint().getY(), 
 					paint);
-<<<<<<< HEAD
 			//Path path = getArrowHead(line.getToPoint().getX(), line.getToPoint().getY(),  line.getTetaFromYAxis());
 			//canvas.drawPath(path, paint);
-=======
+
 //			Path path = getArrowHead(line.getToPoint().getX(), line.getToPoint().getY(),  line.getTetaFromYAxis());
 //			canvas.drawPath(path, paint);
->>>>>>> a7ffb573bcac876a82d78d4ffc65a577437befab
+
 		}
 		
 		//free bitmap
@@ -238,6 +237,9 @@ public class MapCollageBuilder extends AbstractBuilder{
 			return false;
 		for (SlotPushPinTuple tuple : tuples)
 		{
+			tuple.getSlot().assignToPhoto(tuple.getPushpin().getPhoto());
+		}
+			/**
 			if ((tuple.getPushpin() == null) || (tuple.getSlot() == null))
 			{
 				return false;
@@ -260,6 +262,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 			}
 			
 		}
+		**/
 		return true;
 	}
 	/**
