@@ -134,7 +134,7 @@ public class BingServices {
 		for (GPSPoint point : points)  {
 			builder.append("pp=");
 			builder.append(point.toString());
-			builder.append(";14;\r\n");
+			builder.append(";56;\r\n");
 		}
 
 		StringEntity entity = null;
