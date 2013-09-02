@@ -29,7 +29,7 @@ public class Tester {
 		PhotoListenerThread observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
 		
-		SmartModeService.startService();
+		SettingsActivity.MODE = 1;
 
 		File dest = new File(SettingsActivity.ROOT, "Watched");
 		if (!dest.exists()) {

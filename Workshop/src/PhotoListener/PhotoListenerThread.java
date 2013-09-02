@@ -12,7 +12,9 @@ import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
+import com.example.aworkshop.SettingsActivity;
 
+import ActivationManager.SmartModeService;
 import Common.GPSPoint;
 import Common.Photo;
 import Common.PhotoContainer;
@@ -65,8 +67,14 @@ public class PhotoListenerThread extends FileObserver {
 						}
 					}
 					
-					if (photo != null)
+					if (photo != null) {
 						PhotoContainer.getInstance().addToBuffer(photo);
+						if (SettingsActivity.MODE == 1 &&
+								!SmartModeService.isServiceRunning()) { // SMART MODE - starts whenever a photo is received if not busy
+							SmartModeService.startService();
+						}
+					}
+					
 					else {
 						if (locationlessPhotos > 5) {
 							Utils.notifyUserWithError("Photos have no location", "Make sure geo-tagging is on in your device.");

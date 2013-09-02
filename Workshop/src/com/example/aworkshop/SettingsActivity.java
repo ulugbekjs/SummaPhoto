@@ -75,6 +75,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	// public static fields
 	public static Context CONTEXT = null;
+	public static int MODE = 0;
 	public static int COLLAGE_TYPE = 2;
 
 	// global fields
@@ -105,37 +106,37 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	
 //		Tester.insertFilesToObservedDir();
 		
-//		Canvas canvas = null;
-//		Bitmap bmpBase = null;
-//
-//		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
-//		bmpBase.setHasAlpha(true);
-//		canvas = new Canvas(bmpBase);
-//		
-//		 //add lines
-//		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//		//paint.setColor(android.graphics.Color.MAGENTA);
-//		paint.setShader(new LinearGradient(0, 0, 200, 200, Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
-//		paint.setStrokeWidth(5f);
-//	    paint.setStrokeJoin(Paint.Join.ROUND);
-//		canvas.drawLine(200, 200, 400, 400, paint);
-//		Path path = getArrowHead(400, 400);
-//		canvas.drawPath(path, paint);
-//		Photo photo = null;
-//		try {
-//			photo = saveCollage(bmpBase);
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		
-//		
-//		try {
-//			Common.Utils.notifyUserCollageCreated(photo);
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		Canvas canvas = null;
+		Bitmap bmpBase = null;
+
+		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
+		bmpBase.setHasAlpha(true);
+		canvas = new Canvas(bmpBase);
+		
+		 //add lines
+		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		//paint.setColor(android.graphics.Color.MAGENTA);
+		paint.setShader(new LinearGradient(0, 0, 200, 200, Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
+		paint.setStrokeWidth(5f);
+	    paint.setStrokeJoin(Paint.Join.ROUND);
+		canvas.drawLine(200, 200, 400, 400, paint);
+		Path path = getArrowHead(400, 400);
+		canvas.drawPath(path, paint);
+		Photo photo = null;
+		try {
+			photo = saveCollage(bmpBase);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		try {
+			Common.Utils.notifyUserCollageCreated(photo);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		//		// 		Yonatan's code
 		//		//
@@ -329,6 +330,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	 * when off button is pressed, services need to be turned off
 	 */
 	private void offButtonClicked() {
+		
+		MODE = 0;
 
 		// turn off active modes
 		if (SmartModeService.isServiceRunning()) {
@@ -337,6 +340,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		if (ScheduledModeService.isServiceRunning()) {
 			turnOffDailyMode();
 		}
+		
 
 	}
 
@@ -344,6 +348,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		if (SmartModeService.isServiceRunning())
 			turnOffSmartMode();
+		
+		MODE = 2;
 
 		Thread thread = new Thread() {
 
@@ -359,6 +365,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	private void smartButtonClicked() {
 
 		turnOffDailyMode();
+		
+		MODE = 1;
 
 		Thread thread = new Thread() {
 
