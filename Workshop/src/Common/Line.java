@@ -1,9 +1,10 @@
 package Common;
 
 
+import android.R.bool;
 import Generator.PixelPoint;
 /**
- * This class reprsents a line; SOULD NOT BE USED for line with undefined slope (line that is vertical to X-axis)
+ * This class represents a line; SOULD NOT BE USED for line with undefined slope (line that is vertical to X-axis)
  * @author omri
  *
  */
@@ -15,6 +16,8 @@ public class Line {
 	
 	private PixelPoint pointA;
 	private PixelPoint pointB;
+	
+	private boolean isUndefinedSlope = false;
 	
 	public Line (PixelPoint pointA, PixelPoint pointB)
 	{
@@ -95,6 +98,7 @@ public class Line {
 		}
 		if (pointA.getX() ==  pointB.getX())
 		{
+			isUndefinedSlope = true;
 			return Double.NaN;
 		}
 			
@@ -123,10 +127,17 @@ public class Line {
 	
 	/**
 	 * @param point
-	 * @return whether the point is above this line
+	 * @return whether the point is above this line. If the scope is undefined, returns true if the x coordinate of the point is
+	 * bigger than the x coordinate of the line
 	 */
 	public Boolean isPointAboveLine (PixelPoint point)
 	{
+		if (point == null)
+			return false;
+		if (isUndefinedSlope)
+		{
+			return  (point.getX()> pointA.getX()); 
+		}
 		if (point.getX() * slope + constant < point.getY())
 			return true;
 		return false;

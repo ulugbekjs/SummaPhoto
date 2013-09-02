@@ -98,45 +98,40 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		createAppFolders();
 		
-		PixelPoint pointA = new PixelPoint(0,0);
-		PixelPoint pointB = new PixelPoint(50000,86602);
-		Common.Line line = new Line(pointB, pointA) ;
-		double teta = line.getTetaFromYAxis();
-		
 	
 //		Tester.insertFilesToObservedDir();
 		
 		Canvas canvas = null;
 		Bitmap bmpBase = null;
 
-		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
-		bmpBase.setHasAlpha(true);
-		canvas = new Canvas(bmpBase);
-		
+//		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
+//		bmpBase.setHasAlpha(true);
+//		canvas = new Canvas(bmpBase);
+//		
 		 //add lines
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		//paint.setColor(android.graphics.Color.MAGENTA);
-		paint.setShader(new LinearGradient(0, 0, 200, 200, Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
-		paint.setStrokeWidth(5f);
-	    paint.setStrokeJoin(Paint.Join.ROUND);
-		canvas.drawLine(200, 200, 400, 400, paint);
-		Path path = getArrowHead(400, 400);
-		canvas.drawPath(path, paint);
-		Photo photo = null;
-		try {
-			photo = saveCollage(bmpBase);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		
-		try {
-			Common.Utils.notifyUserCollageCreated(photo);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//		//paint.setColor(android.graphics.Color.MAGENTA);
+//		paint.setShader(new LinearGradient(0, 0, 200, 200, Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
+//		paint.setStrokeWidth(5f);
+//	    paint.setStrokeJoin(Paint.Join.ROUND);
+//		canvas.drawLine(200, 200, 400, 400, paint);
+//		Path path = getArrowHead(400, 400);
+//		canvas.drawPath(path, paint);
+//		Photo photo = null;
+//		try {
+//			photo = saveCollage(bmpBase);
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		
+//		try {
+//			Common.Utils.notifyUserCollageCreated(photo);
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		//		// 		Yonatan's code
 		//		//
