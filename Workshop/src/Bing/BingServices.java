@@ -113,7 +113,8 @@ public class BingServices {
 		String file = null;
 
 
-		String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
+//		String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
+		String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/Road?";
 		//Make the actual connection
 		if (metadata) {
 			urlString += "mmd=1&o=xml";
