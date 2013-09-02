@@ -18,6 +18,7 @@ import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.PhotoContainer;
+import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -213,13 +214,17 @@ public abstract class AbstractBuilder {
 	}
 
 	protected void addSlotImageToCanvas(Bitmap bitmap, Canvas canvas, Slot slot) {
+		addSlotImageToCanvasBySampling(bitmap, canvas, slot, 4);
+	}
+
+	private void addSlotImageToCanvasBySampling(Bitmap bitmap, Canvas canvas, Slot slot, int sampleSize) {
 
 		// get Image bitmap
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 		options.inJustDecodeBounds = false;
 		options.inPurgeable = true;
-		options.inSampleSize = 4;
+		options.inSampleSize = sampleSize;
 		options.inDither = true;
 		options.inInputShareable = true;
 		options.inTempStorage = new byte[32 * 1024];
@@ -256,7 +261,6 @@ public abstract class AbstractBuilder {
 		bitmap = null;
 
 	}
-
 	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
 		Calendar calendar = Calendar.getInstance();
 		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "Pictures");

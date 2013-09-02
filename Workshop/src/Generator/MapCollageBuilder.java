@@ -98,6 +98,10 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		return collage;
 	}
+	
+	private addSlotMapToImage() {
+		
+	}
 
 	/**
 	 * This method locate the different pictures in the relevant slots. Return true upon success. 
