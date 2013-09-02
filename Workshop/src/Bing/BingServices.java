@@ -123,7 +123,7 @@ public class BingServices {
 		}
 
 		// concatenate with BING key
-		urlString = urlString + "&mapSize=" + width +"," + height + "&dcl=1&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
+		urlString = urlString + "&mapSize=" + width +"," + height + "&dcl=0&key=AjuPzlE1V8n1TJJK7T7elqCZlfi6wdLGvjyYUn2aUsNJ5ORSwnc-ygOwBvTa9Czt";
 
 		// Construct POST Request
 
@@ -134,7 +134,7 @@ public class BingServices {
 		for (GPSPoint point : points)  {
 			builder.append("pp=");
 			builder.append(point.toString());
-			builder.append(";56;\r\n");
+			builder.append(";51;\r\n");
 		}
 
 		StringEntity entity = null;
