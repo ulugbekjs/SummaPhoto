@@ -1,7 +1,5 @@
 package Common;
 
-
-import android.R.bool;
 import Generator.PixelPoint;
 /**
  * This class represents a line; SOULD NOT BE USED for line with undefined slope (line that is vertical to X-axis)
@@ -35,6 +33,15 @@ public class Line {
 		return constant;
 	}
 	
+	public int getLineXDelta() {
+		return Math.abs(toPoint.getX() - fromPoint.getX());
+	}
+	
+	public int getLineYDelta() {
+		return Math.abs(toPoint.getY() - fromPoint.getY());
+	}
+	
+	
 	/**
 	 * @param x
 	 * @return the value of y of the line
@@ -63,17 +70,12 @@ public class Line {
 	
 	public double getTetaFromYAxis ()
 	{
-		/**
-		if ((getConstant() == Double.NaN) || (getSlope() == Double.NaN))
-			return Double.NaN;
-		double theta = Math.atan2(pointB.getY() - pointA.getY(), pointB.getX() - pointA.getX());
-		theta += Math.PI/2.0;
-		double angle = Math.toDegrees(theta);
-		if (angle < 0) {
-			angle += 360;
+				
+		// in case that the line is vertical to the x-Axis the the slope is undefined but the angle is 0
+		if (isUndefinedSlope)
+		{
+			return 0;
 		}
-		return angle;
-		**/
 		float angle = (float) Math.toDegrees(Math.atan2(toPoint.getX() - fromPoint.getX(), toPoint.getY() - fromPoint.getY()));
 
 	    if(angle < 0){
@@ -119,7 +121,7 @@ public class Line {
 	private Double calculateConst()
 
 	{
-		if (Double.isNaN(slope))
+		if (isUndefinedSlope)
 			return Double.NaN;
 		return (fromPoint.getY() - constant*fromPoint.getX());
 	}

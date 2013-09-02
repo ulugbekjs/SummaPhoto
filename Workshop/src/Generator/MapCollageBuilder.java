@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.jdom2.output.LineSeparator;
+
 import com.adobe.xmp.impl.Utils;
 import com.drew.imaging.ImageProcessingException;
 
@@ -16,18 +18,25 @@ import Bing.Pushpin;
 import Bing.StaticMap;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
+import Common.Line;
 import Common.Photo;
 import Generator.LocatePicturesWithMap.SlotPushPinTuple;
 import android.R.bool;
 import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.util.Log;
 
 public class MapCollageBuilder extends AbstractBuilder{
 	
 	MapTemplate template = null;
+	List<Line> linesList = null;
 	//static {@SuppressWarnings("unused")
 	//byte[] dummy = new byte[36 * 1024 * 1024];
 	//}
@@ -76,6 +85,20 @@ public class MapCollageBuilder extends AbstractBuilder{
 			//TODO: deal with error
 		}
 		
+		for (Line line : linesList) {
+			// add lines
+			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+			//paint.setColor(android.graphics.Color.MAGENTA);
+			paint.setShader(new LinearGradient(0, 0, line.getLineXDelta(), line.getLineYDelta(), Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
+			paint.setStrokeWidth(5f);
+		    paint.setStrokeJoin(Paint.Join.ROUND);
+			canvas.drawLine(line.getFromPoint().getX(), line.getFromPoint().getY(),
+					line.getToPoint().getX(), line.getToPoint().getY(), 
+					paint);
+			Path path = getArrowHead(line.getToPoint().getX(), line.getToPoint().getY(),  line.getTetaFromYAxis());
+			canvas.drawPath(path, paint);
+		}
+		
 		//free bitmap
 //		bitmap.recycle();
 ////		bitmap = null;
@@ -120,7 +143,27 @@ public class MapCollageBuilder extends AbstractBuilder{
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
 		updatePicturesOfSlots (tuples,photosList);
 		template.setMap(mapFromDataSource);
+		linesList = convertTupplesToLines(tuples);
+		
 		return true;
+	}
+	
+	private Path getArrowHead(int tipX, int tipY, double angle) {
+		Path path = new Path();
+		path.moveTo(tipX, tipY);
+        path.lineTo(tipX - 20, tipY +  60);
+        path.lineTo(tipX, tipY + 50);
+        path.lineTo(tipX + 20, tipY + 60);
+        path.close();
+        
+        Matrix mMatrix = new Matrix();
+        RectF bounds = new RectF();
+        path.computeBounds(bounds, true);
+        mMatrix.postRotate((float) angle, 
+                           (bounds.right + bounds.left)/2, 
+                           (bounds.bottom + bounds.top)/2);
+        path.transform(mMatrix);
+		return path;
 	}
 	
 	@Override
@@ -206,6 +249,24 @@ public class MapCollageBuilder extends AbstractBuilder{
 			
 		}
 		return true;
+	}
+	/**
+	 * @param tuplesList list slot to pushPin pin tuples, which should represents which slot is connected to each tuple in the collage
+	 * @return lines that should be added to the final collage
+	 */
+	private List<Line> convertTupplesToLines (List<SlotPushPinTuple> tuplesList)
+	{
+		if (tuplesList == null)
+			return null;
+		List<Line> lineList = new LinkedList<Line>();
+		for (SlotPushPinTuple tuple : tuplesList)
+		{
+			if (tuple.getSlot().hasConnectingLinePoint())
+			{
+				lineList.add(new Line(tuple.getSlot().getConnectingLinePoint(), tuple.getPushpin().getAnchor()));
+			}
+		}
+		return lineList;
 	}
 	
 	
