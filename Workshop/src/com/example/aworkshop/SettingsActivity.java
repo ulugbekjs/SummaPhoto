@@ -16,11 +16,13 @@ import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeService;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
+import Common.Line;
 import Common.Photo;
 import Common.Tester;
 //import Common.PhotoFilter;
 import Common.TestsClass;
 import Generator.AbstractTemplate;
+import Generator.PixelPoint;
 import Generator.LocatePicturesWithMap.SlotPushPinTuple;
 import Generator.MapCollageBuilder;
 import Partitioning.Cluster;
@@ -62,8 +64,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 //		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
+//	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 	public static final String APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
@@ -95,17 +97,18 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		CONTEXT = this;
 
 		createAppFolders();
-	
-		Tester.insertFilesToObservedDir();
 		
-//		Canvas canvas = null;
-//		Bitmap bmpBase = null;
-//
+	
+//		Tester.insertFilesToObservedDir();
+		
+		Canvas canvas = null;
+		Bitmap bmpBase = null;
+
 //		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
 //		bmpBase.setHasAlpha(true);
 //		canvas = new Canvas(bmpBase);
 //		
-//		 //add lines
+		 //add lines
 //		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 //		//paint.setColor(android.graphics.Color.MAGENTA);
 //		paint.setShader(new LinearGradient(0, 0, 200, 200, Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
@@ -145,45 +148,44 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 //		dailyRadioBtn.setOnClickListener(listener);
 		 
 
-//		//TODO: remove, this is because of netwrok on main thread error
-		if (android.os.Build.VERSION.SDK_INT > 9) {
-			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
-			StrictMode.setThreadPolicy(policy);
-		}
+////		//TODO: remove, this is because of netwrok on main thread error
+//		if (android.os.Build.VERSION.SDK_INT > 9) {
+//			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
+//			StrictMode.setThreadPolicy(policy);
+//		}
 //
 //		//		//		//		Omri's code
-//		//		//
-//		File directory = new File(PHOTO_DIR);
-//		if (!directory.exists())
-//			return;
-//		File[] arrayOfPic =  directory.listFiles();
-//		Photo tempPhoho = null;
-//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-//		for (File file : arrayOfPic)
-//		{
-//			try
-//			{
-//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-//			}
-//			catch (Exception ex)
-//			{
-//			}
-//			if (tempPhoho != null)
-//				photosToCluster.add(tempPhoho);
-//		}
-//		List<ActualEvent> events = new LinkedList<ActualEvent>();
-//		Cluster tempCluster;
-//		for (Photo p :photosToCluster)
-//		{
-//			tempCluster = new Cluster();
-//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-//			events.add(new ActualEvent(tempCluster));
-//		}
-//		ActualEventsBundle bundle = new ActualEventsBundle(events);
-//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-//		builder.buildCollage();
-//
-//		return;
+		File directory = new File(PHOTO_DIR);
+		if (!directory.exists())
+			return;
+		File[] arrayOfPic =  directory.listFiles();
+		Photo tempPhoho = null;
+		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		for (File file : arrayOfPic)
+		{
+			try
+			{
+				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+			}
+			catch (Exception ex)
+			{
+			}
+			if (tempPhoho != null)
+				photosToCluster.add(tempPhoho);
+		}
+		List<ActualEvent> events = new LinkedList<ActualEvent>();
+		Cluster tempCluster;
+		for (Photo p :photosToCluster)
+		{
+			tempCluster = new Cluster();
+			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+			events.add(new ActualEvent(tempCluster));
+		}
+		ActualEventsBundle bundle = new ActualEventsBundle(events);
+		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+		builder.buildCollage();
+
+		return;
 		//		
 
 	}
