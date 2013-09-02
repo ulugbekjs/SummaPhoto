@@ -114,7 +114,7 @@ public abstract class AbstractBuilder {
 		if (template == null)
 			return false;
 
-		List<Integer> horizontalSlotsToFill = new LinkedList<Integer>(template.getHorizontalSlots());
+		List<Integer> horizontalSlotsToFill = template.getHorizontalSlots();
 		// placing horizontal photos
 		return getPhotosWithRespectToTemplateSlots(horizontalSlotsToFill, true, pickedPhotos);	
 	}
@@ -122,7 +122,7 @@ public abstract class AbstractBuilder {
 	protected boolean getVerticalPhotosForTemplate(List<Photo> pickedPhotos) {
 		if (template == null)
 			return false;
-		List<Integer> verticalSlotsToFill = new LinkedList<Integer>(template.getHorizontalSlots());
+		List<Integer> verticalSlotsToFill = template.getVerticalSlots();
 		// placing horizontal photos
 		return getPhotosWithRespectToTemplateSlots(verticalSlotsToFill, false, pickedPhotos);	
 	}
