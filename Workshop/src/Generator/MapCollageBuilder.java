@@ -91,7 +91,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 			// add lines
 			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 			//paint.setColor(android.graphics.Color.MAGENTA);
-			paint.setShader(new LinearGradient(0, 0, line.getLineXDelta(), line.getLineYDelta(), Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
+			paint.setShader(new LinearGradient(0, 0, line.getLineXDelta(), line.getLineYDelta(), Color.YELLOW, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
 			paint.setStrokeWidth(5f);
 		    paint.setStrokeJoin(Paint.Join.ROUND);
 		    paint.setStyle(Style.STROKE);
