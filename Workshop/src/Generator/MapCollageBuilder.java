@@ -29,7 +29,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 	
 	MapTemplate template = null;
 	static {@SuppressWarnings("unused")
-	byte[] dummy = new byte[8 * 1024 * 1024];
+	byte[] dummy = new byte[36 * 1024 * 1024];
 	}
 	
 	private static final String TAG = MapCollageBuilder.class.getName();
