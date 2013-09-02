@@ -118,8 +118,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 			Log.e(TAG, "Error when saving collage file");
 			return null;
 		}
-		
-		return collage;
+				return collage;
 	}
 
 	/**
@@ -205,10 +204,12 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		
 		PixelPoint tempPixelPoint;
+		Pushpin adjustedPushpin;
 		// the adjusted pixel point for each pushPin its is originalX + the top left X coordinate of the map (the same for Y coordinate)
 		for (Pushpin pin: pushPins)
 		{
 			tempPixelPoint = new PixelPoint(xInterval + pin.getAnchor().getX(), yInterval + pin.getAnchor().getY());
+			pin.setAnchor(tempPixelPoint);
 			adjustedPushPinsPixelPoints.put(tempPixelPoint, pin);
 		}
 		return adjustedPushPinsPixelPoints ;

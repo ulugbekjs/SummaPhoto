@@ -27,6 +27,7 @@ public class Pushpin {
 	public PixelPoint getAnchor() {
 		return anchor;
 	}
+	
 
 	public int[] getTopLeftOffset() {
 		return topLeftOffset;
