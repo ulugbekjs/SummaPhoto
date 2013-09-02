@@ -26,11 +26,13 @@ import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Paint.Style;
 import android.util.Log;
 
 public class MapCollageBuilder extends AbstractBuilder{
@@ -92,11 +94,14 @@ public class MapCollageBuilder extends AbstractBuilder{
 			paint.setShader(new LinearGradient(0, 0, line.getLineXDelta(), line.getLineYDelta(), Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
 			paint.setStrokeWidth(5f);
 		    paint.setStrokeJoin(Paint.Join.ROUND);
+		    paint.setStyle(Style.STROKE);
+		    paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
+		    paint.setAlpha(120);
 			canvas.drawLine(line.getFromPoint().getX(), line.getFromPoint().getY(),
 					line.getToPoint().getX(), line.getToPoint().getY(), 
 					paint);
-			Path path = getArrowHead(line.getToPoint().getX(), line.getToPoint().getY(),  line.getTetaFromYAxis());
-			canvas.drawPath(path, paint);
+//			Path path = getArrowHead(line.getToPoint().getX(), line.getToPoint().getY(),  line.getTetaFromYAxis());
+//			canvas.drawPath(path, paint);
 		}
 		
 		//free bitmap

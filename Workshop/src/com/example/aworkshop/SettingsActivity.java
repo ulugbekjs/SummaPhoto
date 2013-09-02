@@ -38,9 +38,11 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.RectF;
@@ -100,23 +102,25 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		
 	
 //		Tester.insertFilesToObservedDir();
-		
-		Canvas canvas = null;
-		Bitmap bmpBase = null;
-
+//		
+//		Canvas canvas = null;
+//		Bitmap bmpBase = null;
+//
 //		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
 //		bmpBase.setHasAlpha(true);
 //		canvas = new Canvas(bmpBase);
 //		
-		 //add lines
 //		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 //		//paint.setColor(android.graphics.Color.MAGENTA);
-//		paint.setShader(new LinearGradient(0, 0, 200, 200, Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
+//		paint.setShader(new LinearGradient(0, 0, 200, 200, Color.YELLOW, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
 //		paint.setStrokeWidth(5f);
 //	    paint.setStrokeJoin(Paint.Join.ROUND);
+//	    paint.setStyle(Style.STROKE);
+//	    paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
+//	    paint.setAlpha(120);
 //		canvas.drawLine(200, 200, 400, 400, paint);
-//		Path path = getArrowHead(400, 400);
-//		canvas.drawPath(path, paint);
+////		Path path = getArrowHead(400, 400);
+////		canvas.drawPath(path, paint);
 //		Photo photo = null;
 //		try {
 //			photo = saveCollage(bmpBase);
@@ -124,7 +128,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 //			// TODO Auto-generated catch block
 //			e1.printStackTrace();
 //		}
-//		
+////		
 //		
 //		try {
 //			Common.Utils.notifyUserCollageCreated(photo);
@@ -149,12 +153,12 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		 
 
 ////		//TODO: remove, this is because of netwrok on main thread error
-//		if (android.os.Build.VERSION.SDK_INT > 9) {
-//			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
-//			StrictMode.setThreadPolicy(policy);
-//		}
-//
-//		//		//		//		Omri's code
+		if (android.os.Build.VERSION.SDK_INT > 9) {
+			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
+			StrictMode.setThreadPolicy(policy);
+		}
+
+		//		//		//		Omri's code
 		File directory = new File(PHOTO_DIR);
 		if (!directory.exists())
 			return;
@@ -186,7 +190,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		builder.buildCollage();
 
 		return;
-		//		
+				
 
 	}
 	
