@@ -30,6 +30,7 @@ public class Tester {
 		observer.startWatching();
 		
 		SettingsActivity.MODE = 1;
+		SettingsActivity.COLLAGE_TYPE = 2;
 
 		File dest = new File(SettingsActivity.ROOT, "Watched");
 		if (!dest.exists()) {

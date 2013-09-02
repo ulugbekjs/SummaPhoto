@@ -95,8 +95,8 @@ public abstract class AbstractBuilder {
 		else { // need to fill DedicatedRequest
 			if (minIndex != -1)  { // should be true
 				request = new DedicatedRequest();
-				request.setHorizontalNeeded(templates[minIndex].horizontalSlots.size() - bundle.horizontalCount());
-				request.setVerticalNeeded(templates[minIndex].verticalSlots.size() - bundle.verticalCount());
+				request.setHorizontalNeeded(Math.max(0, templates[minIndex].horizontalSlots.size() - bundle.horizontalCount()));
+				request.setVerticalNeeded(Math.max(0, templates[minIndex].verticalSlots.size() - bundle.verticalCount()));
 			}
 		}
 

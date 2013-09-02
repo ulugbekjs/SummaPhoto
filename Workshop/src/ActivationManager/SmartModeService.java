@@ -124,10 +124,6 @@ public class SmartModeService {
 								Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
 							}
 						}
-						else { // there was an error, notify user
-							Utils.notifyUserWithError("Error when building collage",
-									"Summaphoto has failed building your collage.");
-						}
 
 					}
 					
@@ -157,7 +153,7 @@ public class SmartModeService {
 //		return (scheduler != null);
 //	}
 	
-	public static boolean isServiceRunning() {
+	public static synchronized boolean isServiceRunning() {
 //		return (scheduler != null);
 		return busy;
 	}
