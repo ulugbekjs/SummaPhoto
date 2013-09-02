@@ -89,33 +89,32 @@ public class MapCollageBuilder extends AbstractBuilder{
 		for (Line line : linesList) {
 			// add lines
 			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-			//paint.setColor(android.graphics.Color.MAGENTA);
-			paint.setShader(new LinearGradient(0, 0, line.getLineXDelta(), line.getLineYDelta(), Color.MAGENTA, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
+			paint.setColor(Color.rgb(62, 156, 250));
+			//paint.setShader(new LinearGradient(0, 0, line.getLineXDelta(), line.getLineYDelta(), Color.YELLOW, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
 			paint.setStrokeWidth(5f);
-		    paint.setStrokeJoin(Paint.Join.ROUND);
-		    paint.setStyle(Style.STROKE);
-		    paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
-		    paint.setAlpha(120);
+			paint.setStrokeJoin(Paint.Join.ROUND);
+			paint.setStyle(Style.STROKE);
+//			paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
+//			paint.setAlpha(120);
 			canvas.drawLine(line.getFromPoint().getX(), line.getFromPoint().getY(),
-					line.getToPoint().getX(), line.getToPoint().getY(), 
-					paint);
-			//Path path = getArrowHead(line.getToPoint().getX(), line.getToPoint().getY(),  line.getTetaFromYAxis());
-			//canvas.drawPath(path, paint);
-
-//			Path path = getArrowHead(line.getToPoint().getX(), line.getToPoint().getY(),  line.getTetaFromYAxis());
-//			canvas.drawPath(path, paint);
-
+					line.getToPoint().getX(), line.getToPoint().getY(), paint);
 		}
-		
+
 		//free bitmap
-//		bitmap.recycle();
-////		bitmap = null;
-//
-//		// add lines
-//		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//		paint.setColor(android.graphics.Color.MAGENTA);
-//		paint.setStrokeWidth(3f);
-//		canvas.drawLine(642, 2080, 2448, 642, paint);
+		//		bitmap.recycle();
+		////		bitmap = null;
+		//
+		//		// add lines
+		//		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		//		paint.setColor(android.graphics.Color.MAGENTA);
+		//		paint.setStrokeWidth(3f);
+		//		canvas.drawLine(642, 2080, 2448, 642, paint);
+		
+		Paint paint = new Paint();
+		paint.setColor(Color.WHITE);
+		paint.setStrokeWidth(20f);        
+		paint.setStyle(Paint.Style.STROKE);  
+		canvas.drawRect(0, 0, bmpBase.getWidth(), bmpBase.getHeight(), paint);
 
 		Photo collage;
 		try {
@@ -126,15 +125,16 @@ public class MapCollageBuilder extends AbstractBuilder{
 			Log.e(TAG, "Error when saving collage file");
 			return null;
 		}
-				return collage;
+		Log.d(TAG, "finished");
+		return collage;
 	}
-	
+
 
 	/**
 	 * This method locate the different pictures in the relevant slots. Return true upon success. 
 	 */
 	public boolean populateTemplate() {
-		
+
 		template = MapTemplate.getTemplate(4);
 		List<Photo> hoerizontalPhotosList = new LinkedList<Photo>();
 		getHorizontalPhotosForTemplate(hoerizontalPhotosList);
@@ -190,13 +190,13 @@ public class MapCollageBuilder extends AbstractBuilder{
 	{
 		if (slots == null)
 			return null;
-		 HashMap<PixelPoint, Slot> pixelPointSlotDictionary = new  HashMap<PixelPoint, Slot>();
-		 for (Integer i=0; i< slots.length; i++)
-		 {
-			 if (slots[i].hasConnectingLinePoint())
-				 pixelPointSlotDictionary.put(slots[i].getConnectingLinePoint(), slots[i]);
-		 }
-		 return pixelPointSlotDictionary;
+		HashMap<PixelPoint, Slot> pixelPointSlotDictionary = new  HashMap<PixelPoint, Slot>();
+		for (Integer i=0; i< slots.length; i++)
+		{
+			if (slots[i].hasConnectingLinePoint())
+				pixelPointSlotDictionary.put(slots[i].getConnectingLinePoint(), slots[i]);
+		}
+		return pixelPointSlotDictionary;
 	}
 	
 	/**

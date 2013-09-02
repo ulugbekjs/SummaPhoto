@@ -127,12 +127,15 @@ public abstract class AbstractBuilder {
 		return getPhotosWithRespectToTemplateSlots(verticalSlotsToFill, false, pickedPhotos);	
 	}
 
-	private Queue<ActualEvent> getQueue(boolean reverse) {
+	private Queue<ActualEvent> getQueue(boolean shuffle) {
 		Queue<ActualEvent> queue = new LinkedList<ActualEvent>();
 		List<ActualEvent> events = bundle.getActualEvents();
-		if (reverse) {
-			Collections.reverse(events);
+		if (shuffle) {
+			Collections.shuffle(events);
 		}
+		
+		Collections.reverse(events); // so we start from the other side of the events, that we might have not reached
+
 		for (ActualEvent event: events) {
 			queue.add(event);
 		}
@@ -146,7 +149,6 @@ public abstract class AbstractBuilder {
 		}
 		
 		Queue<ActualEvent> queue = getQueue(horizontalPhotos);
-		Collections.shuffle(slotsToFill);
 
 		while (!slotsToFill.isEmpty() && !queue.isEmpty()) {
 			ActualEvent event = queue.remove();
