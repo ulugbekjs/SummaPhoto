@@ -33,15 +33,16 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Paint.Style;
+import android.graphics.drawable.PaintDrawable;
 import android.util.Log;
 
 public class MapCollageBuilder extends AbstractBuilder{
-	
+
 	List<Line> linesList = null;
 	//static {@SuppressWarnings("unused")
 	//byte[] dummy = new byte[36 * 1024 * 1024];
 	//}
-	
+
 	private static final String TAG = MapCollageBuilder.class.getName();
 
 	public MapCollageBuilder(ActualEventsBundle bundle) {
@@ -75,7 +76,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 				int x = 5;
 			}
 		}
-		
+
 		// draw Bing map into output
 		try {
 			addSlotImageToCanvasBySampling(bitmap, canvas,((MapTemplate) template).getMapSlot(), 1);
@@ -88,12 +89,13 @@ public class MapCollageBuilder extends AbstractBuilder{
 			// add lines
 			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 			paint.setColor(Color.rgb(62, 156, 250));
+			canvas.drawCircle(line.getFromPoint().getX(), line.getFromPoint().getY(), 10, paint);
 			//paint.setShader(new LinearGradient(0, 0, line.getLineXDelta(), line.getLineYDelta(), Color.YELLOW, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
 			paint.setStrokeWidth(5f);
 			paint.setStrokeJoin(Paint.Join.ROUND);
 			paint.setStyle(Style.FILL_AND_STROKE);
 			paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
-//			paint.setAlpha(120);
+			//			paint.setAlpha(120);
 			canvas.drawLine(line.getFromPoint().getX(), line.getFromPoint().getY(),
 					line.getToPoint().getX(), line.getToPoint().getY(), paint);
 		}
@@ -107,12 +109,12 @@ public class MapCollageBuilder extends AbstractBuilder{
 		//		paint.setColor(android.graphics.Color.MAGENTA);
 		//		paint.setStrokeWidth(3f);
 		//		canvas.drawLine(642, 2080, 2448, 642, paint);
-		
+
 		drawFrame(canvas, bmpBase.getWidth(), bmpBase.getHeight());
 
 		Photo collage;
 		try {
-			collage = saveCollage(bmpBase);
+			collage = saveCollageToFile(bmpBase);
 			clearProcessedPhotos(); // not to reuse same photos
 		}
 		catch (IOException exception) {
@@ -147,7 +149,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 			Log.d(TAG, "Stop populate template, because error occured while trying to get map from BING");
 			return false;
 		}
-		
+
 		
 		HashMap<PixelPoint, Pushpin> pixelPointsToPushPins = getAdjustedPixelPointPushPinDictionary(mapFromDataSource.getPushPins());
 		HashMap<PixelPoint, Slot> pixelPointsToSlot = getPixelPointSlotDictionaryHashMap(template.slots);
@@ -166,28 +168,28 @@ public class MapCollageBuilder extends AbstractBuilder{
 		updatePicturesOfSlots (tuples,photosList);
 		((MapTemplate)template).setMap(mapFromDataSource);
 		linesList = convertTupplesToLines(tuples);
-		
+
 		return true;
 	}
-	
+
 	private Path getArrowHead(int tipX, int tipY, double angle) {
 		Path path = new Path();
 		path.moveTo(tipX, tipY);
-        path.lineTo(tipX - 20, tipY +  60);
-        path.lineTo(tipX, tipY + 50);
-        path.lineTo(tipX + 20, tipY + 60);
-        path.close();
-        
-        Matrix mMatrix = new Matrix();
-        RectF bounds = new RectF();
-        path.computeBounds(bounds, true);
-        mMatrix.postRotate((float) angle, 
-                           (bounds.right + bounds.left)/2, 
-                           (bounds.bottom + bounds.top)/2);
-        path.transform(mMatrix);
+		path.lineTo(tipX - 20, tipY +  60);
+		path.lineTo(tipX, tipY + 50);
+		path.lineTo(tipX + 20, tipY + 60);
+		path.close();
+
+		Matrix mMatrix = new Matrix();
+		RectF bounds = new RectF();
+		path.computeBounds(bounds, true);
+		mMatrix.postRotate((float) angle, 
+				(bounds.right + bounds.left)/2, 
+				(bounds.bottom + bounds.top)/2);
+		path.transform(mMatrix);
 		return path;
 	}
-	
+
 	/**
 	@Override
 	public DedicatedRequest setTemplate() {
@@ -195,8 +197,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 		return null;
 	}
 	**/
-	
-	
+
+
 	/**
 	 * @param slots - array of slots of the template
 	 * @return dictionary which its keys are pixelPoints of "connection" points of the slots, and values are the relvant slots
@@ -213,12 +215,12 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 		return pixelPointSlotDictionary;
 	}
-	
+
 	/**
 	 * @param pushPins - the list of pushPins on map retrieved from bing
 	 * @return Dictionary which contains the actual pixel of the pushPin in the output collage as key, and the pushPin object as value 
 	 */
-	
+
 	private HashMap<PixelPoint, Pushpin> getAdjustedPixelPointPushPinDictionary(List<Pushpin> pushPins)
 	{
 		if (pushPins == null)
@@ -226,8 +228,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 		Integer xInterval = ((MapTemplate)template).getMapSlot().getTopLeft().getX();
 		Integer yInterval = ((MapTemplate)template).getMapSlot().getTopLeft().getY();
 		HashMap<PixelPoint, Pushpin> adjustedPushPinsPixelPoints = new HashMap<PixelPoint, Pushpin>();
-		
-		
+
+
 		PixelPoint tempPixelPoint;
 		Pushpin adjustedPushpin;
 		// the adjusted pixel point for each pushPin its is originalX + the top left X coordinate of the map (the same for Y coordinate)
@@ -239,8 +241,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 		return adjustedPushPinsPixelPoints ;
 	}
-	
-	
+
+
 	/**
 	 * @param tuples - tuples of location PixelPoint and pushPin pixelPoint
 	 * @param photosList - list of photos in the collage
@@ -254,6 +256,10 @@ public class MapCollageBuilder extends AbstractBuilder{
 		{
 			tuple.getSlot().assignToPhoto(tuple.getPushpin().getPhoto());
 		}
+			/**
+			
+			
+		**/
 		return true;
 	}
 	/**
@@ -274,7 +280,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 		return lineList;
 	}
-	
-	
-	
+
+
+
 }

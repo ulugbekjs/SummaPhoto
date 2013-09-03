@@ -61,7 +61,7 @@ public class Utils {
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "Pictures");
 
 
-		String  PHOTO_DIR = ROOT + File.separator + "Output" + File.separator + photo.getFileName();
+		String  PHOTO_DIR = ROOT + File.separator + photo.getFileName();
 		File photoFile = new File(PHOTO_DIR);
 
 		if (!photoFile.exists()) {

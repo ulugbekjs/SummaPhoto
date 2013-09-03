@@ -32,8 +32,8 @@ public class BlockCollageBuilder extends AbstractBuilder {
 		successful &= getVerticalPhotosForTemplate(pickedVerticals);
 
 		if (successful) {
-			List<Integer> horizontals = new LinkedList<Integer>(template.getHorizontalSlots());
-			List<Integer> verticals = new LinkedList<Integer>(template.getVerticalSlots());
+			List<Integer> horizontals = template.getHorizontalSlots();
+			List<Integer> verticals = template.getVerticalSlots();
 
 			// populate horizontal slots
 			for (int slot : horizontals) {
@@ -44,7 +44,7 @@ public class BlockCollageBuilder extends AbstractBuilder {
 					successful = false;
 				}
 			}
-			
+
 			// populate vertical slots
 			for (int slot : verticals) {
 				if (!pickedVerticals.isEmpty()) {
@@ -66,19 +66,19 @@ public class BlockCollageBuilder extends AbstractBuilder {
 		bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
 		canvas = new Canvas(bmpBase);
 
-		//		// draw images saved in Template onto canvas
-		//		for (int slot = 0; slot < template.getNumberOfSlots(); slot ++) {
-		//			try {
-		//				addSlotImageToCanvas(canvas, template.getSlot(slot));
-		//			}
-		//			catch (NullPointerException exception) {
-		//				// TODO: deal with error
-		//			}
-		//		}
+		// draw images saved in Template onto canvas
+		for (int slot = 0; slot < template.getNumberOfSlots(); slot ++) {
+			try {
+				addSlotImageToCanvasBySampling(bmpBase, canvas, template.getSlot(slot), 4);
+			}
+			catch (NullPointerException exception) {
+				Log.e(TAG, "Empty Slot, cannot add to collage.");
+			}
+		}
 
 		Photo collage = null;
 		try {
-			collage = saveCollage(bmpBase); 
+			collage = saveCollageToFile(bmpBase); 
 			clearProcessedPhotos(); // clear photos in container so they are not used again
 		}
 		catch (IOException exception) {
