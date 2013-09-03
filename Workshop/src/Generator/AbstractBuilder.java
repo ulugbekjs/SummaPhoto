@@ -275,7 +275,7 @@ public abstract class AbstractBuilder {
 
 		// Save Bitmap to File
 		fos = new FileOutputStream(file);
-		bmpBase.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+		bmpBase.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 
 		fos.flush();
 		fos.close();
