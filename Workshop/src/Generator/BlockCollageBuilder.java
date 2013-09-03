@@ -14,8 +14,6 @@ import android.util.Log;
 
 public class BlockCollageBuilder extends AbstractBuilder {
 	
-	private static final int BLOCK_TEMPLATES_NUM = 3;
-
 	private static final String TAG = BlockCollageBuilder.class.getName();
 
 	public BlockCollageBuilder(ActualEventsBundle bundle) {
@@ -24,7 +22,7 @@ public class BlockCollageBuilder extends AbstractBuilder {
 	
 	@Override
 	public DedicatedRequest setTemplate() {
-		return super.setTemplate(BLOCK_TEMPLATES_NUM);
+		return super.setTemplate(BlockTemplate.BLOCKS_TEMPLATE_NUM);
 	}
 
 	@Override

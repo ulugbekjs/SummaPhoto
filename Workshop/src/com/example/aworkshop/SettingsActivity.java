@@ -101,7 +101,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		createAppFolders();
 		
 	
-		Tester.insertFilesToObservedDir();
+		//Tester.insertFilesToObservedDir();
 //		
 //		Canvas canvas = null;
 //		Bitmap bmpBase = null;

@@ -97,7 +97,7 @@ public class SmartModeService {
 					busy = true;
 					
 					try {
-						Thread.sleep(20000);
+						Thread.sleep(10000);
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

@@ -31,7 +31,7 @@ public class PhotoListenerThread extends FileObserver {
 
 	private static final String TAG = PhotoListenerThread.class.getName();
 	String absolutePath;
-	
+
 	private int locationlessPhotos = 0; 
 
 	public PhotoListenerThread(String path) {
@@ -66,15 +66,18 @@ public class PhotoListenerThread extends FileObserver {
 							Log.e(TAG, "Photo taken: " + "was NOT read from file properly");
 						}
 					}
-					
+
 					if (photo != null) {
 						PhotoContainer.getInstance().addToBuffer(photo);
-						if (SettingsActivity.MODE == 1 &&
-								!SmartModeService.isServiceRunning()) { // SMART MODE - starts whenever a photo is received if not busy
-							SmartModeService.startService();
-						}
+						if (SettingsActivity.MODE == 1)
+							if (!SmartModeService.isServiceRunning()) { // SMART MODE - starts whenever a photo is received if not busy
+								SmartModeService.startService();
+							}
+							else {
+								Log.e(TAG, "SmartModeService not started: already runnning");
+							}
 					}
-					
+
 					else {
 						if (locationlessPhotos > 5) {
 							Utils.notifyUserWithError("Photos have no location", "Make sure geo-tagging is on in your device.");
@@ -82,7 +85,7 @@ public class PhotoListenerThread extends FileObserver {
 						}
 					}
 				}
-				
+
 				if ((event & FileObserver.DELETE) > 0) {
 					PhotoContainer.getInstance().onDelete(file);
 				}
@@ -113,7 +116,7 @@ public class PhotoListenerThread extends FileObserver {
 			this.locationlessPhotos++;
 			return null;
 		}
-		
+
 		//get time
 		ExifSubIFDDirectory directory2 = metadata.getDirectory(ExifSubIFDDirectory.class);
 		Date date = directory2.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
@@ -138,6 +141,6 @@ public class PhotoListenerThread extends FileObserver {
 		return photo;
 	}
 
-	
+
 
 }

@@ -11,9 +11,6 @@ public abstract class AbstractTemplate {
 	public static final int MAP_TYPE = 1;
 	public static final int BLOCK_TYPE = 2;
 
-	//static fields
-	public static int TEMPLATES_NUM; // number of templates existing for this template type
-
 	//protected instance fields
 	protected Slot[] slots = null; // slots[0] == Top Left Photo
 	protected List<Integer> verticalSlots;
