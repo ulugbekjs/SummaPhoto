@@ -4,18 +4,26 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import ActivationManager.DedicatedRequest;
 import Common.ActualEventsBundle;
 import Common.Photo;
+import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
 
 public class BlockCollageBuilder extends AbstractBuilder {
+	
+	private static final int BLOCK_TEMPLATES_NUM = 3;
 
 	private static final String TAG = BlockCollageBuilder.class.getName();
 
 	public BlockCollageBuilder(ActualEventsBundle bundle) {
 		super(bundle);
+	}
+	
+	public DedicatedRequest setTemplate() {
+		return super.setTemplate(BLOCK_TEMPLATES_NUM);
 	}
 
 	@Override
@@ -63,7 +71,7 @@ public class BlockCollageBuilder extends AbstractBuilder {
 		Canvas canvas = null;
 		Bitmap bmpBase = null;
 
-		bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
+		bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.ARGB_8888);
 		canvas = new Canvas(bmpBase);
 
 		// draw images saved in Template onto canvas
