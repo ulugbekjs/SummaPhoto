@@ -3,15 +3,16 @@ package Generator;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.integer;
+import android.R.string;
+
 public abstract class AbstractTemplate {
 	
 	public static final int MAP_TYPE = 1;
 	public static final int BLOCK_TYPE = 2;
 
 	//static fields
-	private static final int TEMPLATE_1 = 1;
-	private static final int TEMPLATE_2 = 2;
-	private static final int TEMPLATE_3 = 3;
+	public static int TEMPLATES_NUM; // number of templates existing for this template type
 
 	//protected instance fields
 	protected Slot[] slots = null; // slots[0] == Top Left Photo

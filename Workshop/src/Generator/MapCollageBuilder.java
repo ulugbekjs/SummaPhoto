@@ -48,6 +48,10 @@ public class MapCollageBuilder extends AbstractBuilder{
 	public MapCollageBuilder(ActualEventsBundle bundle) {
 		super(bundle);
 	}
+	
+	public DedicatedRequest setTemplate() {
+		return super.setTemplate(MapTemplate.MAP_TEMPLATES_NUM);
+	}
 
 	@Override
 	public Photo buildCollage() {

@@ -53,17 +53,17 @@ public abstract class AbstractBuilder {
 	 * Chooses best template for bundle, sets this.template if one is found
 	 * @return request if non matching template is found
 	 */
-	public DedicatedRequest setTemplate() {
-		int[] templateDiffs = new int[BlockTemplate.BLOCK_TEMPLATES_NUM];
-		int[] templateRemaining = new int[BlockTemplate.BLOCK_TEMPLATES_NUM];
+	protected DedicatedRequest setTemplate(int num) {
+		int[] templateDiffs = new int[num];
+		int[] templateRemaining = new int[num];
 
-		BlockTemplate[] templates = new BlockTemplate[BlockTemplate.BLOCK_TEMPLATES_NUM];
-		for (int i=0; i<BlockTemplate.BLOCK_TEMPLATES_NUM; i++) {
+		BlockTemplate[] templates = new BlockTemplate[num];
+		for (int i=0; i<num; i++) {
 			templates[i] = BlockTemplate.getTemplate(i+1);
 		}
 
 		// calculate difference of required vertical and horizontal photos for each template
-		for (int t=0; t<BlockTemplate.BLOCK_TEMPLATES_NUM; t++) {
+		for (int t=0; t<num; t++) {
 			int diffHorizontal = Math.max(0, templates[t].horizontalSlots.size() - bundle.horizontalCount());
 			int diffVertical = Math.max(0, templates[t].verticalSlots.size() - bundle.verticalCount());
 			templateDiffs[t] = Math.abs(diffHorizontal - diffVertical);
@@ -71,8 +71,8 @@ public abstract class AbstractBuilder {
 		}
 		
 		// calculate compatibility scores
-		double[] templateScores = new double[BlockTemplate.BLOCK_TEMPLATES_NUM];
-		for (int i = 0; i<BlockTemplate.BLOCK_TEMPLATES_NUM; i++) {
+		double[] templateScores = new double[num];
+		for (int i = 0; i<num; i++) {
 			templateScores[i] = templateDiffs[i] * 0.3 + templateRemaining[i] * 0.7;
 		}
 
@@ -81,7 +81,7 @@ public abstract class AbstractBuilder {
 		int minIndex = -1;
 
 		// get a fitting template or pick the "closest" one
-		for (int i = 0; i<BlockTemplate.BLOCK_TEMPLATES_NUM; i++) {
+		for (int i = 0; i<num; i++) {
 			if (templates[i].getHorizontalSlots().size() <= bundle.horizontalCount() &&
 					templates[i].getVerticalSlots().size() <= bundle.verticalCount()) { // template fits perfectly for bundle
 				chosenTemplate = templates[i];
