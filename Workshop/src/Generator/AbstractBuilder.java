@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -118,7 +119,7 @@ public abstract class AbstractBuilder {
 		if (template == null)
 			return false;
 
-		List<Integer> horizontalSlotsToFill = template.getHorizontalSlots();
+		List<Integer> horizontalSlotsToFill = new ArrayList<Integer>(template.getHorizontalSlots());
 		// placing horizontal photos
 		return getPhotosWithRespectToTemplateSlots(horizontalSlotsToFill, true, pickedPhotos);	
 	}
@@ -126,7 +127,7 @@ public abstract class AbstractBuilder {
 	protected boolean getVerticalPhotosForTemplate(List<Photo> pickedPhotos) {
 		if (template == null)
 			return false;
-		List<Integer> verticalSlotsToFill = template.getVerticalSlots();
+		List<Integer> verticalSlotsToFill = new ArrayList<Integer>(template.getVerticalSlots());
 		// placing horizontal photos
 		return getPhotosWithRespectToTemplateSlots(verticalSlotsToFill, false, pickedPhotos);	
 	}
@@ -264,8 +265,11 @@ public abstract class AbstractBuilder {
 		bitmap = null;
 
 	}
-	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
+	protected Photo saveCollageToFile(Bitmap bmpBase) throws IOException {
 		Calendar calendar = Calendar.getInstance();
+		int width =  bmpBase.getWidth();
+		int height = bmpBase.getHeight();
+		
 		File file = null;
 		FileOutputStream fos = null;
 
@@ -284,7 +288,7 @@ public abstract class AbstractBuilder {
 		bmpBase.recycle();
 		bmpBase = null;
 
-		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
+		return new Photo(calendar.getTime(), width, height, null, file.getAbsolutePath());
 	}
 
 	protected void clearProcessedPhotos() {

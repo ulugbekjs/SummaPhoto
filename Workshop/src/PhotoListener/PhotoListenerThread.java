@@ -51,10 +51,10 @@ public class PhotoListenerThread extends FileObserver {
 				if ((event & FileObserver.CLOSE_WRITE) > 0) {
 					try {
 						photo = createPhotoFromFile(file);
-						Log.d(TAG, "Photo taken: " + file + " was read from file");
+						Log.d(TAG, "Photo taken: " + path + " was read from file");
 
 					} catch (ImageProcessingException e) {
-						Log.e(TAG, "Photo taken: " + "was not yet fully saved properly");
+						Log.e(TAG, "Photo taken: " + path + " was not yet fully saved properly");
 						try {
 							Thread.sleep(2000);
 						} catch (InterruptedException e1) {

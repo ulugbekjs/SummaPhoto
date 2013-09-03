@@ -1,6 +1,7 @@
 package ActivationManager;
 
 import java.io.FileNotFoundException;
+import java.security.PublicKey;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -96,7 +97,7 @@ public class SmartModeService {
 					busy = true;
 					
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(20000);
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -105,21 +106,21 @@ public class SmartModeService {
 					manager.consumeDedictedRequests(); 
 					boolean collageNeeded = manager.processPhotoBuffer();
 
-					boolean successful = true;
 					if (collageNeeded) { // ActivationManager decided clustering should be made
 						ActualEventsBundle events = partiotionToEvents();
 
 						// build the collage from Bundle of photos
-						Photo collage = null;
+						ResultPair result = null;
+						
 						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
-							successful &= buildCollage(collage, new BlockCollageBuilder(events));
+							result =  buildCollage(new BlockCollageBuilder(events));
 						}
 						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
-							successful &= buildCollage(collage, new MapCollageBuilder(events));
+							result = buildCollage(new MapCollageBuilder(events));
 						}
-						if (successful) {
+						if (result.validCollage) {
 							try {
-								Utils.notifyUserCollageCreated(collage);
+								Utils.notifyUserCollageCreated(result.collage);
 							} catch (FileNotFoundException e) {
 								Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
 							}
@@ -158,21 +159,20 @@ public class SmartModeService {
 		return busy;
 	}
 
-	private static boolean buildCollage(Photo collage, AbstractBuilder builder) {
+	private static ResultPair buildCollage(AbstractBuilder builder) {
+		boolean successful;
+		Photo collage = null;
 		DedicatedRequest request = builder.setTemplate();
 		if (request != null) { // not enough photos for collage
 			manager.addRequestToBuffer(request);
-			return false;
+			successful = false;
 		}
 		else { 
 			builder.populateTemplate();
 			collage =  builder.buildCollage();
-			return true;
+			successful = true;
 		}
+		return new ResultPair(successful, collage);
 	}
 	
-	
-	
-
-
 }

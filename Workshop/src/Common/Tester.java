@@ -37,7 +37,7 @@ public class Tester {
 			dest.mkdirs();
 		}
 
-		File source = new File(SettingsActivity.ROOT, "Tests");
+		File source = new File(SettingsActivity.ROOT, "Tests2");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();

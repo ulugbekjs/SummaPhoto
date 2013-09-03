@@ -116,7 +116,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 		Photo collage;
 		try {
-			collage = saveCollage(bmpBase);
+			collage = saveCollageToFile(bmpBase);
 			clearProcessedPhotos(); // not to reuse same photos
 		}
 		catch (IOException exception) {
