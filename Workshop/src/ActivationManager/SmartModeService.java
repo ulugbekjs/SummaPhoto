@@ -137,7 +137,7 @@ public class SmartModeService {
 				 */
 				private ActualEventsBundle partiotionToEvents() {
 					DBScan eventsClusterer = new DBScan(PhotoContainer.getInstance().getProcessedPhotos());
-					ActualEventsBundle events = eventsClusterer.runDBScanAlgorithm();
+					ActualEventsBundle events = eventsClusterer.ComputeCluster();
 					return events;
 				}
 			});

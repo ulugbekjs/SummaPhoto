@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import android.R.integer;
+
 import Common.*;
 
 
@@ -22,16 +24,26 @@ public class DBScan {
 	private final double MaxSecondsInterval = 600;
 	private final double MaxMetersInterval = 50;
 	private final int minNumberOfPointsInCluster = 2;
+	private final int minNumberOfPointsInClusterForNoisyPictures = 1;
+	private final double MaxRatioOfNoise = 0.4;
 
 	private Hashtable<Double, PhotoObjectForClustering> unvisitedPhotos = null;
 	private Hashtable<Double, PhotoObjectForClustering> visitedPhotos = null;
-
 	
+	private List<Photo> photosData;
 	
 	public DBScan(List<Photo> photosData) {
+		this.photosData = photosData;
+	}
+	
+	private Boolean initialize ()
+	{
 		PhotoObjectForClustering tempObject;
 		unvisitedPhotos = new Hashtable<Double, PhotoObjectForClustering>();
-		if (photosData != null) {
+		if (photosData == null) {
+			return false;
+		}
+		else {
 			for (Photo p : photosData) {
 				if (p != null) {
 					tempObject = new PhotoObjectForClustering(p);
@@ -39,15 +51,33 @@ public class DBScan {
 				}
 			}
 		}
+
 		visitedPhotos = new Hashtable<Double, PhotoObjectForClustering>();
+		return true;
 	}
-	
 	
 	/**
 	 * Takes photos and sorts them to ActualEvents according to the algorithm
 	 * @return ActualEventBundle containing the events containing photos
 	 */
-	public ActualEventsBundle runDBScanAlgorithm() {
+	public ActualEventsBundle ComputeCluster ()
+	{
+		return	runDBScanAlgorithm (false); 
+	}
+	
+	
+	/**
+	 * The actual clustering method
+	 * @param isNoisyRun - indicates if the photos are considered noisy. In such case, reduce the number of minimum photos in cluster
+	 * @return ActualEventBundle containing the events containing photos
+	 */
+	
+	private ActualEventsBundle runDBScanAlgorithm(Boolean isNoisyRun) {
+		if (!initialize())
+			return null;
+		Integer noiseCounter =  0;
+		Integer minimumNumberOfPhotosInCluster = isNoisyRun? minNumberOfPointsInClusterForNoisyPictures: minNumberOfPointsInCluster;
+		Integer numberOfPhotosToClusterInteger = unvisitedPhotos.size();
 		List<Cluster> clustersList = new LinkedList<Cluster>();
 		PhotoObjectForClustering arbitraryUnvisitedPhoto;
 		
@@ -56,16 +86,26 @@ public class DBScan {
 			arbitraryUnvisitedPhoto = getArbitraryPhotoFromHashTableClustering(unvisitedPhotos);
 			moveToVisited(arbitraryUnvisitedPhoto);
 			Queue<PhotoObjectForClustering> neighborsList = getNeighbors(arbitraryUnvisitedPhoto);
-			if (neighborsList.size() < minNumberOfPointsInCluster) {
+			if (neighborsList.size() < minimumNumberOfPhotosInCluster) {
 				arbitraryUnvisitedPhoto.isNoise = true;
+				noiseCounter ++;
 			} else {
 				Cluster cluster = new Cluster();
 				clustersList.add(cluster);
 				arbitraryUnvisitedPhoto.addPointToCluster(cluster);
-				expandCluster(cluster, arbitraryUnvisitedPhoto, neighborsList);
+				expandCluster(cluster, arbitraryUnvisitedPhoto, neighborsList, minimumNumberOfPhotosInCluster);
 			}
 		}
-		return getActualEventsList(clustersList);
+		//  In case that too many pictures were marked as noise, and it is the first run of the clustering algorithm
+		// re-run algorithm with lower parameter for minimumPhotosInCluster
+		if (((double)noiseCounter /(double)numberOfPhotosToClusterInteger > MaxRatioOfNoise) && (!isNoisyRun))
+		{
+			return runDBScanAlgorithm(true); 
+		}
+		else {
+			return getActualEventsList(clustersList);
+		}
+		
 	}
 	
 	
@@ -89,7 +129,7 @@ public class DBScan {
 	 * This method expand the cluster by iterating the photo's neighbors that might be added to the cluster
 	 */
 	private void expandCluster(Cluster cluster, PhotoObjectForClustering photo,
-			Queue<PhotoObjectForClustering> neighbors) {
+			Queue<PhotoObjectForClustering> neighbors, Integer minimumNumberOfPhotosInCluster) {
 		if (neighbors != null) {
 			Queue<PhotoObjectForClustering> subNeighborsList;
 
@@ -100,7 +140,7 @@ public class DBScan {
 					moveToVisited(neighbor);
 					subNeighborsList = getNeighbors(neighbor);
 					if ((subNeighborsList != null)
-							&& (subNeighborsList.size() >= minNumberOfPointsInCluster)) {
+							&& (subNeighborsList.size() >= minimumNumberOfPhotosInCluster)) {
 						neighbors.addAll(subNeighborsList);
 					}
 				}

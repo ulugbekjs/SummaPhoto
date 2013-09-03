@@ -66,7 +66,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 //		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "tals" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
 //	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
@@ -158,7 +158,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 //			StrictMode.setThreadPolicy(policy);
 //		}
 
-		//		//		//		Omri's code
+//		//		//		//		Omri's code
 		File directory = new File(PHOTO_DIR);
 		if (!directory.exists())
 			return;
@@ -178,17 +178,16 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 				photosToCluster.add(tempPhoho);
 		}
 		DBScan algo = new DBScan(photosToCluster);
-		ActualEventsBundle bundle = algo.runDBScanAlgorithm();
+		ActualEventsBundle bundle = algo.ComputeCluster();
 //		
-//		List<ActualEvent> events = new LinkedList<ActualEvent>();
-//		Cluster tempCluster;
-//		for (Photo p :photosToCluster)
-//		{
-//			tempCluster = new Cluster();
-//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-//			events.add(new ActualEvent(tempCluster));
-//		}
-//		 = new ActualEventsBundle(events);
+		List<ActualEvent> events = new LinkedList<ActualEvent>();
+		Cluster tempCluster;
+		for (Photo p :photosToCluster)
+		{
+			tempCluster = new Cluster();
+			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+			events.add(new ActualEvent(tempCluster));
+		}
 		MapCollageBuilder builder = new MapCollageBuilder(bundle);
 		builder.setTemplate();
 		if (builder.populateTemplate())
