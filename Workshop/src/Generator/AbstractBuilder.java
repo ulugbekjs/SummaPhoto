@@ -46,6 +46,7 @@ public abstract class AbstractBuilder {
 	}
 	// methods to override
 	
+	public abstract DedicatedRequest setTemplate();
 	public abstract Photo buildCollage();
 	public abstract boolean populateTemplate();
 

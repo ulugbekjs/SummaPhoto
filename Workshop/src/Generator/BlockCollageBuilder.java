@@ -22,6 +22,7 @@ public class BlockCollageBuilder extends AbstractBuilder {
 		super(bundle);
 	}
 	
+	@Override
 	public DedicatedRequest setTemplate() {
 		return super.setTemplate(BLOCK_TEMPLATES_NUM);
 	}

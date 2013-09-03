@@ -49,6 +49,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		super(bundle);
 	}
 	
+	@Override
 	public DedicatedRequest setTemplate() {
 		return super.setTemplate(MapTemplate.MAP_TEMPLATES_NUM);
 	}
