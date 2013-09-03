@@ -66,7 +66,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 //		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests2" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "test4" + File.separator;
 //	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;

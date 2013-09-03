@@ -60,9 +60,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
 		bmpBase.setHasAlpha(true);
 		canvas = new Canvas(bmpBase);
-
-		
-		populateTemplate();
+			
 		Slot slotToAddToCanvas;
 		Bitmap bitmap = null;
 		// draw images saved in Template onto canvas
@@ -83,7 +81,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 			addSlotImageToCanvasBySampling(bitmap, canvas,((MapTemplate) template).getMapSlot(), 1);
 		}
 		catch (NullPointerException exception) {
-			//TODO: deal with error
+			Log.e(TAG, "Could not add the map to canvas properly");
 		}
 		
 		for (Line line : linesList) {
@@ -131,20 +129,39 @@ public class MapCollageBuilder extends AbstractBuilder{
 	 */
 	public boolean populateTemplate() {
 
-		template = MapTemplate.getTemplate(4);
-		List<Photo> hoerizontalPhotosList = new LinkedList<Photo>();
-		getHorizontalPhotosForTemplate(hoerizontalPhotosList);
+		// decide which pictures from the different events will be included in the collage
+		List<Photo> horizontalPhotosList = new LinkedList<Photo>();
+		getHorizontalPhotosForTemplate(horizontalPhotosList);
 		List<Photo> verticalPhotosList = new LinkedList<Photo>();
 		getVerticalPhotosForTemplate(verticalPhotosList);
 		List<Photo> photosList = new LinkedList<Photo>();
 		photosList.addAll(verticalPhotosList);
-		photosList.addAll(hoerizontalPhotosList);
-		StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, ((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
-		//StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, 899,833);
+		photosList.addAll(horizontalPhotosList);
+		
+		
+		// get the map data and image from Bing
+		StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, 
+				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
+		if (mapFromDataSource == null)
+		{
+			Log.d(TAG, "Stop populate template, because error occured while trying to get map from BING");
+			return false;
+		}
+		
 		
 		HashMap<PixelPoint, Pushpin> pixelPointsToPushPins = getAdjustedPixelPointPushPinDictionary(mapFromDataSource.getPushPins());
 		HashMap<PixelPoint, Slot> pixelPointsToSlot = getPixelPointSlotDictionaryHashMap(template.slots);
+		
+		if (pixelPointsToPushPins.size() != pixelPointsToSlot.size())
+		{
+			Log.d(TAG, "Stop populate template, because number of slots is not equal to number of pushpins");
+			return false;
+		}
+		
+		
+		
 		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(pixelPointsToSlot, pixelPointsToPushPins);
+		// decide which picture will be populated in each slot 
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
 		updatePicturesOfSlots (tuples,photosList);
 		((MapTemplate)template).setMap(mapFromDataSource);
@@ -171,11 +188,13 @@ public class MapCollageBuilder extends AbstractBuilder{
 		return path;
 	}
 	
+	/**
 	@Override
 	public DedicatedRequest setTemplate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	**/
 	
 	
 	/**
@@ -235,30 +254,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 		{
 			tuple.getSlot().assignToPhoto(tuple.getPushpin().getPhoto());
 		}
-			/**
-			if ((tuple.getPushpin() == null) || (tuple.getSlot() == null))
-			{
-				return false;
-			}
-			for (Photo photo: photosList)
-			{
-				if (photo.getLocation() == null)
-					return false;
-				if (photo.getLocation().equals(tuple.getPushpin().getPoint()))
-				{
-					tuple.getSlot().assignToPhoto(photo);
-				}
-			
-			}
-			if (tuple.getSlot().getPhoto() == null)
-			{
-				//TODO: remove next line
-				Integer xInteger = 5;
-				return false;
-			}
-			
-		}
-		**/
 		return true;
 	}
 	/**
