@@ -13,15 +13,15 @@ import java.util.List;
 import com.adobe.xmp.impl.Utils;
 
 import ActivationManager.ScheduledModeService;
-import ActivationManager.SmartModeService;
+import ActivationManager.SmartModeFlow;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
-import Common.Line;
 import Common.Photo;
 import Common.Tester;
 //import Common.PhotoFilter;
 import Common.TestsClass;
 import Generator.AbstractTemplate;
+import Generator.Line;
 import Generator.PixelPoint;
 import Generator.LocatePicturesWithMap.SlotPushPinTuple;
 import Generator.MapCollageBuilder;
@@ -101,7 +101,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		createAppFolders();
 		
 	
-//		Tester.insertFilesToObservedDir();
+		Tester.insertFilesToObservedDirScheduledMode();
 //		
 //		Canvas canvas = null;
 //		Bitmap bmpBase = null;
@@ -159,26 +159,26 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 //		}
 
 		//		//		//		Omri's code
-		File directory = new File(PHOTO_DIR);
-		if (!directory.exists())
-			return;
-		File[] arrayOfPic =  directory.listFiles();
-		Photo tempPhoho = null;
-		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		for (File file : arrayOfPic)
-		{
-			try
-			{
-				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-			}
-			catch (Exception ex)
-			{
-			}
-			if (tempPhoho != null)
-				photosToCluster.add(tempPhoho);
-		}
-		DBScan algo = new DBScan(photosToCluster);
-		ActualEventsBundle bundle = algo.runDBScanAlgorithm();
+//		File directory = new File(PHOTO_DIR);
+//		if (!directory.exists())
+//			return;
+//		File[] arrayOfPic =  directory.listFiles();
+//		Photo tempPhoho = null;
+//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+//		for (File file : arrayOfPic)
+//		{
+//			try
+//			{
+//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+//			}
+//			catch (Exception ex)
+//			{
+//			}
+//			if (tempPhoho != null)
+//				photosToCluster.add(tempPhoho);
+//		}
+//		DBScan algo = new DBScan(photosToCluster);
+//		ActualEventsBundle bundle = algo.runDBScanAlgorithm();
 //		
 //		List<ActualEvent> events = new LinkedList<ActualEvent>();
 //		Cluster tempCluster;
@@ -189,12 +189,12 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 //			events.add(new ActualEvent(tempCluster));
 //		}
 //		 = new ActualEventsBundle(events);
-		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		builder.setTemplate();
-		if (builder.populateTemplate())
-		{
-			builder.buildCollage();
-		}
+//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+//		builder.setTemplate();
+//		if (builder.populateTemplate())
+//		{
+//			builder.buildCollage();
+//		}
 
 		return;
 				
@@ -340,7 +340,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		MODE = 0;
 
 		// turn off active modes
-		if (SmartModeService.isServiceRunning()) {
+		if (SmartModeFlow.isFlowRunning()) {
 			turnOffSmartMode();
 		}
 		if (ScheduledModeService.isServiceRunning()) {
@@ -352,7 +352,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	private void dailyButtonClicked() {
 
-		if (SmartModeService.isServiceRunning())
+		if (SmartModeFlow.isFlowRunning())
 			turnOffSmartMode();
 		
 		MODE = 2;
@@ -378,7 +378,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 			@Override
 			public void run() {
-				SmartModeService.startService(); 
+				SmartModeFlow.startFlow(); 
 			}
 		};
 
@@ -395,8 +395,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	}
 
 	private void turnOffSmartMode() {
-		if (SmartModeService.isServiceRunning())
-			SmartModeService.stopService();
+		if (SmartModeFlow.isFlowRunning())
+			SmartModeFlow.stopService();
 	}
 
 	private void turnOffDailyMode() {

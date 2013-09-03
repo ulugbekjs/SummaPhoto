@@ -14,7 +14,7 @@ import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
 import com.example.aworkshop.SettingsActivity;
 
-import ActivationManager.SmartModeService;
+import ActivationManager.SmartModeFlow;
 import Common.GPSPoint;
 import Common.Photo;
 import Common.PhotoContainer;
@@ -70,8 +70,8 @@ public class PhotoListenerThread extends FileObserver {
 					if (photo != null) {
 						PhotoContainer.getInstance().addToBuffer(photo);
 						if (SettingsActivity.MODE == 1)
-							if (!SmartModeService.isServiceRunning()) { // SMART MODE - starts whenever a photo is received if not busy
-								SmartModeService.startService();
+							if (!SmartModeFlow.isFlowRunning()) { // SMART MODE - starts whenever a photo is received if not busy
+								SmartModeFlow.startFlow();
 							}
 							else {
 								Log.e(TAG, "SmartModeService not started: already runnning");

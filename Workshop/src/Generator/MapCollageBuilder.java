@@ -18,7 +18,6 @@ import Bing.Pushpin;
 import Bing.StaticMap;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
-import Common.Line;
 import Common.Photo;
 import Generator.LocatePicturesWithMap.SlotPushPinTuple;
 import android.R.bool;
@@ -86,7 +85,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 			catch (NullPointerException exception) {
 				// TODO: deal with error
 				Log.e(TAG, "Could not add slot to canvas properly");
-				int x = 5;
 			}
 		}
 

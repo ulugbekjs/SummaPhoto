@@ -11,7 +11,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import ActivationManager.SmartModeService;
+import ActivationManager.ScheduledModeService;
+import ActivationManager.SmartModeFlow;
 import PhotoListener.PhotoListenerThread;
 import android.os.Environment;
 import android.provider.MediaStore.Files;
@@ -21,7 +22,62 @@ import com.example.aworkshop.SettingsActivity;
 
 public class Tester {
 
-	public static void insertFilesToObservedDir() {
+	public static void insertFilesToObservedDirScheduledMode() {
+		
+		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
+		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
+
+		PhotoListenerThread observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
+		observer.startWatching();
+		
+		SettingsActivity.MODE = 2;
+		SettingsActivity.COLLAGE_TYPE =1;
+
+		File dest = new File(SettingsActivity.ROOT, "Watched");
+		if (!dest.exists()) {
+			dest.mkdirs();
+		}
+
+		File source = new File(SettingsActivity.ROOT, "Tests");
+
+		File[] files = source.listFiles();
+		List<Photo> photos = new LinkedList<Photo>();
+		for (File file : files) {
+			try {
+				photos.add(Utils.createPhotoFromFile(file.getAbsolutePath()));
+			} catch (ImageProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		Collections.sort(photos, new Comparator<Photo>() {
+
+			@Override
+			public int compare(Photo lhs, Photo rhs) {
+				return lhs.compareTo(rhs);
+			}
+		});
+
+		List<File> sortedFileList = new LinkedList<File>();
+		for (Photo photo : photos) {
+			sortedFileList.add(new File(photo.getFilePath()));
+		}
+
+		//photos added by the order that they were taken in
+		for (File file : sortedFileList) {
+			try {
+				copyFile(file, new File(dest, file.getName()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		ScheduledModeService.startService(1, 3);
+
+	}
+
+public static void insertFilesToObservedDirSmartMode() {
 		
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;

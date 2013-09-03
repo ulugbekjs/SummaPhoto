@@ -1,15 +1,32 @@
 package ActivationManager;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import Common.ActualEventsBundle;
+import Common.Photo;
+import Common.PhotoContainer;
+import Common.Utils;
+import Generator.AbstractBuilder;
+import Generator.AbstractTemplate;
+import Generator.BlockCollageBuilder;
+import Generator.MapCollageBuilder;
+import Partitioning.DBScan;
+import android.util.Log;
+
+import com.example.aworkshop.SettingsActivity;
+
 public class ScheduledModeService{
+	
+	private final static String TAG = ScheduledModeService.class.getName();
 
 	private static ScheduledExecutorService scheduler = null;
-	private static ActivationManager manager = ActivationManager.getInstance();  
 
 	private ScheduledModeService() {
 	}
@@ -28,8 +45,41 @@ public class ScheduledModeService{
 			scheduler.scheduleWithFixedDelay(new Runnable() {
 				@Override
 				public void run() {
+					
+					Log.d(TAG, "Starting flow");
+					
 					// in this flow there are no dedicated requests
-					manager.processPhotoBuffer();
+					ActualEventsBundle events = partitionToEvents();
+
+					// build the collage from Bundle of photos
+					ResultPair result = null;
+					
+					if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
+						result =  buildCollage(new BlockCollageBuilder(events));
+					}
+					if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
+						result = buildCollage(new MapCollageBuilder(events));
+					}
+					if (result.validCollage) {
+						try {
+							Utils.notifyUserCollageCreated(result.collage);
+						} catch (FileNotFoundException e) {
+							Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
+						}
+					}		
+					
+					Log.d(TAG, "flow ended");
+					
+				}
+				
+				private ActualEventsBundle partitionToEvents() {
+					List<Photo> photos = new ArrayList<Photo>();
+					while (!PhotoContainer.getInstance().isEmpty()) {
+						photos.add(PhotoContainer.getInstance().getNextPhotoFromBuffer());
+					}
+					DBScan eventsClusterer = new DBScan(photos);
+					ActualEventsBundle events = eventsClusterer.runDBScanAlgorithm();
+					return events;
 				}
 			},
 			timeToWakeInSeconds,
@@ -96,4 +146,18 @@ public class ScheduledModeService{
 		return (scheduler != null);
 	}
 
+	private static ResultPair buildCollage(AbstractBuilder builder) {
+		boolean successful;
+		Photo collage = null;
+		DedicatedRequest request = builder.setTemplate();
+		if (request != null) { // not enough photos for collage
+			successful = false;
+		}
+		else { 
+			builder.populateTemplate();
+			collage =  builder.buildCollage();
+			successful = true;
+		}
+		return new ResultPair(successful, collage);
+	}
 }

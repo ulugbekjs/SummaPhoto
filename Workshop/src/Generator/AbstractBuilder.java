@@ -153,7 +153,7 @@ public abstract class AbstractBuilder {
 	private boolean getPhotosWithRespectToTemplateSlots(List<Integer> slotsToFill, boolean horizontalPhotos, List<Photo> pickedPhotos) {
 
 		if (pickedPhotos == null) {
-			pickedPhotos = new LinkedList<Photo>();
+			return false;
 		}
 		
 		Queue<ActualEvent> queue = getQueue(horizontalPhotos);
