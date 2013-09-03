@@ -16,7 +16,7 @@ public class ActivationManager {
 	private static final int DEDICATED_MODE = 1;
 
 	// TODO: maybe do this by number of photos for collage
-	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 1;
+	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 2;
 	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 600;
 	private static final String TAG = "ActionManager.ActionManager";
 
@@ -73,7 +73,7 @@ public class ActivationManager {
 	 * @return TRUE if next module should be awakened
 	 */
 	private boolean processPhoto(Photo photo) {
-		if (isFirstEvent() || isNewEventCandidate(photo)) {  // new event candidate
+		if ((currentState == REGULAR_MODE) && (isFirstEvent() || isNewEventCandidate(photo))) {  // new event candidate
 			lastRecievedPhoto = photo;
 
 			if (remainingEvents > 0) { 

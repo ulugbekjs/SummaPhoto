@@ -46,22 +46,24 @@ public abstract class AbstractBuilder {
 	}
 	// methods to override
 	
-	public abstract DedicatedRequest setTemplate();
-	public abstract Photo buildCollage();
-	public abstract boolean populateTemplate();
-
 	/**
 	 * Chooses best template for bundle, sets this.template if one is found
 	 * @return request if non matching template is found
 	 */
-	protected DedicatedRequest setTemplate(int num) {
+	public abstract DedicatedRequest setTemplate();
+	
+	public abstract Photo buildCollage();
+	
+	/**
+	 * fills this.template slots, so for each slot in slots, slot.photo != null
+	 * @return success if worked
+	 */
+	public abstract boolean populateTemplate();
+
+	protected DedicatedRequest getBestTemplate(int num,	AbstractTemplate[] templates) {
+		
 		int[] templateDiffs = new int[num];
 		int[] templateRemaining = new int[num];
-
-		BlockTemplate[] templates = new BlockTemplate[num];
-		for (int i=0; i<num; i++) {
-			templates[i] = BlockTemplate.getTemplate(i+1);
-		}
 
 		// calculate difference of required vertical and horizontal photos for each template
 		for (int t=0; t<num; t++) {
@@ -77,7 +79,7 @@ public abstract class AbstractBuilder {
 			templateScores[i] = templateDiffs[i] * 0.3 + templateRemaining[i] * 0.7;
 		}
 
-		BlockTemplate chosenTemplate = null;
+		AbstractTemplate chosenTemplate = null;
 		double min = Double.MAX_VALUE;
 		int minIndex = -1;
 
