@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
+import com.example.aworkshop.SettingsActivity;
+
 import ActivationManager.DedicatedRequest;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
@@ -22,6 +24,8 @@ import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Environment;
 import android.provider.Contacts.Photos;
@@ -262,14 +266,12 @@ public abstract class AbstractBuilder {
 	}
 	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
 		Calendar calendar = Calendar.getInstance();
-		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "Pictures");
-		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Output");
 		File file = null;
 		FileOutputStream fos = null;
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
 		file = new File
-				(testsDir, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
+				(SettingsActivity.APP_PHOTO_DIR, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
 
 		// Save Bitmap to File
 		fos = new FileOutputStream(file);
@@ -287,6 +289,14 @@ public abstract class AbstractBuilder {
 
 	protected void clearProcessedPhotos() {
 		PhotoContainer.getInstance().clearProcessPhotos();
+	}
+	
+	protected void drawFrame(Canvas canvas, int width, int height) {
+		Paint paint = new Paint();
+		paint.setColor(Color.WHITE);
+		paint.setStrokeWidth(20f);        
+		paint.setStyle(Paint.Style.STROKE);  
+		canvas.drawRect(0, 0,width, height, paint);
 	}
 
 

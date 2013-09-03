@@ -93,8 +93,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 			//paint.setShader(new LinearGradient(0, 0, line.getLineXDelta(), line.getLineYDelta(), Color.YELLOW, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
 			paint.setStrokeWidth(5f);
 			paint.setStrokeJoin(Paint.Join.ROUND);
-			paint.setStyle(Style.STROKE);
-//			paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
+			paint.setStyle(Style.FILL_AND_STROKE);
+			paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
 //			paint.setAlpha(120);
 			canvas.drawLine(line.getFromPoint().getX(), line.getFromPoint().getY(),
 					line.getToPoint().getX(), line.getToPoint().getY(), paint);
@@ -110,11 +110,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		//		paint.setStrokeWidth(3f);
 		//		canvas.drawLine(642, 2080, 2448, 642, paint);
 		
-		Paint paint = new Paint();
-		paint.setColor(Color.WHITE);
-		paint.setStrokeWidth(20f);        
-		paint.setStyle(Paint.Style.STROKE);  
-		canvas.drawRect(0, 0, bmpBase.getWidth(), bmpBase.getHeight(), paint);
+		drawFrame(canvas, bmpBase.getWidth(), bmpBase.getHeight());
 
 		Photo collage;
 		try {

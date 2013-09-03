@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.util.Log;
 import Common.Photo;
 import Common.GPSPoint;
+import Common.Utils;
 
 public class BingServices {
 
@@ -50,15 +51,10 @@ public class BingServices {
 			List<GPSPoint> points = getImagesPointsList(photos);
 			try {
 				map.setJpgPath(getJPG(points, width, height), width, height);
-			} catch (NetworkErrorException e) {
-				Log.e(TAG, "Network error when getting map jpg from Bing");
-			} catch (IOException e) {
-				Log.e(TAG, "Error when writing / reading recieved jpg");
-			}
-			try {
 				map.setMetadataPath(getJPGMetadata(points, width, height));
 			} catch (NetworkErrorException e) {
 				Log.e(TAG, "Network error when getting map metadata from Bing");
+				Utils. notifyUserWithError("Summaphoto Error", "Verify your connection to the internet.");
 			} catch (JDOMException e) {
 				Log.e(TAG, "Error when parsing Bing xml");
 			} catch (IOException e) {
@@ -113,7 +109,7 @@ public class BingServices {
 		String file = null;
 
 
-//		String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
+		//		String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
 		String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/Road?";
 		//Make the actual connection
 		if (metadata) {
@@ -193,7 +189,7 @@ public class BingServices {
 		if (file.exists()) {
 			file.delete();
 		}
-		
+
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 			Log.d("Test", "sdcard mounted and writable");
