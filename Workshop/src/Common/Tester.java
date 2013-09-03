@@ -30,14 +30,14 @@ public class Tester {
 		observer.startWatching();
 		
 		SettingsActivity.MODE = 1;
-		SettingsActivity.COLLAGE_TYPE = 2;
+		SettingsActivity.COLLAGE_TYPE =1;
 
 		File dest = new File(SettingsActivity.ROOT, "Watched");
 		if (!dest.exists()) {
 			dest.mkdirs();
 		}
 
-		File source = new File(SettingsActivity.ROOT, "Tests2");
+		File source = new File(SettingsActivity.ROOT, "Tests");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();

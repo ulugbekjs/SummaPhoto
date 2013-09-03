@@ -13,16 +13,24 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 public class BlockCollageBuilder extends AbstractBuilder {
-	
+
 	private static final String TAG = BlockCollageBuilder.class.getName();
 
 	public BlockCollageBuilder(ActualEventsBundle bundle) {
 		super(bundle);
 	}
-	
+
 	@Override
 	public DedicatedRequest setTemplate() {
-		return super.setTemplate(BlockTemplate.BLOCKS_TEMPLATE_NUM);
+
+		AbstractTemplate[] templates = new BlockTemplate[BlockTemplate.BLOCKS_TEMPLATE_NUM];
+
+
+		for (int i=0; i<BlockTemplate.BLOCKS_TEMPLATE_NUM; i++) {
+			templates[i] = BlockTemplate.getTemplate(i+1);
+		}
+
+		return super.getBestTemplate(BlockTemplate.BLOCKS_TEMPLATE_NUM, templates);
 	}
 
 	@Override
