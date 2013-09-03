@@ -188,10 +188,10 @@ public class MapTemplate extends AbstractTemplate{
 		template.addSlot(new Slot(new PixelPoint(1179, 289), new PixelPoint(1469, 551), new PixelPoint  (1179, 420)), 5);
 		template.addSlot(new Slot(new PixelPoint(735, 0), new PixelPoint(1120, 289), new PixelPoint (927, 289)), 6);
 		template.addSlot(new Slot(new PixelPoint(349, 0), new PixelPoint(735, 289), new PixelPoint (542, 289)), 7);
-		template.addSlot(new Slot(new PixelPoint(0, 0), new PixelPoint (349, 289), new PixelPoint (319, 289)), 8);
-		template.addSlot(new Slot(new PixelPoint(0, 812), new PixelPoint(349, 1102),  new PixelPoint (319, 812)), 9);
-		template.addSlot(new Slot(new PixelPoint(1120, 812), new PixelPoint(1469, 1102), new PixelPoint (1149, 812)), 10);
-		template.addSlot(new Slot(new PixelPoint(1120, 0), new PixelPoint(1469, 289), new PixelPoint (1149, 289)), 11);
+		template.addSlot(new Slot(new PixelPoint(0, 0), new PixelPoint (349, 289), new PixelPoint (349, 289)), 8);
+		template.addSlot(new Slot(new PixelPoint(0, 812), new PixelPoint(349, 1102),  new PixelPoint (349, 812)), 9);
+		template.addSlot(new Slot(new PixelPoint(1120, 812), new PixelPoint(1469, 1102), new PixelPoint (1120, 812)), 10);
+		template.addSlot(new Slot(new PixelPoint(1120, 0), new PixelPoint(1469, 289), new PixelPoint (1120, 289)), 11);
 		
 		template.mapSlot = new Slot (new PixelPoint(289, 289), new PixelPoint(1179, 812));
 		
