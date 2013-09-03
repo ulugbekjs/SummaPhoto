@@ -66,7 +66,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 //		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "test4" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "tals" + File.separator;
 //	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
@@ -101,7 +101,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		createAppFolders();
 		
 	
-		Tester.insertFilesToObservedDir();
+//		Tester.insertFilesToObservedDir();
 //		
 //		Canvas canvas = null;
 //		Bitmap bmpBase = null;
@@ -152,11 +152,11 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 //		dailyRadioBtn.setOnClickListener(listener);
 		 
 
-////		//TODO: remove, this is because of netwrok on main thread error
-		if (android.os.Build.VERSION.SDK_INT > 9) {
-			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
-			StrictMode.setThreadPolicy(policy);
-		}
+//////		//TODO: remove, this is because of netwrok on main thread error
+//		if (android.os.Build.VERSION.SDK_INT > 9) {
+//			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
+//			StrictMode.setThreadPolicy(policy);
+//		}
 
 		//		//		//		Omri's code
 		File directory = new File(PHOTO_DIR);
@@ -190,7 +190,11 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 //		}
 //		 = new ActualEventsBundle(events);
 		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		builder.buildCollage();
+		builder.setTemplate();
+		if (builder.populateTemplate())
+		{
+			builder.buildCollage();
+		}
 
 		return;
 				

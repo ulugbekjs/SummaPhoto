@@ -51,8 +51,13 @@ public class MapCollageBuilder extends AbstractBuilder{
 	
 	@Override
 	public DedicatedRequest setTemplate() {
-		return super.setTemplate(MapTemplate.MAP_TEMPLATES_NUM);
+	//	return super.setTemplate(MapTemplate.MAP_TEMPLATES_NUM);
+		//TODO: use generic method
+		
+		template =  MapTemplate.getTemplate(1);
+		return null;
 	}
+	
 
 	@Override
 	public Photo buildCollage() {
@@ -154,7 +159,9 @@ public class MapCollageBuilder extends AbstractBuilder{
 			Log.d(TAG, "Stop populate template, because error occured while trying to get map from BING");
 			return false;
 		}
-
+		else {
+			((MapTemplate)template).setMap(mapFromDataSource);
+		}
 		
 		HashMap<PixelPoint, Pushpin> pixelPointsToPushPins = getAdjustedPixelPointPushPinDictionary(mapFromDataSource.getPushPins());
 		HashMap<PixelPoint, Slot> pixelPointsToSlot = getPixelPointSlotDictionaryHashMap(template.slots);
@@ -166,34 +173,18 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 		
 		
+		// decide which picture will be populated in each slot 
 		
 		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(pixelPointsToSlot, pixelPointsToPushPins);
-		// decide which picture will be populated in each slot 
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
-		updatePicturesOfSlots (tuples,photosList);
-		((MapTemplate)template).setMap(mapFromDataSource);
+		updatePicturesOfSlots (tuples,photosList);	
+		
+		// cretaes line which will be added to the collage
 		linesList = convertTupplesToLines(tuples);
 
 		return true;
 	}
 
-	private Path getArrowHead(int tipX, int tipY, double angle) {
-		Path path = new Path();
-		path.moveTo(tipX, tipY);
-		path.lineTo(tipX - 20, tipY +  60);
-		path.lineTo(tipX, tipY + 50);
-		path.lineTo(tipX + 20, tipY + 60);
-		path.close();
-
-		Matrix mMatrix = new Matrix();
-		RectF bounds = new RectF();
-		path.computeBounds(bounds, true);
-		mMatrix.postRotate((float) angle, 
-				(bounds.right + bounds.left)/2, 
-				(bounds.bottom + bounds.top)/2);
-		path.transform(mMatrix);
-		return path;
-	}
 
 	/**
 	@Override
@@ -236,7 +227,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 
 		PixelPoint tempPixelPoint;
-		Pushpin adjustedPushpin;
 		// the adjusted pixel point for each pushPin its is originalX + the top left X coordinate of the map (the same for Y coordinate)
 		for (Pushpin pin: pushPins)
 		{
