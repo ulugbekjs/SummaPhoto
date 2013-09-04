@@ -380,20 +380,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 
 	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-	}
-
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-	}
-
-
-	@Override
 	protected void onDestroy() {
 		offButtonClicked(); // shutdown all services
 		super.onDestroy();

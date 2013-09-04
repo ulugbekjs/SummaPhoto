@@ -62,15 +62,19 @@ import android.widget.RadioGroup;
 import android.widget.TimePicker;
 
 public class SettingsActivity extends FragmentActivity { // Extends FragmentActivity to support < Android 3.0
-
+	
 	private static final String TAG = SettingsActivity.class.getName();
-
+	
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	//	private static final String  PHOTO_DIR = ROOT + File.separator + "tals" + File.separator;
-	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+<<<<<<< HEAD
+		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+//	private static final String  PHOTO_DIR = ROOT + File.separator + "tals" + File.separator;
+=======
+//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "NoisySet" + File.separator;
+>>>>>>> fe59435b8fc07780bcb7249b4c9e3160188e4f5e
+//	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 	public static final String APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
@@ -81,14 +85,14 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// public static fields
 	public static Context CONTEXT = null;
 	public static int MODE = 0;
-	public static int COLLAGE_TYPE = 2;
+	public static int COLLAGE_TYPE = 1;
 
 	// global fields
 	private PhotoListenerThread observer;
 
 	// private fields
-	private RadioButton dailyRadioBtn;
 	private RadioGroup modeGroup;
+	private RadioButton dailyRadioBtn;
 	private RadioButton lastCheckedButton;
 
 	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY + 1);
@@ -101,36 +105,15 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		CONTEXT = this;
 
+<<<<<<< HEAD
 		createAppFolders();
 
-		//		String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
+		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
 
 		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
-
-		final Button button = (Button) findViewById(R.id.button1);
-<<<<<<< HEAD
-		button.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				SettingsActivity.MODE = 1;
-				Tester.insertFilesToObservedDirSmartMode();
-			}
-		});
-
-		//		
-=======
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	SettingsActivity.MODE = 1;
-        		Tester.insertFilesToObservedDirSmartMode();
-            }
-
->>>>>>> 38d9c4554998b133d20667bab30a3d87e6231cc3
-		//		// 		Yonatan's code
-		//		//
-		//
-		//
-
+	
+		//	Yonatan's code
 
 		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
@@ -138,62 +121,78 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
-<<<<<<< HEAD
 
-
-		//////		//TODO: remove, this is because of netwrok on main thread error
-		//		if (android.os.Build.VERSION.SDK_INT > 9) {
-		//			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
-		//			StrictMode.setThreadPolicy(policy);
-		//		}
-
-		////		//		//		//		Omri's code
-		//		File directory = new File(PHOTO_DIR);
-		//		if (!directory.exists())
-		//			return;
-		//		File[] arrayOfPic =  directory.listFiles();
-		//		Photo tempPhoho = null;
-		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		//		for (File file : arrayOfPic)
-		//		{
-		//			try
-		//			{
-		//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-		//			}
-		//			catch (Exception ex)
-		//			{
-		//			}
-		//			if (tempPhoho != null)
-		//				photosToCluster.add(tempPhoho);
-		//		}
-		//		DBScan algo = new DBScan(photosToCluster);
-		//		ActualEventsBundle bundle = algo.ComputeCluster();
-		////		
-		//		List<ActualEvent> events = new LinkedList<ActualEvent>();
-		//		Cluster tempCluster;
-		//		for (Photo p :photosToCluster)
-		//		{
-		//			tempCluster = new Cluster();
-		//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-		//			events.add(new ActualEvent(tempCluster));
-		//		}
-		//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		//		builder.setTemplate();
-		//		if (builder.populateTemplate())
-		//		{
-		//			builder.buildCollage();
-		//		}
-		//
-		//		return;
-		//				
-=======
-		 
-
-//////		//TODO: remove, this is because of netwrok on main thread error
-//		if (android.os.Build.VERSION.SDK_INT > 9) {
-//			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
-//			StrictMode.setThreadPolicy(policy);
+////		//		//		//		Omri's code
+//		File directory = new File(PHOTO_DIR);
+//		if (!directory.exists())
+//			return;
+//		File[] arrayOfPic =  directory.listFiles();
+//		Photo tempPhoho = null;
+//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+//		for (File file : arrayOfPic)
+//		{
+//			try
+//			{
+//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+//			}
+//			catch (Exception ex)
+//			{
+//			}
+//			if (tempPhoho != null)
+//				photosToCluster.add(tempPhoho);
 //		}
+//		DBScan algo = new DBScan(photosToCluster);
+//		ActualEventsBundle bundle = algo.ComputeCluster();		
+//		List<ActualEvent> events = new LinkedList<ActualEvent>();
+//		Cluster tempCluster;
+//		for (Photo p :photosToCluster)
+//		{
+//			tempCluster = new Cluster();
+//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+//			events.add(new ActualEvent(tempCluster));
+//		}
+//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+//		builder.setTemplate();
+//		if (builder.populateTemplate())
+//		{
+//			builder.buildCollage();
+//		}
+=======
+//		createAppFolders();
+//
+//		//		String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
+//
+//		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
+//		observer.startWatching();
+//
+//		final Button button = (Button) findViewById(R.id.button1);
+//		button.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v) {
+//				SettingsActivity.MODE = 1;
+//				Tester.insertFilesToObservedDirSmartMode();
+//			}
+//		});
+//
+//		//		
+//		//		// 		Yonatan's code
+//		//		//
+//		//
+//		//
+//
+//
+//		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+//		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
+//		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+//
+//		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
+//		dailyRadioBtn.setOnClickListener(listener);
+//		 
+//
+////////		//TODO: remove, this is because of netwrok on main thread error
+////		if (android.os.Build.VERSION.SDK_INT > 9) {
+////			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
+////			StrictMode.setThreadPolicy(policy);
+////		}
 
 //		//		//		//		Omri's code
 		File directory = new File(PHOTO_DIR);
@@ -225,15 +224,15 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			events.add(new ActualEvent(tempCluster));
 		}
 		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		builder.setTemplate();
+		builder.omrisSetTemplate();
 		if (builder.populateTemplate())
 		{
 			builder.buildCollage();
 		}
+>>>>>>> fe59435b8fc07780bcb7249b4c9e3160188e4f5e
 
 		return;
 				
->>>>>>> 38d9c4554998b133d20667bab30a3d87e6231cc3
 
 	}
 
@@ -456,6 +455,20 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 				}
 			}).setView(timePickerDialog).show();
 		}
+	}
+
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
 	}
 
 

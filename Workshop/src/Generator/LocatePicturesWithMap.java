@@ -1,3 +1,4 @@
+
 package Generator;
 
 import java.util.HashMap;
@@ -18,8 +19,8 @@ import Bing.Pushpin;
 
 /** This class provides methods to locate the different pictures around the map in good positions **/
 public class LocatePicturesWithMap {
-	
-	
+
+
 	private final String TAG = "LoctePicturesOnMap" ;
 	private HashMap<PixelPoint,Slot> pixelPointToSlotDictionary;
 	private HashMap<PixelPoint,Pushpin> pixelPointToPushPinDictionary;
@@ -37,7 +38,7 @@ public class LocatePicturesWithMap {
 	public LocatePicturesWithMap (HashMap<PixelPoint,Slot> pixelPointToSlotDictionary, 
 			HashMap<PixelPoint,Pushpin> pixelPointToPushPinDictionary)
 	{
-		
+
 		this.pixelPointToPushPinDictionary = pixelPointToPushPinDictionary;
 		this.pixelPointToSlotDictionary = pixelPointToSlotDictionary;
 		verticalPushPinPointsSet = new HashSet<PixelPoint>();
@@ -45,7 +46,7 @@ public class LocatePicturesWithMap {
 		horizontalPushPinPointsSet = new HashSet<PixelPoint>();
 		horizontalSlotPointsSet = new HashSet<PixelPoint>();
 		initiateSlotsAndPushPinsSets (this.pixelPointToSlotDictionary, this.pixelPointToPushPinDictionary);
-		
+
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class LocatePicturesWithMap {
 			}
 		}
 	}
-	
+
 
 	/**
 	 * @return list of slotsPushPinTuple which indicated the data which pushPin related to every slot in the template
@@ -217,16 +218,19 @@ public class LocatePicturesWithMap {
 		double slope;
 		Integer numberOfPushPinsAboveLine = 0;
 		Integer numberOfSlotsAboveLine = 0;
-		Line line = new Line(pushPinCandidate, slotCandidate);
+
+		Boolean isUndefinedSlope = pushPinCandidate.getX() == slotCandidate.getX();
 
 		// the equation of the line between those points is: Y = slope * x + constant
-		if (!line.isUndefiendSlope())
+		if (!isUndefinedSlope)
 		{
+			slope = calculateSlope (pushPinCandidate,slotCandidate );
+			double constant = pushPinCandidate.getY() - slope * pushPinCandidate.getX();
 			for (PixelPoint pushPin :pushPinsSubSet)
 			{
 				if (pushPin == pushPinCandidate)
 					continue;
-				if (isPointAboveLine(pushPin,line))
+				if (isPointAboveLine(pushPin, slope, constant))
 				{
 					numberOfPushPinsAboveLine++;
 					firstSubSetOfPushPinPoints.add(pushPin);
@@ -239,7 +243,7 @@ public class LocatePicturesWithMap {
 			{
 				if (slot == slotCandidate)
 					continue;
-				if (isPointAboveLine(slot, line))
+				if (isPointAboveLine(slot, slope, constant))
 				{
 					numberOfSlotsAboveLine++;
 					firstSubSetofSlotsPoints.add(slot);
@@ -271,16 +275,12 @@ public class LocatePicturesWithMap {
 		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
 		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
 		Set<PixelPoint> secondSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(3);
-		firstSubSetofSlotsPoints.clear();
-		firstSubSetOfPushPinPoints.clear();
-		secondSubSetofSlotsPoints.clear();
-		secondSubSetOfPushPinPoints.clear();
 		Integer numberOfPushPinsAboveLine = 0;
 		Integer numberOfSlotsAboveLine = 0;
 		double verticalLineX = pushPinCandidate.getX();
 		for (PixelPoint pushPin :pushPinsSubSet )
 		{
-			if (pushPin.getX() > verticalLineX)
+			if (pushPinCandidate.getX() > verticalLineX)
 			{
 				numberOfPushPinsAboveLine++;
 				firstSubSetOfPushPinPoints.add(pushPin);
@@ -305,13 +305,12 @@ public class LocatePicturesWithMap {
 
 
 	/** This methods checks whether the point is above the line represented by the slope and constant **/ 
-	private Boolean isPointAboveLine (PixelPoint point, Line line) 
+	private Boolean isPointAboveLine (PixelPoint point, double slope, double constant)
 	{
-		if (point.getX() * line.getSlope() + line.getConstant() < point.getY())
+		if (point.getX() * slope + constant < point.getY())
 			return true;
 		return false;
 	}
-	
 
 	/**
 	 * 
@@ -332,7 +331,7 @@ public class LocatePicturesWithMap {
 			deltaY = (double) (PointB.getY() - pointA.getY() );
 			deltaX = (double) (PointB.getX()- pointA.getX());
 		}
-		slope = (double)deltaY / deltaX;
+		slope = deltaY / deltaX;
 		return slope;
 	}
 
@@ -379,7 +378,4 @@ public class LocatePicturesWithMap {
 		}
 
 	}
-
-
-
 }

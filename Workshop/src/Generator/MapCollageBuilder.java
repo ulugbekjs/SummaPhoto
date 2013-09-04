@@ -47,10 +47,12 @@ public class MapCollageBuilder extends AbstractBuilder{
 	public MapCollageBuilder(ActualEventsBundle bundle) {
 		super(bundle);
 	}
-	
+
 	@Override
 	public DedicatedRequest setTemplate() {
-		
+
+
+
 		AbstractTemplate[] templates = new MapTemplate[MapTemplate.MAP_TEMPLATES_NUM];
 
 
@@ -59,6 +61,12 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 
 		return super.getBestTemplate(MapTemplate.MAP_TEMPLATES_NUM, templates);
+	}
+
+	public DedicatedRequest omrisSetTemplate() {
+
+		this.template = MapTemplate.getTemplate(1);
+		return null;
 	}
 
 	@Override

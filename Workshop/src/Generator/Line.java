@@ -122,7 +122,7 @@ public class Line {
 	{
 		if (isUndefinedSlope)
 			return Double.NaN;
-		return (fromPoint.getY() - constant*fromPoint.getX());
+		return (fromPoint.getY() - slope*fromPoint.getX());
 	}
 	
 	
@@ -139,7 +139,7 @@ public class Line {
 		{
 			return  (point.getX()> fromPoint.getX()); 
 		}
-		if (point.getX() * slope + constant < point.getY())
+		if ((point.getX() * slope + constant) < point.getY())
 			return true;
 		return false;
 	}
