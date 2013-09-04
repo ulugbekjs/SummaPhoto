@@ -16,8 +16,8 @@ public class ActivationManager {
 	private static final int DEDICATED_MODE = 1;
 
 	// TODO: maybe do this by number of photos for collage
-	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 2;
-	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 600;
+	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 3;
+	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 15;
 	private static final String TAG = "ActionManager.ActionManager";
 
 
@@ -165,6 +165,11 @@ public class ActivationManager {
 
 	private synchronized void setToDedicatedMode(DedicatedRequest request) {
 		setMode(DEDICATED_MODE, request);
+	}
+	
+	@Override 
+	public String toString() {
+		return ("State: " + currentState + "\nremainingEvents: " + remainingEvents + "\nremainingHorizontal: "+ remainingHorizontal + "\nremainingVertical: " + remainingVertical); 
 	}
 }
 

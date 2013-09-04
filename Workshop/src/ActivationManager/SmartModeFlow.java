@@ -2,6 +2,7 @@ package ActivationManager;
 
 import java.io.FileNotFoundException;
 import java.security.PublicKey;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import com.example.aworkshop.SettingsActivity;
 
 import android.app.Service;
+import android.os.Bundle;
 import android.util.Log;
 import Common.ActualEventsBundle;
 import Common.Photo;
@@ -92,6 +94,8 @@ public class SmartModeFlow {
 				
 				@Override
 				public void run() {
+					
+					Log.d(TAG, "Flow started: " + new Date());
 
 					setBusy(true);					
 					try {
@@ -103,20 +107,25 @@ public class SmartModeFlow {
 					
 					manager.consumeDedictedRequests(); 
 					boolean collageNeeded = manager.processPhotoBuffer();
+					Log.d(TAG, "Collage needed: " + collageNeeded);
 
 					if (collageNeeded) { // ActivationManager decided clustering should be made
 						ActualEventsBundle events = partitionToEvents();
-
+						Log.d(TAG, "ActualEvents calculated: " + events.getActualEvents().size());
 						// build the collage from Bundle of photos
 						ResultPair result = null;
 						
 						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
+							Log.d(TAG, "attempting to build Block collage");
 							result =  buildCollage(new BlockCollageBuilder(events));
 						}
 						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
 							result = buildCollage(new MapCollageBuilder(events));
+							Log.d(TAG, "attempting to build Map Collage");
+
 						}
 						if (result.validCollage) {
+							Log.e(TAG, "Collage is valid!");
 							try {
 								Utils.notifyUserCollageCreated(result.collage);
 							} catch (FileNotFoundException e) {
@@ -127,6 +136,9 @@ public class SmartModeFlow {
 					}
 					
 					setBusy(false);
+					
+					Log.d(TAG, "Flow ended: " + new Date());
+					Log.d(TAG, "Activatin mangager:\n" + manager.toString());
 				}
 
 				/**
