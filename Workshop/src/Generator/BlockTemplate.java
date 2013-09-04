@@ -34,14 +34,14 @@ public class BlockTemplate extends AbstractTemplate{
 	private static BlockTemplate getTemplate1() {
 		BlockTemplate template = new BlockTemplate(9);
 
-		template.addSlot(new Slot(new PixelPoint(0, 0), new PixelPoint(1761, 1357)), 0);
-		template.addSlot(new Slot(new PixelPoint(0, 1358), new PixelPoint(1761, 2448)), 1);
-		template.addSlot(new Slot(new PixelPoint(1762, 0), new PixelPoint(2715, 1013)), 2);
-		template.addSlot(new Slot(new PixelPoint(2716, 0), new PixelPoint(3264, 1013)), 3);
-		template.addSlot(new Slot(new PixelPoint(1762, 1014), new PixelPoint(2431, 1725)), 4);
+		template.addSlot(new Slot(new PixelPoint(0, 0), new PixelPoint(1761, 1224)), 0);
+		template.addSlot(new Slot(new PixelPoint(0, 1225), new PixelPoint(1761, 2448)), 1);
+		template.addSlot(new Slot(new PixelPoint(1762, 0), new PixelPoint(2600, 1013)), 2);
+		template.addSlot(new Slot(new PixelPoint(2601, 0), new PixelPoint(3264, 1013)), 3);
+		template.addSlot(new Slot(new PixelPoint(1762, 1014), new PixelPoint(2431, 1520)), 4);
 		template.addSlot(new Slot(new PixelPoint(2432, 1014), new PixelPoint(2850, 1775)), 5);
 		template.addSlot(new Slot(new PixelPoint(2851, 1014), new PixelPoint(3264, 1775)), 6);
-		template.addSlot(new Slot(new PixelPoint(1762, 1726), new PixelPoint(2431, 2448)), 7);
+		template.addSlot(new Slot(new PixelPoint(1762, 1521), new PixelPoint(2431, 2448)), 7);
 		template.addSlot(new Slot(new PixelPoint(2432, 1776), new PixelPoint(3264, 2448)), 8);
 
 		return template;
@@ -56,10 +56,14 @@ public class BlockTemplate extends AbstractTemplate{
 		template.addSlot(new Slot(new PixelPoint(1159, 1645), new PixelPoint(1952, 2047)), 3);
 		template.addSlot(new Slot(new PixelPoint(1159, 2048), new PixelPoint(1952, 2448)), 4);
 		template.addSlot(new Slot(new PixelPoint(1953, 0), new PixelPoint(3264, 900)), 5);
-		template.addSlot(new Slot(new PixelPoint(1953, 901), new PixelPoint(2684, 2006)), 6);
-		template.addSlot(new Slot(new PixelPoint(2685, 901), new PixelPoint(3264, 2006)), 7);
-		template.addSlot(new Slot(new PixelPoint(1953, 2007), new PixelPoint(2773, 2448)), 8);
-		template.addSlot(new Slot(new PixelPoint(2774, 2007), new PixelPoint(3264, 2448)), 9);
+//		template.addSlot(new Slot(new PixelPoint(1953, 901), new PixelPoint(2684, 2006)), 6);
+		template.addSlot(new Slot(new PixelPoint(1953, 901), new PixelPoint(2608, 2006)), 6);
+//		template.addSlot(new Slot(new PixelPoint(2685, 901), new PixelPoint(3264, 2006)), 7);
+		template.addSlot(new Slot(new PixelPoint(2609, 901), new PixelPoint(3264, 2006)), 7);
+//		template.addSlot(new Slot(new PixelPoint(1953, 2007), new PixelPoint(2773, 2448)), 8);
+		template.addSlot(new Slot(new PixelPoint(1953, 2007), new PixelPoint(2684, 2448)), 8);
+//		template.addSlot(new Slot(new PixelPoint(2774, 2007), new PixelPoint(3264, 2448)), 9);
+		template.addSlot(new Slot(new PixelPoint(2685, 2007), new PixelPoint(3264, 2448)), 9);
 		
 		return template;
 	}

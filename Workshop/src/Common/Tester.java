@@ -14,6 +14,7 @@ import java.util.List;
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeFlow;
 import PhotoListener.PhotoListenerThread;
+import android.R.menu;
 import android.os.Environment;
 import android.provider.MediaStore.Files;
 
@@ -93,13 +94,15 @@ public static void insertFilesToObservedDirSmartMode() {
 			dest.mkdirs();
 		}
 
-		File source = new File(SettingsActivity.ROOT, "Tests");
+		File source = new File(SettingsActivity.ROOT, "Tests5");
 
 		File[] files = source.listFiles();
+		Photo tempPhoto;
 		List<Photo> photos = new LinkedList<Photo>();
 		for (File file : files) {
 			try {
-				photos.add(Utils.createPhotoFromFile(file.getAbsolutePath()));
+				tempPhoto =Utils.createPhotoFromFile(file.getAbsolutePath()); 
+				photos.add(tempPhoto);
 			} catch (ImageProcessingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
