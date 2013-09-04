@@ -38,9 +38,6 @@ import android.util.Log;
 public class MapCollageBuilder extends AbstractBuilder{
 
 	List<Line> linesList = null;
-	//static {@SuppressWarnings("unused")
-	//byte[] dummy = new byte[36 * 1024 * 1024];
-	//}
 
 	private static final String TAG = MapCollageBuilder.class.getName();
 
@@ -51,10 +48,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 	@Override
 	public DedicatedRequest setTemplate() {
 
-
-
 		AbstractTemplate[] templates = new MapTemplate[MapTemplate.MAP_TEMPLATES_NUM];
-
 
 		for (int i=0; i<MapTemplate.MAP_TEMPLATES_NUM; i++) {
 			templates[i] = MapTemplate.getTemplate(i+1);
@@ -76,8 +70,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 		Canvas canvas = null;
 		Bitmap bmpBase = null;
 
-		// TODO: remove. moved to comments since canvas size for map collage was changes
-		// bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.RGB_565);
 		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
 		bmpBase.setHasAlpha(true);
 		canvas = new Canvas(bmpBase);
@@ -91,7 +83,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 				super.addSlotImageToCanvasBySampling(bitmap, canvas,slotToAddToCanvas, 4);
 			}
 			catch (NullPointerException exception) {
-				// TODO: deal with error
 				Log.e(TAG, "Could not add slot to canvas properly");
 			}
 		}
@@ -120,16 +111,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 			canvas.drawLine(line.getFromPoint().getX(), line.getFromPoint().getY(),
 					line.getToPoint().getX(), line.getToPoint().getY(), paint);
 		}
-
-		//free bitmap
-		//		bitmap.recycle();
-		////		bitmap = null;
-		//
-		//		// add lines
-		//		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		//		paint.setColor(android.graphics.Color.MAGENTA);
-		//		paint.setStrokeWidth(3f);
-		//		canvas.drawLine(642, 2080, 2448, 642, paint);
 
 		drawFrame(canvas, bmpBase.getWidth(), bmpBase.getHeight());
 
