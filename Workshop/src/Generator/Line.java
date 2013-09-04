@@ -143,6 +143,11 @@ public class Line {
 			return true;
 		return false;
 	}
+	
+	public Boolean isUndefiendSlope()
+	{
+		return this.isUndefinedSlope;
+	}
 
 	
 

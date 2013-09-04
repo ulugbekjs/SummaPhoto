@@ -67,7 +67,7 @@ public class GPSPoint  {
 	
 	private double roundDouble (double num)
 	{
-		return (Math.round(num * Math.pow(10, 13)) / Math.pow(10, 13));
+		return (Math.round(num * Math.pow(10, 10)) / Math.pow(10, 10));
 	}
 	
 }
