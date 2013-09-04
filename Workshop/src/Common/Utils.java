@@ -31,7 +31,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class Utils {
-	
+
 	/** Checks if external storage is available to at least read 
 	 * */
 	public static boolean isExternalStorageReadable() {
@@ -94,7 +94,7 @@ public class Utils {
 		// Builds the notification and issues it.
 		mNotifyMgr.notify(1, mBuilder.build());
 	}
-	
+
 	public static void notifyUserWithError(String title, String text) {
 		Context context = SettingsActivity.CONTEXT;
 
@@ -115,7 +115,7 @@ public class Utils {
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		// Builds the notification and issues it.
 		mNotifyMgr.notify(1, mBuilder.build());
-		
+
 	}
 
 	private static Uri addImageToGallery(Photo photo) {
@@ -142,7 +142,7 @@ public class Utils {
 
 		return SettingsActivity.CONTEXT.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, image);
 	}
-	
+
 	// TODO: remove, this is for Omri
 	public static Photo createPhotoFromFile(String file) throws ImageProcessingException {
 
@@ -158,12 +158,19 @@ public class Utils {
 		}
 
 		//get location
-		GpsDirectory directory1 = metadata.getDirectory(GpsDirectory.class);
-		GeoLocation location = directory1.getGeoLocation();
-		if (location == null) { // photo has no location, dont create photo
+		GeoLocation location = null;
+		try {
+			GpsDirectory directory1 = metadata.getDirectory(GpsDirectory.class);
+			 location = directory1.getGeoLocation();
+			if (location == null) { // photo has no location, dont create photo
+				throw new NullPointerException();
+			}
+		}
+		catch (NullPointerException exception) {
+			Log.e("UTILS", "photo has no loction and EXIF metada libraya is shit");
 			return null;
 		}
-		
+
 		//get time
 		ExifSubIFDDirectory directory2 = metadata.getDirectory(ExifSubIFDDirectory.class);
 		Date date = directory2.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);

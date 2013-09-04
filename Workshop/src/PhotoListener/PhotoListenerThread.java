@@ -43,7 +43,10 @@ public class PhotoListenerThread extends FileObserver {
 	public void onEvent(int event, String path) {
 
 		if (Utils.isExternalStorageReadable()) {
-			if (path.endsWith(".jpg")) {
+			if (path.endsWith(".jpg") ||
+					path.endsWith(".JPG") ||
+					path.endsWith(".jpeg") ||
+					path.endsWith("JPEG")) {
 
 				Photo photo = null;
 				String file = absolutePath + path;
@@ -110,10 +113,17 @@ public class PhotoListenerThread extends FileObserver {
 		}
 
 		//get location
-		GpsDirectory directory1 = metadata.getDirectory(GpsDirectory.class);
-		GeoLocation location = directory1.getGeoLocation();
-		if (location == null) { // photo has no location, don't create photo
-			this.locationlessPhotos++;
+		GeoLocation location = null;
+		try {
+			GpsDirectory directory1 = metadata.getDirectory(GpsDirectory.class);
+			location = directory1.getGeoLocation();
+			if (location == null) { // photo has no location, don't create photo
+				this.locationlessPhotos++;
+				throw new NullPointerException();
+			}
+		}
+		catch (NullPointerException exception) {
+			Log.e(TAG, "Photo " + path.getName() + " has no location.");
 			return null;
 		}
 

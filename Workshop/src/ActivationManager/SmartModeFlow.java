@@ -87,7 +87,7 @@ public class SmartModeFlow {
 //			20,
 //			INTERVAL_IN_SECONDS,
 //			TimeUnit.SECONDS);	
-		if (!busy) {
+		if (!isFlowRunning()) {
 			scheduler = Executors.newSingleThreadExecutor();
 			scheduler.execute(new Runnable() {
 				

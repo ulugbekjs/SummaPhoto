@@ -24,13 +24,13 @@ import com.example.aworkshop.SettingsActivity;
 public class Tester {
 
 	public static void insertFilesToObservedDirScheduledMode() {
-		
+
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 		PhotoListenerThread observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
-		
+
 		SettingsActivity.MODE = 2;
 		SettingsActivity.COLLAGE_TYPE =1;
 
@@ -78,14 +78,14 @@ public class Tester {
 
 	}
 
-public static void insertFilesToObservedDirSmartMode() {
-		
+	public static void insertFilesToObservedDirSmartMode() {
+
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 		PhotoListenerThread observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
-		
+
 		SettingsActivity.MODE = 1;
 		SettingsActivity.COLLAGE_TYPE =1;
 
@@ -102,7 +102,8 @@ public static void insertFilesToObservedDirSmartMode() {
 		for (File file : files) {
 			try {
 				tempPhoto =Utils.createPhotoFromFile(file.getAbsolutePath()); 
-				photos.add(tempPhoto);
+				if (tempPhoto != null)
+					photos.add(tempPhoto);
 			} catch (ImageProcessingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -134,15 +135,15 @@ public static void insertFilesToObservedDirSmartMode() {
 
 	}
 
-	
-public static void omriInsertFilesToObservedDir() {
-		
+
+	public static void omriInsertFilesToObservedDir() {
+
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 		PhotoListenerThread observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
-		
+
 		SettingsActivity.MODE = 1;
 		SettingsActivity.COLLAGE_TYPE = 1;
 
