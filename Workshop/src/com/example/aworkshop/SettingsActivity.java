@@ -68,7 +68,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 //		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "tals" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "NoisySet" + File.separator;
 //	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
@@ -100,41 +100,41 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		CONTEXT = this;
 
-		createAppFolders();
-
-		//		String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
-
-		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-		observer.startWatching();
-
-		final Button button = (Button) findViewById(R.id.button1);
-		button.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				SettingsActivity.MODE = 1;
-				Tester.insertFilesToObservedDirSmartMode();
-			}
-		});
-
-		//		
-		//		// 		Yonatan's code
-		//		//
-		//
-		//
-
-
-		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
-		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
-		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
-
-		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-		dailyRadioBtn.setOnClickListener(listener);
-		 
-
-//////		//TODO: remove, this is because of netwrok on main thread error
-//		if (android.os.Build.VERSION.SDK_INT > 9) {
-//			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
-//			StrictMode.setThreadPolicy(policy);
-//		}
+//		createAppFolders();
+//
+//		//		String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
+//
+//		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
+//		observer.startWatching();
+//
+//		final Button button = (Button) findViewById(R.id.button1);
+//		button.setOnClickListener(new View.OnClickListener() {
+//			public void onClick(View v) {
+//				SettingsActivity.MODE = 1;
+//				Tester.insertFilesToObservedDirSmartMode();
+//			}
+//		});
+//
+//		//		
+//		//		// 		Yonatan's code
+//		//		//
+//		//
+//		//
+//
+//
+//		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+//		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
+//		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+//
+//		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
+//		dailyRadioBtn.setOnClickListener(listener);
+//		 
+//
+////////		//TODO: remove, this is because of netwrok on main thread error
+////		if (android.os.Build.VERSION.SDK_INT > 9) {
+////			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
+////			StrictMode.setThreadPolicy(policy);
+////		}
 
 //		//		//		//		Omri's code
 		File directory = new File(PHOTO_DIR);
