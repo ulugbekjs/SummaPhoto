@@ -74,24 +74,24 @@ public class SmartModeFlow {
 						// build the collage from Bundle of photos
 						ResultPair result = null;
 						// TODO: uncomment the if
-						//						if (events.getActualEvents().size() > 3) {
-						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
-							Log.d(TAG, "attempting to build Block collage");
-							result =  buildCollage(new BlockCollageBuilder(events));
-						}
-						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
-							result = buildCollage(new MapCollageBuilder(events));
-							Log.d(TAG, "attempting to build Map Collage");
-						}
-						if (result.validCollage) {
-							Log.e(TAG, "Collage is valid!");
-							try {
-								Utils.notifyUserCollageCreated(result.collage);
-							} catch (FileNotFoundException e) {
-								Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
+						if (events.getActualEvents().size() > 3) {
+							if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
+								Log.d(TAG, "attempting to build Block collage");
+								result =  buildCollage(new BlockCollageBuilder(events));
+							}
+							if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
+								result = buildCollage(new MapCollageBuilder(events));
+								Log.d(TAG, "attempting to build Map Collage");
+							}
+							if (result.validCollage) {
+								Log.e(TAG, "Collage is valid!");
+								try {
+									Utils.notifyUserCollageCreated(result.collage);
+								} catch (FileNotFoundException e) {
+									Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
+								}
 							}
 						}
-						//						}
 
 					}
 

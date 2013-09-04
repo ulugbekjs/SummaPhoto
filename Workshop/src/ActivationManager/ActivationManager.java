@@ -17,7 +17,7 @@ public class ActivationManager {
 
 	// TODO: maybe do this by number of photos for collage
 	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 3;
-	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 15;
+	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 400;
 	private static final String TAG = "ActionManager.ActionManager";
 
 

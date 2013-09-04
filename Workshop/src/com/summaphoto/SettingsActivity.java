@@ -111,12 +111,13 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		i.putExtra("path", Constants.PHOTO_DIR);
 //		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
 		startService(i);
-		
-		//	Yonatan's code
 
 		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
 		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+		
+		//	Yonatan's code
+
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
