@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Summa Photo</string>
+    <string name="app_name">SummaPhoto</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_settings">Summa Photo</string>
+    <string name="title_activity_settings">SummaPhoto</string>
     <string name="Smart">Smart</string>
     <string name="Daily">Daily</string>
     <string name="Off">Off</string>
-    <string name="SmartDescription">Let Summaphoto decide when to generate a collage</string>
-    <string name="DailyDescription">Collage will be created daily at a scheduled time</string>
+    <string name="SmartDescription">Let SummaPhoto decide when to generate a collage</string>
+    <string name="DailyDescription">SummaPhoto will attempt to create a daily collage</string>
     <string name="OffDescription">SummaPhoto will not generate any collages</string>
     <string name="Mode">Mode</string>
     <string name="ModeHeader">Mode</string>

@@ -86,8 +86,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	private PhotoListenerThread observer;
 
 	// private fields
-	private RadioButton dailyRadioBtn;
 	private RadioGroup modeGroup;
+	private RadioButton dailyRadioBtn;
 	private RadioButton lastCheckedButton;
 
 	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY + 1);
@@ -106,21 +106,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
-
-		final Button button = (Button) findViewById(R.id.button1);
-		button.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				SettingsActivity.MODE = 1;
-				Tester.insertFilesToObservedDirSmartMode();
-			}
-		});
-
-		//		
-		//		// 		Yonatan's code
-		//		//
-		//
-		//
-
+	
+		//	Yonatan's code
 
 		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
@@ -128,13 +115,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
-		 
-
-//////		//TODO: remove, this is because of netwrok on main thread error
-//		if (android.os.Build.VERSION.SDK_INT > 9) {
-//			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
-//			StrictMode.setThreadPolicy(policy);
-//		}
 
 ////		//		//		//		Omri's code
 //		File directory = new File(PHOTO_DIR);
@@ -396,6 +376,20 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 				}
 			}).setView(timePickerDialog).show();
 		}
+	}
+
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
 	}
 
 

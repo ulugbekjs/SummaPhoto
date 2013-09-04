@@ -46,7 +46,7 @@ public class ScheduledModeService{
 				@Override
 				public void run() {
 					
-					Log.d(TAG, "Starting flow");
+					Log.d(TAG, "Scheduled Mode: Starting flow");
 					
 					// in this flow there are no dedicated requests
 					ActualEventsBundle events = partitionToEvents();
@@ -68,7 +68,7 @@ public class ScheduledModeService{
 						}
 					}		
 					
-					Log.d(TAG, "flow ended");
+					Log.d(TAG, "Scheduled Mode: flow ended");
 					
 				}
 				
