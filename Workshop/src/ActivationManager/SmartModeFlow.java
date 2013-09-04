@@ -105,7 +105,12 @@ public class SmartModeFlow {
 						e1.printStackTrace();
 					}
 					
-					manager.consumeDedictedRequests(); 
+					boolean changed = manager.consumeDedictedRequests();
+					if (changed) {
+						Log.d(TAG, "Activation manager changed to dedicated mode");
+						Log.d(TAG, "Activation manager: " + manager.toString());
+					}
+					
 					boolean collageNeeded = manager.processPhotoBuffer();
 					Log.d(TAG, "Collage needed: " + collageNeeded);
 

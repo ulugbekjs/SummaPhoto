@@ -58,9 +58,9 @@ public class ActivationManager {
 	}
 
 	private boolean isCollageNeeded() {
-		return (((currentState == DEDICATED_MODE || currentState == REGULAR_MODE)) && (remainingEvents == 0) || // currentState == DEDICATED_MODE || currentState == REGULAR_MODE
+		return (((currentState == REGULAR_MODE) && (remainingEvents == 0)) || 
 				(currentState == DEDICATED_MODE && 
-				((remainingHorizontal == 0) ||
+				((remainingHorizontal == 0) &&
 						(remainingVertical == 0)))); 
 	}
 
@@ -130,14 +130,21 @@ public class ActivationManager {
 		}
 	}
 
-	public void consumeDedictedRequests() {
+	/**
+	 * consume request sent in last run
+	 * @return true if mode changed
+	 */
+	public boolean consumeDedictedRequests() {
+		boolean changed = false;
 		while (!requestBuffer.isEmpty()) {
 			DedicatedRequest request = requestBuffer.remove();
 			// make sure dedicated request has information
 			if (!request.isEmptyRequest()) {
-				setToDedicatedMode(request);
+				 setToDedicatedMode(request);
+				 changed = true;
 			}
 		}
+		return changed;
 	}
 
 	private void setMode(int newState, DedicatedRequest request) {

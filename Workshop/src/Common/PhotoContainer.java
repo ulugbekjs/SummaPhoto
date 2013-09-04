@@ -22,15 +22,15 @@ public class PhotoContainer {
 		return instance;
 	}
 
-	public List<Photo> getProcessedPhotos() {
+	public synchronized List<Photo> getProcessedPhotos() {
 		return instance.processedPhotos;
 	}
 
-	public Photo getNextPhotoFromBuffer() {
+	public synchronized  Photo getNextPhotoFromBuffer() {
 		return buffer.remove();
 	}
 
-	public void addToBuffer(Photo p) {
+	public synchronized void addToBuffer(Photo p) {
 		if (!buffer.contains(p)) {
 			try {
 				buffer.put(p);
@@ -40,7 +40,7 @@ public class PhotoContainer {
 		}
 	}
 
-	public void moveToProcessedPhotos(Photo photo) {
+	public synchronized void moveToProcessedPhotos(Photo photo) {
 		if (!processedPhotos.contains(photo)) {
 			processedPhotos.add(photo);
 		}

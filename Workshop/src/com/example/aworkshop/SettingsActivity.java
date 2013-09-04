@@ -67,8 +67,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "tals" + File.separator;
+		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+//	private static final String  PHOTO_DIR = ROOT + File.separator + "tals" + File.separator;
 //	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
@@ -80,7 +80,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// public static fields
 	public static Context CONTEXT = null;
 	public static int MODE = 0;
-	public static int COLLAGE_TYPE = 2;
+	public static int COLLAGE_TYPE = 1;
 
 	// global fields
 	private PhotoListenerThread observer;
@@ -102,7 +102,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		createAppFolders();
 
-		//		String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
+		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
 
 		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
@@ -136,41 +136,41 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 //			StrictMode.setThreadPolicy(policy);
 //		}
 
-//		//		//		//		Omri's code
-		File directory = new File(PHOTO_DIR);
-		if (!directory.exists())
-			return;
-		File[] arrayOfPic =  directory.listFiles();
-		Photo tempPhoho = null;
-		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		for (File file : arrayOfPic)
-		{
-			try
-			{
-				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-			}
-			catch (Exception ex)
-			{
-			}
-			if (tempPhoho != null)
-				photosToCluster.add(tempPhoho);
-		}
-		DBScan algo = new DBScan(photosToCluster);
-		ActualEventsBundle bundle = algo.ComputeCluster();		
-		List<ActualEvent> events = new LinkedList<ActualEvent>();
-		Cluster tempCluster;
-		for (Photo p :photosToCluster)
-		{
-			tempCluster = new Cluster();
-			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-			events.add(new ActualEvent(tempCluster));
-		}
-		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		builder.setTemplate();
-		if (builder.populateTemplate())
-		{
-			builder.buildCollage();
-		}
+////		//		//		//		Omri's code
+//		File directory = new File(PHOTO_DIR);
+//		if (!directory.exists())
+//			return;
+//		File[] arrayOfPic =  directory.listFiles();
+//		Photo tempPhoho = null;
+//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+//		for (File file : arrayOfPic)
+//		{
+//			try
+//			{
+//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+//			}
+//			catch (Exception ex)
+//			{
+//			}
+//			if (tempPhoho != null)
+//				photosToCluster.add(tempPhoho);
+//		}
+//		DBScan algo = new DBScan(photosToCluster);
+//		ActualEventsBundle bundle = algo.ComputeCluster();		
+//		List<ActualEvent> events = new LinkedList<ActualEvent>();
+//		Cluster tempCluster;
+//		for (Photo p :photosToCluster)
+//		{
+//			tempCluster = new Cluster();
+//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+//			events.add(new ActualEvent(tempCluster));
+//		}
+//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+//		builder.setTemplate();
+//		if (builder.populateTemplate())
+//		{
+//			builder.buildCollage();
+//		}
 
 		return;
 				
