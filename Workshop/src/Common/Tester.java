@@ -13,89 +13,51 @@ import java.util.List;
 
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeFlow;
-import PhotoListener.PhotoListenerThread;
+import PhotoListener.CameraObserver;
+import android.R.integer;
 import android.R.menu;
 import android.os.Environment;
 import android.provider.MediaStore.Files;
+import android.util.Log;
 
 import com.drew.imaging.ImageProcessingException;
-import com.example.aworkshop.SettingsActivity;
+import com.summaphoto.SettingsActivity;
 
 public class Tester {
 
-	public static void insertFilesToObservedDirScheduledMode() {
-
-		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
-
-		PhotoListenerThread observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-		observer.startWatching();
-
-		SettingsActivity.MODE = 2;
-		SettingsActivity.COLLAGE_TYPE =1;
-
-		File dest = new File(SettingsActivity.ROOT, "Watched");
-		if (!dest.exists()) {
-			dest.mkdirs();
-		}
-
-		File source = new File(SettingsActivity.ROOT, "Tals");
-
-		File[] files = source.listFiles();
-		List<Photo> photos = new LinkedList<Photo>();
-		for (File file : files) {
-			try {
-				photos.add(Utils.createPhotoFromFile(file.getAbsolutePath()));
-			} catch (ImageProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		Collections.sort(photos, new Comparator<Photo>() {
-
-			@Override
-			public int compare(Photo lhs, Photo rhs) {
-				return lhs.compareTo(rhs);
-			}
-		});
-
-		List<File> sortedFileList = new LinkedList<File>();
-		for (Photo photo : photos) {
-			sortedFileList.add(new File(photo.getFilePath()));
-		}
-
-		//photos added by the order that they were taken in
-		for (File file : sortedFileList) {
-			try {
-				copyFile(file, new File(dest, file.getName()));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		ScheduledModeService.startService(1, 3);
-
+	public static void SmartWithMapTest() {
+		insertFilesToObservedDir(1, 1);
 	}
+	
+	public static void SmartWithBlocksTest() {
+		insertFilesToObservedDir(1, 2);
+	}
+	
+	public static void ScheduledWithMapTest(int hour, int min) {
+		ScheduledModeService.startService(hour, min);
+		insertFilesToObservedDir(2, 1);
+	}
+	
+	public static void ScheduledWithBlocksTest(int hour, int min) {
+		insertFilesToObservedDir(2, 2);
+	}
+	
+	private static void insertFilesToObservedDir(int mode, int collage_type) {
 
-	public static void insertFilesToObservedDirSmartMode() {
-
+		Log.d("Tester", "Test started");
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
-		PhotoListenerThread observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-		observer.startWatching();
+		SettingsActivity.MODE = mode;
+		SettingsActivity.COLLAGE_TYPE =collage_type;
 
-		SettingsActivity.MODE = 1;
-		SettingsActivity.COLLAGE_TYPE =1;
-
-		File dest = new File(SettingsActivity.ROOT, "Watched");
+		File dest = new File(Constants.ROOT, "Watched");
 		if (!dest.exists()) {
 			dest.mkdirs();
 		}
 
 //		File source = new File(SettingsActivity.ROOT, "Tests5");
-		File source = new File(SettingsActivity.ROOT, "Tests");
+		File source = new File(Constants.ROOT, "Tests");
 
 
 		File[] files = source.listFiles();
@@ -143,18 +105,18 @@ public class Tester {
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
-		PhotoListenerThread observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
+		CameraObserver observer = new CameraObserver(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
 
 		SettingsActivity.MODE = 1;
 		SettingsActivity.COLLAGE_TYPE = 1;
 
-		File dest = new File(SettingsActivity.ROOT, "Watched");
+		File dest = new File(Constants.ROOT, "Watched");
 		if (!dest.exists()) {
 			dest.mkdirs();
 		}
 
-		File source = new File(SettingsActivity.ROOT, "Tests5");
+		File source = new File(Constants.ROOT, "Tests5");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();

@@ -20,11 +20,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.jdom2.JDOMException;
 
-import com.example.aworkshop.SettingsActivity;
+import com.summaphoto.SettingsActivity;
 
 import android.accounts.NetworkErrorException;
 import android.os.Environment;
 import android.util.Log;
+import Common.Constants;
 import Common.Photo;
 import Common.GPSPoint;
 import Common.Utils;
@@ -176,7 +177,7 @@ public class BingServices {
 
 	private static String createOutputFile(boolean metadata, ByteArrayOutputStream out) throws IOException {
 
-		File file = new File(SettingsActivity.APP_TEMP_DIR, "map_temp.");
+		File file = new File(Constants.APP_TEMP_DIR, "map_temp.");
 
 		// Construct right file according to requested content
 		if (!metadata) {

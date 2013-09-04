@@ -12,7 +12,7 @@ import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
-import com.example.aworkshop.SettingsActivity;
+import com.summaphoto.SettingsActivity;
 
 import ActivationManager.SmartModeFlow;
 import Common.GPSPoint;
@@ -27,14 +27,14 @@ import android.util.Log;
  * @author yonatan
  *
  */
-public class PhotoListenerThread extends FileObserver {
+public class CameraObserver extends FileObserver {
 
-	private static final String TAG = PhotoListenerThread.class.getName();
+	private static final String TAG = CameraObserver.class.getName();
 	String absolutePath;
 
 	private int locationlessPhotos = 0; 
 
-	public PhotoListenerThread(String path) {
+	public CameraObserver(String path) {
 		super(path, FileObserver.CLOSE_WRITE | FileObserver.DELETE);
 		this.absolutePath = path;
 	}

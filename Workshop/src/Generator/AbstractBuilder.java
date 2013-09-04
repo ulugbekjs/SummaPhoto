@@ -14,22 +14,20 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
-import com.example.aworkshop.SettingsActivity;
+import com.summaphoto.SettingsActivity;
 
 import ActivationManager.DedicatedRequest;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
+import Common.Constants;
 import Common.Photo;
 import Common.PhotoContainer;
-import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Environment;
-import android.provider.Contacts.Photos;
 
 /**
  * This is an abstract class for Builder objects which contain logic of choosing a template, populating it with photos and drawing them onto the template
@@ -182,47 +180,6 @@ public abstract class AbstractBuilder {
 			return true;
 		}
 	}
-	
-
-
-	protected Bitmap decodeScaledBitmapFromSdCard(String filePath,
-			int reqWidth, int reqHeight) {
-
-		// First decode with inJustDecodeBounds=true to check dimensions
-		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeFile(filePath, options);
-
-		// Calculate inSampleSize
-		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-		// Decode bitmap with inSampleSize set
-		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeFile(filePath, options);
-	}
-
-	private int calculateInSampleSize(
-			BitmapFactory.Options options, int reqWidth, int reqHeight) {
-		// Raw height and width of image
-		final int height = options.outHeight;
-		final int width = options.outWidth;
-		int inSampleSize = 1;
-
-		if (height > reqHeight || width > reqWidth) {
-
-			// Calculate ratios of height and width to requested height and width
-			final int heightRatio = Math.round((float) height / (float) reqHeight);
-			final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-			// Choose the smallest ratio as inSampleSize value, this will guarantee
-			// a final image with both dimensions larger than or equal to the
-			// requested height and width.
-			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-		}
-
-		return inSampleSize;
-	}
-
 
 	protected void addSlotImageToCanvasBySampling(Bitmap bitmap, Canvas canvas, Slot slot, int sampleSize) {
 
@@ -278,7 +235,7 @@ public abstract class AbstractBuilder {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
 		file = new File
-				(SettingsActivity.APP_PHOTO_DIR, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
+				(Constants.APP_PHOTO_DIR, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
 
 		// Save Bitmap to File
 		fos = new FileOutputStream(file);
@@ -294,6 +251,9 @@ public abstract class AbstractBuilder {
 		return new Photo(calendar.getTime(), width, height, null, file.getAbsolutePath());
 	}
 
+	/**
+	 * removes all processed photos from PhotoContainer. 
+	 */
 	protected void clearProcessedPhotos() {
 		PhotoContainer.getInstance().clearProcessPhotos();
 	}

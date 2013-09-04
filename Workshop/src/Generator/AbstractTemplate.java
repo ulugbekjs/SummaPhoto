@@ -3,9 +3,6 @@ package Generator;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.R.integer;
-import android.R.string;
-
 public abstract class AbstractTemplate {
 	
 	public static final int MAP_TYPE = 1;

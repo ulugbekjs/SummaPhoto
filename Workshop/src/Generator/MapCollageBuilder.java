@@ -2,37 +2,21 @@ package Generator;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-
-import org.jdom2.output.LineSeparator;
-
-import com.adobe.xmp.impl.Utils;
-import com.drew.imaging.ImageProcessingException;
-
 import ActivationManager.DedicatedRequest;
 import Bing.BingServices;
 import Bing.Pushpin;
 import Bing.StaticMap;
-import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import Generator.LocatePicturesWithMap.SlotPushPinTuple;
-import android.R.bool;
-import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
 import android.graphics.Paint.Style;
-import android.graphics.drawable.PaintDrawable;
 import android.util.Log;
 
 public class MapCollageBuilder extends AbstractBuilder{

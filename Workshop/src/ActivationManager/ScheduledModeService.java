@@ -20,7 +20,7 @@ import Generator.MapCollageBuilder;
 import Partitioning.DBScan;
 import android.util.Log;
 
-import com.example.aworkshop.SettingsActivity;
+import com.summaphoto.SettingsActivity;
 
 public class ScheduledModeService{
 	

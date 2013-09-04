@@ -13,10 +13,9 @@ import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
-import com.example.aworkshop.R;
-import com.example.aworkshop.SettingsActivity;
+import com.summaphoto.R;
+import com.summaphoto.SettingsActivity;
 
-import android.R.bool;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;

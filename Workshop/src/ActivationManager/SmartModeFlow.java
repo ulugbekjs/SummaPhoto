@@ -1,17 +1,13 @@
 package ActivationManager;
 
 import java.io.FileNotFoundException;
-import java.security.PublicKey;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-import com.example.aworkshop.SettingsActivity;
+import com.summaphoto.SettingsActivity;
 
-import android.app.Service;
-import android.os.Bundle;
+import android.os.FileObserver;
 import android.util.Log;
 import Common.ActualEventsBundle;
 import Common.Photo;
@@ -30,6 +26,7 @@ public class SmartModeFlow {
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
 	private static ActivationManager manager = ActivationManager.getInstance();  
+	private static final FileObserver OBSERVER = null;
 
 	private SmartModeFlow() {
 	}
@@ -41,49 +38,6 @@ public class SmartModeFlow {
 		//			scheduler.scheduleWithFixedDelay(new Runnable() {
 		//				@Override
 		//				public void run() { // this is the main flow of the app
-		//
-		//					manager.consumeDedictedRequests(); 
-		//					boolean collageNeeded = manager.processPhotoBuffer();
-		//
-		//					boolean successful = true;
-		//					if (collageNeeded) { // ActivationManager decided clustering should be made
-		//						ActualEventsBundle events = partiotionToEvents();
-		//
-		//						// build the collage from Bundle of photos
-		//						Photo collage = null;
-		//						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
-		//							successful &= buildCollage(collage, new BlockCollageBuilder(events));
-		//						}
-		//						if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
-		//							successful &= buildCollage(collage, new MapCollageBuilder(events));
-		//						}
-		//						if (successful) {
-		//							try {
-		//								Utils.notifyUserCollageCreated(collage);
-		//							} catch (FileNotFoundException e) {
-		//								Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
-		//							}
-		//						}
-		//						else { // there was an error, notify user
-		//							Utils.notifyUserWithError("Error when building collage",
-		//									"Summaphoto has failed building your collage.");
-		//						}
-		//
-		//					}
-		//					else {
-		//						// do nothing, advance to next iteration
-		//					}
-		//				}
-		//
-		//				/**
-		//				 * run the DBScan algorithm to cluster photos to ActualEvents
-		//				 * @return
-		//				 */
-		//				private ActualEventsBundle partiotionToEvents() {
-		//					DBScan eventsClusterer = new DBScan(PhotoContainer.getInstance().getProcessedPhotos());
-		//					ActualEventsBundle events = eventsClusterer.runDBScanAlgorithm();
-		//					return events;
-		//				}
 		//			},
 		//			20,
 		//			INTERVAL_IN_SECONDS,

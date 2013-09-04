@@ -1,4 +1,4 @@
-package com.example.aworkshop;
+package com.summaphoto;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,11 +11,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.adobe.xmp.impl.Utils;
+import com.summaphoto.R;
 
 import ActivationManager.ScheduledModeService;
 import ActivationManager.SmartModeFlow;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
+import Common.Constants;
 import Common.Photo;
 import Common.Tester;
 //import Common.PhotoFilter;
@@ -29,12 +31,13 @@ import Partitioning.Cluster;
 import Partitioning.DBScan;
 import Partitioning.PhotoObjectForClustering;
 import Partitioning.TestDBScan;
-import PhotoListener.PhotoListenerThread;
+import PhotoListener.CameraObserver;
 import android.R.drawable;
 import android.R.integer;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -62,18 +65,18 @@ import android.widget.RadioGroup;
 import android.widget.TimePicker;
 
 public class SettingsActivity extends FragmentActivity { // Extends FragmentActivity to support < Android 3.0
-	
+
 	private static final String TAG = SettingsActivity.class.getName();
-	
+
 	// static final fields
-	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-//	private static final String  PHOTO_DIR = ROOT + File.separator + "tals" + File.separator;
-//	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
+	//	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
+	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+	//	private static final String  PHOTO_DIR = ROOT + File.separator + "tals" + File.separator;
+	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
-	public static final String APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
-	public static final String APP_TEMP_DIR = new File(Environment.getExternalStorageDirectory(), "Summaphoto") + File.separator + "Temp" + File.separator;
+	//	public static final String APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
+	//	public static final String APP_TEMP_DIR = new File(Environment.getExternalStorageDirectory(), "Summaphoto") + File.separator + "Temp" + File.separator;
 
 
 
@@ -83,14 +86,14 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	public static int COLLAGE_TYPE = 1;
 
 	// global fields
-	private PhotoListenerThread observer;
+	private CameraObserver observer;
 
 	// private fields
 	private RadioGroup modeGroup;
 	private RadioButton dailyRadioBtn;
 	private RadioButton lastCheckedButton;
 
-	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY + 1);
+	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY ) + 1;
 	private int pickerMin = 0;
 
 	@Override
@@ -104,9 +107,12 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
 
-		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-		observer.startWatching();
-	
+		// start camera folder observer 
+		Intent i= new Intent(this, PhotoListenerService.class);
+//		i.putExtra("path", Constants.PHOTO_DIR);
+		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
+		startService(i);
+		
 		//	Yonatan's code
 
 		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
@@ -115,49 +121,101 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
+		
+		Button button = (Button) findViewById(R.id.button1);
+		 
+		button.setOnClickListener(new OnClickListener() {
+ 
+			@Override
+			public void onClick(View arg0) {
+				Tester.SmartWithMapTest();
+			}
+ 
+		});
+		
+		button = (Button) findViewById(R.id.button2);
+		
+		button.setOnClickListener(new OnClickListener() {
+			 
+			@Override
+			public void onClick(View arg0) {
+				Tester.SmartWithBlocksTest();
+			}
+ 
+		});
+		
 
-////		//		//		//		Omri's code
-//		File directory = new File(PHOTO_DIR);
-//		if (!directory.exists())
-//			return;
-//		File[] arrayOfPic =  directory.listFiles();
-//		Photo tempPhoho = null;
-//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-//		for (File file : arrayOfPic)
-//		{
-//			try
-//			{
-//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-//			}
-//			catch (Exception ex)
-//			{
-//			}
-//			if (tempPhoho != null)
-//				photosToCluster.add(tempPhoho);
-//		}
-//		DBScan algo = new DBScan(photosToCluster);
-//		ActualEventsBundle bundle = algo.ComputeCluster();		
-//		List<ActualEvent> events = new LinkedList<ActualEvent>();
-//		Cluster tempCluster;
-//		for (Photo p :photosToCluster)
-//		{
-//			tempCluster = new Cluster();
-//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-//			events.add(new ActualEvent(tempCluster));
-//		}
-//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-//		builder.setTemplate();
-//		if (builder.populateTemplate())
-//		{
-//			builder.buildCollage();
-//		}
+		button = (Button) findViewById(R.id.button3);
+		
+		button.setOnClickListener(new OnClickListener() {
+			 
+			@Override
+			public void onClick(View arg0) {
+				Tester.ScheduledWithMapTest(22, 00);
+			}
+ 
+		});
+		
+
+		button = (Button) findViewById(R.id.button4);
+		
+		button.setOnClickListener(new OnClickListener() {
+			 
+			@Override
+			public void onClick(View arg0) {
+				Tester.ScheduledWithBlocksTest(22,00);
+			}
+ 
+		});
+		
+ 
+		
+ 
+		
+ 
+		
+
+		////		//		//		//		Omri's code
+		//		File directory = new File(PHOTO_DIR);
+		//		if (!directory.exists())
+		//			return;
+		//		File[] arrayOfPic =  directory.listFiles();
+		//		Photo tempPhoho = null;
+		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		//		for (File file : arrayOfPic)
+		//		{
+		//			try
+		//			{
+		//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+		//			}
+		//			catch (Exception ex)
+		//			{
+		//			}
+		//			if (tempPhoho != null)
+		//				photosToCluster.add(tempPhoho);
+		//		}
+		//		DBScan algo = new DBScan(photosToCluster);
+		//		ActualEventsBundle bundle = algo.ComputeCluster();		
+		//		List<ActualEvent> events = new LinkedList<ActualEvent>();
+		//		Cluster tempCluster;
+		//		for (Photo p :photosToCluster)
+		//		{
+		//			tempCluster = new Cluster();
+		//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+		//			events.add(new ActualEvent(tempCluster));
+		//		}
+		//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+		//		builder.setTemplate();
+		//		if (builder.populateTemplate())
+		//		{
+		//			builder.buildCollage();
+		//		}
 
 		return;
-				
+
 
 	}
-
-
+	
 	// TODO: remove
 	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
 		Calendar calendar = Calendar.getInstance();
@@ -190,12 +248,12 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			return false;
 
 		//create folders for app
-		File tmpFile = new File(APP_PHOTO_DIR);
+		File tmpFile = new File(Constants.APP_PHOTO_DIR);
 		if (!tmpFile.exists()) {
 			tmpFile.mkdirs();
 		}
 
-		tmpFile = new File(APP_TEMP_DIR);
+		tmpFile = new File(Constants.APP_TEMP_DIR);
 		if (!tmpFile.exists()) {
 			tmpFile.mkdirs();
 		}
@@ -381,7 +439,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	@Override
 	protected void onDestroy() {
-		offButtonClicked(); // shutdown all services
 		super.onDestroy();
 	}
 

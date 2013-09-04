@@ -1,10 +1,11 @@
-package com.example.aworkshop;
+package com.summaphoto;
 
 import org.joda.time.DateTime;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import com.summaphoto.R;
 
 
 
