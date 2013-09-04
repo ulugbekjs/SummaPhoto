@@ -25,11 +25,7 @@ public class Tester {
 
 	public static void insertFilesToObservedDirScheduledMode() {
 
-		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
-
-		PhotoListenerThread observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-		observer.startWatching();
+		
 
 		SettingsActivity.MODE = 2;
 		SettingsActivity.COLLAGE_TYPE =1;
@@ -94,7 +90,9 @@ public class Tester {
 			dest.mkdirs();
 		}
 
-		File source = new File(SettingsActivity.ROOT, "Tests5");
+//		File source = new File(SettingsActivity.ROOT, "Tests5");
+		File source = new File(SettingsActivity.ROOT, "Tests");
+
 
 		File[] files = source.listFiles();
 		Photo tempPhoto;

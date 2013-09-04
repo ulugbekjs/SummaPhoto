@@ -46,7 +46,7 @@ public class PhotoContainer {
 		}
 	}
 
-	public void onDelete(String deleted) {
+	public synchronized void onDelete(String deleted) {
 		// scan queues
 		for (Photo photo : processedPhotos) {
 			if (photo.getFilePath().equals(deleted)) {
@@ -61,11 +61,11 @@ public class PhotoContainer {
 		}
 	}
 
-	public boolean isEmpty() {
+	public synchronized boolean isEmpty() {
 		return buffer.isEmpty();
 	}
 
-	public void clearProcessPhotos() {
+	public synchronized void clearProcessPhotos() {
 		instance.processedPhotos.clear();
 	}
 

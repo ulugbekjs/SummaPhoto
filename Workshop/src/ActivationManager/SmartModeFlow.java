@@ -28,7 +28,6 @@ public class SmartModeFlow {
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
 	private static ActivationManager manager = ActivationManager.getInstance();  
-//	private static final int INTERVAL_IN_SECONDS = 30;
 
 	private SmartModeFlow() {
 	}
