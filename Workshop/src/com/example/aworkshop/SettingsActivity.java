@@ -101,41 +101,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		createAppFolders();
 		
 	
-		Tester.insertFilesToObservedDirSmartMode();
-//		
-//		Canvas canvas = null;
-//		Bitmap bmpBase = null;
-//
-//		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
-//		bmpBase.setHasAlpha(true);
-//		canvas = new Canvas(bmpBase);
-//		
-//		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//		//paint.setColor(android.graphics.Color.MAGENTA);
-//		paint.setShader(new LinearGradient(0, 0, 200, 200, Color.YELLOW, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
-//		paint.setStrokeWidth(5f);
-//	    paint.setStrokeJoin(Paint.Join.ROUND);
-//	    paint.setStyle(Style.STROKE);
-//	    paint.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
-//	    paint.setAlpha(120);
-//		canvas.drawLine(200, 200, 400, 400, paint);
-////		Path path = getArrowHead(400, 400);
-////		canvas.drawPath(path, paint);
-//		Photo photo = null;
-//		try {
-//			photo = saveCollage(bmpBase);
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-////		
-//		
-//		try {
-//			Common.Utils.notifyUserCollageCreated(photo);
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+//		Tester.insertFilesToObservedDirSmartMode();
 
 		//		// 		Yonatan's code
 		//		//
@@ -178,8 +144,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 				photosToCluster.add(tempPhoho);
 		}
 		DBScan algo = new DBScan(photosToCluster);
-		ActualEventsBundle bundle = algo.ComputeCluster();
-//		
+		ActualEventsBundle bundle = algo.ComputeCluster();		
 		List<ActualEvent> events = new LinkedList<ActualEvent>();
 		Cluster tempCluster;
 		for (Photo p :photosToCluster)

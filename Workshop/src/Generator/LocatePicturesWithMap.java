@@ -217,19 +217,16 @@ public class LocatePicturesWithMap {
 		double slope;
 		Integer numberOfPushPinsAboveLine = 0;
 		Integer numberOfSlotsAboveLine = 0;
-
-		Boolean isUndefinedSlope = pushPinCandidate.getX() == slotCandidate.getX();
+		Line line = new Line(pushPinCandidate, slotCandidate);
 
 		// the equation of the line between those points is: Y = slope * x + constant
-		if (!isUndefinedSlope)
+		if (!line.isUndefiendSlope())
 		{
-			slope = calculateSlope (pushPinCandidate,slotCandidate );
-			double constant = pushPinCandidate.getY() - slope * pushPinCandidate.getX();
 			for (PixelPoint pushPin :pushPinsSubSet)
 			{
 				if (pushPin == pushPinCandidate)
 					continue;
-				if (isPointAboveLine(pushPin, slope, constant))
+				if (isPointAboveLine(pushPin,line))
 				{
 					numberOfPushPinsAboveLine++;
 					firstSubSetOfPushPinPoints.add(pushPin);
@@ -242,7 +239,7 @@ public class LocatePicturesWithMap {
 			{
 				if (slot == slotCandidate)
 					continue;
-				if (isPointAboveLine(slot, slope, constant))
+				if (isPointAboveLine(slot, line))
 				{
 					numberOfSlotsAboveLine++;
 					firstSubSetofSlotsPoints.add(slot);
@@ -274,12 +271,16 @@ public class LocatePicturesWithMap {
 		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
 		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
 		Set<PixelPoint> secondSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(3);
+		firstSubSetofSlotsPoints.clear();
+		firstSubSetOfPushPinPoints.clear();
+		secondSubSetofSlotsPoints.clear();
+		secondSubSetOfPushPinPoints.clear();
 		Integer numberOfPushPinsAboveLine = 0;
 		Integer numberOfSlotsAboveLine = 0;
 		double verticalLineX = pushPinCandidate.getX();
 		for (PixelPoint pushPin :pushPinsSubSet )
 		{
-			if (pushPinCandidate.getX() > verticalLineX)
+			if (pushPin.getX() > verticalLineX)
 			{
 				numberOfPushPinsAboveLine++;
 				firstSubSetOfPushPinPoints.add(pushPin);
@@ -304,12 +305,13 @@ public class LocatePicturesWithMap {
 
 
 	/** This methods checks whether the point is above the line represented by the slope and constant **/ 
-	private Boolean isPointAboveLine (PixelPoint point, double slope, double constant)
+	private Boolean isPointAboveLine (PixelPoint point, Line line) 
 	{
-		if (point.getX() * slope + constant < point.getY())
+		if (point.getX() * line.getSlope() + line.getConstant() < point.getY())
 			return true;
 		return false;
 	}
+	
 
 	/**
 	 * 
@@ -330,7 +332,7 @@ public class LocatePicturesWithMap {
 			deltaY = (double) (PointB.getY() - pointA.getY() );
 			deltaX = (double) (PointB.getX()- pointA.getX());
 		}
-		slope = deltaY / deltaX;
+		slope = (double)deltaY / deltaX;
 		return slope;
 	}
 

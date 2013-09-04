@@ -39,7 +39,7 @@ public class Tester {
 			dest.mkdirs();
 		}
 
-		File source = new File(SettingsActivity.ROOT, "Tests");
+		File source = new File(SettingsActivity.ROOT, "Tals");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();
@@ -94,7 +94,7 @@ public class Tester {
 			dest.mkdirs();
 		}
 
-		File source = new File(SettingsActivity.ROOT, "Tests5");
+		File source = new File(SettingsActivity.ROOT, "tals");
 
 		File[] files = source.listFiles();
 		Photo tempPhoto;
