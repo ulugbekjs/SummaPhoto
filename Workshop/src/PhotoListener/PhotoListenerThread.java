@@ -41,61 +41,62 @@ public class PhotoListenerThread extends FileObserver {
 
 	@Override
 	public void onEvent(int event, String path) {
+		if (path != null) {
+			if (Utils.isExternalStorageReadable()) {
+				if (path.endsWith(".jpg") ||
+						path.endsWith(".JPG") ||
+						path.endsWith(".jpeg") ||
+						path.endsWith("JPEG")) {
 
-		if (Utils.isExternalStorageReadable()) {
-			if (path.endsWith(".jpg") ||
-					path.endsWith(".JPG") ||
-					path.endsWith(".jpeg") ||
-					path.endsWith("JPEG")) {
+					Photo photo = null;
+					String file = absolutePath + path;
 
-				Photo photo = null;
-				String file = absolutePath + path;
-
-				if ((event & FileObserver.CLOSE_WRITE) > 0) {
-					try {
-						photo = createPhotoFromFile(file);
-						Log.d(TAG, "Photo taken: " + path + " was read from file");
-
-					} catch (ImageProcessingException e) {
-						Log.e(TAG, "Photo taken: " + path + " was not yet fully saved properly");
+					if ((event & FileObserver.CLOSE_WRITE) > 0) {
 						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e1) {
-							Log.e(TAG, "Waiting for photo to be saved was interrupted");
-						}
-						try { // try reading again
 							photo = createPhotoFromFile(file);
-						} catch (ImageProcessingException e1) {
-							Log.e(TAG, "Photo taken: " + "was NOT read from file properly");
+							Log.d(TAG, "Photo taken: " + path + " was read from file");
+
+						} catch (ImageProcessingException e) {
+							Log.e(TAG, "Photo taken: " + path + " was not yet fully saved properly");
+							try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e1) {
+								Log.e(TAG, "Waiting for photo to be saved was interrupted");
+							}
+							try { // try reading again
+								photo = createPhotoFromFile(file);
+							} catch (ImageProcessingException e1) {
+								Log.e(TAG, "Photo taken: " + "was NOT read from file properly");
+							}
+						}
+
+						if (photo != null) {
+							PhotoContainer.getInstance().addToBuffer(photo);
+							if (SettingsActivity.MODE == 1)
+								if (!SmartModeFlow.isFlowRunning()) { // SMART MODE - starts whenever a photo is received if not busy
+									SmartModeFlow.startFlow();
+								}
+								else {
+									// nothing
+								}
+						}
+
+						else {
+							if (locationlessPhotos > 5) {
+								Utils.notifyUserWithError("Photos have no location", "Make sure geo-tagging is on in your device.");
+								locationlessPhotos = 0;
+							}
 						}
 					}
 
-					if (photo != null) {
-						PhotoContainer.getInstance().addToBuffer(photo);
-						if (SettingsActivity.MODE == 1)
-							if (!SmartModeFlow.isFlowRunning()) { // SMART MODE - starts whenever a photo is received if not busy
-								SmartModeFlow.startFlow();
-							}
-							else {
-								Log.e(TAG, "SmartModeService not started: already runnning");
-							}
+					if ((event & FileObserver.DELETE) > 0) {
+						PhotoContainer.getInstance().onDelete(file);
 					}
-
-					else {
-						if (locationlessPhotos > 5) {
-							Utils.notifyUserWithError("Photos have no location", "Make sure geo-tagging is on in your device.");
-							locationlessPhotos = 0;
-						}
-					}
-				}
-
-				if ((event & FileObserver.DELETE) > 0) {
-					PhotoContainer.getInstance().onDelete(file);
 				}
 			}
-		}
-		else {
-			Log.wtf(TAG,"External storage is not readable!");
+			else {
+				Log.wtf(TAG,"External storage is not readable!");
+			}
 		}
 	}
 

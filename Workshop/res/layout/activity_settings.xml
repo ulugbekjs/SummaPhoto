@@ -2,101 +2,106 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-     tools:context=".SettingsActivity" >
+    tools:context=".SettingsActivity" >
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:text="Start Flow" />
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawablePadding="4dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="4dp"
+            android:text="@string/Mode"
+            android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/tv"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:drawablePadding="4dp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="4dp"
-                android:text="@string/Mode"
-                android:textSize="20sp" />
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:scaleType="fitXY"
+            android:src="?android:attr/listDivider" />
 
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:scaleType="fitXY"
-                android:src="?android:attr/listDivider" />
+        <RadioGroup
+            android:id="@+id/radioMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
 
-            <RadioGroup
-                android:id="@+id/radioMode"
+            <RadioButton
+                android:id="@+id/radioOff"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <RadioButton
-                    android:id="@+id/radioOff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:onClick="onRadioButtonClicked"
-                    android:text="@string/Off" />
-
-                <TextView android:text="@string/OffDescription" />
-
-                <RadioButton
-                    android:id="@+id/radioSmart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onRadioButtonClicked"
-                    android:text="@string/Smart" />
-
-                <TextView android:text="@string/SmartDescription" />
-
-                <RadioButton
-                    android:id="@+id/radioDaily"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onRadioButtonClicked"
-                    android:text="@string/Daily" />
-
-                <TextView android:text="@string/DailyDescription" />
-            </RadioGroup>
-
-            <TextView
-                android:id="@+id/tv2"
-                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:drawablePadding="4dp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="4dp"
-                android:text="@string/TypeHeader"
-                android:textSize="20sp" />
+                android:checked="true"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/Off" />
 
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="3dp"
-                android:scaleType="fitXY"
-                android:src="?android:attr/listDivider" />
+            <TextView android:text="@string/OffDescription" />
 
-            <RadioGroup
-                android:id="@+id/OutputType"
+            <RadioButton
+                android:id="@+id/radioSmart"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/Smart" />
 
-                <RadioButton
-                    android:id="@+id/radioMapType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:onClick="onTypeRadioButtonClicked"
-                    android:text="@string/Map" />
+            <TextView android:text="@string/SmartDescription" />
 
-                <RadioButton
-                    android:id="@+id/radioBlocksType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onTypeRadioButtonClicked"
-                    android:text="@string/Blocks" />
-            </RadioGroup>
-        </LinearLayout>
+            <RadioButton
+                android:id="@+id/radioDaily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/Daily" />
+
+            <TextView android:text="@string/DailyDescription" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawablePadding="4dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="4dp"
+            android:text="@string/TypeHeader"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:scaleType="fitXY"
+            android:src="?android:attr/listDivider" />
+
+        <RadioGroup
+            android:id="@+id/OutputType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/radioMapType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onClick="onTypeRadioButtonClicked"
+                android:text="@string/Map" />
+
+            <RadioButton
+                android:id="@+id/radioBlocksType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onTypeRadioButtonClicked"
+                android:text="@string/Blocks" />
+        </RadioGroup>
+    </LinearLayout>
 
 </ScrollView>

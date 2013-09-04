@@ -105,9 +105,4 @@ public class BlockCollageBuilder extends AbstractBuilder {
 		return collage;
 
 	}
-
-
-
-
-
 }

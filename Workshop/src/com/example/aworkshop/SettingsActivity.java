@@ -48,6 +48,7 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileObserver;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
@@ -55,6 +56,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
@@ -81,14 +83,14 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	public static int COLLAGE_TYPE = 2;
 
 	// global fields
-	PhotoListenerThread observer;
+	private PhotoListenerThread observer;
 
 	// private fields
 	private RadioButton dailyRadioBtn;
 	private RadioGroup modeGroup;
 	private RadioButton lastCheckedButton;
 
-	private int pickerHour = 20;
+	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY + 1);
 	private int pickerMin = 0;
 
 	@Override
@@ -100,22 +102,30 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		createAppFolders();
 		
-	
-//		Tester.insertFilesToObservedDirSmartMode();
+		String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
+
+		observer = new PhotoListenerThread(PHOTO_DIR_B); // observer over the gallery directory
+		observer.startWatching();
+				
+		final Button button = (Button) findViewById(R.id.button1);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	SettingsActivity.MODE = 1;
+        		Tester.insertFilesToObservedDirSmartMode();
+            }
 
 		//		// 		Yonatan's code
 		//		//
 		//
 		//
 
-//		observer = new PhotoListenerThread(PHOTO_DIR); // observer over the gallery directory
-//		observer.startWatching();
-//		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
-//		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
-//		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
-//
-//		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-//		dailyRadioBtn.setOnClickListener(listener);
+
+		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
+		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+
+		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
+		dailyRadioBtn.setOnClickListener(listener);
 		 
 
 //////		//TODO: remove, this is because of netwrok on main thread error
@@ -165,24 +175,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	}
 	
-	private Path getArrowHead(int tipX, int tipY) {
-		Path path = new Path();
-		path.moveTo(tipX, tipY);
-        path.lineTo(tipX - 20, tipY +  60);
-        path.lineTo(tipX, tipY + 50);
-        path.lineTo(tipX + 20, tipY + 60);
-        path.close();
-        
-        Matrix mMatrix = new Matrix();
-        RectF bounds = new RectF();
-        path.computeBounds(bounds, true);
-        mMatrix.postRotate(90, 
-                           (bounds.right + bounds.left)/2, 
-                           (bounds.bottom + bounds.top)/2);
-        path.transform(mMatrix);
-		return path;
-	}
-
+	
 	// TODO: remove
 	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
 		Calendar calendar = Calendar.getInstance();
@@ -400,6 +393,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			}).setView(timePickerDialog).show();
 		}
 	}
+
 
 	@Override
 	protected void onDestroy() {

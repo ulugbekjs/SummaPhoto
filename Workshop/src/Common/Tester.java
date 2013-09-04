@@ -94,7 +94,9 @@ public class Tester {
 			dest.mkdirs();
 		}
 
-		File source = new File(SettingsActivity.ROOT, "tals");
+//		File source = new File(SettingsActivity.ROOT, "Tests5");
+		File source = new File(SettingsActivity.ROOT, "Tests");
+
 
 		File[] files = source.listFiles();
 		Photo tempPhoto;
