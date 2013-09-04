@@ -78,7 +78,7 @@ public class ScheduledModeService{
 						photos.add(PhotoContainer.getInstance().getNextPhotoFromBuffer());
 					}
 					DBScan eventsClusterer = new DBScan(photos);
-					ActualEventsBundle events = eventsClusterer.runDBScanAlgorithm();
+					ActualEventsBundle events = eventsClusterer.ComputeCluster();
 					return events;
 				}
 			},
