@@ -166,7 +166,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			events.add(new ActualEvent(tempCluster));
 		}
 		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		builder.setTemplate();
+		builder.omrisSetTemplate();
 		if (builder.populateTemplate())
 		{
 			builder.buildCollage();
