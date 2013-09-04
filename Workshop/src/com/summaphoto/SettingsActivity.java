@@ -35,6 +35,7 @@ import PhotoListener.CameraObserver;
 import android.R.drawable;
 import android.R.integer;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -85,9 +86,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	public static int MODE = 0;
 	public static int COLLAGE_TYPE = 1;
 
-	// global fields
-	private CameraObserver observer;
-
 	// private fields
 	private RadioGroup modeGroup;
 	private RadioButton dailyRadioBtn;
@@ -104,13 +102,14 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		CONTEXT = this;
 
 		createAppFolders();
+		saveLogcatToFile();
 
 		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
 
 		// start camera folder observer 
 		Intent i= new Intent(this, PhotoListenerService.class);
-//		i.putExtra("path", Constants.PHOTO_DIR);
-		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
+		i.putExtra("path", Constants.PHOTO_DIR);
+//		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
 		startService(i);
 		
 		//	Yonatan's code
@@ -214,6 +213,25 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		return;
 
 
+	}
+	
+	public static void saveLogcatToFile() {    
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
+	    String fileName =  "logcat_"+formatter.format(Calendar.getInstance().getTime())+".txt";
+	    File outputFile = new File(Constants.APP_TEMP_DIR,fileName);
+	    try {
+			outputFile.createNewFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    try {
+			@SuppressWarnings("unused")
+			Process process = Runtime.getRuntime().exec("logcat -f "+outputFile.getAbsolutePath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// TODO: remove

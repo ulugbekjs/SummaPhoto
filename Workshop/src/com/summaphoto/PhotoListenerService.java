@@ -2,6 +2,7 @@ package com.summaphoto;
 
 
 import PhotoListener.CameraObserver;
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.FileObserver;
@@ -11,7 +12,7 @@ import android.util.Log;
 public class PhotoListenerService extends Service {
 
 	private static final String TAG = PhotoListenerService.class.getName();
-	private FileObserver observer = null;
+	private static FileObserver observer = null;
 
 
 	@Override
@@ -22,15 +23,29 @@ public class PhotoListenerService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (observer == null) { // first time or observer was garbage-collected
-			observer = new CameraObserver(intent.getStringExtra("path"));
-			observer.startWatching();
-			Log.d(TAG, "CameraObserver started watching");
+		final Intent i = intent;
+		if (i != null) {
+			if (observer == null) { // first time or observer was garbage-collected
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						String path = i.getStringExtra("path");
+						observer = new CameraObserver(path);
+						observer.startWatching();
+						Log.d(TAG, "CameraObserver started watching");						
+					}
+				}).run();
+			
+			}
+		}
+		else {
+			Log.e(TAG, "recieved null intent");
 		}
 
 		// We want this service to continue running until it is explicitly
 		// stopped, so return sticky.
-		return START_STICKY;
+		return START_REDELIVER_INTENT;
 	}
 
 	@Override
