@@ -22,6 +22,7 @@ import Partitioning.DBScan;
 public class SmartModeFlow {
 
 	private static final String TAG = SmartModeFlow.class.getName();
+	private static final int MIN_EVENTS = 2;
 	//	private static ScheduledExecutorService scheduler = null;
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
@@ -74,7 +75,7 @@ public class SmartModeFlow {
 						// build the collage from Bundle of photos
 						ResultPair result = null;
 						// TODO: uncomment the if
-						if (events.getActualEvents().size() > 3) {
+						if (events.getActualEvents().size() >= MIN_EVENTS) {
 							if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
 								Log.d(TAG, "attempting to build Block collage");
 								result =  buildCollage(new BlockCollageBuilder(events));

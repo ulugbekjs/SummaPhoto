@@ -70,11 +70,11 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	private static final String TAG = SettingsActivity.class.getName();
 
 	// static final fields
-		public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
+	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-		private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
-	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
-
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
+	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
+	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
 	//	public static final String APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
 	//	public static final String APP_TEMP_DIR = new File(Environment.getExternalStorageDirectory(), "Summaphoto") + File.separator + "Temp" + File.separator;
@@ -108,125 +108,119 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		// start camera folder observer 
 		Intent i= new Intent(this, PhotoListenerService.class);
-		i.putExtra("path", Constants.PHOTO_DIR);
-//		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
+		//		i.putExtra("path", Constants.PHOTO_DIR);
+		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
 		startService(i);
 
 		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
 		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
-		
+
 		//	Yonatan's code
 
 
-//		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-//		dailyRadioBtn.setOnClickListener(listener);
-//		
-//		Button button = (Button) findViewById(R.id.button1);
-//		 
-//		button.setOnClickListener(new OnClickListener() {
-// 
-//			@Override
-//			public void onClick(View arg0) {
-//				Tester.SmartWithMapTest();
-//			}
-// 
-//		});
-//		
-//		button = (Button) findViewById(R.id.button2);
-//		
-//		button.setOnClickListener(new OnClickListener() {
-//			 
-//			@Override
-//			public void onClick(View arg0) {
-//				Tester.SmartWithBlocksTest();
-//			}
-// 
-//		});
-//		
-//
-//		button = (Button) findViewById(R.id.button3);
-//		
-//		button.setOnClickListener(new OnClickListener() {
-//			 
-//			@Override
-//			public void onClick(View arg0) {
-//				Tester.ScheduledWithMapTest(22, 00);
-//			}
-// 
-//		});
-//		
-//
-//		button = (Button) findViewById(R.id.button4);
-//		
-//		button.setOnClickListener(new OnClickListener() {
-//			 
-//			@Override
-//			public void onClick(View arg0) {
-//				Tester.ScheduledWithBlocksTest(22,00);
-//			}
-// 
-//		});
-//		
-// 
-//		
-// 
-//		
- 
-		
+		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
+		dailyRadioBtn.setOnClickListener(listener);
 
-		//		//		//		//		Omri's code
-				File directory = new File(PHOTO_DIR);
-				if (!directory.exists())
-					return;
-				File[] arrayOfPic =  directory.listFiles();
-				Photo tempPhoho = null;
-				List<Photo> photosToCluster = new LinkedList<Photo>(); 
-				for (File file : arrayOfPic)
-				{
-					try
-					{
-						tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-					}
-					catch (Exception ex)
-					{
-					}
-					if (tempPhoho != null)
-						photosToCluster.add(tempPhoho);
-				}
-				DBScan algo = new DBScan(photosToCluster);
-				ActualEventsBundle bundle = algo.ComputeCluster();		
-				List<ActualEvent> events = new LinkedList<ActualEvent>();
-				Cluster tempCluster;
-				for (Photo p :photosToCluster)
-				{
-					tempCluster = new Cluster();
-					tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-					events.add(new ActualEvent(tempCluster));
-				}
-				MapCollageBuilder builder = new MapCollageBuilder(bundle);
-				builder.setTemplate();
-				if (builder.populateTemplate())
-				{
-					builder.buildCollage();
-				}
+		Button button = (Button) findViewById(R.id.button1);
+
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Tester.SmartWithMapTest();
+			}
+
+		});
+
+		button = (Button) findViewById(R.id.button2);
+
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Tester.SmartWithBlocksTest();
+			}
+
+		});
+
+
+		button = (Button) findViewById(R.id.button3);
+
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Tester.ScheduledWithMapTest(22, 00);
+			}
+
+		});
+
+
+		button = (Button) findViewById(R.id.button4);
+
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Tester.ScheduledWithBlocksTest(22,00);
+			}
+
+		});
+
+
+		//		Omri's code
+		File directory = new File(PHOTO_DIR);
+		if (!directory.exists())
+			return;
+		File[] arrayOfPic =  directory.listFiles();
+		Photo tempPhoho = null;
+		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		for (File file : arrayOfPic)
+		{
+			try
+			{
+				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+			}
+			catch (Exception ex)
+			{
+			}
+			if (tempPhoho != null)
+				photosToCluster.add(tempPhoho);
+		}
+		DBScan algo = new DBScan(photosToCluster);
+		ActualEventsBundle bundle = algo.ComputeCluster();		
+		List<ActualEvent> events = new LinkedList<ActualEvent>();
+		Cluster tempCluster;
+		for (Photo p :photosToCluster)
+		{
+			tempCluster = new Cluster();
+			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+			events.add(new ActualEvent(tempCluster));
+		}
+		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+		builder.setTemplate();
+		if (builder.populateTemplate())
+		{
+			builder.buildCollage();
+		}
 
 		return;
 
 
 	}
-	
+
 	public static void saveLogcatToFile() {    
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
-	    String fileName =  "logcat_"+formatter.format(Calendar.getInstance().getTime())+".txt";
-	    File outputFile = new File(Constants.APP_TEMP_DIR,fileName);
-	    try {
+		String fileName =  "logcat_"+formatter.format(Calendar.getInstance().getTime())+".txt";
+		File outputFile = new File(Constants.APP_TEMP_DIR,fileName);
+		try {
 			outputFile.createNewFile();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-	    try {
+		try {
 			@SuppressWarnings("unused")
 			Process process = Runtime.getRuntime().exec("logcat -f "+outputFile.getAbsolutePath());
 		} catch (IOException e) {
@@ -234,7 +228,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			e.printStackTrace();
 		}
 	}
-	
+
 	// TODO: remove
 	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
 		Calendar calendar = Calendar.getInstance();
