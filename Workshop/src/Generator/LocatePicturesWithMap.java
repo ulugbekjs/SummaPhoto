@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.security.auth.PrivateCredentialPermission;
 
+import android.R.integer;
 import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 
@@ -213,14 +214,21 @@ public class LocatePicturesWithMap {
 		firstSubSetOfPushPinPoints.clear();
 		secondSubSetofSlotsPoints.clear();
 		secondSubSetOfPushPinPoints.clear();
+		
+		List<PixelPoint> localSetForPushPinsOnLine = new LinkedList<PixelPoint>() ;
+		List<PixelPoint> localSetForSlotssOnLines = new LinkedList<PixelPoint>() ;
 
 
 		double slope;
 		Integer numberOfPushPinsAboveLine = 0;
 		Integer numberOfSlotsAboveLine = 0;
+		Integer numberOfPushPinsUnderLine = 0;
+		Integer numberOfSlotsUnderLine = 0;
+		Integer numberOfPushPinsOnLine = 0;
+		Integer numberOfSlotsOnLine = 0;
 
 		Boolean isUndefinedSlope = pushPinCandidate.getX() == slotCandidate.getX();
-
+		PointLineStatus pointLineStatus = null;
 		// the equation of the line between those points is: Y = slope * x + constant
 		if (!isUndefinedSlope)
 		{
@@ -230,26 +238,48 @@ public class LocatePicturesWithMap {
 			{
 				if (pushPin == pushPinCandidate)
 					continue;
-				if (isPointAboveLine(pushPin, slope, constant))
+				pointLineStatus = isPointAboveLine(pushPin, slope, constant);
+				if ( pointLineStatus == PointLineStatus.pointAbove)
 				{
 					numberOfPushPinsAboveLine++;
 					firstSubSetOfPushPinPoints.add(pushPin);
 				}
 				else {
+					if (pointLineStatus == PointLineStatus.PointUnder)
+					{
 					secondSubSetOfPushPinPoints.add(pushPin);
+					numberOfPushPinsUnderLine ++;
+					}
+					else {
+						{
+							numberOfPushPinsOnLine ++;
+							localSetForPushPinsOnLine.add(pushPin);
+						}
+					}
 				}
 			}
 			for (PixelPoint slot :slotsSubSet )
 			{
 				if (slot == slotCandidate)
 					continue;
-				if (isPointAboveLine(slot, slope, constant))
+				pointLineStatus = isPointAboveLine(slot, slope, constant);
+				if (pointLineStatus == PointLineStatus.pointAbove)
 				{
 					numberOfSlotsAboveLine++;
 					firstSubSetofSlotsPoints.add(slot);
 				}
 				else {
+					if (pointLineStatus == PointLineStatus.PointUnder)
+					{
 					secondSubSetofSlotsPoints.add(slot);
+					numberOfSlotsUnderLine ++;
+					}
+					else {
+						{
+							numberOfSlotsOnLine ++;
+							localSetForSlotssOnLines.add(slot);
+						}
+					}
 				}
 			}
 		}
@@ -257,7 +287,48 @@ public class LocatePicturesWithMap {
 		{
 			return isSplitingEqualUndefinedSlope (pushPinsSubSet, slotsSubSet, pushPinCandidate, slotCandidate, listOfSplitedPixelPointSets);
 		}
-		return (numberOfPushPinsAboveLine == numberOfSlotsAboveLine);
+		if (numberOfPushPinsAboveLine == numberOfSlotsAboveLine)
+		{
+			secondSubSetOfPushPinPoints.addAll(localSetForPushPinsOnLine);
+			secondSubSetofSlotsPoints.addAll(localSetForSlotssOnLines);
+			return true;
+		}
+		if (numberOfPushPinsUnderLine == numberOfSlotsUnderLine)
+		{
+			firstSubSetOfPushPinPoints.addAll(localSetForPushPinsOnLine);
+			firstSubSetofSlotsPoints.addAll(localSetForSlotssOnLines);
+			return true;
+		}
+		if (((Math.abs(numberOfPushPinsAboveLine - numberOfSlotsAboveLine) <= numberOfPushPinsOnLine) &&
+				(numberOfPushPinsAboveLine < numberOfSlotsAboveLine)) || 
+			 ((Math.abs(numberOfPushPinsAboveLine - numberOfSlotsAboveLine) <= numberOfSlotsOnLine)) && 
+			 	(numberOfPushPinsAboveLine > numberOfSlotsAboveLine))
+		{
+			Integer numberOfNeededItmesAboveLine = Math.max(numberOfPushPinsAboveLine, numberOfSlotsAboveLine);
+			for (int i=numberOfPushPinsAboveLine; i < numberOfNeededItmesAboveLine; i ++)
+			{
+				if (localSetForPushPinsOnLine.size()  == 0)
+				{
+					Log.d(TAG, "trying to move items from list of pushPins on line while it is empty");
+					return false;
+				}
+				firstSubSetOfPushPinPoints.add(localSetForPushPinsOnLine.remove(0));
+			}
+			secondSubSetOfPushPinPoints.addAll(localSetForPushPinsOnLine);
+			
+			for (int i=numberOfSlotsAboveLine; i < numberOfNeededItmesAboveLine; i ++)
+			{
+				if (localSetForSlotssOnLines.size()  == 0)
+				{
+					Log.d(TAG, "trying to move items from list of slots on line while it is empty");
+					return false;
+				}
+				firstSubSetofSlotsPoints.add(localSetForSlotssOnLines.remove(0));
+			}
+			secondSubSetofSlotsPoints.addAll(localSetForSlotssOnLines);
+			return true;
+		}
+		return false;
 	}
 	/**
 	 * @param pushPinsSubSet - sub set of pushPins that had to be matched to slots
@@ -305,12 +376,15 @@ public class LocatePicturesWithMap {
 
 
 	/** This methods checks whether the point is above the line represented by the slope and constant **/ 
-	private Boolean isPointAboveLine (PixelPoint point, double slope, double constant)
+	private PointLineStatus isPointAboveLine (PixelPoint point, double slope, double constant)
 	{
 		if (point.getX() * slope + constant < point.getY())
-			return true;
-		return false;
+			return PointLineStatus.pointAbove;
+		if  (point.getX() * slope + constant == point.getY())
+			return PointLineStatus.PointOn;
+		return PointLineStatus.PointUnder;
 	}
+	
 
 	/**
 	 * 
@@ -333,6 +407,14 @@ public class LocatePicturesWithMap {
 		}
 		slope = deltaY / deltaX;
 		return slope;
+	}
+	
+	/** This enum describes the relations between line and point on a plane **/ 
+	private enum PointLineStatus
+	{
+		pointAbove,
+		PointOn,
+		PointUnder
 	}
 
 	/**
