@@ -82,11 +82,11 @@ public class MapTemplate extends AbstractTemplate{
 			template =  getTemplate1();
 			break;
 		}
-//		case 2:
-//		{
-//			template =  getTemplate2();
-//			break;
-//		}
+		case 2:
+		{
+			template =  getTemplate2();
+			break;
+		}
 //		case 3:
 //		{
 //			template =  getTemplate3();
@@ -217,6 +217,26 @@ public class MapTemplate extends AbstractTemplate{
 		template.addSlot(new Slot(new PixelPoint(1120, 812), new PixelPoint(1469, 1102), new PixelPoint (1120, 812)), 8);
 		template.addSlot(new Slot(new PixelPoint(1120, 0), new PixelPoint(1469, 289), new PixelPoint (1120, 289)), 9);
 		
+		template.mapSlot = new Slot (new PixelPoint(350, 290), new PixelPoint(1119, 811));
+		
+		return template;
+	}
+	
+//	
+//	/** template of size 1469*1102. slot 0 and 3 are vertical **/
+//	
+	private static MapTemplate getTemplate2() {
+		
+		MapTemplate template = new MapTemplate(8);
+
+		template.addSlot(new Slot(new PixelPoint(0, 0), new PixelPoint(349, 551),new PixelPoint  (349, 400)) , 0);
+		template.addSlot(new Slot(new PixelPoint(0, 552), new PixelPoint(349, 1102),new PixelPoint  (349, 682)) , 1);
+		template.addSlot(new Slot(new PixelPoint(1120, 0), new PixelPoint(1469, 551),new PixelPoint  (1120, 400)) , 2);
+		template.addSlot(new Slot(new PixelPoint(1120, 552), new PixelPoint(1469, 1102),new PixelPoint  (1120, 682)) , 3);
+		template.addSlot(new Slot(new PixelPoint(350, 812), new PixelPoint (734, 1102), new PixelPoint  (542, 812)), 4);
+		template.addSlot(new Slot(new PixelPoint(735, 812), new PixelPoint (1119, 1102), new PixelPoint  (927, 812)), 5);
+		template.addSlot(new Slot(new PixelPoint(735, 0), new PixelPoint(1119, 289), new PixelPoint (927, 289)), 6);
+		template.addSlot(new Slot(new PixelPoint(350, 0), new PixelPoint(734, 289), new PixelPoint (542, 289)), 7);
 		template.mapSlot = new Slot (new PixelPoint(350, 290), new PixelPoint(1119, 811));
 		
 		return template;
