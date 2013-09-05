@@ -16,7 +16,7 @@ public class ActivationManager {
 	private static final int DEDICATED_MODE = 1;
 
 	// TODO: maybe do this by number of photos for collage
-	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 3;
+	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 1;
 	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 400;
 	private static final String TAG = "ActionManager.ActionManager";
 
@@ -161,6 +161,7 @@ public class ActivationManager {
 			remainingEvents = CANDIDATE_EVENTS_FOR_COLLAGE; 
 			remainingHorizontal = 0;
 			remainingVertical = 0;
+			lastRecievedPhoto = null;
 			currentState = REGULAR_MODE;
 		}
 		}
