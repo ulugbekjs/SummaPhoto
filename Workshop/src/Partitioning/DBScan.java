@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import android.R.string;
+import android.util.Log;
+
 import Common.*;
 
 
@@ -14,6 +17,8 @@ import Common.*;
  * @author omri
  */
 public class DBScan {
+	
+	private final String TAG = "Clustering Algorithm";
 
 	/*
 	 * Parameters for deciding weather two pictures are "close" to each other as
@@ -98,6 +103,7 @@ public class DBScan {
 		// re-run algorithm with lower parameter for minimumPhotosInCluster
 		if (((double)noiseCounter /(double)numberOfPhotosToClusterInteger > MaxRatioOfNoise) && (!isNoisyRun))
 		{
+			Log.d(TAG, "starting algorithm for noisy pics");
 			return runDBScanAlgorithm(true); 
 		}
 		else {

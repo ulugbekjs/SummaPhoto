@@ -119,9 +119,9 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 		// decide which pictures from the different events will be included in the collage
 		List<Photo> horizontalPhotosList = new LinkedList<Photo>();
-		getHorizontalPhotosForTemplate(horizontalPhotosList);
+		getHorizontalPhotosForTemplate(horizontalPhotosList, false);
 		List<Photo> verticalPhotosList = new LinkedList<Photo>();
-		getVerticalPhotosForTemplate(verticalPhotosList);
+		getVerticalPhotosForTemplate(verticalPhotosList, true);
 		List<Photo> photosList = new LinkedList<Photo>();
 		photosList.addAll(verticalPhotosList);
 		photosList.addAll(horizontalPhotosList);
@@ -142,11 +142,13 @@ public class MapCollageBuilder extends AbstractBuilder{
 		HashMap<PixelPoint, Pushpin> pixelPointsToPushPins = getAdjustedPixelPointPushPinDictionary(mapFromDataSource.getPushPins());
 		HashMap<PixelPoint, Slot> pixelPointsToSlot = getPixelPointSlotDictionaryHashMap(template.slots);
 		
-		if (pixelPointsToPushPins.size() != pixelPointsToSlot.size())
+		
+		if (pixelPointsToPushPins.size() < pixelPointsToSlot.size())
 		{
-			Log.d(TAG, "Stop populate template, because number of slots is not equal to number of pushpins");
+			Log.d(TAG, "Stop populate template, because number of slots is bigegr than number of pushpins");
 			return false;
 		}
+		
 		
 		
 		// decide which picture will be populated in each slot 

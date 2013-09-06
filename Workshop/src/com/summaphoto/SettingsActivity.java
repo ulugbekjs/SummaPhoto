@@ -56,7 +56,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "failed" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals2" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
@@ -151,20 +151,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		
 		//		//		Omri's code	
 		
-				Boolean intersect;
-				
-				intersect = Common.Utils.linesIntersect(-1, 1, 0, 0, -1, 1, 0, 4);
-				if (intersect)
-				{
-					Log.d(TAG, "intersect");
-				}
-				else 
-				{
-
-					Log.d(TAG, " not intersect");
-
-
-				}
 				File directory = new File(PHOTO_DIR);
 				if (!directory.exists())
 					return;

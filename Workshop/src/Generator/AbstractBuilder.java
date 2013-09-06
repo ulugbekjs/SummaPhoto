@@ -22,6 +22,7 @@ import Common.ActualEventsBundle;
 import Common.Constants;
 import Common.Photo;
 import Common.PhotoContainer;
+import android.R.bool;
 import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -117,21 +118,31 @@ public abstract class AbstractBuilder {
 	 * @param pickedPhotos
 	 * @return true if pickedPhotos.size() >= slotsToFill.size()
 	 */
-	protected boolean getHorizontalPhotosForTemplate(List<Photo> pickedPhotos) {
+	protected boolean getHorizontalPhotosForTemplate(List<Photo> pickedPhotos, Boolean addExtraPhotos) {
 		if (template == null)
 			return false;
 
 		List<Integer> horizontalSlotsToFill = new ArrayList<Integer>(template.getHorizontalSlots());
 		// placing horizontal photos
-		return getPhotosWithRespectToTemplateSlots(horizontalSlotsToFill, true, pickedPhotos);	
+		return getPhotosWithRespectToTemplateSlots(horizontalSlotsToFill, true, pickedPhotos, addExtraPhotos);	
 	}
 	
-	protected boolean getVerticalPhotosForTemplate(List<Photo> pickedPhotos) {
+	/** overload of previous method **/
+	protected boolean getHorizontalPhotosForTemplate(List<Photo> pickedPhotos) {
+		return 	getHorizontalPhotosForTemplate(pickedPhotos, false);
+	}
+	
+	protected boolean getVerticalPhotosForTemplate(List<Photo> pickedPhotos, Boolean addExtraPhotos) {
 		if (template == null)
 			return false;
 		List<Integer> verticalSlotsToFill = new ArrayList<Integer>(template.getVerticalSlots());
 		// placing horizontal photos
-		return getPhotosWithRespectToTemplateSlots(verticalSlotsToFill, false, pickedPhotos);	
+		return getPhotosWithRespectToTemplateSlots(verticalSlotsToFill, false, pickedPhotos, addExtraPhotos);	
+	}
+	
+	/** overload of previous method **/
+	protected boolean getVerticalPhotosForTemplate(List<Photo> pickedPhoto) {
+		return getVerticalPhotosForTemplate(pickedPhoto, false);
 	}
 
 	private Queue<ActualEvent> getQueue(boolean shuffle) {
@@ -150,19 +161,19 @@ public abstract class AbstractBuilder {
 	}
 	
 	private boolean getPhotosWithRespectToTemplateSlots(List<Integer> slotsToFill, boolean horizontalPhotos, 
-			List<Photo> pickedPhotos) {
+			List<Photo> pickedPhotos,Boolean addExtraPhotos) {
 
 		if (pickedPhotos == null) {
 			return false;
 		}
 		
 		Integer originalNumberOfSlotsToFill = slotsToFill.size();
-		
+		Integer neededNumberOfSlot = addExtraPhotos? (originalNumberOfSlotsToFill +6): originalNumberOfSlotsToFill;
 		
 		
 		Queue<ActualEvent> queue = getQueue(horizontalPhotos);
 
-		while (!slotsToFill.isEmpty() && !queue.isEmpty()) {
+		while ((neededNumberOfSlot > 0) && !queue.isEmpty()) {
 			ActualEvent event = queue.remove();
 
 			List<Photo> photosInEvent = (horizontalPhotos) ? event.horizontalPhotos() : event.verticalPhotos(); 
@@ -171,15 +182,14 @@ public abstract class AbstractBuilder {
 				Random random = new Random(new Date().getTime());
 				int rand = random.nextInt(photosInEvent.size());
 				pickedPhotos.add(photosInEvent.remove(rand));
-				slotsToFill.remove(0);
+				neededNumberOfSlot--;
 			}
 
 			if (!photosInEvent.isEmpty()) { // still horizontal photos left in event 
 				queue.add(event); // return to queue
 			}
 		}
-
-		if (!slotsToFill.isEmpty()) { 
+		if (neededNumberOfSlot > 0) { 
 			// having enough photos as original request, but without extra photos
 			if (pickedPhotos.size() >= originalNumberOfSlotsToFill)
 				return true;

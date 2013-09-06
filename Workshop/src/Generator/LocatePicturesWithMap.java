@@ -7,12 +7,15 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.security.auth.PrivateCredentialPermission;
 
 import android.R.bool;
 import android.R.integer;
+import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 
@@ -96,12 +99,12 @@ public class LocatePicturesWithMap {
 	public List<SlotPushPinTuple> matchPicturesOnMapToPointOnFrame ()
 	{
 		slotsToPushPinList = new LinkedList<SlotPushPinTuple>();
-		splitSetsEqualPointsTuple (horizontalPushPinPointsSet,horizontalSlotPointsSet);
-		splitSetsEqualPointsTuple(verticalPushPinPointsSet, verticalSlotPointsSet);
+		splitSetsEqualPointsTuple (horizontalPushPinPointsSet,horizontalSlotPointsSet, false);
+		splitSetsEqualPointsTuple(verticalPushPinPointsSet, verticalSlotPointsSet, true);
 		return slotsToPushPinList;
 	}
 
-	private Boolean splitSetsEqualPointsTuple (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet)
+	private Boolean splitSetsEqualPointsTuple (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet, boolean reduceCross)
 	{
 		// Subsets of pointsOnFrameSet and  picturesOnMapSet for recursive algorithm issues
 		Set<PixelPoint> firstSubSetofSlotsPoints =new HashSet<PixelPoint>();
@@ -117,13 +120,14 @@ public class LocatePicturesWithMap {
 
 		SlotPushPinTuple tempTupleToAdd;
 
+		TreeMap<Integer, SlotPushPinTuple> candidtesTuplesHashMap = new TreeMap<Integer, LocatePicturesWithMap.SlotPushPinTuple>();
+		
 		PixelPoint closestSlot;
 		if (pushPinsSubSet.size() != slotsSubSet.size())
 		{
 			Log.d(TAG, "Number of slots and number of pictures is not equal");
-			return false;
 		}
-		if (pushPinsSubSet.size() == 0)
+		if (slotsSubSet.size() == 0)
 			return true;
 //		if (pushPinsSubSet.size() == 1){
 //			PixelPoint lastSlot = null;
@@ -142,6 +146,7 @@ public class LocatePicturesWithMap {
 //			}
 //		}
 
+		int interscetionsNumber;
 		for (PixelPoint pushPinPoint : pushPinsSubSet) {
 			// First try to split the sets with closest point in pointsOnFrameSubSetSet to the chosen point
 			closestSlot = findClosestPointInSet(pushPinPoint,slotsSubSet);
@@ -149,43 +154,111 @@ public class LocatePicturesWithMap {
 			{
 				tempTupleToAdd = new SlotPushPinTuple (pushPinPoint, pixelPointToPushPinDictionary.get(pushPinPoint),
 						closestSlot,pixelPointToSlotDictionary.get(closestSlot));
-				slotsToPushPinList.add(tempTupleToAdd);
-				splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints);
-				splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints);
-				return true;
-			}
-			else {
-				for (PixelPoint slotPoint : slotsSubSet)
-				{
-					if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint , slotPoint, listOfSplitedPixelPointSets))
-					{
-						tempTupleToAdd = new SlotPushPinTuple (pushPinPoint, pixelPointToPushPinDictionary.get(pushPinPoint),
-								slotPoint,pixelPointToSlotDictionary.get(slotPoint));
-						slotsToPushPinList.add(tempTupleToAdd);
-						splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints);
-						splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints);
+				
+				interscetionsNumber =  createsCross (pushPinPoint,closestSlot);
+				if ((reduceCross) && (interscetionsNumber > 0))
+					candidtesTuplesHashMap.put(interscetionsNumber, tempTupleToAdd);
+				else {
+					slotsToPushPinList.add(tempTupleToAdd);
+					if (slotsToPushPinList.size() == pixelPointToSlotDictionary.keySet().size())
 						return true;
-					}
+					splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints, reduceCross);
+					splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints, reduceCross);
+					return true;
 				}
 				
 			}
-			
-		}
-		Log.d(TAG, "didn't find point-slot valid dividers");
-		for (PixelPoint pushPinPoint : pushPinsSubSet)
-		{
-			Log.d(TAG, pushPinPoint.getX() + "    " + pushPinPoint.getY());
-		}
-		for (PixelPoint slotPoint : slotsSubSet)
-		{
-			Log.d(TAG, slotPoint.getX() + "    " + slotPoint.getY());
-		}
-		
-		return false;
+			for (PixelPoint slotPoint : slotsSubSet)
+			{
+				if (isSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint , slotPoint, listOfSplitedPixelPointSets))
+				{
+					tempTupleToAdd = new SlotPushPinTuple (pushPinPoint, pixelPointToPushPinDictionary.get(pushPinPoint),
+							slotPoint,pixelPointToSlotDictionary.get(slotPoint));
+					interscetionsNumber =  createsCross (pushPinPoint,slotPoint);
+					if ((reduceCross) && (interscetionsNumber > 0))
+						candidtesTuplesHashMap.put(interscetionsNumber, tempTupleToAdd);
+					else {
+						slotsToPushPinList.add(tempTupleToAdd);
+						if (slotsToPushPinList.size() == pixelPointToSlotDictionary.keySet().size())
+							return true;
+						splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints, reduceCross);
+						splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints, reduceCross);
+						return true;
+					}						
+				}
+			}
 
+
+
+		}
+		Log.d(TAG, "adding line with minimum itersections");
+		if (candidtesTuplesHashMap.keySet().isEmpty())
+		{
+			//debuging log
+			Log.d(TAG, "didn't find point-slot valid dividers");
+			for (PixelPoint pushPinPoint : pushPinsSubSet)
+			{
+				Log.d(TAG, pushPinPoint.getX() + "    " + pushPinPoint.getY());
+			}
+			for (PixelPoint slotPoint : slotsSubSet)
+			{
+				Log.d(TAG, slotPoint.getX() + "    " + slotPoint.getY());
+			}
+			return false;
+		}
+		// get candidate with minimum number of intersections
+		Entry<Integer,SlotPushPinTuple> entryToAdd = candidtesTuplesHashMap.firstEntry();
+		if (isSplitingEqual(pushPinsSubSet, slotsSubSet,entryToAdd.getValue().getPointOnMapPixelPoint() , entryToAdd.getValue().getPointOnFrame(),
+				listOfSplitedPixelPointSets))
+		{
+			slotsToPushPinList.add(entryToAdd.getValue());
+			if (slotsToPushPinList.size() == pixelPointToSlotDictionary.keySet().size())
+				return true;
+			splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints, reduceCross);
+			splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints, reduceCross);
+			return true;
+		}
+		else
+		{
+			Log.d(TAG, "Error while trying to add candidate");
+			return false;
+		}
 	}
 
+	/**
+	 * @param pushPinPoint
+	 * @param slotPoint
+	 * @return the number of intersection between the line that the pushPin-Slot connection will create to the lines that are
+	 * created by other pushPin-Slot that already contained in the list
+	 */
 
+	private int createsCross (PixelPoint pushPinPoint, PixelPoint slotPoint)
+	{
+		if ((pushPinPoint == null) || (slotPoint == null) || (slotsToPushPinList == null))
+				return 0;
+		int x1 = pushPinPoint.getX();
+		int y1 = pushPinPoint.getY();
+		int x2 = slotPoint.getX();
+		int y2 = slotPoint.getY();
+		int x3; 
+		int y3;
+		int x4;
+		int y4;
+		int numberOfInetsections = 0;
+		for (SlotPushPinTuple tuple : slotsToPushPinList) {
+			if (!tuple.getSlot().hasConnectingLinePoint())
+			{
+				continue;
+			}
+			x3 = tuple.getPushpin().getAnchor().getX();
+			y3 = tuple.getPushpin().getAnchor().getY();
+			x4 = tuple.getSlot().getConnectingLinePoint().getX();
+			y4 =  tuple.getSlot().getConnectingLinePoint().getY();
+			if (Common.Utils.linesIntersect(x1, y1, x2, y2, x3, y3, x4, y4))
+				numberOfInetsections++;
+		}
+		return numberOfInetsections;
+	}
 
 	/**
 	 * @param point
