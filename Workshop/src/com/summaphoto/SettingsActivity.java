@@ -55,7 +55,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals2" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
@@ -154,44 +154,44 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		});
 
-		//
-		//		//		Omri's code
-		//		File directory = new File(PHOTO_DIR);
-		//		if (!directory.exists())
-		//			return;
-		//		File[] arrayOfPic =  directory.listFiles();
-		//		Photo tempPhoho = null;
-		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		//		for (File file : arrayOfPic)
-		//		{
-		//			try
-		//			{
-		//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-		//			}
-		//			catch (Exception ex)
-		//			{
-		//			}
-		//			if (tempPhoho != null)
-		//				photosToCluster.add(tempPhoho);
-		//		}
-		//		DBScan algo = new DBScan(photosToCluster);
-		//		ActualEventsBundle bundle = algo.ComputeCluster();		
-		//		List<ActualEvent> events = new LinkedList<ActualEvent>();
-		//		Cluster tempCluster;
-		//		for (Photo p :photosToCluster)
-		//		{
-		//			tempCluster = new Cluster();
-		//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-		//			events.add(new ActualEvent(tempCluster));
-		//		}
-		//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		//		builder.setTemplate();
-		//		if (builder.populateTemplate())
-		//		{
-		//			builder.buildCollage();
-		//		}
-		//
-		//		return;
+
+		//		Omri's code
+		//				File directory = new File(PHOTO_DIR);
+		//				if (!directory.exists())
+		//					return;
+		//				File[] arrayOfPic =  directory.listFiles();
+		//				Photo tempPhoho = null;
+		//				List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		//				for (File file : arrayOfPic)
+		//				{
+		//					try
+		//					{
+		//						tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+		//					}
+		//					catch (Exception ex)
+		//					{
+		//					}
+		//					if (tempPhoho != null)
+		//						photosToCluster.add(tempPhoho);
+		//				}
+		//				DBScan algo = new DBScan(photosToCluster);
+		//				ActualEventsBundle bundle = algo.ComputeCluster();		
+		//				List<ActualEvent> events = new LinkedList<ActualEvent>();
+		//				Cluster tempCluster;
+		//				for (Photo p :photosToCluster)
+		//				{
+		//					tempCluster = new Cluster();
+		//					tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+		//					events.add(new ActualEvent(tempCluster));
+		//				}
+		//				MapCollageBuilder builder = new MapCollageBuilder(bundle);
+		//				builder.setTemplate();
+		//				if (builder.populateTemplate())
+		//				{
+		//					builder.buildCollage();
+		//				}
+		//		
+		//				return;
 
 
 	}
@@ -315,7 +315,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
 	}
 
-	
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -416,6 +416,9 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		thread.run();
 	}
 
+	/**
+	 * when smart button clicked, need to start observing and turn off daily mode
+	 */
 	private void smartButtonClicked() {
 
 		if (!PhotoListenerService.isObserving()) {
@@ -458,6 +461,11 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			ScheduledModeService.stopService();
 	}
 
+	/**
+	 * listener for the daily mode button, opens up the time picker dialog
+	 * @author yonatan
+	 *
+	 */
 	private class ScheduledModeListener implements View.OnClickListener { 
 
 

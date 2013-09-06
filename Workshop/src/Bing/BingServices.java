@@ -26,6 +26,7 @@ import android.accounts.NetworkErrorException;
 import android.os.Environment;
 import android.util.Log;
 import Common.Constants;
+import Common.GeoBoundingBox;
 import Common.Photo;
 import Common.GPSPoint;
 import Common.Utils;
@@ -73,13 +74,53 @@ public class BingServices {
 
 		return map;
 	}
+	
+	public static StaticMap getStaticMap(List<Photo> photos, int width, int height, GeoBoundingBox box) {
 
+		StaticMap map = null;
+
+		if (photos.size()  > 0) { // Request only iff there is at least one photo
+
+			map = new StaticMap(photos, width, height);
+
+			List<GPSPoint> points = getImagesPointsList(photos);
+			try {
+				map.setJpgPath(getJPG(points, width, height, box), width, height);
+				map.setMetadataPath(getJPGMetadata(points, width, height, box));
+			} catch (NetworkErrorException e) {
+				Log.e(TAG, "Network error when getting map metadata from Bing");
+				Utils. notifyUserWithError("Summaphoto Error", "Verify your connection to the internet.");
+			} catch (JDOMException e) {
+				Log.e(TAG, "Error when parsing Bing xml");
+			} catch (IOException e) {
+				Log.e(TAG, "Error while writing / reading recieved xml");
+			}
+
+			if (map.getJpgPath() == null || map.getMetadataPath() == null) { // verify paths
+				return null;  // free map for GC
+			}
+
+		}
+		else {
+			Log.d(TAG, "getStaticMap: Zero locations in request");
+		}
+
+		return map;
+	}
 	private static String getJPG(List<GPSPoint> points, int width, int height) throws NetworkErrorException, IOException {
-		return createHTTPRequest(false, points, width, height);
+		return createHTTPRequest(false, points, width, height,null);
+	}
+	
+	private static String getJPG(List<GPSPoint> points, int width, int height, GeoBoundingBox box) throws NetworkErrorException, IOException {
+		return createHTTPRequest(false, points, width, height,box);
 	}
 
 	private static String getJPGMetadata(List<GPSPoint> points, int width, int height) throws NetworkErrorException, IOException {
-		return createHTTPRequest(true, points, width, height);
+		return createHTTPRequest(true, points, width, height,null);
+	}
+	
+	private static String getJPGMetadata(List<GPSPoint> points, int width, int height, GeoBoundingBox box) throws NetworkErrorException, IOException {
+		return createHTTPRequest(true, points, width, height,box);
 	}
 
 	/**
@@ -105,13 +146,20 @@ public class BingServices {
 	 * @throws IOException 
 	 * @throws  
 	 */
-	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points, int width, int height) throws NetworkErrorException, IOException {
+	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points, int width, int height, GeoBoundingBox box) throws NetworkErrorException, IOException {
 
 		String file = null;
 
 
 		//		String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels?";
 		String urlString ="http://dev.virtualearth.net/REST/v1/Imagery/Map/Road?";
+
+		if (box != null) {
+			urlString +="mapArea=" + box.getBottomRight().getLongitude() + "," 
+					+ box.getTopLeft().getLatitude() + "," 
+					+ box.getTopLeft().getLongitude() + "," +
+					box.getBottomRight().getLatitude() + "&";
+		}
 		//Make the actual connection
 		if (metadata) {
 			urlString += "mmd=1&o=xml";

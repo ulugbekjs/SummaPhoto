@@ -17,8 +17,8 @@ public class ActivationManager {
 
 	// TODO: maybe do this by number of photos for collage
 	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 3;
-	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 60;
-	private static final String TAG = "ActionManager.ActionManager";
+	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 600;
+	private static final String TAG = ActivationManager.class.getName();
 
 
 	//instance fields
@@ -45,16 +45,9 @@ public class ActivationManager {
 
 	private boolean isNewEventCandidate(Photo newPhoto) {
 
-		//TODO : uncomment the if
-		//if (newPhoto.getTakenDate().isAfter(lastRecievedPhoto.getTakenDate())) { // should always be true
 		int delta = lastRecievedPhoto.timeDeltaInSecondsFrom(newPhoto);
-		Log.d(TAG, "diff from last photo: " + delta);
+		Log.d(TAG, "diff of " + newPhoto.getFileName()  + " from last photo " + newPhoto.getFileName() + ": " + delta);
 		return (delta > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
-		//}
-		//	else { // should not happen, except on daylight savings time switch
-		//	return false;
-		//	}
-
 	}
 
 	private boolean isCollageNeeded() {
@@ -166,8 +159,12 @@ public class ActivationManager {
 		}
 		}
 	}
+	
+	public int getState(){
+		return this.currentState;
+	}
 
-	private synchronized void setToRegularMode() {
+	public synchronized void setToRegularMode() {
 		setMode(REGULAR_MODE, null);
 	}
 

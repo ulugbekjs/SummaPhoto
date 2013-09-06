@@ -63,7 +63,6 @@ public class SmartModeFlow {
 						Log.d(TAG, "ActualEvents calculated: " + events.getActualEvents().size());
 						// build the collage from Bundle of photos
 						ResultPair result = null;
-						// TODO: uncomment the if
 						if (events.getActualEvents().size() >= MIN_EVENTS) {
 							if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
 								Log.d(TAG, "attempting to build Block collage");
@@ -88,7 +87,7 @@ public class SmartModeFlow {
 					setBusy(false);
 
 					Log.d(TAG, "Flow ended: " + new Date());
-					Log.d(TAG, "Activatin mangager:\n" + manager.toString());
+					Log.d(TAG, "Activatin mangager at end of flow:\n" + manager.toString());
 				}
 
 				/**

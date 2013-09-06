@@ -160,6 +160,21 @@ public class MapCollageBuilder extends AbstractBuilder{
 			Log.d(TAG, "Failed to populate all slots with pictures");
 		}
 		updatePicturesOfSlots (tuples,photosList);	
+		photosList.clear();
+		for (SlotPushPinTuple tuple :tuples )
+		{
+			photosList.add(tuple.getPushpin().getPhoto());
+		}
+		mapFromDataSource = BingServices.getStaticMap(photosList, 
+				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
+		if (mapFromDataSource == null)
+		{
+			Log.d(TAG, "Stop populate template, because error occured while trying to get map from BING");
+			return false;
+		}
+		else {
+			((MapTemplate)template).setMap(mapFromDataSource);
+		}
 		
 		// cretaes line which will be added to the collage
 		linesList = convertTupplesToLines(tuples);
