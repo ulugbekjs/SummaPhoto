@@ -23,8 +23,7 @@ import Partitioning.DBScan;
 public class SmartModeFlow {
 
 	private static final String TAG = SmartModeFlow.class.getName();
-	private static final int MIN_EVENTS = 2;
-	//	private static ScheduledExecutorService scheduler = null;
+	private static final int MIN_EVENTS = 3;
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
 	private static ActivationManager manager = ActivationManager.getInstance();  
@@ -33,16 +32,6 @@ public class SmartModeFlow {
 	}
 
 	public static void startFlow() {
-		//		if (scheduler == null) {
-		//			scheduler =  Executors.newScheduledThreadPool(1);
-		//			// waits INTERVAL_IN_SECONDS seconds after end of last execution
-		//			scheduler.scheduleWithFixedDelay(new Runnable() {
-		//				@Override
-		//				public void run() { // this is the main flow of the app
-		//			},
-		//			20,
-		//			INTERVAL_IN_SECONDS,
-		//			TimeUnit.SECONDS);	
 		if (!isFlowRunning()) {
 			scheduler = Executors.newSingleThreadExecutor();
 			scheduler.execute(new Runnable() {

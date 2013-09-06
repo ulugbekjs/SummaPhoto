@@ -55,8 +55,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
@@ -72,7 +72,12 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	// private fields
 	private RadioGroup modeGroup;
+	private RadioButton offRadioButton;
 	private RadioButton dailyRadioBtn;
+	private RadioButton smartRadioButton;
+	private RadioButton mapRadioButton;
+	private RadioButton blocksRadioButton;
+
 	private RadioButton lastCheckedButton;
 
 	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY ) + 1;
@@ -88,14 +93,15 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		createAppFolders();
 		saveLogcatToFile();
 
-		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
-
-		startObserverService();
-
-		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+		// getting radio buttons
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
-		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+		offRadioButton = (RadioButton) findViewById(R.id.radioOff);
+		smartRadioButton = (RadioButton) findViewById(R.id.radioSmart);
+		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+		mapRadioButton = (RadioButton) findViewById(R.id.radioMapType);
+		blocksRadioButton = (RadioButton) findViewById(R.id.radioBlocksType);
 
+		lastCheckedButton = offRadioButton;
 		//	Yonatan's code
 
 
@@ -190,23 +196,89 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	}
 
+
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putBoolean("off", offRadioButton.isChecked());
+		outState.putBoolean("smart", smartRadioButton.isChecked());
+		outState.putBoolean("daily", dailyRadioBtn.isChecked());
+		outState.putBoolean("map", mapRadioButton.isChecked());
+		outState.putBoolean("blocks", blocksRadioButton.isChecked());
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+
+		offRadioButton.setChecked(savedInstanceState.getBoolean("off"));
+		smartRadioButton.setChecked(savedInstanceState.getBoolean("smart"));
+		dailyRadioBtn.setChecked(savedInstanceState.getBoolean("daily"));
+		mapRadioButton.setChecked(savedInstanceState.getBoolean("map"));
+		blocksRadioButton.setChecked(savedInstanceState.getBoolean("blocks"));
+	}
+
+	/**
+	 * create necessary folders for app
+	 * @return
+	 */
+	private boolean createAppFolders() {
+
+		if (!Common.Utils.isExternalStorageWritable())
+			return false;
+
+		//create folders for app
+		File tmpFile = new File(Constants.APP_PHOTO_DIR);
+		if (!tmpFile.exists()) {
+			tmpFile.mkdirs();
+		}
+
+		tmpFile = new File(Constants.APP_TEMP_DIR);
+		if (!tmpFile.exists()) {
+			tmpFile.mkdirs();
+		}
+
+		File nomediaFile = new File(tmpFile, ".nomedia");
+		if (!nomediaFile.exists()) {
+			try {
+				nomediaFile.createNewFile();
+			} catch (IOException e) {
+				Log.e(TAG, "Could not create .nomedia file");
+			}
+		}
+
+		tmpFile = null;
+
+
+		return true;
+	}
+
+	/**
+	 * sends an intent to start running the PhotoListenerService
+	 */
 	private void startObserverService() {
 		// start camera folder observer 
 		Intent i= new Intent(this, PhotoListenerService.class);
-		//		i.putExtra("path", Constants.PHOTO_DIR);
-		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
+		i.putExtra("path", Constants.PHOTO_DIR);
+		//		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
 		startService(i);
 	}
 
+	/**
+	 * creates and directs log to file
+	 */
 	public static void saveLogcatToFile() {    
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
-		String fileName =  "logcat_"+formatter.format(Calendar.getInstance().getTime())+".txt";
+		String fileName =  "log.txt";
 		File outputFile = new File(Constants.APP_TEMP_DIR,fileName);
-		try {
-			outputFile.createNewFile();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if (!outputFile.exists()) {
+			try {
+				outputFile.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		try {
 			@SuppressWarnings("unused")
@@ -243,36 +315,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
 	}
 
-	private boolean createAppFolders() {
-
-		if (!Common.Utils.isExternalStorageWritable())
-			return false;
-
-		//create folders for app
-		File tmpFile = new File(Constants.APP_PHOTO_DIR);
-		if (!tmpFile.exists()) {
-			tmpFile.mkdirs();
-		}
-
-		tmpFile = new File(Constants.APP_TEMP_DIR);
-		if (!tmpFile.exists()) {
-			tmpFile.mkdirs();
-		}
-
-		File nomediaFile = new File(tmpFile, ".nomedia");
-		if (!nomediaFile.exists()) {
-			try {
-				nomediaFile.createNewFile();
-			} catch (IOException e) {
-				Log.e(TAG, "Could not create .nomedia file");
-			}
-		}
-
-		tmpFile = null;
-
-
-		return true;
-	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -378,7 +421,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		if (!PhotoListenerService.isObserving()) {
 			startObserverService();
 		}
-		
+
 		turnOffDailyMode();
 
 		MODE = 1;
@@ -447,11 +490,4 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			}).setView(timePickerDialog).show();
 		}
 	}
-
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-
 }
