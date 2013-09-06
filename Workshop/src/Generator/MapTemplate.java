@@ -6,7 +6,7 @@ import Bing.StaticMap;
 
 public class MapTemplate extends AbstractTemplate{
 
-	public final static int MAP_TEMPLATES_NUM = 1; // number of templates existing for this template type
+	public final static int MAP_TEMPLATES_NUM = 2; // number of templates existing for this template type
 
 
 	private Slot mapSlot;
@@ -87,12 +87,6 @@ public class MapTemplate extends AbstractTemplate{
 			template =  getTemplate2();
 			break;
 		}
-		case 3:
-		{
-			template =  getTestTemlate();
-			break;
-		}
-//		case 4:
 //		{
 //			template =  getTemplate4();
 //			break;

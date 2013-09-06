@@ -11,6 +11,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.transform.Templates;
+
 import PhotoListener.CameraObserver;
 import android.R.integer;
 import android.R.menu;
@@ -117,13 +119,16 @@ public class Tester {
 			dest.mkdirs();
 		}
 
-		File source = new File(Constants.ROOT, "Tests5");
+		File source = new File(Constants.ROOT, "tals3");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();
+		Photo tempPhoto;
 		for (File file : files) {
 			try {
-				photos.add(Utils.createPhotoFromFile(file.getAbsolutePath()));
+				tempPhoto = Utils.createPhotoFromFile(file.getAbsolutePath());
+				if (tempPhoto != null)
+					photos.add(tempPhoto);
 			} catch (ImageProcessingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

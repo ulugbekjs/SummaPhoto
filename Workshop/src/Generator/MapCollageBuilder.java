@@ -19,6 +19,10 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.Log;
 
+/**
+ * @author omri
+ * This class extend the abstract builder, and enables to create a Map Collage
+ */
 public class MapCollageBuilder extends AbstractBuilder{
 
 	List<Line> linesList = null;
@@ -40,12 +44,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 		return super.getBestTemplate(MapTemplate.MAP_TEMPLATES_NUM, templates);
 	}
-
-	public DedicatedRequest omrisSetTemplate() {
-
-		this.template = MapTemplate.getTemplate(1);
-		return null;
-	}
+	
 
 	@Override
 	public Photo buildCollage() {
@@ -113,15 +112,17 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 
 	/**
-	 * This method locate the different pictures in the relevant slots. Return true upon success. 
+	 * The method populates different photos in different slots, and adds the map. Return true upon success.
 	 */
 	public boolean populateTemplate() {
 
 		// decide which pictures from the different events will be included in the collage
 		List<Photo> horizontalPhotosList = new LinkedList<Photo>();
-		getHorizontalPhotosForTemplate(horizontalPhotosList, false);
 		List<Photo> verticalPhotosList = new LinkedList<Photo>();
+		
+		getHorizontalPhotosForTemplate(horizontalPhotosList, false);
 		getVerticalPhotosForTemplate(verticalPhotosList, true);
+		
 		List<Photo> photosList = new LinkedList<Photo>();
 		photosList.addAll(verticalPhotosList);
 		photosList.addAll(horizontalPhotosList);
@@ -141,10 +142,9 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		HashMap<PixelPoint, Pushpin> pixelPointsToPushPins = getAdjustedPixelPointPushPinDictionary(mapFromDataSource.getPushPins());
 		HashMap<PixelPoint, Slot> pixelPointsToSlot = getPixelPointSlotDictionaryHashMap(template.slots);
-		
-		
 		if (pixelPointsToPushPins.size() < pixelPointsToSlot.size())
 		{
+			// may occur not because of error, when extra photos are taken in oreder to avoid lines intersections 
 			Log.d(TAG, "Stop populate template, because number of slots is bigegr than number of pushpins");
 			return false;
 		}
@@ -152,15 +152,18 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		
 		// decide which picture will be populated in each slot 
-		
 		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(pixelPointsToSlot, pixelPointsToPushPins);
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
 		if (tuples.size() != template.slots.length)
 		{
 			Log.d(TAG, "Failed to populate all slots with pictures");
 		}
+		
+		// populate the slots with selected pictures
 		updatePicturesOfSlots (tuples,photosList);	
 		photosList.clear();
+		
+		// receive again a map from bing, because in the first map there might be extra pushPins (becuase of extra photos)
 		for (SlotPushPinTuple tuple :tuples )
 		{
 			photosList.add(tuple.getPushpin().getPhoto());
@@ -194,7 +197,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 	/**
 	 * @param slots - array of slots of the template
-	 * @return dictionary which its keys are pixelPoints of "connection" points of the slots, and values are the relvant slots
+	 * @return dictionary which its keys are pixelPoints of "connection" points of the slots, and values are the relevant slots
 	 */
 	private HashMap<PixelPoint, Slot> getPixelPointSlotDictionaryHashMap (Slot[] slots)
 	{
@@ -211,7 +214,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 	/**
 	 * @param pushPins - the list of pushPins on map retrieved from bing
-	 * @return Dictionary which contains the actual pixel of the pushPin in the output collage as key, and the pushPin object as value 
+	 * @return Dictionary which contains the actual pixel of the pushPin in the output collage as key,
+	 *  and the pushPin object as value 
 	 */
 
 	private HashMap<PixelPoint, Pushpin> getAdjustedPixelPointPushPinDictionary(List<Pushpin> pushPins)
@@ -255,7 +259,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 		return true;
 	}
 	/**
-	 * @param tuplesList list slot to pushPin pin tuples, which should represents which slot is connected to each tuple in the collage
+	 * @param tuplesList - list of slot to pushPin pin tuples, which should represents which slot is connected to each 
+	 * pushPin in the collage
 	 * @return lines that should be added to the final collage
 	 */
 	private List<Line> convertTupplesToLines (List<SlotPushPinTuple> tuplesList)
