@@ -43,7 +43,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 	public DedicatedRequest omrisSetTemplate() {
 
-		this.template = MapTemplate.getTemplate(2);
+		this.template = MapTemplate.getTemplate(1);
 		return null;
 	}
 
@@ -153,6 +153,10 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(pixelPointsToSlot, pixelPointsToPushPins);
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
+		if (tuples.size() != template.slots.length)
+		{
+			Log.d(TAG, "Failed to populate all slots with pictures");
+		}
 		updatePicturesOfSlots (tuples,photosList);	
 		
 		// cretaes line which will be added to the collage

@@ -166,7 +166,7 @@ public class Utils {
 			}
 		}
 		catch (NullPointerException exception) {
-			Log.e("UTILS", "photo has no loction and EXIF metada libraya is shit");
+			Log.e("UTILS", "photo has no loction and EXIF metada");
 			return null;
 		}
 
