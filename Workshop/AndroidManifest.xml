@@ -37,6 +37,8 @@
         </activity>
         <service android:enabled="true" 
             android:name="com.summaphoto.PhotoListenerService"></service>
+        <service android:enabled="true" 
+            android:name="com.summaphoto.ScheduledModeService"></service>
     </application>
 
 </manifest>

@@ -1,14 +1,15 @@
-package ActivationManager;
+package com.summaphoto;
 
 import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.summaphoto.SettingsActivity;
 
 import android.os.FileObserver;
 import android.util.Log;
+import ActivationManager.ActivationManager;
+import ActivationManager.DedicatedRequest;
 import Common.ActualEventsBundle;
 import Common.Photo;
 import Common.PhotoContainer;
@@ -27,7 +28,6 @@ public class SmartModeFlow {
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
 	private static ActivationManager manager = ActivationManager.getInstance();  
-	private static final FileObserver OBSERVER = null;
 
 	private SmartModeFlow() {
 	}

@@ -13,8 +13,6 @@ import java.util.List;
 import com.adobe.xmp.impl.Utils;
 import com.summaphoto.R;
 
-import ActivationManager.ScheduledModeService;
-import ActivationManager.SmartModeFlow;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Constants;
@@ -35,27 +33,13 @@ import PhotoListener.CameraObserver;
 import android.R.drawable;
 import android.R.integer;
 import android.app.AlertDialog;
-import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.FileObserver;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -100,112 +84,118 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		setContentView(R.layout.activity_settings);
 
 		CONTEXT = this;
-//		saveLogcatToFile();
+
+		createAppFolders();
+		saveLogcatToFile();
 
 		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
 
-		// start camera folder observer 
-//		Intent i= new Intent(this, PhotoListenerService.class);
-//		//		i.putExtra("path", Constants.PHOTO_DIR);
-//		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
-//		startService(i);
+		startObserverService();
 
-//		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
-//		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
-//		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
+		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
 
 		//	Yonatan's code
 
 
-//		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-//		dailyRadioBtn.setOnClickListener(listener);
-//
-//		Button button = (Button) findViewById(R.id.button1);
-//
-//		button.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View arg0) {
-//				Tester.SmartWithMapTest();
-//			}
-//
-//		});
-//
-//		button = (Button) findViewById(R.id.button2);
-//
-//		button.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View arg0) {
-//				Tester.SmartWithBlocksTest();
-//			}
-//
-//		});
-//
-//
-//		button = (Button) findViewById(R.id.button3);
-//
-//		button.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View arg0) {
-//				Tester.ScheduledWithMapTest(22, 00);
-//			}
-//
-//		});
-//
-//
-//		button = (Button) findViewById(R.id.button4);
-//
-//		button.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View arg0) {
-//				Tester.ScheduledWithBlocksTest(22,00);
-//			}
-//
-//		});
+		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
+		dailyRadioBtn.setOnClickListener(listener);
 
+		Button button = (Button) findViewById(R.id.button1);
 
-		//		Omri's code
-		File directory = new File(PHOTO_DIR);
-		if (!directory.exists())
-			return;
-		File[] arrayOfPic =  directory.listFiles();
-		Photo tempPhoho = null;
-		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		for (File file : arrayOfPic)
-		{
-			try
-			{
-				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Tester.SmartWithMapTest();
 			}
-			catch (Exception ex)
-			{
+
+		});
+
+		button = (Button) findViewById(R.id.button2);
+
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Tester.SmartWithBlocksTest();
 			}
-			if (tempPhoho != null)
-				photosToCluster.add(tempPhoho);
-		}
-		DBScan algo = new DBScan(photosToCluster);
-		ActualEventsBundle bundle = algo.ComputeCluster();		
-		List<ActualEvent> events = new LinkedList<ActualEvent>();
-		Cluster tempCluster;
-		for (Photo p :photosToCluster)
-		{
-			tempCluster = new Cluster();
-			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-			events.add(new ActualEvent(tempCluster));
-		}
-		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		builder.omrisSetTemplate();
-		if (builder.populateTemplate())
-		{
-			builder.buildCollage();
-		}
 
-		return;
+		});
 
 
+		button = (Button) findViewById(R.id.button3);
+
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Tester.ScheduledWithMapTest(SettingsActivity.this, 11, 49);
+			}
+
+		});
+
+
+		button = (Button) findViewById(R.id.button4);
+
+		button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Tester.ScheduledWithBlocksTest(22,00);
+			}
+
+		});
+
+		//
+		//		//		Omri's code
+		//		File directory = new File(PHOTO_DIR);
+		//		if (!directory.exists())
+		//			return;
+		//		File[] arrayOfPic =  directory.listFiles();
+		//		Photo tempPhoho = null;
+		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
+		//		for (File file : arrayOfPic)
+		//		{
+		//			try
+		//			{
+		//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+		//			}
+		//			catch (Exception ex)
+		//			{
+		//			}
+		//			if (tempPhoho != null)
+		//				photosToCluster.add(tempPhoho);
+		//		}
+		//		DBScan algo = new DBScan(photosToCluster);
+		//		ActualEventsBundle bundle = algo.ComputeCluster();		
+		//		List<ActualEvent> events = new LinkedList<ActualEvent>();
+		//		Cluster tempCluster;
+		//		for (Photo p :photosToCluster)
+		//		{
+		//			tempCluster = new Cluster();
+		//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+		//			events.add(new ActualEvent(tempCluster));
+		//		}
+		//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
+		//		builder.setTemplate();
+		//		if (builder.populateTemplate())
+		//		{
+		//			builder.buildCollage();
+		//		}
+		//
+		//		return;
+
+
+	}
+
+	private void startObserverService() {
+		// start camera folder observer 
+		Intent i= new Intent(this, PhotoListenerService.class);
+		//		i.putExtra("path", Constants.PHOTO_DIR);
+		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
+		startService(i);
 	}
 
 	public static void saveLogcatToFile() {    
@@ -347,18 +337,24 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		MODE = 0;
 
+
 		// turn off active modes
+		if (PhotoListenerService.isObserving()) {
+			stopService(new Intent(this, PhotoListenerService.class));
+		}
 		if (SmartModeFlow.isFlowRunning()) {
 			turnOffSmartMode();
 		}
 		if (ScheduledModeService.isServiceRunning()) {
 			turnOffDailyMode();
 		}
-
-
 	}
 
 	private void dailyButtonClicked() {
+
+		if (PhotoListenerService.isObserving()) {
+			startObserverService();
+		}
 
 		if (SmartModeFlow.isFlowRunning())
 			turnOffSmartMode();
@@ -369,7 +365,9 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 			@Override
 			public void run() {
-				ScheduledModeService.startService(SettingsActivity.this.pickerHour, SettingsActivity.this.pickerMin);
+				ScheduledModeService.startScheduledMode(SettingsActivity.this,
+						SettingsActivity.this.pickerHour, 
+						SettingsActivity.this.pickerMin);
 			}
 		};
 
@@ -378,6 +376,10 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	private void smartButtonClicked() {
 
+		if (!PhotoListenerService.isObserving()) {
+			startObserverService();
+		}
+		
 		turnOffDailyMode();
 
 		MODE = 1;

@@ -13,8 +13,8 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
 import com.summaphoto.SettingsActivity;
+import com.summaphoto.SmartModeFlow;
 
-import ActivationManager.SmartModeFlow;
 import Common.GPSPoint;
 import Common.Photo;
 import Common.PhotoContainer;

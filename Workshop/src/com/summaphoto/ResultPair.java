@@ -1,4 +1,4 @@
-package ActivationManager;
+package com.summaphoto;
 
 import Common.Photo;
 
