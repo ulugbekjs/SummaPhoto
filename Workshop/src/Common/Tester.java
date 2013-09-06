@@ -11,17 +11,18 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import ActivationManager.ScheduledModeService;
-import ActivationManager.SmartModeFlow;
 import PhotoListener.CameraObserver;
 import android.R.integer;
 import android.R.menu;
+import android.content.Context;
 import android.os.Environment;
 import android.provider.MediaStore.Files;
 import android.util.Log;
 
 import com.drew.imaging.ImageProcessingException;
+import com.summaphoto.ScheduledModeService;
 import com.summaphoto.SettingsActivity;
+import com.summaphoto.SmartModeFlow;
 
 public class Tester {
 
@@ -33,9 +34,9 @@ public class Tester {
 		insertFilesToObservedDir(1, 2);
 	}
 	
-	public static void ScheduledWithMapTest(int hour, int min) {
-		ScheduledModeService.startService(hour, min);
+	public static void ScheduledWithMapTest(Context context, int hour, int min) {
 		insertFilesToObservedDir(2, 1);
+		ScheduledModeService.startScheduledMode(context, hour, min);
 	}
 	
 	public static void ScheduledWithBlocksTest(int hour, int min) {
