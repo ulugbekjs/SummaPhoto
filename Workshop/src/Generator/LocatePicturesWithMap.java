@@ -1,6 +1,7 @@
 
 package Generator;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -168,9 +169,19 @@ public class LocatePicturesWithMap {
 				}
 				
 			}
-			return false;
+			
 		}
-		return true;
+		Log.d(TAG, "didn't find point-slot valid dividers");
+		for (PixelPoint pushPinPoint : pushPinsSubSet)
+		{
+			Log.d(TAG, pushPinPoint.getX() + "    " + pushPinPoint.getY());
+		}
+		for (PixelPoint slotPoint : slotsSubSet)
+		{
+			Log.d(TAG, slotPoint.getX() + "    " + slotPoint.getY());
+		}
+		
+		return false;
 
 	}
 
@@ -209,6 +220,8 @@ public class LocatePicturesWithMap {
 			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
 	{
 
+		if ((listOfSplitedPixelPointSets == null) || (listOfSplitedPixelPointSets.size() < 4))
+			return false;
 		Set<PixelPoint> firstSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(0);
 		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
 		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
@@ -232,12 +245,16 @@ public class LocatePicturesWithMap {
 		{
 			slope = calculateSlope (pushPinCandidate,slotCandidate );
 			double constant = pushPinCandidate.getY() - slope * pushPinCandidate.getX();
+			if (constant != (slotCandidate.getY() - slope * slotCandidate.getX()))
+			{
+				Log.d(TAG, "error calculating slope and const");
+			}
 			for (PixelPoint pushPin :pushPinsSubSet)
 			{
 				if (pushPin == pushPinCandidate)
 					continue;
 				pointLineStatus = ComputePointLineStatus(pushPin, slope, constant,firstSubSetOfPushPinPoints, 
-						secondSubSetOfPushPinPoints, localSetForPushPinsOnLine);
+						localSetForPushPinsOnLine, secondSubSetOfPushPinPoints);
 				if (pointLineStatus == PointLineStatus.Error) {
 					return false;
 				}
@@ -247,7 +264,7 @@ public class LocatePicturesWithMap {
 				if (slot == slotCandidate)
 					continue;
 				pointLineStatus = ComputePointLineStatus(slot, slope, constant,firstSubSetofSlotsPoints, 
-						secondSubSetofSlotsPoints, localSetForSlotssOnLines);
+						localSetForSlotssOnLines, secondSubSetofSlotsPoints);
 				if (pointLineStatus == PointLineStatus.Error) {
 					return false;
 				}
@@ -354,6 +371,7 @@ public class LocatePicturesWithMap {
 		Integer numberOfSlotsAboveLine = 0;
 		double verticalLineX = pushPinCandidate.getX();
 		/// undefined undefienc undefines
+		Log.d(TAG, "calculating for undefined slope");
 		for (PixelPoint pushPin :pushPinsSubSet )
 		{
 			if (pushPinCandidate.getX() > verticalLineX)
@@ -386,32 +404,33 @@ public class LocatePicturesWithMap {
 	 * @param point - point in the plane to be checked
 	 * @param slope - slope of the line
 	 * @param constant - constant of the line
-	 * @param pointAboveLineSet
-	 * @param pointOnLineSet
-	 * @param pointUnderLineSet
+	 * @param pointAboveLineColection
+	 * @param pointOnLineCollection
+	 * @param pointsUnderLineCollection
 	 * @return This methods checks whether the point is above \ on\ under the line represented by the slope and constant,and adds
 	 * it to the relevant sets
 	 */
-	private PointLineStatus ComputePointLineStatus (PixelPoint point, double slope, double constant,  Set<PixelPoint> pointAboveLineSet,
-			Set<PixelPoint> pointOnLineSet, List<PixelPoint> pointUnderLineSet)
+	private PointLineStatus ComputePointLineStatus (PixelPoint point, double slope, double constant,  Collection<PixelPoint> pointsAboveLineCollection,
+			Collection<PixelPoint> pointsOnLineCollection, Collection<PixelPoint> pointsUnderLineCollection)
 	{
-		if ((pointAboveLineSet == null) || (pointOnLineSet == null) || (pointUnderLineSet == null))
+		if ((pointsAboveLineCollection == null) || (pointsOnLineCollection == null) || (pointsUnderLineCollection == null))
 		{
 			Log.d(TAG, "when trying to assign point to relvant set (onLine, underLine, AboveLine), one of the" +
 					"arguments to method was null");
 			return PointLineStatus.Error;
 		}
-		if (point.getX() * slope + constant < point.getY())
+		int yValueOnLineInteger = Math.round(Math.round(point.getX() * slope + constant));
+		if (yValueOnLineInteger < point.getY())
 		{
-			pointAboveLineSet.add(point);
+			pointsAboveLineCollection.add(point);
 			return PointLineStatus.pointAbove;
 		}
-		if  (point.getX() * slope + constant == point.getY())
+		if  (yValueOnLineInteger== point.getY())
 		{
-			pointOnLineSet.add(point);
+			pointsOnLineCollection.add(point);
 			return PointLineStatus.PointOn;
 		}
-		pointUnderLineSet.add(point);	
+		pointsUnderLineCollection.add(point);	
 		return PointLineStatus.PointUnder;
 	}
 	

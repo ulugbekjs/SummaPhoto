@@ -87,11 +87,11 @@ public class MapTemplate extends AbstractTemplate{
 			template =  getTemplate2();
 			break;
 		}
-//		case 3:
-//		{
-//			template =  getTemplate3();
-//			break;
-//		}
+		case 3:
+		{
+			template =  getTestTemlate();
+			break;
+		}
 //		case 4:
 //		{
 //			template =  getTemplate4();
@@ -237,6 +237,21 @@ public class MapTemplate extends AbstractTemplate{
 		template.addSlot(new Slot(new PixelPoint(735, 812), new PixelPoint (1119, 1102), new PixelPoint  (927, 812)), 5);
 		template.addSlot(new Slot(new PixelPoint(735, 0), new PixelPoint(1119, 289), new PixelPoint (927, 289)), 6);
 		template.addSlot(new Slot(new PixelPoint(350, 0), new PixelPoint(734, 289), new PixelPoint (542, 289)), 7);
+		template.mapSlot = new Slot (new PixelPoint(350, 290), new PixelPoint(1119, 811));
+		
+		return template;
+	}
+	
+//	
+//	/** template of size 1469*1102. all slots are horizontal, used only for tests!!!
+//	
+	private static MapTemplate getTestTemlate() {
+		
+		MapTemplate template = new MapTemplate(4);
+		template.addSlot(new Slot(new PixelPoint(350, 812), new PixelPoint (734, 1102), new PixelPoint  (542, 812)), 0);
+		template.addSlot(new Slot(new PixelPoint(735, 812), new PixelPoint (1119, 1102), new PixelPoint  (927, 812)), 1);
+		template.addSlot(new Slot(new PixelPoint(735, 0), new PixelPoint(1119, 289), new PixelPoint (927, 289)),2);
+		template.addSlot(new Slot(new PixelPoint(350, 0), new PixelPoint(734, 289), new PixelPoint (542, 289)), 3);
 		template.mapSlot = new Slot (new PixelPoint(350, 290), new PixelPoint(1119, 811));
 		
 		return template;

@@ -22,6 +22,7 @@ import Common.ActualEventsBundle;
 import Common.Constants;
 import Common.Photo;
 import Common.PhotoContainer;
+import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -148,11 +149,16 @@ public abstract class AbstractBuilder {
 		return queue;
 	}
 	
-	private boolean getPhotosWithRespectToTemplateSlots(List<Integer> slotsToFill, boolean horizontalPhotos, List<Photo> pickedPhotos) {
+	private boolean getPhotosWithRespectToTemplateSlots(List<Integer> slotsToFill, boolean horizontalPhotos, 
+			List<Photo> pickedPhotos) {
 
 		if (pickedPhotos == null) {
 			return false;
 		}
+		
+		Integer originalNumberOfSlotsToFill = slotsToFill.size();
+		
+		
 		
 		Queue<ActualEvent> queue = getQueue(horizontalPhotos);
 
@@ -173,7 +179,10 @@ public abstract class AbstractBuilder {
 			}
 		}
 
-		if (!slotsToFill.isEmpty()) { // events ran out before full population
+		if (!slotsToFill.isEmpty()) { 
+			// having enough photos as original request, but without extra photos
+			if (pickedPhotos.size() >= originalNumberOfSlotsToFill)
+				return true;
 			return false;
 		}
 		else {
