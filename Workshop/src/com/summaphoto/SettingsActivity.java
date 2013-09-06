@@ -56,7 +56,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "failed" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
@@ -88,104 +88,119 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		createAppFolders();
 		saveLogcatToFile();
 
-		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
+//		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
+//
+//		startObserverService();
+//
+//		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+//		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
+//		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
+//
+//		//	Yonatan's code
+//
+//
+//		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
+//		dailyRadioBtn.setOnClickListener(listener);
+//
+//		Button button = (Button) findViewById(R.id.button1);
+//
+//		button.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				Tester.SmartWithMapTest();
+//			}
+//
+//		});
+//
+//		button = (Button) findViewById(R.id.button2);
+//
+//		button.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				Tester.SmartWithBlocksTest();
+//			}
+//
+//		});
+//
+//
+//		button = (Button) findViewById(R.id.button3);
+//
+//		button.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				Tester.ScheduledWithMapTest(SettingsActivity.this, 11, 49);
+//			}
+//
+//		});
+//
+//
+//		button = (Button) findViewById(R.id.button4);
+//
+//		button.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				Tester.ScheduledWithBlocksTest(22,00);
+//			}
+//
+//		});
 
-		startObserverService();
+		
+		//		//		Omri's code	
+		
+				Boolean intersect;
+				
+				intersect = Common.Utils.linesIntersect(-1, 1, 0, 0, -1, 1, 0, 4);
+				if (intersect)
+				{
+					Log.d(TAG, "intersect");
+				}
+				else 
+				{
 
-		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
-		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
-		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
-
-		//	Yonatan's code
-
-
-		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-		dailyRadioBtn.setOnClickListener(listener);
-
-		Button button = (Button) findViewById(R.id.button1);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.SmartWithMapTest();
-			}
-
-		});
-
-		button = (Button) findViewById(R.id.button2);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.SmartWithBlocksTest();
-			}
-
-		});
+					Log.d(TAG, " not intersect");
 
 
-		button = (Button) findViewById(R.id.button3);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.ScheduledWithMapTest(SettingsActivity.this, 11, 49);
-			}
-
-		});
-
-
-		button = (Button) findViewById(R.id.button4);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.ScheduledWithBlocksTest(22,00);
-			}
-
-		});
-
-		//
-		//		//		Omri's code
-		//		File directory = new File(PHOTO_DIR);
-		//		if (!directory.exists())
-		//			return;
-		//		File[] arrayOfPic =  directory.listFiles();
-		//		Photo tempPhoho = null;
-		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		//		for (File file : arrayOfPic)
-		//		{
-		//			try
-		//			{
-		//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-		//			}
-		//			catch (Exception ex)
-		//			{
-		//			}
-		//			if (tempPhoho != null)
-		//				photosToCluster.add(tempPhoho);
-		//		}
-		//		DBScan algo = new DBScan(photosToCluster);
-		//		ActualEventsBundle bundle = algo.ComputeCluster();		
-		//		List<ActualEvent> events = new LinkedList<ActualEvent>();
-		//		Cluster tempCluster;
-		//		for (Photo p :photosToCluster)
-		//		{
-		//			tempCluster = new Cluster();
-		//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-		//			events.add(new ActualEvent(tempCluster));
-		//		}
-		//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		//		builder.setTemplate();
-		//		if (builder.populateTemplate())
-		//		{
-		//			builder.buildCollage();
-		//		}
-		//
-		//		return;
+				}
+				File directory = new File(PHOTO_DIR);
+				if (!directory.exists())
+					return;
+				File[] arrayOfPic =  directory.listFiles();
+				Photo tempPhoho = null;
+				List<Photo> photosToCluster = new LinkedList<Photo>(); 
+				for (File file : arrayOfPic)
+				{
+					try
+					{
+						tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+					}
+					catch (Exception ex)
+					{
+					}
+					if (tempPhoho != null)
+						photosToCluster.add(tempPhoho);
+				}
+				DBScan algo = new DBScan(photosToCluster);
+				ActualEventsBundle bundle = algo.ComputeCluster();		
+				List<ActualEvent> events = new LinkedList<ActualEvent>();
+				Cluster tempCluster;
+				for (Photo p :photosToCluster)
+				{
+					tempCluster = new Cluster();
+					tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+					events.add(new ActualEvent(tempCluster));
+				}
+				MapCollageBuilder builder = new MapCollageBuilder(bundle);
+				builder.omrisSetTemplate();
+				if (builder.populateTemplate())
+				{
+					builder.buildCollage();
+				}
+		
+				return;
 
 
 	}

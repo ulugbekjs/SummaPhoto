@@ -125,22 +125,22 @@ public class LocatePicturesWithMap {
 		}
 		if (pushPinsSubSet.size() == 0)
 			return true;
-		if (pushPinsSubSet.size() == 1){
-			PixelPoint lastSlot = null;
-			PixelPoint lastPushPin = null;
-			if (pushPinsSubSet.iterator().hasNext() && slotsSubSet.iterator().hasNext()) {
-				lastPushPin = pushPinsSubSet.iterator().next(); 
-				lastSlot = slotsSubSet.iterator().next();
-				tempTupleToAdd = new SlotPushPinTuple (lastPushPin, pixelPointToPushPinDictionary.get(lastPushPin),
-						lastSlot,pixelPointToSlotDictionary.get(lastSlot));
-				slotsToPushPinList.add(tempTupleToAdd);
-				return true;
-
-			}
-			else {
-				return false;
-			}
-		}
+//		if (pushPinsSubSet.size() == 1){
+//			PixelPoint lastSlot = null;
+//			PixelPoint lastPushPin = null;
+//			if (pushPinsSubSet.iterator().hasNext() && slotsSubSet.iterator().hasNext()) {
+//				lastPushPin = pushPinsSubSet.iterator().next(); 
+//				lastSlot = slotsSubSet.iterator().next();
+//				tempTupleToAdd = new SlotPushPinTuple (lastPushPin, pixelPointToPushPinDictionary.get(lastPushPin),
+//						lastSlot,pixelPointToSlotDictionary.get(lastSlot));
+//				slotsToPushPinList.add(tempTupleToAdd);
+//				return true;
+//
+//			}
+//			else {
+//				return false;
+//			}
+//		}
 
 		for (PixelPoint pushPinPoint : pushPinsSubSet) {
 			// First try to split the sets with closest point in pointsOnFrameSubSetSet to the chosen point
@@ -236,45 +236,50 @@ public class LocatePicturesWithMap {
 
 
 		double slope;
-	
+		double constant;
 
 		Boolean isUndefinedSlope = pushPinCandidate.getX() == slotCandidate.getX();
 		PointLineStatus pointLineStatus = null;
 		// the equation of the line between those points is: Y = slope * x + constant
-		if (!isUndefinedSlope)
+		
+		// in case that the line is vertical to X axis, then slope is undefined, and constant is the X coordinate
+		if (isUndefinedSlope)
+		{
+			slope = Double.NaN;
+			constant = pushPinCandidate.getX();
+		}
+
+		else 
 		{
 			slope = calculateSlope (pushPinCandidate,slotCandidate );
-			double constant = pushPinCandidate.getY() - slope * pushPinCandidate.getX();
+			constant = pushPinCandidate.getY() - slope * pushPinCandidate.getX();
 			if (constant != (slotCandidate.getY() - slope * slotCandidate.getX()))
 			{
 				Log.d(TAG, "error calculating slope and const");
 			}
-			for (PixelPoint pushPin :pushPinsSubSet)
-			{
-				if (pushPin == pushPinCandidate)
-					continue;
-				pointLineStatus = ComputePointLineStatus(pushPin, slope, constant,firstSubSetOfPushPinPoints, 
-						localSetForPushPinsOnLine, secondSubSetOfPushPinPoints);
-				if (pointLineStatus == PointLineStatus.Error) {
-					return false;
-				}
-			}
-			for (PixelPoint slot :slotsSubSet)
-			{
-				if (slot == slotCandidate)
-					continue;
-				pointLineStatus = ComputePointLineStatus(slot, slope, constant,firstSubSetofSlotsPoints, 
-						localSetForSlotssOnLines, secondSubSetofSlotsPoints);
-				if (pointLineStatus == PointLineStatus.Error) {
-					return false;
-				}
-			}
-		}
-		else 
+		}	
+
+		for (PixelPoint pushPin :pushPinsSubSet)
 		{
-			return isSplitingEqualUndefinedSlope (pushPinsSubSet, slotsSubSet, pushPinCandidate, slotCandidate, listOfSplitedPixelPointSets);
+			if (pushPin == pushPinCandidate)
+				continue;
+			pointLineStatus = ComputePointLineStatus(pushPin, slope, constant,firstSubSetOfPushPinPoints, 
+					localSetForPushPinsOnLine, secondSubSetOfPushPinPoints,isUndefinedSlope );
+			if (pointLineStatus == PointLineStatus.Error) {
+				return false;
+			}
 		}
-		
+		for (PixelPoint slot :slotsSubSet)
+		{
+			if (slot == slotCandidate)
+				continue;
+			pointLineStatus = ComputePointLineStatus(slot, slope, constant,firstSubSetofSlotsPoints, 
+					localSetForSlotssOnLines, secondSubSetofSlotsPoints, isUndefinedSlope);
+			if (pointLineStatus == PointLineStatus.Error) {
+				return false;
+			}
+		}
+
 		Integer numberOfPushPinsAboveLine =  firstSubSetOfPushPinPoints.size();
 		Integer numberOfSlotsAboveLine = firstSubSetofSlotsPoints.size();
 		Integer numberOfPushPinsUnderLine = secondSubSetOfPushPinPoints.size();
@@ -359,43 +364,43 @@ public class LocatePicturesWithMap {
 	 * @return True if the pushPin candidate and slot candidate split the plane in such way that the line between them won't
 	 * intersect other lines between pushPins and slots
 	 */
-	private Boolean isSplitingEqualUndefinedSlope (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
-			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
-	{
-
-		Set<PixelPoint> firstSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(0);
-		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
-		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
-		Set<PixelPoint> secondSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(3);
-		Integer numberOfPushPinsAboveLine = 0;
-		Integer numberOfSlotsAboveLine = 0;
-		double verticalLineX = pushPinCandidate.getX();
-		/// undefined undefienc undefines
-		Log.d(TAG, "calculating for undefined slope");
-		for (PixelPoint pushPin :pushPinsSubSet )
-		{
-			if (pushPinCandidate.getX() > verticalLineX)
-			{
-				numberOfPushPinsAboveLine++;
-				firstSubSetOfPushPinPoints.add(pushPin);
-			}
-			else {
-				secondSubSetOfPushPinPoints.add(pushPin);
-			}
-		}
-		for (PixelPoint slot :slotsSubSet )
-		{
-			if (slot.getX() > verticalLineX)
-			{
-				numberOfSlotsAboveLine++;
-				firstSubSetofSlotsPoints.add(slot);
-			}
-			else {
-				secondSubSetofSlotsPoints.add(slot);
-			}
-		}
-		return (numberOfSlotsAboveLine == numberOfPushPinsAboveLine);
-	}
+//	private Boolean isSplitingEqualUndefinedSlope (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
+//			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
+//	{
+//
+//		Set<PixelPoint> firstSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(0);
+//		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
+//		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
+//		Set<PixelPoint> secondSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(3);
+//		Integer numberOfPushPinsAboveLine = 0;
+//		Integer numberOfSlotsAboveLine = 0;
+//		double verticalLineX = pushPinCandidate.getX();
+//		/// undefined undefienc undefines
+//		Log.d(TAG, "calculating for undefined slope");
+//		for (PixelPoint pushPin :pushPinsSubSet )
+//		{
+//			if (pushPinCandidate.getX() > verticalLineX)
+//			{
+//				numberOfPushPinsAboveLine++;
+//				firstSubSetOfPushPinPoints.add(pushPin);
+//			}
+//			else {
+//				secondSubSetOfPushPinPoints.add(pushPin);
+//			}
+//		}
+//		for (PixelPoint slot :slotsSubSet )
+//		{
+//			if (slot.getX() > verticalLineX)
+//			{
+//				numberOfSlotsAboveLine++;
+//				firstSubSetofSlotsPoints.add(slot);
+//			}
+//			else {
+//				secondSubSetofSlotsPoints.add(slot);
+//			}
+//		}
+//		return (numberOfSlotsAboveLine == numberOfPushPinsAboveLine);
+//	}
 
 
 	
@@ -411,7 +416,7 @@ public class LocatePicturesWithMap {
 	 * it to the relevant sets
 	 */
 	private PointLineStatus ComputePointLineStatus (PixelPoint point, double slope, double constant,  Collection<PixelPoint> pointsAboveLineCollection,
-			Collection<PixelPoint> pointsOnLineCollection, Collection<PixelPoint> pointsUnderLineCollection)
+			Collection<PixelPoint> pointsOnLineCollection, Collection<PixelPoint> pointsUnderLineCollection, Boolean undefinedSlope)
 	{
 		if ((pointsAboveLineCollection == null) || (pointsOnLineCollection == null) || (pointsUnderLineCollection == null))
 		{
@@ -419,16 +424,32 @@ public class LocatePicturesWithMap {
 					"arguments to method was null");
 			return PointLineStatus.Error;
 		}
-		int yValueOnLineInteger = Math.round(Math.round(point.getX() * slope + constant));
-		if (yValueOnLineInteger < point.getY())
+		if (!undefinedSlope)
 		{
-			pointsAboveLineCollection.add(point);
-			return PointLineStatus.pointAbove;
+			int yValueOnLineInteger = Math.round(Math.round(point.getX() * slope + constant));
+			if (yValueOnLineInteger < point.getY())
+			{
+				pointsAboveLineCollection.add(point);
+				return PointLineStatus.pointAbove;
+			}
+			if  (yValueOnLineInteger== point.getY())
+			{
+				pointsOnLineCollection.add(point);
+				return PointLineStatus.PointOn;
+			}
 		}
-		if  (yValueOnLineInteger== point.getY())
+		else 
 		{
-			pointsOnLineCollection.add(point);
-			return PointLineStatus.PointOn;
+			if (constant < point.getX())
+			{
+				pointsAboveLineCollection.add(point);
+				return PointLineStatus.pointAbove;
+			}
+			if  (constant== point.getX())
+			{
+				pointsOnLineCollection.add(point);
+				return PointLineStatus.PointOn;
+			}	
 		}
 		pointsUnderLineCollection.add(point);	
 		return PointLineStatus.PointUnder;
