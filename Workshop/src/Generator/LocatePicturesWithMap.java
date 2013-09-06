@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.security.auth.PrivateCredentialPermission;
 
+import android.R.bool;
 import android.R.integer;
 import android.provider.SyncStateContract.Constants;
 import android.util.Log;
@@ -165,7 +166,9 @@ public class LocatePicturesWithMap {
 						return true;
 					}
 				}
+				
 			}
+			return false;
 		}
 		return true;
 
@@ -203,6 +206,302 @@ public class LocatePicturesWithMap {
 	 * intersect other lines between pushPins and slots
 	 */
 	private Boolean isSplitingEqual (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
+			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
+	{
+
+		Set<PixelPoint> firstSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(0);
+		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
+		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
+		Set<PixelPoint> secondSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(3);
+		firstSubSetofSlotsPoints.clear();
+		firstSubSetOfPushPinPoints.clear();
+		secondSubSetofSlotsPoints.clear();
+		secondSubSetOfPushPinPoints.clear();
+		
+		List<PixelPoint> localSetForPushPinsOnLine = new LinkedList<PixelPoint>() ;
+		List<PixelPoint> localSetForSlotssOnLines = new LinkedList<PixelPoint>() ;
+
+
+		double slope;
+	
+
+		Boolean isUndefinedSlope = pushPinCandidate.getX() == slotCandidate.getX();
+		PointLineStatus pointLineStatus = null;
+		// the equation of the line between those points is: Y = slope * x + constant
+		if (!isUndefinedSlope)
+		{
+			slope = calculateSlope (pushPinCandidate,slotCandidate );
+			double constant = pushPinCandidate.getY() - slope * pushPinCandidate.getX();
+			for (PixelPoint pushPin :pushPinsSubSet)
+			{
+				if (pushPin == pushPinCandidate)
+					continue;
+				pointLineStatus = ComputePointLineStatus(pushPin, slope, constant,firstSubSetOfPushPinPoints, 
+						secondSubSetOfPushPinPoints, localSetForPushPinsOnLine);
+				if (pointLineStatus == PointLineStatus.Error) {
+					return false;
+				}
+			}
+			for (PixelPoint slot :slotsSubSet)
+			{
+				if (slot == slotCandidate)
+					continue;
+				pointLineStatus = ComputePointLineStatus(slot, slope, constant,firstSubSetofSlotsPoints, 
+						secondSubSetofSlotsPoints, localSetForSlotssOnLines);
+				if (pointLineStatus == PointLineStatus.Error) {
+					return false;
+				}
+			}
+		}
+		else 
+		{
+			return isSplitingEqualUndefinedSlope (pushPinsSubSet, slotsSubSet, pushPinCandidate, slotCandidate, listOfSplitedPixelPointSets);
+		}
+		
+		Integer numberOfPushPinsAboveLine =  firstSubSetOfPushPinPoints.size();
+		Integer numberOfSlotsAboveLine = firstSubSetofSlotsPoints.size();
+		Integer numberOfPushPinsUnderLine = secondSubSetOfPushPinPoints.size();
+		Integer numberOfSlotsUnderLine = secondSubSetofSlotsPoints.size();
+		Integer numberOfPushPinsOnLine = localSetForPushPinsOnLine.size();
+		Integer numberOfSlotsOnLine = localSetForSlotssOnLines.size();
+		
+		
+		if (numberOfPushPinsAboveLine == numberOfSlotsAboveLine)
+		{
+			secondSubSetOfPushPinPoints.addAll(localSetForPushPinsOnLine);
+			secondSubSetofSlotsPoints.addAll(localSetForSlotssOnLines);
+			return true;
+		}
+		if (numberOfPushPinsUnderLine == numberOfSlotsUnderLine)
+		{
+			firstSubSetOfPushPinPoints.addAll(localSetForPushPinsOnLine);
+			firstSubSetofSlotsPoints.addAll(localSetForSlotssOnLines);
+			return true;
+		}
+		if (((Math.abs(numberOfPushPinsAboveLine - numberOfSlotsAboveLine) <= numberOfPushPinsOnLine) &&
+				(numberOfPushPinsAboveLine < numberOfSlotsAboveLine)) || 
+			 ((Math.abs(numberOfPushPinsAboveLine - numberOfSlotsAboveLine) <= numberOfSlotsOnLine)) && 
+			 	(numberOfPushPinsAboveLine > numberOfSlotsAboveLine))
+		{
+			Integer numberOfNeededItmesAboveLine = Math.max(numberOfPushPinsAboveLine, numberOfSlotsAboveLine);
+			if (!moveFromOnLineListToAboveAndUnderSets(firstSubSetOfPushPinPoints, secondSubSetOfPushPinPoints, 
+					localSetForPushPinsOnLine, numberOfPushPinsAboveLine, numberOfNeededItmesAboveLine))
+				return false;
+			if (!moveFromOnLineListToAboveAndUnderSets(firstSubSetofSlotsPoints, secondSubSetofSlotsPoints, 
+					localSetForSlotssOnLines, numberOfSlotsAboveLine, numberOfNeededItmesAboveLine))
+				return false;
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param aboveSet - set of PixelPoints that are above line
+	 * @param underSet - set of PixelPoints that are under line
+	 * @param onLineList - list of PixelPoints that are int line
+	 * @param currentNumberOfItemsAboveLine
+	 * @param numberOfNeededItmesAboveLine
+	 * @return - True if succeed to move the (numberOfNeededItemsAboveLine - currentNumberOfItemsAboveLine) items from the list t
+	 * to the aboveSet. other items in the list will be moved to the under set
+	 */
+	private Boolean moveFromOnLineListToAboveAndUnderSets (Set <PixelPoint> aboveSet, Set <PixelPoint> underSet,
+			List<PixelPoint> onLineList, int currentNumberOfItemsAboveLine, int numberOfNeededItmesAboveLine  )
+	{
+		for (int i=currentNumberOfItemsAboveLine; i < numberOfNeededItmesAboveLine; i ++)
+		{
+			
+			if (!addOneItemToSetFromList(onLineList, aboveSet))
+			{
+				Log.d(TAG, "trying to move items from list of pushPins on line while it is empty");
+				return false;
+			}
+		}
+		underSet.addAll(onLineList);
+		return true;
+	}
+	
+	/**
+	 * @param list - list to get an item
+	 * @param set - set wehere to add the item
+	 * @return - True uppon successfull adding of first item in list to the ser
+	 */
+	private Boolean addOneItemToSetFromList (List<PixelPoint> list, Set<PixelPoint> set)
+	{
+		if ((list == null) || (list.size() == 0 ) || (set == null))
+			return false;
+		set.add(list.remove(0));
+		return true;
+	}
+	
+	
+	/**
+	 * @param pushPinsSubSet - sub set of pushPins that had to be matched to slots
+	 * @param slotsSubSet - sub set of slots that had to me matched to push pins
+	 * @param pushPinCandidate - push pin candidate
+	 * @param slotCandidate - slot candidate
+	 * @return True if the pushPin candidate and slot candidate split the plane in such way that the line between them won't
+	 * intersect other lines between pushPins and slots
+	 */
+	private Boolean isSplitingEqualUndefinedSlope (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
+			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
+	{
+
+		Set<PixelPoint> firstSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(0);
+		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
+		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
+		Set<PixelPoint> secondSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(3);
+		Integer numberOfPushPinsAboveLine = 0;
+		Integer numberOfSlotsAboveLine = 0;
+		double verticalLineX = pushPinCandidate.getX();
+		/// undefined undefienc undefines
+		for (PixelPoint pushPin :pushPinsSubSet )
+		{
+			if (pushPinCandidate.getX() > verticalLineX)
+			{
+				numberOfPushPinsAboveLine++;
+				firstSubSetOfPushPinPoints.add(pushPin);
+			}
+			else {
+				secondSubSetOfPushPinPoints.add(pushPin);
+			}
+		}
+		for (PixelPoint slot :slotsSubSet )
+		{
+			if (slot.getX() > verticalLineX)
+			{
+				numberOfSlotsAboveLine++;
+				firstSubSetofSlotsPoints.add(slot);
+			}
+			else {
+				secondSubSetofSlotsPoints.add(slot);
+			}
+		}
+		return (numberOfSlotsAboveLine == numberOfPushPinsAboveLine);
+	}
+
+
+	
+	
+	/** 
+	 * @param point - point in the plane to be checked
+	 * @param slope - slope of the line
+	 * @param constant - constant of the line
+	 * @param pointAboveLineSet
+	 * @param pointOnLineSet
+	 * @param pointUnderLineSet
+	 * @return This methods checks whether the point is above \ on\ under the line represented by the slope and constant,and adds
+	 * it to the relevant sets
+	 */
+	private PointLineStatus ComputePointLineStatus (PixelPoint point, double slope, double constant,  Set<PixelPoint> pointAboveLineSet,
+			Set<PixelPoint> pointOnLineSet, List<PixelPoint> pointUnderLineSet)
+	{
+		if ((pointAboveLineSet == null) || (pointOnLineSet == null) || (pointUnderLineSet == null))
+		{
+			Log.d(TAG, "when trying to assign point to relvant set (onLine, underLine, AboveLine), one of the" +
+					"arguments to method was null");
+			return PointLineStatus.Error;
+		}
+		if (point.getX() * slope + constant < point.getY())
+		{
+			pointAboveLineSet.add(point);
+			return PointLineStatus.pointAbove;
+		}
+		if  (point.getX() * slope + constant == point.getY())
+		{
+			pointOnLineSet.add(point);
+			return PointLineStatus.PointOn;
+		}
+		pointUnderLineSet.add(point);	
+		return PointLineStatus.PointUnder;
+	}
+	
+
+	/**
+	 * 
+	 * @param pointA - first point
+	 * @param PointB - second point
+	 * @return the slope of the line which connect those two points
+	 */
+	private double calculateSlope (PixelPoint pointA, PixelPoint PointB)
+	{
+		Double deltaY;
+		Double deltaX;
+		Double slope;
+		if (pointA.getX() > PointB.getX() ){
+			deltaY = (double) (pointA.getY() - PointB.getY());
+			deltaX = (double) (pointA.getX() - PointB.getX());
+		}
+		else {
+			deltaY = (double) (PointB.getY() - pointA.getY() );
+			deltaX = (double) (PointB.getX()- pointA.getX());
+		}
+		slope = deltaY / deltaX;
+		return slope;
+	}
+	
+	/** This enum describes the relations between line and point on a plane **/ 
+	private enum PointLineStatus
+	{
+		pointAbove,
+		PointOn,
+		PointUnder,
+		Error
+	}
+
+	/**
+	 * This class represents a slot-pushPin tupple, which indicates that in specific collage a pushPin is connected to a slot
+	 * @author omri
+	 *
+	 */
+	public class SlotPushPinTuple
+	{
+		private PixelPoint pushPinPoint;
+		private PixelPoint slotConnectionPoint;
+		private Slot slot;
+		private Pushpin pushPin;
+
+
+		public SlotPushPinTuple (PixelPoint pushPinPoint, Pushpin pushpin, PixelPoint slotConnectionPoint,  Slot slot)
+		{
+			this.pushPinPoint = pushPinPoint;
+			this.slotConnectionPoint = slotConnectionPoint;
+			this.pushPin = pushpin;
+			this.slot = slot;	
+		}
+
+		public PixelPoint getPointOnMapPixelPoint ()
+		{
+			return pushPinPoint;
+		}
+
+		public PixelPoint getPointOnFrame ()
+		{
+			return slotConnectionPoint;
+		}
+
+		public Slot getSlot ()
+		{
+			return this.slot;
+		}
+
+
+		public Pushpin getPushpin()
+		{
+			return this.pushPin;
+		}
+
+	}
+	
+	/**
+	 * @param pushPinsSubSet - sub set of pushPins that had to be matched to slots
+	 * @param slotsSubSet - sub set of slots that had to me matched to push pins
+	 * @param pushPinCandidate - push pin candidate
+	 * @param slotCandidate - slot candidate
+	 * @return True if the pushPin candidate and slot candidate split the plane in such way that the line between them won't
+	 * intersect other lines between pushPins and slots
+	 */
+	/**
+	private Boolean isSplitingEqualCopy (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
 			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
 	{
 
@@ -330,52 +629,9 @@ public class LocatePicturesWithMap {
 		}
 		return false;
 	}
+	**/
+	/** This methods checks whether the point is above the line represented by the slope and constant **/
 	/**
-	 * @param pushPinsSubSet - sub set of pushPins that had to be matched to slots
-	 * @param slotsSubSet - sub set of slots that had to me matched to push pins
-	 * @param pushPinCandidate - push pin candidate
-	 * @param slotCandidate - slot candidate
-	 * @return True if the pushPin candidate and slot candidate split the plane in such way that the line between them won't
-	 * intersect other lines between pushPins and slots
-	 */
-	private Boolean isSplitingEqualUndefinedSlope (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
-			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
-	{
-
-		Set<PixelPoint> firstSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(0);
-		Set<PixelPoint> firstSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(1);
-		Set<PixelPoint> secondSubSetofSlotsPoints = listOfSplitedPixelPointSets.get(2);
-		Set<PixelPoint> secondSubSetOfPushPinPoints = listOfSplitedPixelPointSets.get(3);
-		Integer numberOfPushPinsAboveLine = 0;
-		Integer numberOfSlotsAboveLine = 0;
-		double verticalLineX = pushPinCandidate.getX();
-		for (PixelPoint pushPin :pushPinsSubSet )
-		{
-			if (pushPinCandidate.getX() > verticalLineX)
-			{
-				numberOfPushPinsAboveLine++;
-				firstSubSetOfPushPinPoints.add(pushPin);
-			}
-			else {
-				secondSubSetOfPushPinPoints.add(pushPin);
-			}
-		}
-		for (PixelPoint slot :slotsSubSet )
-		{
-			if (slot.getX() > verticalLineX)
-			{
-				numberOfSlotsAboveLine++;
-				firstSubSetofSlotsPoints.add(slot);
-			}
-			else {
-				secondSubSetofSlotsPoints.add(slot);
-			}
-		}
-		return (numberOfSlotsAboveLine == numberOfPushPinsAboveLine);
-	}
-
-
-	/** This methods checks whether the point is above the line represented by the slope and constant **/ 
 	private PointLineStatus isPointAboveLine (PixelPoint point, double slope, double constant)
 	{
 		if (point.getX() * slope + constant < point.getY())
@@ -384,80 +640,6 @@ public class LocatePicturesWithMap {
 			return PointLineStatus.PointOn;
 		return PointLineStatus.PointUnder;
 	}
+	**/
 	
-
-	/**
-	 * 
-	 * @param pointA - first point
-	 * @param PointB - second point
-	 * @return the slope of the line which connect those two points
-	 */
-	private double calculateSlope (PixelPoint pointA, PixelPoint PointB)
-	{
-		Double deltaY;
-		Double deltaX;
-		Double slope;
-		if (pointA.getX() > PointB.getX() ){
-			deltaY = (double) (pointA.getY() - PointB.getY());
-			deltaX = (double) (pointA.getX() - PointB.getX());
-		}
-		else {
-			deltaY = (double) (PointB.getY() - pointA.getY() );
-			deltaX = (double) (PointB.getX()- pointA.getX());
-		}
-		slope = deltaY / deltaX;
-		return slope;
-	}
-	
-	/** This enum describes the relations between line and point on a plane **/ 
-	private enum PointLineStatus
-	{
-		pointAbove,
-		PointOn,
-		PointUnder
-	}
-
-	/**
-	 * This class represents a slot-pushPin tupple, which indicates that in specific collage a pushPin is connected to a slot
-	 * @author omri
-	 *
-	 */
-	public class SlotPushPinTuple
-	{
-		private PixelPoint pushPinPoint;
-		private PixelPoint slotConnectionPoint;
-		private Slot slot;
-		private Pushpin pushPin;
-
-
-		public SlotPushPinTuple (PixelPoint pushPinPoint, Pushpin pushpin, PixelPoint slotConnectionPoint,  Slot slot)
-		{
-			this.pushPinPoint = pushPinPoint;
-			this.slotConnectionPoint = slotConnectionPoint;
-			this.pushPin = pushpin;
-			this.slot = slot;	
-		}
-
-		public PixelPoint getPointOnMapPixelPoint ()
-		{
-			return pushPinPoint;
-		}
-
-		public PixelPoint getPointOnFrame ()
-		{
-			return slotConnectionPoint;
-		}
-
-		public Slot getSlot ()
-		{
-			return this.slot;
-		}
-
-
-		public Pushpin getPushpin()
-		{
-			return this.pushPin;
-		}
-
-	}
 }

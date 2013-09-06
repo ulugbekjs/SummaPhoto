@@ -43,7 +43,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 
 	public DedicatedRequest omrisSetTemplate() {
 
-		this.template = MapTemplate.getTemplate(1);
+		this.template = MapTemplate.getTemplate(2);
 		return null;
 	}
 
