@@ -33,27 +33,13 @@ import PhotoListener.CameraObserver;
 import android.R.drawable;
 import android.R.integer;
 import android.app.AlertDialog;
-import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.FileObserver;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -104,11 +90,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
 
-		// start camera folder observer 
-		Intent i= new Intent(this, PhotoListenerService.class);
-		//		i.putExtra("path", Constants.PHOTO_DIR);
-		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
-		startService(i);
+		startObserverService();
 
 		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
@@ -206,6 +188,14 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		//		return;
 
 
+	}
+
+	private void startObserverService() {
+		// start camera folder observer 
+		Intent i= new Intent(this, PhotoListenerService.class);
+		//		i.putExtra("path", Constants.PHOTO_DIR);
+		i.putExtra("path", Constants.ROOT + File.separator + "Watched" + File.separator);
+		startService(i);
 	}
 
 	public static void saveLogcatToFile() {    
@@ -347,7 +337,11 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		MODE = 0;
 
+
 		// turn off active modes
+		if (PhotoListenerService.isObserving()) {
+			stopService(new Intent(this, PhotoListenerService.class));
+		}
 		if (SmartModeFlow.isFlowRunning()) {
 			turnOffSmartMode();
 		}
@@ -357,6 +351,10 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	}
 
 	private void dailyButtonClicked() {
+
+		if (PhotoListenerService.isObserving()) {
+			startObserverService();
+		}
 
 		if (SmartModeFlow.isFlowRunning())
 			turnOffSmartMode();
@@ -378,6 +376,10 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	private void smartButtonClicked() {
 
+		if (!PhotoListenerService.isObserving()) {
+			startObserverService();
+		}
+		
 		turnOffDailyMode();
 
 		MODE = 1;
@@ -410,8 +412,8 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	}
 
 	private void turnOffDailyMode() {
-		//		if (ScheduledModeService.isServiceRunning())
-		//			ScheduledModeService.stopService();
+		if (ScheduledModeService.isServiceRunning())
+			ScheduledModeService.stopService();
 	}
 
 	private class ScheduledModeListener implements View.OnClickListener { 

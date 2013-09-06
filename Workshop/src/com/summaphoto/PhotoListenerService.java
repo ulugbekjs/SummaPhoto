@@ -2,6 +2,7 @@ package com.summaphoto;
 
 
 import PhotoListener.CameraObserver;
+import android.R.bool;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -56,6 +57,17 @@ public class PhotoListenerService extends Service {
 		// We want this service to continue running until it is explicitly
 		// stopped, so return sticky.
 		return START_REDELIVER_INTENT;
+	}
+	
+	public static boolean isObserving() {
+		return (observer != null);
+	}
+	
+	
+	@Override
+	public void onDestroy() {
+		observer = null;
+		super.onDestroy();
 	}
 
 	private void startObservingInForeground() {
