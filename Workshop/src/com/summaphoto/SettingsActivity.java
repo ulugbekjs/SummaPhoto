@@ -337,7 +337,6 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 		MODE = 0;
 
-
 		// turn off active modes
 		if (PhotoListenerService.isObserving()) {
 			stopService(new Intent(this, PhotoListenerService.class));
@@ -352,7 +351,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 
 	private void dailyButtonClicked() {
 
-		if (PhotoListenerService.isObserving()) {
+		if (!PhotoListenerService.isObserving()) {
 			startObserverService();
 		}
 
