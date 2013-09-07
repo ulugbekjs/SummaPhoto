@@ -85,13 +85,6 @@ public class SettingsActivity extends Activity { // Extends FragmentActivity to 
 	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY ) + 1;
 	private int pickerMin = 0;
 
-	@Override
-	public View onCreateView(String name, Context context, AttributeSet attrs) {
-		// TODO Auto-generated method stub
-		return super.onCreateView(name, context, attrs);
-	}
-
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -223,6 +216,7 @@ public class SettingsActivity extends Activity { // Extends FragmentActivity to 
 		outState.putBoolean("daily", dailyRadioBtn.isChecked());
 		outState.putBoolean("map", mapRadioButton.isChecked());
 		outState.putBoolean("blocks", blocksRadioButton.isChecked());
+
 	}
 
 	@Override

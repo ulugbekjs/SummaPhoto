@@ -12,9 +12,8 @@ public class PhotoContainer {
 	private static final String TAG = PhotoContainer.class.getName();
 	private static final PhotoContainer instance = new PhotoContainer();
 
-	private List<Photo> processedPhotos = new ArrayList<Photo>();
+	private BlockingQueue<Photo> processedPhotos = new LinkedBlockingQueue<Photo>();  
 	private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
-//	private deletedPhotos<String>
 
 	private PhotoContainer() {
 	}  
@@ -23,7 +22,7 @@ public class PhotoContainer {
 		return instance;
 	}
 
-	public synchronized List<Photo> getProcessedPhotos() {
+	public synchronized BlockingQueue<Photo> getProcessedPhotos() {
 		return instance.processedPhotos;
 	}
 

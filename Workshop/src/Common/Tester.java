@@ -119,7 +119,7 @@ public class Tester {
 			dest.mkdirs();
 		}
 
-		File source = new File(Constants.ROOT, "tals3");
+		File source = new File(Constants.ROOT, "tom");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();
