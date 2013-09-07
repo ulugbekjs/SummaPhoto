@@ -81,8 +81,8 @@ public class PhotoListenerService extends Service {
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(this)
 		.setSmallIcon(R.drawable.icon)
-		.setContentTitle("Summaphoto is running")
-		.setContentText("Click to return to app")
+		.setContentTitle("SummaPhoto")
+		.setContentText("Return to app")
 		.setContentIntent(PendingIntent.getActivity(this, 0, notifyIntent, 0));
 
 		Notification notification = mBuilder.build();

@@ -32,6 +32,7 @@ import Partitioning.TestDBScan;
 import PhotoListener.CameraObserver;
 import android.R.drawable;
 import android.R.integer;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,6 +41,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -49,7 +51,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
 
-public class SettingsActivity extends FragmentActivity { // Extends FragmentActivity to support < Android 3.0
+public class SettingsActivity extends Activity { // Extends FragmentActivity to support < Android 3.0
 
 	private static final String TAG = SettingsActivity.class.getName();
 
@@ -83,6 +85,15 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY ) + 1;
 	private int pickerMin = 0;
 
+	
+	@Override
+	public View onCreateView(String name, Context context, AttributeSet attrs) {
+		// TODO Auto-generated method stub
+		return super.onCreateView(name, context, attrs);
+	}
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -102,57 +113,61 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		blocksRadioButton = (RadioButton) findViewById(R.id.radioBlocksType);
 
 		lastCheckedButton = offRadioButton;
+		
+		if (savedInstanceState != null) {
+			onRestoreInstanceState(savedInstanceState);
+		}
 		//	Yonatan's code
 
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
 
-		Button button = (Button) findViewById(R.id.button1);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.SmartWithMapTest();
-			}
-
-		});
-
-		button = (Button) findViewById(R.id.button2);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.SmartWithBlocksTest();
-			}
-
-		});
-
-
-		button = (Button) findViewById(R.id.button3);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.ScheduledWithMapTest(SettingsActivity.this, 11, 49);
-			}
-
-		});
-
-
-		button = (Button) findViewById(R.id.button4);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.ScheduledWithBlocksTest(22,00);
-			}
-
-		});
+//		Button button = (Button) findViewById(R.id.button1);
+//
+//		button.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				Tester.SmartWithMapTest();
+//			}
+//
+//		});
+//
+//		button = (Button) findViewById(R.id.button2);
+//
+//		button.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				Tester.SmartWithBlocksTest();
+//			}
+//
+//		});
+//
+//
+//		button = (Button) findViewById(R.id.button3);
+//
+//		button.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				Tester.ScheduledWithMapTest(SettingsActivity.this, 11, 49);
+//			}
+//
+//		});
+//
+//
+//		button = (Button) findViewById(R.id.button4);
+//
+//		button.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				Tester.ScheduledWithBlocksTest(22,00);
+//			}
+//
+//		});
 
 
 		//		Omri's code

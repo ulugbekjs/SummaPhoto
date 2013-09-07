@@ -14,6 +14,7 @@ public class PhotoContainer {
 
 	private List<Photo> processedPhotos = new ArrayList<Photo>();
 	private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
+//	private deletedPhotos<String>
 
 	private PhotoContainer() {
 	}  

@@ -79,12 +79,10 @@ public class MapCollageBuilder extends AbstractBuilder{
 			Log.e(TAG, "Could not add the map to canvas properly");
 		}
 		
-		int blue = 250;
 		for (Line line : linesList) {
 			// add lines
 			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-			paint.setColor(Color.rgb(62, 156, blue));
-			blue -=10;
+			paint.setColor(Color.rgb(62, 156, 250));
 			canvas.drawCircle(line.getFromPoint().getX(), line.getFromPoint().getY(), 10, paint);
 			//paint.setShader(new LinearGradient(0, 0, line.getLineXDelta(), line.getLineYDelta(), Color.YELLOW, Color.WHITE, android.graphics.Shader.TileMode.MIRROR));
 			paint.setStrokeWidth(5f);
