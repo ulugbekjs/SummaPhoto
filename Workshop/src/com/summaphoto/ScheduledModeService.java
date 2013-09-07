@@ -91,7 +91,7 @@ public class ScheduledModeService extends Service{
 
 	public static void startScheduledMode(Context context, int hour, int min) {
 		if (alarmManager != null && intent != null) {
-			alarmManager.cancel(intent);
+			stopService();
 		}
 
 		if (alarmManager == null) {
