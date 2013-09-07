@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.summaphoto"
     android:installLocation="preferExternal"
+    android:launchMode="singleInstance"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -22,22 +23,21 @@
         <activity
             android:name="com.summaphoto.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:launchMode="singleInstance"
             android:theme="@style/SummaPhotoTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.summaphoto.SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Splash" >
-        </activity>
-        <service android:enabled="true" 
-            android:name="com.summaphoto.PhotoListenerService"></service>
-        <service android:enabled="true" 
-            android:name="com.summaphoto.ScheduledModeService"></service>
+        <service
+            android:name="com.summaphoto.PhotoListenerService"
+            android:enabled="true" >
+        </service>
+        <service
+            android:name="com.summaphoto.ScheduledModeService"
+            android:enabled="true" >
+        </service>
     </application>
 
 </manifest>

@@ -74,7 +74,7 @@ public class PhotoListenerService extends Service {
 
 		Intent notifyIntent = new Intent(Intent.ACTION_MAIN);
 		notifyIntent.setClass(getApplicationContext(), SettingsActivity.class);
-		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+		notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
 				Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 
