@@ -83,12 +83,15 @@ public abstract class AbstractBuilder {
 		double min = Double.MAX_VALUE;
 		int minIndex = -1;
 
+		List<Integer> templatesNumberFitToBundle = new LinkedList<Integer>();
+		
 		// get a fitting template or pick the "closest" one
 		for (int i = 0; i<num; i++) {
 			if (templates[i].getHorizontalSlots().size() <= bundle.horizontalCount() &&
 					templates[i].getVerticalSlots().size() <= bundle.verticalCount()) { // template fits perfectly for bundle
-				chosenTemplate = templates[i];
-				break;
+				templatesNumberFitToBundle.add(i);
+				continue;
+
 			}
 			if (templateScores[i] < min) { 
 				min = templateScores[i];
@@ -96,6 +99,12 @@ public abstract class AbstractBuilder {
 			}
 		}
 
+		if (templatesNumberFitToBundle.size() != 0)
+		{
+			Random random = new Random();
+			int randChosenItem = random.nextInt(templatesNumberFitToBundle.size());
+			chosenTemplate = templates[templatesNumberFitToBundle.get(randChosenItem)];
+		}
 		DedicatedRequest request = null;
 
 		if (chosenTemplate != null) { // template was chosen

@@ -164,7 +164,7 @@ public class SettingsActivity extends Activity {
 
 		//		Omri's code
 
-		//		Tester.omriInsertFilesToObservedDir();
+				Tester.omriInsertFilesToObservedDir();
 		//						File directory = new File(PHOTO_DIR);
 		//						if (!directory.exists())
 		//							return;
