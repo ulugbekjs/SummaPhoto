@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.joda.time.Minutes;
+
 
 import android.os.FileObserver;
 import android.util.Log;
@@ -26,9 +28,12 @@ public class SmartModeFlow {
 
 	private static final String TAG = SmartModeFlow.class.getName();
 	private static final int MIN_EVENTS = 3;
+	private static final int MIN_TIME_BETWEEN_COLLAGES = 4;
+
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
 	private static ActivationManager manager = ActivationManager.getInstance();  
+	private static long lastCollageTime = -1;
 
 	private SmartModeFlow() {
 	}
@@ -62,9 +67,17 @@ public class SmartModeFlow {
 					if (collageNeeded) { // ActivationManager decided clustering should be made
 						ActualEventsBundle events = partitionToEvents();
 						Log.d(TAG, "ActualEvents calculated: " + events.getActualEvents().size());
-						
+
 						ResultPair result = null;
-						if (events.getActualEvents().size() >= MIN_EVENTS) { // only create collage if exceeds certain number of ActualEvents
+						long diffHours;
+						if (lastCollageTime != -1) {
+							diffHours = (new Date().getTime() -lastCollageTime) / (60 * 60 * 1000) % 24; // hours passed since last collage
+						}
+						else {
+							diffHours = MIN_TIME_BETWEEN_COLLAGES;
+						}
+						if ((diffHours >= MIN_TIME_BETWEEN_COLLAGES) && // only create collage if MIN_TIME_BETWEEN_COLLAGES passed
+								(events.getActualEvents().size() >= MIN_EVENTS)) { // only create collage if exceeds MIN_EVENTS value of ActualEvents
 							if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
 								Log.d(TAG, "attempting to build Block collage");
 								result =  buildCollage(new BlockCollageBuilder(events));
@@ -75,6 +88,7 @@ public class SmartModeFlow {
 							}
 							if (result.validCollage) {
 								Log.d(TAG, "Collage is valid!");
+								lastCollageTime = new Date().getTime();
 								try {
 									Utils.notifyUserCollageCreated(result.collage);
 								} catch (FileNotFoundException e) {
