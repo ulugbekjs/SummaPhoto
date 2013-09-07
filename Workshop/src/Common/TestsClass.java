@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import Generator.PixelPoint;
-import Generator.LocatePicturesWithMap.SlotPushPinTuple;
+import Generator.PopulateSlotsOfMapCollage.SlotPushPinTuple;
 
 public class TestsClass {
 	

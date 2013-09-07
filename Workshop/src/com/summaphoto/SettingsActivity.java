@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.adobe.xmp.impl.Utils;
 import com.summaphoto.R;
 
+import Bing.Pushpin;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Constants;
@@ -23,7 +25,9 @@ import Common.TestsClass;
 import Generator.AbstractTemplate;
 import Generator.Line;
 import Generator.PixelPoint;
-import Generator.LocatePicturesWithMap.SlotPushPinTuple;
+import Generator.PopulateSlotsOfMapCollage;
+import Generator.Slot;
+import Generator.PopulateSlotsOfMapCollage.SlotPushPinTuple;
 import Generator.MapCollageBuilder;
 import Partitioning.Cluster;
 import Partitioning.DBScan;
@@ -57,7 +61,7 @@ public class SettingsActivity extends Activity {
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals2" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tests5" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
@@ -91,11 +95,12 @@ public class SettingsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 
+		
 		CONTEXT = this;
 
 		createAppFolders();
 		saveLogcatToFile();
-
+		
 		// getting radio buttons
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
 		offRadioButton = (RadioButton) findViewById(R.id.radioOff);
@@ -171,16 +176,6 @@ public class SettingsActivity extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Log.d(TAG, "starting second test!!!");
-				Tester.omriInsertFilesToObservedDir();
-				try {
-					Thread.sleep(60000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Log.d(TAG, "starting thirs test!!!");
-				Tester.omriInsertFilesToObservedDir();
 		//						File directory = new File(PHOTO_DIR);
 		//						if (!directory.exists())
 		//							return;

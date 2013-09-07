@@ -60,7 +60,7 @@ public class Tester {
 		}
 
 //		File source = new File(SettingsActivity.ROOT, "Tests5");
-		File source = new File(Constants.ROOT, "Tests");
+		File source = new File(Constants.ROOT, "tom");
 
 
 		File[] files = source.listFiles();
@@ -118,7 +118,7 @@ public class Tester {
 		if (!dest.exists()) {
 			dest.mkdirs();
 		}
-		File source = new File(Constants.ROOT, "Tests5");
+		File source = new File(Constants.ROOT, "failed");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();

@@ -10,7 +10,7 @@ import Bing.Pushpin;
 import Bing.StaticMap;
 import Common.ActualEventsBundle;
 import Common.Photo;
-import Generator.LocatePicturesWithMap.SlotPushPinTuple;
+import Generator.PopulateSlotsOfMapCollage.SlotPushPinTuple;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -151,7 +151,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		
 		// decide which picture will be populated in each slot 
-		LocatePicturesWithMap locatePicturesWithMap = new LocatePicturesWithMap(pixelPointsToSlot, pixelPointsToPushPins);
+		PopulateSlotsOfMapCollage locatePicturesWithMap = new PopulateSlotsOfMapCollage(pixelPointsToSlot, pixelPointsToPushPins);
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
 		if (tuples.size() != template.slots.length)
 		{
