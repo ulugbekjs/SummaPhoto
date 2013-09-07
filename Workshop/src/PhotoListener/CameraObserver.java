@@ -59,7 +59,7 @@ public class CameraObserver extends FileObserver {
 						} catch (ImageProcessingException e) {
 							Log.e(TAG, "Photo taken: " + path + " was not yet fully saved properly");
 							try {
-								Thread.sleep(2000);
+								Thread.sleep(2000); // sometimes it takes a bit more time to save
 							} catch (InterruptedException e1) {
 								Log.e(TAG, "Waiting for photo to be saved was interrupted");
 							}
@@ -91,6 +91,7 @@ public class CameraObserver extends FileObserver {
 
 					if ((event & FileObserver.DELETE) > 0) {
 						PhotoContainer.getInstance().onDelete(file);
+						Log.d(TAG, "photo: " + path + " deleted from containers");
 					}
 				}
 			}

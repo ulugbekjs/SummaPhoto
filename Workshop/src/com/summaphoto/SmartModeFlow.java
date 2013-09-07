@@ -47,8 +47,7 @@ public class SmartModeFlow {
 					try {
 						Thread.sleep(10000);
 					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						Log.e(TAG, "sleep was interrupted");
 					}
 
 					boolean changed = manager.consumeDedictedRequests();
@@ -63,9 +62,9 @@ public class SmartModeFlow {
 					if (collageNeeded) { // ActivationManager decided clustering should be made
 						ActualEventsBundle events = partitionToEvents();
 						Log.d(TAG, "ActualEvents calculated: " + events.getActualEvents().size());
-						// build the collage from Bundle of photos
+						
 						ResultPair result = null;
-						if (events.getActualEvents().size() >= MIN_EVENTS) {
+						if (events.getActualEvents().size() >= MIN_EVENTS) { // only create collage if exceeds certain number of ActualEvents
 							if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
 								Log.d(TAG, "attempting to build Block collage");
 								result =  buildCollage(new BlockCollageBuilder(events));
@@ -75,7 +74,7 @@ public class SmartModeFlow {
 								Log.d(TAG, "attempting to build Map Collage");
 							}
 							if (result.validCollage) {
-								Log.e(TAG, "Collage is valid!");
+								Log.d(TAG, "Collage is valid!");
 								try {
 									Utils.notifyUserCollageCreated(result.collage);
 								} catch (FileNotFoundException e) {
