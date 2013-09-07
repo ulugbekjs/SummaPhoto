@@ -165,6 +165,22 @@ public class SettingsActivity extends Activity {
 		//		Omri's code
 
 				Tester.omriInsertFilesToObservedDir();
+				try {
+					Thread.sleep(60000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.d(TAG, "starting second test!!!");
+				Tester.omriInsertFilesToObservedDir();
+				try {
+					Thread.sleep(60000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.d(TAG, "starting thirs test!!!");
+				Tester.omriInsertFilesToObservedDir();
 		//						File directory = new File(PHOTO_DIR);
 		//						if (!directory.exists())
 		//							return;

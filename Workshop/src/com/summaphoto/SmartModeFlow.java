@@ -28,7 +28,7 @@ public class SmartModeFlow {
 
 	private static final String TAG = SmartModeFlow.class.getName();
 	private static final int MIN_EVENTS = 3;
-	private static final int MIN_TIME_BETWEEN_COLLAGES = 4;
+	private static final int MIN_TIME_BETWEEN_COLLAGES = 0;
 
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
@@ -76,25 +76,31 @@ public class SmartModeFlow {
 						else {
 							diffHours = MIN_TIME_BETWEEN_COLLAGES;
 						}
-						if ((diffHours >= MIN_TIME_BETWEEN_COLLAGES) && // only create collage if MIN_TIME_BETWEEN_COLLAGES passed
-								(events.getActualEvents().size() >= MIN_EVENTS)) { // only create collage if exceeds MIN_EVENTS value of ActualEvents
-							if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
-								Log.d(TAG, "attempting to build Block collage");
-								result =  buildCollage(new BlockCollageBuilder(events));
-							}
-							if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
-								result = buildCollage(new MapCollageBuilder(events));
-								Log.d(TAG, "attempting to build Map Collage");
-							}
-							if (result.validCollage) {
-								Log.d(TAG, "Collage is valid!");
-								lastCollageTime = new Date().getTime();
-								try {
-									Utils.notifyUserCollageCreated(result.collage);
-								} catch (FileNotFoundException e) {
-									Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
+						if (diffHours >= MIN_TIME_BETWEEN_COLLAGES)// only create collage if MIN_TIME_BETWEEN_COLLAGES passed
+						{
+							if 		(events.getActualEvents().size() >= MIN_EVENTS) 
+							{ // only create collage if exceeds MIN_EVENTS value of ActualEvents
+								if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
+									Log.d(TAG, "attempting to build Block collage");
+									result =  buildCollage(new BlockCollageBuilder(events));
+								}
+								if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
+									result = buildCollage(new MapCollageBuilder(events));
+									Log.d(TAG, "attempting to build Map Collage");
+								}
+								if (result.validCollage) {
+									Log.d(TAG, "Collage is valid!");
+									lastCollageTime = new Date().getTime();
+									try {
+										Utils.notifyUserCollageCreated(result.collage);
+									} catch (FileNotFoundException e) {
+										Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
+									}
 								}
 							}
+						}
+						else {
+							Log.d(TAG, "not starting to create a collage because the time diff from last collage is not enough");
 						}
 
 					}
