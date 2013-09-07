@@ -104,7 +104,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 			Log.e(TAG, "Error when saving collage file");
 			return null;
 		}
-		Log.d(TAG, "finished");
+		Log.d(TAG, "finished creating the collage");
 		return collage;
 	}
 
@@ -127,6 +127,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		
 		// get the map data and image from Bing
+		Log.d(TAG, "retrieve first map from Bing");
 		StaticMap mapFromDataSource = BingServices.getStaticMap(photosList, 
 				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
 		if (mapFromDataSource == null)
@@ -166,6 +167,8 @@ public class MapCollageBuilder extends AbstractBuilder{
 		{
 			photosList.add(tuple.getPushpin().getPhoto());
 		}
+		
+		Log.d(TAG, "retrieve final map from Bing");
 		mapFromDataSource = BingServices.getStaticMap(photosList, 
 				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
 		if (mapFromDataSource == null)

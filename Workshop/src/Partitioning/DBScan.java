@@ -5,10 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-
-import android.R.string;
 import android.util.Log;
-
 import Common.*;
 
 
@@ -86,9 +83,10 @@ public class DBScan {
 		
 		// continue the clustering operation while there are photos that are still unvisited
 		while (!unvisitedPhotos.isEmpty()) {
-			arbitraryUnvisitedPhoto = getArbitraryPhotoFromHashTableClustering(unvisitedPhotos);
+			arbitraryUnvisitedPhoto = getPhotoFromTable(unvisitedPhotos);
 			moveToVisited(arbitraryUnvisitedPhoto);
 			Queue<PhotoObjectForClustering> neighborsList = getNeighbors(arbitraryUnvisitedPhoto);
+			// in case that there are no enough neighbors - points is considered as noise
 			if (neighborsList.size() < minimumNumberOfPhotosInCluster) {
 				arbitraryUnvisitedPhoto.isNoise = true;
 				noiseCounter ++;
@@ -127,9 +125,9 @@ public class DBScan {
 
 	/**
 	 * 
-	 * @param cluster
-	 * @param photo
-	 * @param neighbors
+	 * @param cluster - a cluster
+	 * @param photo - photo which is part of the cluster
+	 * @param neighbors - all neighbors of that specific photo
 	 * This method expand the cluster by iterating the photo's neighbors that might be added to the cluster
 	 */
 	private void expandCluster(Cluster cluster, PhotoObjectForClustering photo,
@@ -155,37 +153,57 @@ public class DBScan {
 		}
 	}
 
-	private void moveToVisited(PhotoObjectForClustering p) {
-		p.isVisited = true;
-		unvisitedPhotos.remove(p.getID());
-		visitedPhotos.put(p.getID(), p);
+	/**
+	 * 
+	 * @param photo - a photo
+	 * The method removes the pictures from the unvisited list, and adds it the the visited list
+	 */
+	private void moveToVisited(PhotoObjectForClustering photo) {
+		photo.isVisited = true;
+		unvisitedPhotos.remove(photo.getID());
+		visitedPhotos.put(photo.getID(), photo);
 	}
+	
+	/**
+	 * @param photo1
+	 * @param photo2
+	 * @return returns True of photo1 is "close" to photo 2, according to time and distance parameters
+	 */
 
-	private boolean isEpsilonDistanced(PhotoObjectForClustering p1,
-			PhotoObjectForClustering p2) {
-		if ((p1.distanceFrom(p2) < MaxMetersInterval)
-				&& (p1.timeDeltaInSecondsFrom(p2) < MaxSecondsInterval))
+	private boolean isEpsilonDistanced(PhotoObjectForClustering photo1,
+			PhotoObjectForClustering photo2) {
+		if ((photo1.distanceFrom(photo2) < MaxMetersInterval)
+				&& (photo1.timeDeltaInSecondsFrom(photo2) < MaxSecondsInterval))
 			return true;
 		return false;
 	}
 
-	private Queue<PhotoObjectForClustering> getNeighbors(PhotoObjectForClustering p) {
+	/**
+	 * @param photo
+	 * @return All photos (visited and unvisited) that are close (according to time and distance) to the photo
+	 */
+	
+	private Queue<PhotoObjectForClustering> getNeighbors(PhotoObjectForClustering photo) {
 		Queue<PhotoObjectForClustering> photosEpsilonClose = new PriorityQueue<PhotoObjectForClustering>();
 		for (PhotoObjectForClustering photoCandidate : unvisitedPhotos.values()) {
-			if (isEpsilonDistanced(p, photoCandidate)) {
+			if (isEpsilonDistanced(photo, photoCandidate)) {
 				photosEpsilonClose.add(photoCandidate);
 			}
 
 		}
 		for (PhotoObjectForClustering photoCandidate : visitedPhotos.values()) {
-			if (isEpsilonDistanced(p, photoCandidate)) {
+			if (isEpsilonDistanced(photo, photoCandidate)) {
 				photosEpsilonClose.add(photoCandidate);
 			}
 		}
 		return photosEpsilonClose;
 	}
 
-	private PhotoObjectForClustering getArbitraryPhotoFromHashTableClustering(
+	/**
+	 * @param hashTable - table 
+	 * @return a photo from the table
+	 */
+	private PhotoObjectForClustering getPhotoFromTable(
 			Hashtable<Double, PhotoObjectForClustering> hashTable) {
 		if ((hashTable == null) || (hashTable.isEmpty())) {
 			return null;

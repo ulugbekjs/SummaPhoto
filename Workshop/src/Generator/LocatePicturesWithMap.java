@@ -100,6 +100,7 @@ public class LocatePicturesWithMap {
 		slotsToPushPinList = new LinkedList<SlotPushPinTuple>();
 		splitSetsEqualPointsTuple (horizontalPushPinPointsSet,horizontalSlotPointsSet, false);
 		splitSetsEqualPointsTuple(verticalPushPinPointsSet, verticalSlotPointsSet, true);
+		Log.d(TAG, "finished to populate photos in slots");
 		return slotsToPushPinList;
 	}
 
@@ -329,10 +330,6 @@ public class LocatePicturesWithMap {
 		{
 			slope = calculateSlope (pushPinCandidate,slotCandidate );
 			constant = pushPinCandidate.getY() - slope * pushPinCandidate.getX();
-			if (constant != (slotCandidate.getY() - slope * slotCandidate.getX()))
-			{
-				Log.d(TAG, "error calculating slope and const");
-			}
 		}	
 
 		// go over all pushPins and all slots, and decide for each of them where it is located in comparison to the line

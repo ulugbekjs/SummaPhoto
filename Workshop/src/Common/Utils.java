@@ -73,8 +73,7 @@ public class Utils {
 		it.setDataAndType(uri, "image/jpeg");
 		it.setAction(Intent.ACTION_VIEW);
 
-		Intent[] arrIntents = {it};
-		PendingIntent pendingIntent = PendingIntent.getActivities(context, 1, arrIntents, PendingIntent.FLAG_ONE_SHOT);
+		PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, it, PendingIntent.FLAG_ONE_SHOT);
 		Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
 		NotificationCompat.Builder mBuilder =
@@ -91,7 +90,6 @@ public class Utils {
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		// Builds the notification and issues it.
 		mNotifyMgr.notify(1, mBuilder.build());
-		**/
 	}
 
 	public static void notifyUserWithError(String title, String text) {
