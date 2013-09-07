@@ -5,10 +5,4 @@
         <!-- Any customizations for your app running on pre-3.0 devices here -->
     </style>
 
-    <style name="Splash" parent="android:Theme.NoTitleBar.Fullscreen">
-        <item name="android:windowBackground">@drawable/splash</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFrame">@null</item>
-    </style>
-
 </resources>
