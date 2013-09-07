@@ -77,7 +77,7 @@ public class BlockCollageBuilder extends AbstractBuilder {
 		Canvas canvas = null;
 		Bitmap bmpBase = null;
 
-		bmpBase = Bitmap.createBitmap(3264, 2448, Bitmap.Config.ARGB_8888);
+		bmpBase = Bitmap.createBitmap(1469, 1102, Bitmap.Config.ARGB_8888);
 		canvas = new Canvas(bmpBase);
 
 		// draw images saved in Template onto canvas

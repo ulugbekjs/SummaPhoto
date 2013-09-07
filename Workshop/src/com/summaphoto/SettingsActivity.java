@@ -23,7 +23,7 @@ import Common.TestsClass;
 import Generator.AbstractTemplate;
 import Generator.Line;
 import Generator.PixelPoint;
-import Generator.LocatePicturesWithMap.SlotPushPinTuple;
+import Generator.PopulateSlotsOfMapCollage.SlotPushPinTuple;
 import Generator.MapCollageBuilder;
 import Partitioning.Cluster;
 import Partitioning.DBScan;
@@ -164,7 +164,7 @@ public class SettingsActivity extends Activity {
 
 		//		Omri's code
 
-//				Tester.omriInsertFilesToObservedDir();
+				Tester.omriInsertFilesToObservedDir();
 //				try {
 //					Thread.sleep(60000);
 //				} catch (InterruptedException e) {
