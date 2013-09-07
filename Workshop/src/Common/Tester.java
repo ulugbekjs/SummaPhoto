@@ -118,8 +118,7 @@ public class Tester {
 		if (!dest.exists()) {
 			dest.mkdirs();
 		}
-
-		File source = new File(Constants.ROOT, "tom");
+		File source = new File(Constants.ROOT, "Template2");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();
