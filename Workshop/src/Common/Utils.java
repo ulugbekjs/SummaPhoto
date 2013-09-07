@@ -59,8 +59,6 @@ public class Utils {
 
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "Pictures");
 
-		return;
-/**
 		String  PHOTO_DIR = ROOT + File.separator + "SummaPhoto" + File.separator + photo.getFileName();
 		File photoFile = new File(PHOTO_DIR);
 
@@ -93,7 +91,7 @@ public class Utils {
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		// Builds the notification and issues it.
 		mNotifyMgr.notify(1, mBuilder.build());
-		**/
+	
 	}
 
 	public static void notifyUserWithError(String title, String text) {
