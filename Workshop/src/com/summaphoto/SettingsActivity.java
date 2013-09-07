@@ -32,6 +32,7 @@ import Partitioning.TestDBScan;
 import PhotoListener.CameraObserver;
 import android.R.drawable;
 import android.R.integer;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,6 +41,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -49,13 +51,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
 
-public class SettingsActivity extends FragmentActivity { // Extends FragmentActivity to support < Android 3.0
+public class SettingsActivity extends Activity { // Extends FragmentActivity to support < Android 3.0
 
 	private static final String TAG = SettingsActivity.class.getName();
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-	private static final String  PHOTO_DIR = ROOT + File.separator + "NoisySet" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals2" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
@@ -83,6 +85,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY ) + 1;
 	private int pickerMin = 0;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -102,12 +105,16 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		blocksRadioButton = (RadioButton) findViewById(R.id.radioBlocksType);
 
 		lastCheckedButton = offRadioButton;
+		
+		if (savedInstanceState != null) {
+			onRestoreInstanceState(savedInstanceState);
+		}
 		//	Yonatan's code
 
 
-//		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-//		dailyRadioBtn.setOnClickListener(listener);
-//
+		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
+		dailyRadioBtn.setOnClickListener(listener);
+
 //		Button button = (Button) findViewById(R.id.button1);
 //
 //		button.setOnClickListener(new OnClickListener() {
@@ -209,6 +216,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		outState.putBoolean("daily", dailyRadioBtn.isChecked());
 		outState.putBoolean("map", mapRadioButton.isChecked());
 		outState.putBoolean("blocks", blocksRadioButton.isChecked());
+
 	}
 
 	@Override

@@ -1,7 +1,9 @@
 package com.summaphoto;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -95,7 +97,8 @@ public class SmartModeFlow {
 				 * @return
 				 */
 				private ActualEventsBundle partitionToEvents() {
-					DBScan eventsClusterer = new DBScan(PhotoContainer.getInstance().getProcessedPhotos());
+					List<Photo> photos = new ArrayList<Photo>(PhotoContainer.getInstance().getProcessedPhotos());
+					DBScan eventsClusterer = new DBScan(photos);
 					ActualEventsBundle events = eventsClusterer.ComputeCluster();
 					return events;
 				}

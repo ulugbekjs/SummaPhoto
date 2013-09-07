@@ -32,6 +32,7 @@ import Partitioning.TestDBScan;
 import PhotoListener.CameraObserver;
 import android.R.drawable;
 import android.R.integer;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -40,6 +41,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -49,19 +51,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
 
-public class SettingsActivity extends FragmentActivity { // Extends FragmentActivity to support < Android 3.0
+public class SettingsActivity extends Activity { // Extends FragmentActivity to support < Android 3.0
 
 	private static final String TAG = SettingsActivity.class.getName();
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-<<<<<<< HEAD
-	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals2" + File.separator;
-=======
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Camera" + File.separator;
+	private static final String  PHOTO_DIR = ROOT + File.separator + "NoisySet" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
->>>>>>> fa782c1599515d07077b674016fa3b5eb98dab9a
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
 	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
@@ -88,6 +85,15 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 	private int pickerHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY ) + 1;
 	private int pickerMin = 0;
 
+	
+	@Override
+	public View onCreateView(String name, Context context, AttributeSet attrs) {
+		// TODO Auto-generated method stub
+		return super.onCreateView(name, context, attrs);
+	}
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,21 +104,31 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		createAppFolders();
 		saveLogcatToFile();
 
+		// getting radio buttons
+		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
+		offRadioButton = (RadioButton) findViewById(R.id.radioOff);
+		smartRadioButton = (RadioButton) findViewById(R.id.radioSmart);
+		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
+		mapRadioButton = (RadioButton) findViewById(R.id.radioMapType);
+		blocksRadioButton = (RadioButton) findViewById(R.id.radioBlocksType);
+
+		lastCheckedButton = offRadioButton;
+		
+		if (savedInstanceState != null) {
+			onRestoreInstanceState(savedInstanceState);
+		}
+		//	Yonatan's code
+
+
 <<<<<<< HEAD
-//		//	String  PHOTO_DIR_B = ROOT + File.separator + "Watched" + File.separator;
-//
-//		startObserverService();
-//
-//		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
-//		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
-//		lastCheckedButton = (RadioButton) findViewById(R.id.radioOff);
-//
-//		//	Yonatan's code
-//
-//
+		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
+		dailyRadioBtn.setOnClickListener(listener);
+
+=======
 //		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 //		dailyRadioBtn.setOnClickListener(listener);
 //
+>>>>>>> bb1564bbdce119cfc758c3b539fe7052611d1b27
 //		Button button = (Button) findViewById(R.id.button1);
 //
 //		button.setOnClickListener(new OnClickListener() {
@@ -158,148 +174,52 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 //			}
 //
 //		});
+<<<<<<< HEAD
 
-		
-		//		//		Omri's code	
-		
-				File directory = new File(PHOTO_DIR);
-				if (!directory.exists())
-					return;
-				File[] arrayOfPic =  directory.listFiles();
-				Photo tempPhoho = null;
-				List<Photo> photosToCluster = new LinkedList<Photo>(); 
-				for (File file : arrayOfPic)
-				{
-					try
-					{
-						tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-					}
-					catch (Exception ex)
-					{
-					}
-					if (tempPhoho != null)
-						photosToCluster.add(tempPhoho);
-				}
-				DBScan algo = new DBScan(photosToCluster);
-				ActualEventsBundle bundle = algo.ComputeCluster();		
-				List<ActualEvent> events = new LinkedList<ActualEvent>();
-				Cluster tempCluster;
-				for (Photo p :photosToCluster)
-				{
-					tempCluster = new Cluster();
-					tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-					events.add(new ActualEvent(tempCluster));
-				}
-				MapCollageBuilder builder = new MapCollageBuilder(bundle);
-				builder.omrisSetTemplate();
-				if (builder.populateTemplate())
-				{
-					builder.buildCollage();
-				}
-		
-				return;
 =======
-		// getting radio buttons
-		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
-		offRadioButton = (RadioButton) findViewById(R.id.radioOff);
-		smartRadioButton = (RadioButton) findViewById(R.id.radioSmart);
-		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
-		mapRadioButton = (RadioButton) findViewById(R.id.radioMapType);
-		blocksRadioButton = (RadioButton) findViewById(R.id.radioBlocksType);
+//
+>>>>>>> bb1564bbdce119cfc758c3b539fe7052611d1b27
 
-		lastCheckedButton = offRadioButton;
-		//	Yonatan's code
-
-
-		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
-		dailyRadioBtn.setOnClickListener(listener);
-
-		Button button = (Button) findViewById(R.id.button1);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.SmartWithMapTest();
-			}
-
-		});
-
-		button = (Button) findViewById(R.id.button2);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.SmartWithBlocksTest();
-			}
-
-		});
-
-
-		button = (Button) findViewById(R.id.button3);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.ScheduledWithMapTest(SettingsActivity.this, 11, 49);
-			}
-
-		});
-
-
-		button = (Button) findViewById(R.id.button4);
-
-		button.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				Tester.ScheduledWithBlocksTest(22,00);
-			}
-
-		});
-
-		//
-		//		//		Omri's code
-		//		File directory = new File(PHOTO_DIR);
-		//		if (!directory.exists())
-		//			return;
-		//		File[] arrayOfPic =  directory.listFiles();
-		//		Photo tempPhoho = null;
-		//		List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		//		for (File file : arrayOfPic)
-		//		{
-		//			try
-		//			{
-		//				tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-		//			}
-		//			catch (Exception ex)
-		//			{
-		//			}
-		//			if (tempPhoho != null)
-		//				photosToCluster.add(tempPhoho);
-		//		}
-		//		DBScan algo = new DBScan(photosToCluster);
-		//		ActualEventsBundle bundle = algo.ComputeCluster();		
-		//		List<ActualEvent> events = new LinkedList<ActualEvent>();
-		//		Cluster tempCluster;
-		//		for (Photo p :photosToCluster)
-		//		{
-		//			tempCluster = new Cluster();
-		//			tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-		//			events.add(new ActualEvent(tempCluster));
-		//		}
-		//		MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		//		builder.setTemplate();
-		//		if (builder.populateTemplate())
-		//		{
-		//			builder.buildCollage();
-		//		}
-		//
-		//		return;
->>>>>>> fa782c1599515d07077b674016fa3b5eb98dab9a
-
+		//		Omri's code
+		
+		Tester.omriInsertFilesToObservedDir();
+//						File directory = new File(PHOTO_DIR);
+//						if (!directory.exists())
+//							return;
+//						File[] arrayOfPic =  directory.listFiles();
+//						Photo tempPhoho = null;
+//						List<Photo> photosToCluster = new LinkedList<Photo>(); 
+//						for (File file : arrayOfPic)
+//						{
+//							try
+//							{
+//								tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
+//							}
+//							catch (Exception ex)
+//							{
+//							}
+//							if (tempPhoho != null)
+//								photosToCluster.add(tempPhoho);
+//						}
+//						DBScan algo = new DBScan(photosToCluster);
+//						ActualEventsBundle bundle = algo.ComputeCluster();		
+//						List<ActualEvent> events = new LinkedList<ActualEvent>();
+//						Cluster tempCluster;
+//						for (Photo p :photosToCluster)
+//						{
+//							tempCluster = new Cluster();
+//							tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
+//							events.add(new ActualEvent(tempCluster));
+//						}
+//						MapCollageBuilder builder = new MapCollageBuilder(bundle);
+//						builder.setTemplate();
+//						if (builder.populateTemplate())
+//						{
+//							builder.buildCollage();
+//						}
+//				
+//						return;
+//
 
 	}
 
@@ -422,7 +342,7 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
 	}
 
-	
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -523,6 +443,9 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 		thread.run();
 	}
 
+	/**
+	 * when smart button clicked, need to start observing and turn off daily mode
+	 */
 	private void smartButtonClicked() {
 
 		if (!PhotoListenerService.isObserving()) {
@@ -565,6 +488,11 @@ public class SettingsActivity extends FragmentActivity { // Extends FragmentActi
 			ScheduledModeService.stopService();
 	}
 
+	/**
+	 * listener for the daily mode button, opens up the time picker dialog
+	 * @author yonatan
+	 *
+	 */
 	private class ScheduledModeListener implements View.OnClickListener { 
 
 
