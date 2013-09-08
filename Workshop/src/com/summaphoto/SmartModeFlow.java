@@ -6,10 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import org.junit.Ignore;
-
-import android.R.id;
 import android.util.Log;
 import ActivationManager.ActivationManager;
 import ActivationManager.DedicatedRequest;

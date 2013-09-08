@@ -1,36 +1,16 @@
 package com.summaphoto;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.adobe.xmp.impl.Utils;
 import com.summaphoto.R;
-
-import Common.ActualEvent;
-import Common.ActualEventsBundle;
 import Common.Constants;
 import Common.Photo;
 import Common.Tester;
-//import Common.PhotoFilter;
-import Common.TestsClass;
 import Generator.AbstractTemplate;
-import Generator.Line;
-import Generator.PixelPoint;
-import Generator.MapCollageBuilder;
-import Partitioning.Cluster;
-import Partitioning.DBScan;
-import Partitioning.PhotoObjectForClustering;
-import Partitioning.TestDBScan;
-import PhotoListener.CameraObserver;
-import android.R.drawable;
-import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -39,13 +19,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
@@ -57,12 +34,6 @@ public class SettingsActivity extends Activity {
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
 	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals2" + File.separator;
-	//	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals" + File.separator;
-	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
-	//		private static final String  PHOTO_DIR = ROOT + File.separator + "Tests" + File.separator;
-	//	private static final String  PHOTO_DIR = ROOT + File.separator + "copy" + File.separator;
-	//	public static final String APP_PHOTO_DIR =  new File(Environment.getExternalStorageDirectory(), "Pictures") + File.separator + "SummaPhoto" + File.separator;
-	//	public static final String APP_TEMP_DIR = new File(Environment.getExternalStorageDirectory(), "Summaphoto") + File.separator + "Temp" + File.separator;
 
 
 

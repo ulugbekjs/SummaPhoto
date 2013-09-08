@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import ActivationManager.DedicatedRequest;
 import Common.ActualEventsBundle;
 import Common.Photo;
@@ -120,92 +116,6 @@ public class ScheduledModeService extends Service{
 			}
 	        
 		}
-	}
-
-	//
-	//	public static void startService(int hour, int min) {
-	//		if (scheduler != null) { // already runs
-	//			stopService();
-	//		}
-	//		
-	//		if (scheduler == null) {
-	//			scheduler =  Executors.newScheduledThreadPool(1);
-	//
-	//			int timeToWakeInSeconds = calcTimeToWakeInSeconds(hour, min);
-	//
-	//			// waits INTERVAL_IN_SECONDS seconds after end of last execution
-	//			scheduler.scheduleWithFixedDelay(new Runnable() {
-	//				@Override
-	//				public void run() {
-	//					
-	//					Log.d(TAG, "Scheduled Mode: Starting flow");
-	//					
-	//					// in this flow there are no dedicated requests
-	//					ActualEventsBundle events = partitionToEvents();
-	//
-	//					// build the collage from Bundle of photos
-	//					ResultPair result = null;
-	//					
-	//					if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
-	//						result =  buildCollage(new BlockCollageBuilder(events));
-	//					}
-	//					if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
-	//						result = buildCollage(new MapCollageBuilder(events));
-	//					}
-	//					if (result.validCollage) {
-	//						try {
-	//							Utils.notifyUserCollageCreated(result.collage);
-	//						} catch (FileNotFoundException e) {
-	//							Log.e(TAG, "Could not open the created collage file, collage notification aborted.");
-	//						}
-	//					}		
-	//					
-	//					Log.d(TAG, "Scheduled Mode: flow ended");
-	//					
-	//				}
-	//				
-	//				private ActualEventsBundle partitionToEvents() {
-	//					List<Photo> photos = new ArrayList<Photo>();
-	//					while (!PhotoContainer.getInstance().isEmpty()) {
-	//						photos.add(PhotoContainer.getInstance().getNextPhotoFromBuffer());
-	//					}
-	//					DBScan eventsClusterer = new DBScan(photos);
-	//					ActualEventsBundle events = eventsClusterer.ComputeCluster();
-	//					return events;
-	//				}
-	//			},
-	//			timeToWakeInSeconds,
-	//			86400, // DAY
-	//			TimeUnit.SECONDS);	
-	//		}
-	//	}
-
-	private static int calcTimeToWakeInSeconds(int hour, int min) {
-		// calculate time until next waking of thread
-
-		Calendar calendar = Calendar.getInstance();
-		Date currentDateTime =  calendar.getTime();
-
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		calendar.set(year,
-				month,
-				day,
-				hour, min, 0);
-
-		Date scheduledTime = calendar.getTime();
-
-		int timeToWakeInSeconds = 0;
-		if (compareTimes(scheduledTime, currentDateTime) < 0) { // scheduledTime passed today
-			scheduledTime = plusDay(year, month, day, hour, min);
-			timeToWakeInSeconds = (int) ((scheduledTime.getTime() - currentDateTime.getTime()) / 1000);
-		}
-		else {
-			timeToWakeInSeconds = (int) ((scheduledTime.getTime() - currentDateTime.getTime()) / 1000);
-		}
-
-		return timeToWakeInSeconds;
 	}
 	
 	private static boolean hasPassedToday(int hour, int min) {

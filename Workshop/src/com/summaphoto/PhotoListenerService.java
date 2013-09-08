@@ -2,18 +2,12 @@ package com.summaphoto;
 
 
 import PhotoListener.CameraObserver;
-import android.R.bool;
-import android.app.IntentService;
+import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.FileObserver;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -70,6 +64,7 @@ public class PhotoListenerService extends Service {
 		super.onDestroy();
 	}
 
+	@SuppressLint("NewApi")
 	private void startObservingInForeground() {
 
 		Intent notifyIntent = new Intent(Intent.ACTION_MAIN);

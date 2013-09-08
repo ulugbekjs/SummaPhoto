@@ -19,9 +19,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.jdom2.JDOMException;
-
-import com.summaphoto.SettingsActivity;
-
 import android.accounts.NetworkErrorException;
 import android.os.Environment;
 import android.util.Log;
@@ -64,7 +61,7 @@ public class BingServices {
 			}
 
 			if (map.getJpgPath() == null || map.getMetadataPath() == null) { // verify paths
-				return null;  // free map for GC
+				return null;  
 			}
 
 		}
