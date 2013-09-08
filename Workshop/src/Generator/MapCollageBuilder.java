@@ -132,7 +132,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
 		if (mapFromDataSource == null)
 		{
-			Log.d(TAG, "Stop populate template, because error occured while trying to get map from BING");
+			Log.e(TAG, "Stop populate template, because error occured while trying to get map from BING");
 			return false;
 		}
 		else {
@@ -144,7 +144,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		if (pixelPointsToPushPins.size() < pixelPointsToSlot.size())
 		{
 			// may occur not because of error, when extra photos are taken in oreder to avoid lines intersections 
-			Log.d(TAG, "Stop populate template, because number of slots is bigegr than number of pushpins");
+			Log.e(TAG, "Stop populate template, because number of slots is bigegr than number of pushpins");
 			return false;
 		}
 		
@@ -155,7 +155,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
 		if (tuples.size() != template.slots.length)
 		{
-			Log.d(TAG, "Failed to populate all slots with pictures");
+			Log.e(TAG, "Failed to populate all slots with pictures");
 			return false;
 		}
 		
@@ -174,7 +174,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
 		if (mapFromDataSource == null)
 		{
-			Log.d(TAG, "Stop populate template, because error occured while trying to get map from BING");
+			Log.e(TAG, "Stop populate template, because error occured while trying to get map from BING");
 			return false;
 		}
 		else {
