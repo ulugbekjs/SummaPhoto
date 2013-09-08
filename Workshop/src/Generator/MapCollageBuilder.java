@@ -1,6 +1,7 @@
 package Generator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -154,6 +155,13 @@ public class MapCollageBuilder extends AbstractBuilder{
 		// decide which picture will be populated in each slot 
 		PopulateSlotsOfMapCollage locatePicturesWithMap = new PopulateSlotsOfMapCollage(pixelPointsToSlot, pixelPointsToPushPins);
 		List<SlotPushPinTuple> tuples = locatePicturesWithMap.matchPicturesOnMapToPointOnFrame();
+		
+		List<Photo> l1 = new ArrayList<Photo>();
+		for (SlotPushPinTuple tuple : tuples)
+		{
+			l1.add(tuple.getPushpin().getPhoto());
+		}
+		
 		if (tuples.size() != template.slots.length)
 		{
 			Log.e(TAG, "Failed to populate all slots with pictures");
@@ -267,7 +275,4 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 		return lineList;
 	}
-
-
-
 }

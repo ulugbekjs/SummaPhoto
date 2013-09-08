@@ -1,22 +1,17 @@
 package com.summaphoto;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import com.summaphoto.R;
 import Common.Constants;
-import Common.Photo;
-import Common.Tester;
 import Generator.AbstractTemplate;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -33,9 +28,6 @@ public class SettingsActivity extends Activity {
 
 	// static final fields
 	public static final File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-	private static final String  PHOTO_DIR = ROOT + File.separator + "Tals2" + File.separator;
-
-
 
 	// public static fields
 	public static Context CONTEXT = null;
@@ -83,115 +75,9 @@ public class SettingsActivity extends Activity {
 		if (savedInstanceState != null) {
 			onRestoreInstanceState(savedInstanceState);
 		}
-		//	Yonatan's code
-
-
+		
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
-
-		//		Button button = (Button) findViewById(R.id.button1);
-		//
-		//		button.setOnClickListener(new OnClickListener() {
-		//
-		//			@Override
-		//			public void onClick(View arg0) {
-		//				Tester.SmartWithMapTest();
-		//			}
-		//
-		//		});
-		//
-		//		button = (Button) findViewById(R.id.button2);
-		//
-		//		button.setOnClickListener(new OnClickListener() {
-		//
-		//			@Override
-		//			public void onClick(View arg0) {
-		//				Tester.SmartWithBlocksTest();
-		//			}
-		//
-		//		});
-		//
-		//
-		//		button = (Button) findViewById(R.id.button3);
-		//
-		//		button.setOnClickListener(new OnClickListener() {
-		//
-		//			@Override
-		//			public void onClick(View arg0) {
-		//				Tester.ScheduledWithMapTest(SettingsActivity.this, 11, 49);
-		//			}
-		//
-		//		});
-		//
-		//
-		//		button = (Button) findViewById(R.id.button4);
-		//
-		//		button.setOnClickListener(new OnClickListener() {
-		//
-		//			@Override
-		//			public void onClick(View arg0) {
-		//				Tester.ScheduledWithBlocksTest(22,00);
-		//			}
-		//
-		//		});
-		//
-
-//				Omri's code
-
-			Tester.omriInsertFilesToObservedDir();
-//				try {
-//					Thread.sleep(60000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				Log.d(TAG, "starting second test!!!");
-//				Tester.omriInsertFilesToObservedDir();
-//				try {
-//					Thread.sleep(60000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				Log.d(TAG, "starting thirs test!!!");
-//				Tester.omriInsertFilesToObservedDir();
-		//						File directory = new File(PHOTO_DIR);
-		//						if (!directory.exists())
-		//							return;
-		//						File[] arrayOfPic =  directory.listFiles();
-		//						Photo tempPhoho = null;
-		//						List<Photo> photosToCluster = new LinkedList<Photo>(); 
-		//						for (File file : arrayOfPic)
-		//						{
-		//							try
-		//							{
-		//								tempPhoho = Common.Utils.createPhotoFromFile(file.getAbsolutePath());
-		//							}
-		//							catch (Exception ex)
-		//							{
-		//							}
-		//							if (tempPhoho != null)
-		//								photosToCluster.add(tempPhoho);
-		//						}
-		//						DBScan algo = new DBScan(photosToCluster);
-		//						ActualEventsBundle bundle = algo.ComputeCluster();		
-		//						List<ActualEvent> events = new LinkedList<ActualEvent>();
-		//						Cluster tempCluster;
-		//						for (Photo p :photosToCluster)
-		//						{
-		//							tempCluster = new Cluster();
-		//							tempCluster.photosInCluster.add( new PhotoObjectForClustering(p));
-		//							events.add(new ActualEvent(tempCluster));
-		//						}
-		//						MapCollageBuilder builder = new MapCollageBuilder(bundle);
-		//						builder.setTemplate();
-		//						if (builder.populateTemplate())
-		//						{
-		//							builder.buildCollage();
-		//						}
-		//				
-		//						return;
-		//
 
 	}
 
@@ -292,33 +178,6 @@ public class SettingsActivity extends Activity {
 			Log.e(TAG, "Error when executing routing to log file: "  + outputFile.getAbsolutePath());
 		}
 	}
-
-	// TODO: remove
-	protected Photo saveCollage(Bitmap bmpBase) throws IOException {
-		Calendar calendar = Calendar.getInstance();
-		File externalStorageDir = new File(Environment.getExternalStorageDirectory(), "Pictures");
-		File testsDir = new File(externalStorageDir.getAbsolutePath() + File.separator + "Output");
-		File file = null;
-		FileOutputStream fos = null;
-
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm");
-		file = new File
-				(testsDir, "summaphoto_" + formatter.format(calendar.getTime()) + ".jpg");
-
-		// Save Bitmap to File
-		fos = new FileOutputStream(file);
-		bmpBase.compress(Bitmap.CompressFormat.JPEG, 70, fos);
-
-		fos.flush();
-		fos.close();
-		fos = null;
-
-		bmpBase.recycle();
-		bmpBase = null;
-
-		return new Photo(calendar.getTime(), 3264, 2488, null, file.getAbsolutePath());
-	}
-
 
 
 	@Override
