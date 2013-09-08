@@ -46,19 +46,28 @@ public class PhotoContainer {
 		}
 	}
 
-	public synchronized void onDelete(String deleted) {
+	/**
+	 * delete photo from container
+	 * @param deleted
+	 * @return true iff the file was found and deleted
+	 */
+	public synchronized boolean onDelete(String deleted) {
+		boolean wasDeleted = false;
 		// scan queues
 		for (Photo photo : processedPhotos) {
 			if (photo.getFilePath().equals(deleted)) {
 				processedPhotos.remove(photo);
+				wasDeleted |= true;
 			}
 		}
 
 		for (Photo photo : buffer) {
 			if (photo.getFilePath().equals(deleted)) {
 				buffer.remove(photo);
+				wasDeleted |=true;
 			}
 		}
+		return wasDeleted;
 	}
 
 	public synchronized boolean isEmpty() {

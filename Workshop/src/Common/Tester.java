@@ -49,7 +49,6 @@ public class Tester {
 
 		Log.d("Tester", "Test started");
 		File ROOT = new File(Environment.getExternalStorageDirectory(), "DCIM");
-		String  PHOTO_DIR = ROOT + File.separator + "Watched" + File.separator;
 
 		SettingsActivity.MODE = mode;
 		SettingsActivity.COLLAGE_TYPE =collage_type;
@@ -159,6 +158,7 @@ public class Tester {
 
 	}
 
+	@SuppressWarnings("resource")
 	private static void copyFile(File sourceFile, File destFile) throws IOException {
 		if (!sourceFile.exists()) {
 			return;

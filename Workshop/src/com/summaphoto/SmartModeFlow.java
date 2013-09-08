@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import android.R.id;
 import android.util.Log;
 import ActivationManager.ActivationManager;
 import ActivationManager.DedicatedRequest;
@@ -22,13 +24,13 @@ import Partitioning.DBScan;
 public class SmartModeFlow {
 
 	private static final String TAG = SmartModeFlow.class.getName();
-	private static final int MIN_EVENTS = 3;
+	private static final int MIN_ACTUAL_EVENTS = 3;
 	private static final int MIN_TIME_BETWEEN_COLLAGES = 0;
 
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
 	private static ActivationManager manager = ActivationManager.getInstance();  
-	private static long lastCollageTime = -1;
+	public static long lastCollageTime = -1;
 
 	private SmartModeFlow() {
 	}
@@ -56,31 +58,27 @@ public class SmartModeFlow {
 						Log.d(TAG, "Activation manager: " + manager.toString());
 					}
 
-					boolean collageNeeded = manager.processPhotoBuffer();
-					Log.d(TAG, "Collage needed: " + collageNeeded);
+					boolean clusteringNeeded = manager.processPhotoBuffer();
+					Log.d(TAG, "Collage needed: " + clusteringNeeded);
 
-					if (collageNeeded) { // ActivationManager decided clustering should be made
-						ActualEventsBundle events = partitionToEvents();
-						Log.d(TAG, "ActualEvents calculated: " + events.getActualEvents().size());
+					long diffHours;
+					diffHours = (new Date().getTime() - lastCollageTime) / (60 * 60 * 1000) % 24; // hours passed since last collage
 
-						ResultPair result = null;
-						long diffHours;
-						if (lastCollageTime != -1) {
-							diffHours = (new Date().getTime() -lastCollageTime) / (60 * 60 * 1000) % 24; // hours passed since last collage
-						}
-						else {
-							diffHours = MIN_TIME_BETWEEN_COLLAGES;
-						}
-						if (diffHours >= MIN_TIME_BETWEEN_COLLAGES)// only create collage if MIN_TIME_BETWEEN_COLLAGES passed
-						{
-							if 		(events.getActualEvents().size() >= MIN_EVENTS) 
-							{ // only create collage if exceeds MIN_EVENTS value of ActualEvents
+					if (clusteringNeeded) {	 // ActivationManager decided clustering should be made
+						if (diffHours >= MIN_TIME_BETWEEN_COLLAGES) {	// only create collage if MIN_TIME_BETWEEN_COLLAGES passed
+							
+							ActualEventsBundle events = cluster();
+							Log.d(TAG, "ActualEvents calculated: " + events.getActualEvents().size());
+
+							ResultPair result = null;
+							if 	(events.getActualEvents().size() >= MIN_ACTUAL_EVENTS) { // only create collage if exceeds MIN_EVENTS value of ActualEvents
+ 
 								if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.BLOCK_TYPE) {
 									Log.d(TAG, "attempting to build Block collage");
-									result =  buildCollage(new BlockCollageBuilder(events));
+									result =  generate(new BlockCollageBuilder(events));
 								}
 								if (SettingsActivity.COLLAGE_TYPE == AbstractTemplate.MAP_TYPE) {
-									result = buildCollage(new MapCollageBuilder(events));
+									result = generate(new MapCollageBuilder(events));
 									Log.d(TAG, "attempting to build Map Collage");
 								}
 								if (result.validCollage) {
@@ -93,9 +91,12 @@ public class SmartModeFlow {
 									}
 								}
 							}
+							else {
+								Log.d(TAG, "Not building collage because number of Actual Events calculated < MIN_ACTUAL_EVENTS (" + MIN_ACTUAL_EVENTS + ")");
+							}
 						}
 						else {
-							Log.d(TAG, "not starting to create a collage because the time diff from last collage is not enough");
+							Log.d(TAG, "Not building because the time diff from last collage < MIN_TIME_BETWEEN_COLLAGES (" + MIN_TIME_BETWEEN_COLLAGES + ")");
 						}
 
 					}
@@ -110,7 +111,7 @@ public class SmartModeFlow {
 				 * run the DBScan algorithm to cluster photos to ActualEvents
 				 * @return
 				 */
-				private ActualEventsBundle partitionToEvents() {
+				private ActualEventsBundle cluster() {
 					List<Photo> photos = new ArrayList<Photo>(PhotoContainer.getInstance().getProcessedPhotos());
 					DBScan eventsClusterer = new DBScan(photos);
 					ActualEventsBundle events = eventsClusterer.ComputeCluster();
@@ -135,7 +136,7 @@ public class SmartModeFlow {
 		return busy;
 	}
 
-	private static ResultPair buildCollage(AbstractBuilder builder) {
+	private static ResultPair generate(AbstractBuilder builder) {
 		boolean successful;
 		Photo collage = null;
 		DedicatedRequest request = builder.setTemplate();

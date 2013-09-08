@@ -23,7 +23,6 @@ import Common.TestsClass;
 import Generator.AbstractTemplate;
 import Generator.Line;
 import Generator.PixelPoint;
-import Generator.PopulateSlotsOfMapCollage.SlotPushPinTuple;
 import Generator.MapCollageBuilder;
 import Partitioning.Cluster;
 import Partitioning.DBScan;
@@ -95,6 +94,10 @@ public class SettingsActivity extends Activity {
 
 		createAppFolders();
 		saveLogcatToFile();
+		
+		if (SmartModeFlow.lastCollageTime == -1) { // SmartModeFlow should have the app launch time at first
+			SmartModeFlow.lastCollageTime = new Date().getTime();
+		}
 
 		// getting radio buttons
 		modeGroup = (RadioGroup) findViewById(R.id.radioMode);
@@ -219,6 +222,12 @@ public class SettingsActivity extends Activity {
 		//						return;
 		//
 
+	}
+
+
+
+	@Override
+	public void onBackPressed() {
 	}
 
 
