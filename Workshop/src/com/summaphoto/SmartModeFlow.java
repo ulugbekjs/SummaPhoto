@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.junit.Ignore;
+
 import android.R.id;
 import android.util.Log;
 import ActivationManager.ActivationManager;
@@ -25,7 +27,7 @@ public class SmartModeFlow {
 
 	private static final String TAG = SmartModeFlow.class.getName();
 	private static final int MIN_ACTUAL_EVENTS = 3;
-	private static final int MIN_TIME_BETWEEN_COLLAGES = 1;
+	private static final int MIN_TIME_BETWEEN_COLLAGES = 4;
 
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
@@ -137,7 +139,7 @@ public class SmartModeFlow {
 	}
 
 	private static ResultPair generate(AbstractBuilder builder) {
-		boolean successful;
+		boolean successful = true;
 		Photo collage = null;
 		DedicatedRequest request = builder.setTemplate();
 		if (request != null) { // not enough photos for collage
@@ -145,9 +147,11 @@ public class SmartModeFlow {
 			successful = false;
 		}
 		else { 
-			builder.populateTemplate();
-			collage =  builder.buildCollage();
-			successful = true;
+			successful = builder.populateTemplate();
+			if (successful) {
+				collage =  builder.buildCollage();
+				successful = true;
+			}
 		}
 		return new ResultPair(successful, collage);
 	}

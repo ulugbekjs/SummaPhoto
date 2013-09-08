@@ -22,7 +22,7 @@ public class DBScan {
 	 * part of the DBScan algorithm
 	 */
 	private final double MaxSecondsInterval = 600;
-	private final double MaxMetersInterval = 50;
+	private final double MaxMetersInterval = 100;
 	private final int minNumberOfPointsInCluster = 2;
 	private final int minNumberOfPointsInClusterForNoisyPictures = 1;
 	private final double MaxRatioOfNoise = 0.4;

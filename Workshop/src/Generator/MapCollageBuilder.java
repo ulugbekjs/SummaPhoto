@@ -156,6 +156,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		if (tuples.size() != template.slots.length)
 		{
 			Log.d(TAG, "Failed to populate all slots with pictures");
+			return false;
 		}
 		
 		// populate the slots with selected pictures

@@ -165,9 +165,9 @@ public class SettingsActivity extends Activity {
 		//		});
 		//
 
-		//		Omri's code
+//				Omri's code
 
-//				Tester.omriInsertFilesToObservedDir();
+			Tester.omriInsertFilesToObservedDir();
 //				try {
 //					Thread.sleep(60000);
 //				} catch (InterruptedException e) {

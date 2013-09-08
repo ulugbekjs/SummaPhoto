@@ -111,13 +111,13 @@ public class Tester {
 		observer.startWatching();
 
 		SettingsActivity.MODE = 1;
-		SettingsActivity.COLLAGE_TYPE = 2;
+		SettingsActivity.COLLAGE_TYPE = 1;
 
 		File dest = new File(Constants.ROOT, "Watched");
 		if (!dest.exists()) {
 			dest.mkdirs();
 		}
-		File source = new File(Constants.ROOT, "Tals");
+		File source = new File(Constants.ROOT, "Tests2");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();
