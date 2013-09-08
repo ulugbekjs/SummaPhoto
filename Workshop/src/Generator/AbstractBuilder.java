@@ -13,17 +13,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
-
-import com.summaphoto.SettingsActivity;
-
 import ActivationManager.DedicatedRequest;
 import Common.ActualEvent;
 import Common.ActualEventsBundle;
 import Common.Constants;
 import Common.Photo;
 import Common.PhotoContainer;
-import android.R.bool;
-import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
