@@ -120,7 +120,7 @@ public class StaticMap {
 			double NorthLatitude = Double.valueOf(node. getChildText("NorthLatitude",namespace)); // "NorthLatitude"
 			double EastLongitude = Double.valueOf(node. getChildText("EastLongitude",namespace)); // "EastLongitude"
 
-			GeoBoundingBox box = new GeoBoundingBox(new GPSPoint(NorthLatitude, WestLongitude), 
+			GeoBoundingBox box = new GeoBoundingBox(new GPSPoint(WestLongitude,NorthLatitude), 
 					new GPSPoint(EastLongitude, SouthLatitude));
 			this.box = box;
 
@@ -141,6 +141,7 @@ public class StaticMap {
 				node = pushpinNode.getChild("Point", namespace);
 				latitude = Double.valueOf(node.getChildText("Latitude", namespace));	
 				longitude = Double.valueOf(node.getChildText("Longitude", namespace)); 
+				Log.d(TAG, latitude + "," + longitude + ";");
 
 				node = pushpinNode.getChild("Anchor", namespace);
 				int ax = Integer.valueOf(node.getChildText("X", namespace));	

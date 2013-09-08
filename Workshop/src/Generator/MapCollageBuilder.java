@@ -9,6 +9,7 @@ import Bing.BingServices;
 import Bing.Pushpin;
 import Bing.StaticMap;
 import Common.ActualEventsBundle;
+import Common.GeoBoundingBox;
 import Common.Photo;
 import Generator.PopulateSlotsOfMapCollage.SlotPushPinTuple;
 import android.graphics.Bitmap;
@@ -170,8 +171,9 @@ public class MapCollageBuilder extends AbstractBuilder{
 		}
 		
 		Log.d(TAG, "retrieve final map from Bing");
+		GeoBoundingBox boundingBox = mapFromDataSource.getBox();
 		mapFromDataSource = BingServices.getStaticMap(photosList, 
-				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
+				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight(), boundingBox);
 		if (mapFromDataSource == null)
 		{
 			Log.e(TAG, "Stop populate template, because error occured while trying to get map from BING");

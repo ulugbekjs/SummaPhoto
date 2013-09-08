@@ -109,7 +109,7 @@ public class Tester {
 		if (!dest.exists()) {
 			dest.mkdirs();
 		}
-		File source = new File(Constants.ROOT, "special tets");
+		File source = new File(Constants.ROOT, "fuck");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();
