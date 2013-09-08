@@ -172,8 +172,9 @@ public class MapCollageBuilder extends AbstractBuilder{
 		
 		GeoBoundingBox boundingBox = mapFromDataSource.getBox();
 		Log.d(TAG, "retrieve final map from Bing");
+		GeoBoundingBox boundingBox = mapFromDataSource.getBox();
 		mapFromDataSource = BingServices.getStaticMap(photosList, 
-				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight(),
+				((MapTemplate)template).getMapPixelWidth(), ((MapTemplate)template).getMapPixelHeight());
 				boundingBox);
 		if (mapFromDataSource == null)
 		{

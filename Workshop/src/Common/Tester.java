@@ -102,14 +102,14 @@ public class Tester {
 		CameraObserver observer = new CameraObserver(PHOTO_DIR); // observer over the gallery directory
 		observer.startWatching();
 
-		SettingsActivity.MODE = 1;
+		SettingsActivity.MODE = 2;
 		SettingsActivity.COLLAGE_TYPE = 1;
 
 		File dest = new File(Constants.ROOT, "Watched");
 		if (!dest.exists()) {
 			dest.mkdirs();
 		}
-		File source = new File(Constants.ROOT, "special tets");
+		File source = new File(Constants.ROOT, "fuck");
 
 		File[] files = source.listFiles();
 		List<Photo> photos = new LinkedList<Photo>();
