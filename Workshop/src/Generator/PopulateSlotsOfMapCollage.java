@@ -93,27 +93,27 @@ public class PopulateSlotsOfMapCollage {
 
 
 	/**
-	 * @return list of slotsPushPinTuple which indicated the data which pushPin related to every slot in the template
+	 * @return list of slots-PushPin tuples that indicated the data which pushPin related to every slot in the template
 	 */
 	public List<SlotPushPinTuple> matchPicturesOnMapToPointOnFrame ()
 	{
 		slotsToPushPinList = new LinkedList<SlotPushPinTuple>();
-		splitSetsEqualPointsTuple (horizontalPushPinPointsSet,horizontalSlotPointsSet, false);
-		splitSetsEqualPointsTuple(verticalPushPinPointsSet, verticalSlotPointsSet, true);
+		splitSetsEqual (horizontalPushPinPointsSet,horizontalSlotPointsSet, false);
+		splitSetsEqual(verticalPushPinPointsSet, verticalSlotPointsSet, true);
 		Log.d(TAG, "finished to populate photos in slots");
 		return slotsToPushPinList;
 	}
 
 	
 	/**
-	 * @param pushPinsSubSet - set of pushPine that should be connected to slots
+	 * @param pushPinsSubSet - set of pushPin that should be connected to slots
 	 * @param slotsSubSet - set of slots that should be connected to pushPins 
-	 * @param reduceIntersections - if need to reduce the number of intersections
+	 * @param reduceIntersections - if need to reduce the number of intersections between lines that connects slot to pushpPin
 	 * @return - True if there is a line that connects one pushPin and one slot, such as the number of pushPins at one side
-	 * of the line equals  the number of slot's connection points . If so, the method continues to split recursively the subSets, 
-	 * and adds the relevant slot-PushPin tuple to the list
+	 * of the line equals  the number of slot's connection points at same side . If so, the method continues to split recursively 
+	 * the subSets, and adds the relevant slot-PushPin tuple to the list
 	 */
-	private Boolean splitSetsEqualPointsTuple (Set<PixelPoint> pushPinsSubSet, 
+	private Boolean splitSetsEqual (Set<PixelPoint> pushPinsSubSet, 
 			Set<PixelPoint> slotsSubSet, boolean reduceIntersections)
 	{
 		// Subsets of pointsOnFrameSet and  picturesOnMapSet for recursive algorithm issues
@@ -131,7 +131,7 @@ public class PopulateSlotsOfMapCollage {
 
 		SlotPushPinTuple tempTupleToAdd;
 
-		// dictionary that will contain pushPin-slot tuple that split the plane as needed, but the line that connects them
+		// dictionary that will contain pushPin-slot tuples that split the plane as needed, but the line that connects them
 		// intersects other lines between slots and pushPins
 		TreeMap<Integer, SlotPushPinTuple> candidtesTuplesHashMap = new TreeMap<Integer, PopulateSlotsOfMapCollage.SlotPushPinTuple>();
 		
@@ -146,7 +146,7 @@ public class PopulateSlotsOfMapCollage {
 
 		int interscetionsNumber;
 		for (PixelPoint pushPinPoint : pushPinsSubSet) {
-			// First try to split the sets with closest point in pointsOnFrameSubSetSet to the chosen point
+			// First try to split the sets with closest point in slotsSubSet to the chosen pushPin
 			closestSlot = findClosestPointInSet(pushPinPoint,slotsSubSet);
 			if (areSplitingEqual(pushPinsSubSet, slotsSubSet,pushPinPoint, closestSlot, listOfSplitedPixelPointSets))
 			{
@@ -154,13 +154,17 @@ public class PopulateSlotsOfMapCollage {
 						closestSlot,pixelPointToSlotDictionary.get(closestSlot));
 				interscetionsNumber =  calculateIntersections (pushPinPoint,closestSlot);
 				if ((reduceIntersections) && (interscetionsNumber > 0))
+				{
+					// in case that this tuple creates intersections, add it to the candidates list 
 					candidtesTuplesHashMap.put(interscetionsNumber, tempTupleToAdd);
+				}
 				else {
+					// no intersection - continue recursively on each side of the line
 					slotsToPushPinList.add(tempTupleToAdd);
 					if (slotsToPushPinList.size() == pixelPointToSlotDictionary.keySet().size())
 						return true;
-					splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints, reduceIntersections);
-					splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints, reduceIntersections);
+					splitSetsEqual (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints, reduceIntersections);
+					splitSetsEqual (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints, reduceIntersections);
 					return true;
 				}
 				
@@ -180,8 +184,8 @@ public class PopulateSlotsOfMapCollage {
 						slotsToPushPinList.add(tempTupleToAdd);
 						if (slotsToPushPinList.size() == pixelPointToSlotDictionary.keySet().size())
 							return true;
-						splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints, reduceIntersections);
-						splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints, reduceIntersections);
+						splitSetsEqual (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints, reduceIntersections);
+						splitSetsEqual (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints, reduceIntersections);
 						return true;
 					}						
 				}
@@ -205,6 +209,7 @@ public class PopulateSlotsOfMapCollage {
 			{
 				Log.d(TAG, slotPoint.getX() + "    " + slotPoint.getY());
 			}
+			// if the candidates list is empty error occures in algorithm
 			return false;
 		}
 		// get candidate with minimum number of intersections
@@ -215,8 +220,8 @@ public class PopulateSlotsOfMapCollage {
 			slotsToPushPinList.add(entryToAdd.getValue());
 			if (slotsToPushPinList.size() == pixelPointToSlotDictionary.keySet().size())
 				return true;
-			splitSetsEqualPointsTuple (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints, reduceIntersections);
-			splitSetsEqualPointsTuple (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints, reduceIntersections);
+			splitSetsEqual (firstSubSetOfPushPinPoints, firstSubSetofSlotsPoints, reduceIntersections);
+			splitSetsEqual (secondSubSetOfPushPinPoints, secondSubSetofSlotsPoints, reduceIntersections);
 			return true;
 		}
 		else
@@ -230,8 +235,8 @@ public class PopulateSlotsOfMapCollage {
 	/**
 	 * @param pushPinPoint
 	 * @param slotPoint
-	 * @return the number of intersection between the line that the pushPin-Slot connection will create to the lines that are
-	 * created by other pushPin-Slot that already contained in the list
+	 * @return the number of intersection between the line, that connects the pushPin to the slot,and the
+	 *  lines that are created by other pushPin-Slot tuple that already contained in the list
 	 */
 
 	private int calculateIntersections (PixelPoint pushPinPoint, PixelPoint slotPoint)
@@ -290,8 +295,8 @@ public class PopulateSlotsOfMapCollage {
 	 * @param slotCandidate - slot candidate
 	 * @param listOfSplitedPixelPointSets - lists of sets, that will contain the pushPins and slots at each side of the line
 	 * that connects the pushPin candidate and slot candidate
-	 * @return True if the pushPin candidate and slot candidate split the plane in such way that the number of
-	 * push pins at on side of the line equals the number of slots connection points
+	 * @return True, if the line that connects pushPin candidate to slot candidate split the plane in such way that the number of
+	 * push pins at on side of the line equals the number of slots  at the same side
 	 */
 	public Boolean areSplitingEqual (Set<PixelPoint> pushPinsSubSet, Set<PixelPoint> slotsSubSet,
 			PixelPoint pushPinCandidate, PixelPoint slotCandidate, List<Set<PixelPoint>> listOfSplitedPixelPointSets)
@@ -398,11 +403,11 @@ public class PopulateSlotsOfMapCollage {
 	/**
 	 * @param aboveSet - set of PixelPoints that are above line
 	 * @param underSet - set of PixelPoints that are under line
-	 * @param onLineList - list of PixelPoints that are int line
+	 * @param onLineList - list of PixelPoints that are on the line
 	 * @param currentNumberOfItemsAboveLine
 	 * @param numberOfNeededItmesAboveLine
-	 * @return - True if succeed to move the (numberOfNeededItemsAboveLine - currentNumberOfItemsAboveLine) items from the list t
-	 * to the aboveSet. other items in the list will be moved to the under set
+	 * @return - True if succeed to move  (numberOfNeededItemsAboveLine - currentNumberOfItemsAboveLine) items from the list
+	 * to the aboveSet. Other items in the list will be moved to the under set
 	 */
 	private Boolean moveFromOnLineListToAboveAndUnderSets (Set <PixelPoint> aboveSet, Set <PixelPoint> underSet,
 			List<PixelPoint> onLineList, int currentNumberOfItemsAboveLine, int numberOfNeededItmesAboveLine  )
@@ -422,8 +427,8 @@ public class PopulateSlotsOfMapCollage {
 	
 	/**
 	 * @param list - list to get an item
-	 * @param set - set wehere to add the item
-	 * @return - True uppon successfull adding of first item in list to the ser
+	 * @param set - set where to add the item
+	 * @return - True upon successful adding of first item in list to the set
 	 */
 	private Boolean addOneItemToSetFromList (List<PixelPoint> list, Set<PixelPoint> set)
 	{
@@ -437,22 +442,14 @@ public class PopulateSlotsOfMapCollage {
 	 /**
      * Tells whether the two line segments cross.
      * 
-     * @param x1
-     *            the x coordinate of the starting point of the first segment.
-     * @param y1
-     *            the y coordinate of the starting point of the first segment.
-     * @param x2
-     *            the x coordinate of the end point of the first segment.
-     * @param y2
-     *            the y coordinate of the end point of the first segment.
-     * @param x3
-     *            the x coordinate of the starting point of the second segment.
-     * @param y3
-     *            the y coordinate of the starting point of the second segment.
-     * @param x4
-     *            the x coordinate of the end point of the second segment.
-     * @param y4
-     *            the y coordinate of the end point of the second segment.
+     * @param x1- the x coordinate of the starting point of the first segment.
+     * @param y1- the y coordinate of the starting point of the first segment.
+     * @param x2- the x coordinate of the end point of the first segment.
+     * @param y2- the y coordinate of the end point of the first segment.
+     * @param x3- the x coordinate of the starting point of the second segment.
+     * @param y3- the y coordinate of the starting point of the second segment.
+     * @param x4- the x coordinate of the end point of the second segment.
+     * @param y4- the y coordinate of the end point of the second segment.
      * @return true, if the two line segments cross.
      */
     public static boolean linesIntersect(double x1, double y1, double x2, double y2, double x3,
@@ -495,8 +492,6 @@ public class PopulateSlotsOfMapCollage {
     }
 	
 	
-	
-	
 	/** 
 	 * @param point - point in the plane to be checked
 	 * @param slope - slope of the line
@@ -504,6 +499,7 @@ public class PopulateSlotsOfMapCollage {
 	 * @param pointAboveLineColection
 	 * @param pointOnLineCollection
 	 * @param pointsUnderLineCollection
+	 * @param undefinedSlope- indicates whether the slope of the line is undefined
 	 * @return This methods checks whether the point is above \ on\ under the line represented by the slope and constant,and adds
 	 * it to the relevant set
 	 */
@@ -543,6 +539,7 @@ public class PopulateSlotsOfMapCollage {
 				return PointLineStatus.PointOn;
 			}	
 		}
+		
 		pointsUnderLineCollection.add(point);	
 		return PointLineStatus.PointUnder;
 	}

@@ -22,7 +22,7 @@ public class DBScan {
 	 * part of the DBScan algorithm
 	 */
 	private final double MaxSecondsInterval = 600;
-	private final double MaxMetersInterval = 100;
+	private final double MaxMetersInterval = 50;
 	private final int minNumberOfPointsInCluster = 2;
 	private final int minNumberOfPointsInClusterForNoisyPictures = 1;
 	private final double MaxRatioOfNoise = 0.4;
@@ -128,7 +128,8 @@ public class DBScan {
 	 * @param cluster - a cluster
 	 * @param photo - photo which is part of the cluster
 	 * @param neighbors - all neighbors of that specific photo
-	 * This method expand the cluster by iterating the photo's neighbors that might be added to the cluster
+	 * This method expand the cluster by iterating the photo's neighbors, and their neighbors (and recursively their neighbors),
+	 * that might be added to the cluster
 	 */
 	private void expandCluster(Cluster cluster, PhotoObjectForClustering photo,
 			Queue<PhotoObjectForClustering> neighbors, Integer minimumNumberOfPhotosInCluster) {
