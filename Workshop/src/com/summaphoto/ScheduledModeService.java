@@ -84,7 +84,7 @@ public class ScheduledModeService extends Service{
 				ActualEventsBundle events = eventsClusterer.ComputeCluster();
 				return events;
 			}
-		}).run();
+		}).start();
 
 		return START_REDELIVER_INTENT;
 	}
