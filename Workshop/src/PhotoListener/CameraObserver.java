@@ -91,7 +91,6 @@ public class CameraObserver extends FileObserver {
 
 					if ((event & FileObserver.DELETE) > 0) {
 						PhotoContainer.getInstance().onDelete(file);
-						Log.d(TAG, "photo: " + path + " deleted from containers");
 					}
 				}
 			}
