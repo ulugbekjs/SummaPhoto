@@ -65,6 +65,11 @@ public class GPSPoint  {
 		return true;
 	}
 	
+	/**
+	 * Rounding the location GPS coordinate because Bing does not return more and it causes bugs when checking Equals() between our and Bing coordinates
+	 * @param num
+	 * @return
+	 */
 	private double roundDouble (double num)
 	{
 		return (Math.round(num * Math.pow(10, 10)) / Math.pow(10, 10));

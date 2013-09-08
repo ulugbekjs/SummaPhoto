@@ -23,7 +23,7 @@ import android.os.FileObserver;
 import android.util.Log;
 
 /**
- * The thread that observes the camera's folder
+ * The FileObserver thread that listens to the camera's folder
  * @author yonatan
  *
  */
@@ -100,6 +100,12 @@ public class CameraObserver extends FileObserver {
 		}
 	}
 
+	/**
+	 * Creates photo object from intercepted file using Metadata-extractor library
+	 * @param file
+	 * @return
+	 * @throws ImageProcessingException
+	 */
 	private Photo createPhotoFromFile(String file) throws ImageProcessingException {
 
 		Photo photo = null;
