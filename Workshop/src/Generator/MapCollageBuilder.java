@@ -187,16 +187,6 @@ public class MapCollageBuilder extends AbstractBuilder{
 		return true;
 	}
 
-
-	/**
-	@Override
-	public DedicatedRequest setTemplate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	**/
-
-
 	/**
 	 * @param slots - array of slots of the template
 	 * @return dictionary which its keys are pixelPoints of "connection" points of the slots, and values are the relevant slots

@@ -138,7 +138,7 @@ public class SettingsActivity extends Activity {
 
 //				Omri's code
 
-			Tester.omriInsertFilesToObservedDir();
+		//	Tester.omriInsertFilesToObservedDir();
 //				try {
 //					Thread.sleep(60000);
 //				} catch (InterruptedException e) {
@@ -282,16 +282,14 @@ public class SettingsActivity extends Activity {
 			try {
 				outputFile.createNewFile();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				Log.e(TAG, "Error when creating log file: "  + outputFile.getAbsolutePath());
 			}
 		}
 		try {
 			@SuppressWarnings("unused")
 			Process process = Runtime.getRuntime().exec("logcat -f "+outputFile.getAbsolutePath());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(TAG, "Error when executing routing to log file: "  + outputFile.getAbsolutePath());
 		}
 	}
 

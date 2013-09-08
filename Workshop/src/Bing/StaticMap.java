@@ -146,15 +146,6 @@ public class StaticMap {
 				int ax = Integer.valueOf(node.getChildText("X", namespace));	
 				int ay = Integer.valueOf(node.getChildText("Y", namespace));	
 
-				//TODO : remove if not needed
-				//				node = pushpinNode.getChild("TopLeftOffset", namespace);
-				//				int tx = Integer.valueOf(node.getChildText("X", namespace));	
-				//				int ty = Integer.valueOf(node.getChildText("Y", namespace));	
-				//
-				//				node = pushpinNode.getChild("BottomRightOffset", namespace);
-				//				int bx = Integer.valueOf(node.getChildText("X", namespace));	
-				//				int by = Integer.valueOf(node.getChildText("Y", namespace));	
-
 				// pushpins are returned in order they were sent
 				if (pins.get(pushpin).getPhoto().getLocation().equals(new GPSPoint(latitude, longitude))) { // verify returned pushpin to out pushpin by location
 					pins.get(pushpin).setAnchor(new PixelPoint(ax, ay));

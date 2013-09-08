@@ -24,12 +24,16 @@ import android.os.IBinder;
 import android.util.Log;
 
 
+/**
+ * Service responsible for the daily mode
+ * @author yonatan
+ *
+ */
 public class ScheduledModeService extends Service{
 
 	private final static String TAG = ScheduledModeService.class.getName();
 
-	//	private static ScheduledExecutorService scheduler = null;
-	private static AlarmManager alarmManager = null;
+	private static AlarmManager alarmManager = null; // this goes off daily to trigger the flow
 	private static PendingIntent intent = null;
 
 	public ScheduledModeService() {
@@ -85,6 +89,12 @@ public class ScheduledModeService extends Service{
 		return START_REDELIVER_INTENT;
 	}
 
+	/**
+	 * initializes the service with an alarm that goes off at hour:min
+	 * @param context
+	 * @param hour
+	 * @param min
+	 */
 	public static void startScheduledMode(Context context, int hour, int min) {
 		if (alarmManager != null && intent != null) {
 			stopService();
@@ -118,6 +128,12 @@ public class ScheduledModeService extends Service{
 		}
 	}
 	
+	/**
+	 * checks if the given time had already passed for the day
+	 * @param hour
+	 * @param min
+	 * @return
+	 */
 	private static boolean hasPassedToday(int hour, int min) {
 		// calculate time until next waking of thread
 
@@ -182,16 +198,17 @@ public class ScheduledModeService extends Service{
 			successful = false;
 		}
 		else { 
-			builder.populateTemplate();
-			collage =  builder.buildCollage();
-			successful = true;
+			successful = builder.populateTemplate();
+			if (successful) {
+				collage =  builder.buildCollage();
+				successful = true;
+			}
 		}
 		return new ResultPair(successful, collage);
 	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

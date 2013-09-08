@@ -28,6 +28,11 @@ import Common.Photo;
 import Common.GPSPoint;
 import Common.Utils;
 
+/**
+ * Class with static method that are used to get static maps and metadata from Bing
+ * @author yonatan
+ *
+ */
 public class BingServices {
 
 	private final static String TAG = BingServices.class.getName();
@@ -141,7 +146,6 @@ public class BingServices {
 	 * @return Path of newly saved .JPG/XML or NULL
 	 * @throws NetworkErrorException 
 	 * @throws IOException 
-	 * @throws  
 	 */
 	private static String createHTTPRequest(boolean metadata, List<GPSPoint> points, int width, int height, GeoBoundingBox box) throws NetworkErrorException, IOException {
 
