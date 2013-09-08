@@ -15,7 +15,6 @@ public class ActivationManager {
 	private static final int REGULAR_MODE = 0;
 	private static final int DEDICATED_MODE = 1;
 
-	// TODO: maybe do this by number of photos for collage
 	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 3;
 	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 300;
 	private static final String TAG = ActivationManager.class.getName();
@@ -43,6 +42,11 @@ public class ActivationManager {
 	}
 
 
+	/**
+	 * Guesses if photo is part of the last event recoginzed by the AM
+	 * @param newPhoto
+	 * @return true iff photo starts a new event
+	 */
 	private boolean isNewEventCandidate(Photo newPhoto) {
 
 		int delta = lastRecievedPhoto.timeDeltaInSecondsFrom(newPhoto);
@@ -50,7 +54,11 @@ public class ActivationManager {
 		return (delta > NEW_CANDIDATE_THRESHOLD_DELTA) ? true : false;
 	}
 
-	private boolean isCollageNeeded() {
+	/**
+	 * Based on mode, decided if clustering should be made
+	 * @return true iff clustering algorithm should be invoked
+	 */
+	private boolean isClusteringNeeded() {
 		return (((currentState == REGULAR_MODE) && (remainingEvents == 0)) || 
 				(currentState == DEDICATED_MODE && 
 				((remainingHorizontal == 0) &&
@@ -85,7 +93,7 @@ public class ActivationManager {
 		
 		photoContainer.moveToProcessedPhotos(photo);
 
-		return isCollageNeeded();
+		return isClusteringNeeded();
 	}
 
 
@@ -115,6 +123,10 @@ public class ActivationManager {
 
 	
 
+	/**
+	 * method to add a DedicatedRequest to the AM queue
+	 * @param request
+	 */
 	public void addRequestToBuffer(DedicatedRequest request) {
 		try {
 			requestBuffer.put(request);
@@ -140,6 +152,11 @@ public class ActivationManager {
 		return changed;
 	}
 
+	/**
+	 * Changes AM mode
+	 * @param newState
+	 * @param request
+	 */
 	private void setMode(int newState, DedicatedRequest request) {
 		switch (newState) {
 		case DEDICATED_MODE: {

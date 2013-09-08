@@ -5,26 +5,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.xml.transform.Templates;
-
 import PhotoListener.CameraObserver;
-import android.R.integer;
-import android.R.menu;
 import android.content.Context;
 import android.os.Environment;
-import android.provider.MediaStore.Files;
 import android.util.Log;
 
 import com.drew.imaging.ImageProcessingException;
 import com.summaphoto.ScheduledModeService;
 import com.summaphoto.SettingsActivity;
-import com.summaphoto.SmartModeFlow;
 
 public class Tester {
 

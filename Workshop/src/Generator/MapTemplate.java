@@ -2,16 +2,24 @@ package Generator;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import android.util.Log;
 import Bing.StaticMap;
 
+/**
+ * Represents a Map template, with slots and a map slot to be later populated
+ * @author yonatan
+ *
+ */
 public class MapTemplate extends AbstractTemplate{
+	
+	private static final String TAG = MapTemplate.class.getName();
 
 	public final static int MAP_TEMPLATES_NUM = 2; // number of templates existing for this template type
 
 
 	private Slot mapSlot;
 
-	private StaticMap map = null; // map in center of collage
 	/**
 	 * Template can only be created by static methods
 	 * @param slotsInTemplate
@@ -33,14 +41,13 @@ public class MapTemplate extends AbstractTemplate{
 	public boolean setMap(StaticMap newMap) {
 		if (newMap.getPixelWidth() == this.getMapPixelWidth() && // only add map if it meets the planned map dimension
 				newMap.getPixelHeight() == this.getMapPixelHeight()) {
-			map = newMap;
 			try {
 				
 				mapSlot.assignToPhoto(newMap.getPhotoObject());
 			}
-			catch (Exception ex)
+			catch (NullPointerException ex)
 			{
-				/** TODO: add exceptionsHandling **/ 
+				Log.e(TAG, "Static Map object photo object is null");
 				return false;
 			}
 			return true;
