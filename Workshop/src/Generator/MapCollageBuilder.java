@@ -163,7 +163,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 		updatePicturesOfSlots (tuples,photosList);	
 		photosList.clear();
 		
-		// receive again a map from bing, because in the first map there might be extra pushPins (becuase of extra photos)
+		// receive again a map from bing, because in the first map there might be extra pushPins (because of extra photos)
 		for (SlotPushPinTuple tuple :tuples )
 		{
 			photosList.add(tuple.getPushpin().getPhoto());
@@ -181,7 +181,7 @@ public class MapCollageBuilder extends AbstractBuilder{
 			((MapTemplate)template).setMap(mapFromDataSource);
 		}
 		
-		// cretaes line which will be added to the collage
+		// create lines (that connects push pin to slot) which will be added to the collage
 		linesList = convertTupplesToLines(tuples);
 
 		return true;
