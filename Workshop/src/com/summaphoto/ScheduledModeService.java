@@ -52,7 +52,7 @@ public class ScheduledModeService extends Service{
 				Log.d(TAG, "Scheduled Mode: Starting flow");
 
 				// in this flow there are no dedicated requests
-				ActualEventsBundle events = partitionToEvents();
+				ActualEventsBundle events = cluster();
 
 				// build the collage from Bundle of photos
 				ResultPair result = null;
@@ -75,7 +75,7 @@ public class ScheduledModeService extends Service{
 
 			}
 
-			private ActualEventsBundle partitionToEvents() {
+			private ActualEventsBundle cluster() {
 				List<Photo> photos = new ArrayList<Photo>();
 				while (!PhotoContainer.getInstance().isEmpty()) {
 					photos.add(PhotoContainer.getInstance().getNextPhotoFromBuffer());
