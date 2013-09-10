@@ -56,7 +56,7 @@ public class SettingsActivity extends Activity {
 		CONTEXT = this;
 
 		createAppFolders();
-		saveLogcatToFile();
+		//saveLogcatToFile();
 		
 		if (SmartModeFlow.lastCollageTime == -1) { // SmartModeFlow should have the app launch time at first
 			SmartModeFlow.lastCollageTime = new Date().getTime();
