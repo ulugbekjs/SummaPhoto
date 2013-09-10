@@ -53,6 +53,7 @@ public class ScheduledModeService extends Service{
 
 				// in this flow there are no dedicated requests
 				ActualEventsBundle events = cluster();
+				Log.d(TAG, "ActualEvents calculated: " + events.getActualEvents().size());
 
 				// build the collage from Bundle of photos
 				ResultPair result = null;
