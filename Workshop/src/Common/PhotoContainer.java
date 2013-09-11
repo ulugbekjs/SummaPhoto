@@ -8,7 +8,7 @@ import android.util.Log;
 public class PhotoContainer {
 
 	private static final String TAG = PhotoContainer.class.getName();
-	private static final PhotoContainer instance = new PhotoContainer();
+	private static PhotoContainer instance;
 
 	private BlockingQueue<Photo> processedPhotos = new LinkedBlockingQueue<Photo>();  
 	private BlockingQueue<Photo> buffer = new LinkedBlockingQueue<Photo>();
@@ -17,6 +17,9 @@ public class PhotoContainer {
 	}  
 
 	public static PhotoContainer getInstance() {
+		if (instance == null) {
+			instance = new PhotoContainer();
+		}
 		return instance;
 	}
 

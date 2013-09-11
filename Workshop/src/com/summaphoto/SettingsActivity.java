@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import com.summaphoto.R;
 import Common.Constants;
+import Common.Tester;
 import Generator.AbstractTemplate;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -56,7 +57,7 @@ public class SettingsActivity extends Activity {
 		CONTEXT = this;
 
 		createAppFolders();
-		//saveLogcatToFile();
+		saveLogcatToFile();
 		
 		if (SmartModeFlow.lastCollageTime == -1) { // SmartModeFlow should have the app launch time at first
 			SmartModeFlow.lastCollageTime = new Date().getTime();
@@ -78,6 +79,7 @@ public class SettingsActivity extends Activity {
 		
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
+		
 
 	}
 
@@ -85,6 +87,7 @@ public class SettingsActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
+		// consume
 	}
 
 

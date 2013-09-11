@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import ActivationManager.ActivationManager;
 import ActivationManager.DedicatedRequest;
 import Common.ActualEventsBundle;
 import Common.Photo;
@@ -54,6 +56,9 @@ public class ScheduledModeService extends Service{
 				// in this flow there are no dedicated requests
 				ActualEventsBundle events = cluster();
 				Log.d(TAG, "ActualEvents calculated: " + events.getActualEvents().size());
+				Log.d(TAG, "Horizontal photos count in ActualEventsBundle: " + events.horizontalCount());
+				Log.d(TAG, "vertical photos count in ActualEventsBundle: " + events.verticalCount());
+
 
 				// build the collage from Bundle of photos
 				ResultPair result = null;
@@ -77,10 +82,12 @@ public class ScheduledModeService extends Service{
 			}
 
 			private ActualEventsBundle cluster() {
-				List<Photo> photos = new ArrayList<Photo>();
-				while (!PhotoContainer.getInstance().isEmpty()) {
-					photos.add(PhotoContainer.getInstance().getNextPhotoFromBuffer());
-				}
+				
+				ActivationManager.getInstance().processPhotoBuffer(); // process photos artificially, ignore return value
+
+				List<Photo> photos = new ArrayList<Photo>(PhotoContainer.getInstance().getProcessedPhotos());
+				Log.d(TAG, "read " + photos.size() + " photos to cluster");
+				
 				DBScan eventsClusterer = new DBScan(photos);
 				ActualEventsBundle events = eventsClusterer.ComputeCluster();
 				return events;
@@ -104,10 +111,10 @@ public class ScheduledModeService extends Service{
 		if (alarmManager == null) {
 
 			alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//			PendingIntent pIntent = PendingIntent.getService(context, 0, new Intent(context, ScheduledModeService.class), 0);
+			//			PendingIntent pIntent = PendingIntent.getService(context, 0, new Intent(context, ScheduledModeService.class), 0);
 			Intent in = new Intent(context, ScheduledModeService.class);
 			PendingIntent pIntent = PendingIntent.getService(context, 0, in, 0);
-		
+
 
 			intent = pIntent;
 
@@ -115,7 +122,7 @@ public class ScheduledModeService extends Service{
 			int year = calendar.get(Calendar.YEAR);
 			int month = calendar.get(Calendar.MONTH);
 			int day = calendar.get(Calendar.DAY_OF_MONTH);
-			
+
 			if (hasPassedToday(hour, min)) {
 				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, plusDay(year, month, day, hour, min).getTime(), AlarmManager.INTERVAL_DAY, pIntent);
 			}
@@ -125,10 +132,10 @@ public class ScheduledModeService extends Service{
 				calendar.set(Calendar.SECOND, 0);
 				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
 			}
-	        
+
 		}
 	}
-	
+
 	/**
 	 * checks if the given time had already passed for the day
 	 * @param hour
@@ -196,6 +203,10 @@ public class ScheduledModeService extends Service{
 		Photo collage = null;
 		DedicatedRequest request = builder.setTemplate();
 		if (request != null) { // not enough photos for collage
+			Log.d(TAG, "needed horizontal photos for closest template: " + request.getHorizontalNeeded());
+			Log.d(TAG, "needed vertical photos for closest template: " + request.getVerticalNeeded());
+
+			Log.d(TAG, "There were not enough photos in bundle for template.\n");
 			successful = false;
 		}
 		else { 
