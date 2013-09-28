@@ -22,8 +22,8 @@ import Partitioning.DBScan;
 public class SmartModeFlow {
 
 	private static final String TAG = SmartModeFlow.class.getName();
-	private static final int MIN_ACTUAL_EVENTS = 3;
-	private static final int MIN_TIME_BETWEEN_COLLAGES = 4;
+	private static final int MIN_ACTUAL_EVENTS = 2; // 3
+	private static final int MIN_TIME_BETWEEN_COLLAGES = 0; // 4
 
 	private static ExecutorService scheduler = null;
 	private static boolean busy = false;
@@ -102,7 +102,7 @@ public class SmartModeFlow {
 					setBusy(false);
 
 					Log.d(TAG, "Flow ended: " + new Date());
-					Log.d(TAG, "Activatin manager at end of flow:\n" + manager.toString());
+					Log.d(TAG, "Activation manager at end of flow:\n" + manager.toString());
 				}
 
 				/**

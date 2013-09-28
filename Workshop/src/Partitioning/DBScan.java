@@ -14,7 +14,7 @@ import Common.*;
  * @author omri
  */
 public class DBScan {
-	
+
 	private final String TAG = "Clustering Algorithm";
 
 	/*
@@ -27,15 +27,22 @@ public class DBScan {
 	private final int minNumberOfPointsInClusterForNoisyPictures = 1;
 	private final double MaxRatioOfNoise = 0.4;
 
+	private boolean noNoise = false; 
+
 	private Hashtable<Double, PhotoObjectForClustering> unvisitedPhotos = null;
 	private Hashtable<Double, PhotoObjectForClustering> visitedPhotos = null;
-	
+
 	private List<Photo> photosData;
-	
+
 	public DBScan(List<Photo> photosData) {
 		this.photosData = photosData;
 	}
-	
+
+	public DBScan(List<Photo> photosData, Boolean noNoise) {
+		this(photosData);
+		this.noNoise = noNoise;
+	}
+
 	private Boolean initialize ()
 	{
 		PhotoObjectForClustering tempObject;
@@ -55,23 +62,28 @@ public class DBScan {
 		visitedPhotos = new Hashtable<Double, PhotoObjectForClustering>();
 		return true;
 	}
-	
+
 	/**
 	 * Takes photos and sorts them to ActualEvents according to the algorithm
 	 * @return ActualEventBundle containing the events containing photos
 	 */
 	public ActualEventsBundle ComputeCluster ()
 	{
-		return	runDBScanAlgorithm (false); 
+		if (noNoise)
+			return runDBScanAlgorithm(true);
+		else {
+			return	runDBScanAlgorithm (false); 
+		}
 	}
-	
-	
+
+
+
 	/**
 	 * The actual clustering method
 	 * @param isNoisyRun - indicates if the photos are considered noisy. In such case, reduce the number of minimum photos in cluster
 	 * @return ActualEventBundle containing the events containing photos
 	 */
-	
+
 	private ActualEventsBundle runDBScanAlgorithm(Boolean isNoisyRun) {
 		if (!initialize())
 			return null;
@@ -80,7 +92,7 @@ public class DBScan {
 		Integer numberOfPhotosToClusterInteger = unvisitedPhotos.size();
 		List<Cluster> clustersList = new LinkedList<Cluster>();
 		PhotoObjectForClustering arbitraryUnvisitedPhoto;
-		
+
 		// continue the clustering operation while there are photos that are still unvisited
 		while (!unvisitedPhotos.isEmpty()) {
 			arbitraryUnvisitedPhoto = getPhotoFromTable(unvisitedPhotos);
@@ -107,10 +119,10 @@ public class DBScan {
 		else {
 			return getActualEventsList(clustersList);
 		}
-		
+
 	}
-	
-	
+
+
 	/**
 	 * @param clusterList
 	 * @return ActualEventBundle which is constructed according to the clusters in list
@@ -164,7 +176,7 @@ public class DBScan {
 		unvisitedPhotos.remove(photo.getID());
 		visitedPhotos.put(photo.getID(), photo);
 	}
-	
+
 	/**
 	 * @param photo1
 	 * @param photo2
@@ -183,7 +195,7 @@ public class DBScan {
 	 * @param photo
 	 * @return All photos (visited and unvisited) that are close (according to time and distance) to the photo
 	 */
-	
+
 	private Queue<PhotoObjectForClustering> getNeighbors(PhotoObjectForClustering photo) {
 		Queue<PhotoObjectForClustering> photosEpsilonClose = new PriorityQueue<PhotoObjectForClustering>();
 		for (PhotoObjectForClustering photoCandidate : unvisitedPhotos.values()) {

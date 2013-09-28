@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+
 import com.summaphoto.R;
 import Common.Constants;
-import Common.Tester;
 import Generator.AbstractTemplate;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TimePicker;
@@ -44,6 +45,8 @@ public class SettingsActivity extends Activity {
 	private RadioButton blocksRadioButton;
 
 	private RadioButton lastCheckedButton;
+	
+	private Button immediateButton;
 
 	private int pickerHour = -1;
 	private int pickerMin = -1;
@@ -57,8 +60,8 @@ public class SettingsActivity extends Activity {
 		CONTEXT = this;
 
 		createAppFolders();
-//		saveLogcatToFile();
-		
+		saveLogcatToFile();
+
 		if (SmartModeFlow.lastCollageTime == -1) { // SmartModeFlow should have the app launch time at first
 			SmartModeFlow.lastCollageTime = new Date().getTime();
 		}
@@ -70,17 +73,18 @@ public class SettingsActivity extends Activity {
 		dailyRadioBtn = (RadioButton) findViewById(R.id.radioDaily);
 		mapRadioButton = (RadioButton) findViewById(R.id.radioMapType);
 		blocksRadioButton = (RadioButton) findViewById(R.id.radioBlocksType);
+		immediateButton = (Button) findViewById(R.id.immediate);
 
 		lastCheckedButton = offRadioButton;
+		
+		immediateButton.setEnabled(false);
 
 		if (savedInstanceState != null) {
 			onRestoreInstanceState(savedInstanceState);
 		}
-		
+
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
-		
-
 	}
 
 
@@ -101,6 +105,8 @@ public class SettingsActivity extends Activity {
 		outState.putBoolean("daily", dailyRadioBtn.isChecked());
 		outState.putBoolean("map", mapRadioButton.isChecked());
 		outState.putBoolean("blocks", blocksRadioButton.isChecked());
+		outState.putBoolean("immediate", immediateButton.isEnabled());
+
 
 	}
 
@@ -113,6 +119,8 @@ public class SettingsActivity extends Activity {
 		dailyRadioBtn.setChecked(savedInstanceState.getBoolean("daily"));
 		mapRadioButton.setChecked(savedInstanceState.getBoolean("map"));
 		blocksRadioButton.setChecked(savedInstanceState.getBoolean("blocks"));
+		immediateButton.setEnabled(savedInstanceState.getBoolean("immediate"));
+
 	}
 
 	/**
@@ -167,16 +175,20 @@ public class SettingsActivity extends Activity {
 	public static void saveLogcatToFile() {    
 		String fileName =  "log.txt";
 		File outputFile = new File(Constants.APP_TEMP_DIR,fileName);
-		if (!outputFile.exists()) {
-			try {
-				outputFile.createNewFile();
-			} catch (IOException e1) {
-				Log.e(TAG, "Error when creating log file: "  + outputFile.getAbsolutePath());
-			}
+		if (outputFile.exists()) {
+			outputFile.delete();
 		}
+
+		try {
+			outputFile.createNewFile();
+		} catch (IOException e1) {
+			Log.e(TAG, "Error when creating log file: "  + outputFile.getAbsolutePath());
+		}
+
 		try {
 			@SuppressWarnings("unused")
-			Process process = Runtime.getRuntime().exec("logcat -f "+outputFile.getAbsolutePath());
+			Process process = Runtime.getRuntime().exec("logcat -c");
+			process = Runtime.getRuntime().exec("logcat -f "+outputFile.getAbsolutePath());
 		} catch (IOException e) {
 			Log.e(TAG, "Error when executing routing to log file: "  + outputFile.getAbsolutePath());
 		}
@@ -213,6 +225,12 @@ public class SettingsActivity extends Activity {
 		}
 	}
 
+	public void onImmediateClicked(View view) {
+		new ImmediateModeTask(this).execute((Void)null);
+	}
+	
+
+
 	public void onTypeRadioButtonClicked(View view) {
 		lastCheckedButton = (RadioButton) view;
 		boolean checked = lastCheckedButton.isChecked();
@@ -241,7 +259,9 @@ public class SettingsActivity extends Activity {
 	private void offButtonClicked() {
 
 		MODE = 0;
-
+		
+		immediateButton.setEnabled(false);
+		
 		// turn off active modes
 		if (PhotoListenerService.isObserving()) {
 			stopService(new Intent(this, PhotoListenerService.class));
@@ -263,6 +283,7 @@ public class SettingsActivity extends Activity {
 		if (SmartModeFlow.isFlowRunning())
 			turnOffSmartMode();
 
+		immediateButton.setEnabled(true);
 		MODE = 2;
 
 		Thread thread = new Thread() {
@@ -288,7 +309,8 @@ public class SettingsActivity extends Activity {
 		}
 
 		turnOffDailyMode();
-
+		
+		immediateButton.setEnabled(true);
 		MODE = 1;
 
 		Thread thread = new Thread() {

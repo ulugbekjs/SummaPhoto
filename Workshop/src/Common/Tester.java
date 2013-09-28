@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import PhotoListener.CameraObserver;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;

@@ -104,6 +104,7 @@ public class ScheduledModeService extends Service{
 	 * @param min
 	 */
 	public static void startScheduledMode(Context context, int hour, int min) {
+		
 		if (alarmManager != null && intent != null) {
 			stopService();
 		}
@@ -132,6 +133,8 @@ public class ScheduledModeService extends Service{
 				calendar.set(Calendar.SECOND, 0);
 				alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
 			}
+			
+			Log.d(TAG, "Waiting patiently for alarm to go off");
 
 		}
 	}

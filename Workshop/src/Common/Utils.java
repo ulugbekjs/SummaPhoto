@@ -27,7 +27,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 public class Utils {
 
@@ -115,7 +114,7 @@ public class Utils {
 
 	}
 
-	private static Uri addImageToGallery(Photo photo) {
+	public static Uri addImageToGallery(Photo photo) {
 		ContentValues image = new ContentValues();
 
 		image.put(Images.Media.TITLE, photo.getFileName());

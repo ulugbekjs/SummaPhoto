@@ -9,30 +9,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-       <!--   <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Smart+Map" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Smart+Blocks" />
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Scheduled+Map" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Scheduled+Blocks" />-->
-
         <TextView
             android:id="@+id/tv"
             android:layout_width="fill_parent"
@@ -121,6 +97,27 @@
                 android:onClick="onTypeRadioButtonClicked"
                 android:text="@string/Blocks" />
         </RadioGroup>
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:scaleType="fitXY"
+            android:src="?android:attr/listDivider" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/immediate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:onClick="onImmediateClicked"
+                android:text="@string/immediate" >
+            </Button>
+        </RelativeLayout>
     </LinearLayout>
 
 </ScrollView>

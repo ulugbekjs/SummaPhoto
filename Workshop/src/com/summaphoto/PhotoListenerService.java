@@ -1,6 +1,9 @@
 package com.summaphoto;
 
 
+import java.util.Date;
+import java.util.Random;
+
 import PhotoListener.CameraObserver;
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -37,7 +40,7 @@ public class PhotoListenerService extends Service {
 						observer = new CameraObserver(path);
 						observer.startWatching();
 						startObservingInForeground();
-						Log.d(TAG, "CameraObserver started watching");						
+						Log.d(TAG, "CameraObserver started.");						
 					}
 				}).run();
 
@@ -59,7 +62,10 @@ public class PhotoListenerService extends Service {
 	
 	@Override
 	public void onDestroy() {
+		observer.stopWatching();
 		observer = null;
+		Log.d(TAG, "Camera Observer stopped.");
+
 		super.onDestroy();
 	}
 
@@ -84,7 +90,8 @@ public class PhotoListenerService extends Service {
 			notification.priority = Notification.PRIORITY_MIN;
 		}
 
-		startForeground(1337, notification);
+		Random random = new Random(new Date().getTime());
+		startForeground(random.nextInt(), notification);
 	}
 
 	@Override

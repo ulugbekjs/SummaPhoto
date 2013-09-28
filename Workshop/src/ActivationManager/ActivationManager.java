@@ -15,8 +15,8 @@ public class ActivationManager {
 	private static final int REGULAR_MODE = 0;
 	private static final int DEDICATED_MODE = 1;
 
-	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 3;
-	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 300;
+	private static final int CANDIDATE_EVENTS_FOR_COLLAGE = 2; // 3
+	private static final int NEW_CANDIDATE_THRESHOLD_DELTA = 10; // 100
 	private static final String TAG = ActivationManager.class.getName();
 
 
