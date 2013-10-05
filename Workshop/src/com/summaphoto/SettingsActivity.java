@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.drew.imaging.ImageProcessingException;
 import com.summaphoto.R;
 import Common.Constants;
+import Common.Utils;
 import Generator.AbstractTemplate;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -85,6 +87,25 @@ public class SettingsActivity extends Activity {
 
 		OnClickListener listener = new ScheduledModeListener(); // use same listener every time
 		dailyRadioBtn.setOnClickListener(listener);
+//		
+//		try {
+////			Utils.createPhotoFromFile(ROOT + "//IMG_20130903_175353.jpg");
+//			Utils.createPhotoFromFile(ROOT + "//20130930_162802.jpg");
+//
+//		} catch (ImageProcessingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		try {
+////			Utils.createPhotoFromFile(ROOT + "//IMG_20130903_181034.jpg");
+//			Utils.createPhotoFromFile(ROOT + "//20130930_162736.jpg");
+//
+//		} catch (ImageProcessingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
 	}
 
 

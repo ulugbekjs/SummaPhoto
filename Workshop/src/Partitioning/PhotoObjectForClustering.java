@@ -11,7 +11,7 @@ public class PhotoObjectForClustering extends Photo {
 	
 	public PhotoObjectForClustering(Photo p)
 	{
-		super(p.getTakenDate().toDate(), p.getWidth(), p.getHeight(), p.getLocation(), p.getFilePath());
+		super(p.getTakenDate().toDate(), p.getWidth(), p.getHeight(), p.getLocation(), p.getFilePath(), p.getOrientation());
 	}
 	
 	public void addPointToCluster(Cluster c)

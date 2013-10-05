@@ -6,6 +6,9 @@ import java.util.Date;
 import org.joda.time.DateTime;
 import org.joda.time.Seconds;
 
+import android.R.integer;
+import android.media.ExifInterface;
+
 /**
  * Represents a photo in the gallery that was taken by the user
  * @author yonatan
@@ -20,17 +23,33 @@ public class Photo implements Comparable<Photo> {
 	private int width;
 	private String path; // 
 	private String fileName;
+	private int orientation;
 	private double ID; //unique per Photo
 
-	public Photo(Date date, int width, int height, GPSPoint location, String path) {
+	public Photo(Date date, int width, int height, GPSPoint location, String path, int orientation) {
 		this.takenDate = new DateTime(date);
 		this.location = location;
 		this.height = height;
 		this.width = width;
-		this.isHorizontal = (width > height);
+		this.isHorizontal = !isVertical(width, height, orientation);
 		this.path = path;
+		this.orientation = orientation;
 		this.fileName = new File(path).getName();
 		this.ID = takenDate.getMillis();
+	}
+	
+	private boolean isVertical(int width, int height, int orientation) {
+		if (orientation == 0) // phone does not use orientation
+			return (width < height);
+		
+		if (orientation ==  ExifInterface.ORIENTATION_ROTATE_90){ // galaxy 3
+			return true;
+		}
+		else return false;
+	}
+	
+	public int getOrientation() {
+		return this.orientation;
 	}
 
 	public String getFileName() {

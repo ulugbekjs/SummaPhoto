@@ -67,7 +67,7 @@ public class StaticMap {
 
 	public void setJpgPath(String jpgPath, int width, int height) {
 		this.jpgPath = jpgPath;
-		this.map = new Photo(new Date(), width, height, null, jpgPath);
+		this.map = new Photo(new Date(), width, height, null, jpgPath, 0);
 
 	}
 	public String getMetadataPath() {

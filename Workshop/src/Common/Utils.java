@@ -10,12 +10,14 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
 import com.summaphoto.R;
 import com.summaphoto.SettingsActivity;
 
+import android.R.integer;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
@@ -27,6 +29,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 public class Utils {
 
@@ -138,7 +141,13 @@ public class Utils {
 
 		return SettingsActivity.CONTEXT.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, image);
 	}
-	
+
+	/**
+	 * Creates photo object from intercepted file using Metadata-extractor library
+	 * @param file
+	 * @return
+	 * @throws ImageProcessingException
+	 */
 	public static Photo createPhotoFromFile(String file) throws ImageProcessingException {
 
 		Photo photo = null;
@@ -169,6 +178,19 @@ public class Utils {
 		ExifSubIFDDirectory directory2 = metadata.getDirectory(ExifSubIFDDirectory.class);
 		Date date = directory2.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
 
+		// get orientation
+		int exifOrientation = 0;
+		ExifIFD0Directory exifIFD0Directory = metadata.getDirectory(ExifIFD0Directory.class);
+		if(exifIFD0Directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION))
+		{
+			  try {
+				exifOrientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+			} catch (MetadataException e) {
+				int x =5;
+				x++;
+			}
+		}
+
 		//get dimensions
 		JpegDirectory jpgDirectory = metadata.getDirectory(JpegDirectory.class);
 		try {
@@ -180,13 +202,15 @@ public class Utils {
 					width,
 					height,
 					new GPSPoint(location.getLatitude(),location.getLongitude()),
-					path.getPath());
+					path.getPath(),
+					exifOrientation);
 		} catch (MetadataException e) {
 			return null;
 		}
 
 		return photo;
 	}
+
 
 
 }

@@ -271,7 +271,7 @@ public abstract class AbstractBuilder {
 		bmpBase.recycle();
 		bmpBase = null;
 
-		return new Photo(calendar.getTime(), width, height, null, file.getAbsolutePath());
+		return new Photo(calendar.getTime(), width, height, null, file.getAbsolutePath(), 0);
 	}
 
 	/**

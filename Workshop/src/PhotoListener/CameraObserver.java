@@ -9,6 +9,7 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
@@ -138,6 +139,18 @@ public class CameraObserver extends FileObserver {
 		ExifSubIFDDirectory directory2 = metadata.getDirectory(ExifSubIFDDirectory.class);
 		Date date = directory2.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
 
+		// get orientation
+		int exifOrientation = 0;
+		ExifIFD0Directory exifIFD0Directory = metadata.getDirectory(ExifIFD0Directory.class);
+		if(exifIFD0Directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION))
+		{
+			  try {
+				exifOrientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+			} catch (MetadataException e) {
+				Log.e(TAG, "cannot get orientation");
+			}
+		}
+
 		//get dimensions
 		JpegDirectory jpgDirectory = metadata.getDirectory(JpegDirectory.class);
 		try {
@@ -149,7 +162,8 @@ public class CameraObserver extends FileObserver {
 					width,
 					height,
 					new GPSPoint(location.getLatitude(),location.getLongitude()),
-					path.getPath());
+					path.getPath(),
+					exifOrientation);
 		} catch (MetadataException e) {
 			Log.e(TAG, "Error getting photo dimensions");
 			return null;
